@@ -2,7 +2,7 @@
 
 ![architecture schema](docs/cover.jpg)
 
-### An application for piloting robots from your browser !
+### Join in real robots fight from your browser !
 
 ## Features
 <hr>
