@@ -7,7 +7,7 @@
     "module": "commonjs",
     "newLine": "LF",
     "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "noImplicitReturns": true,
     "noImplicitThis": false,
     "noUnusedParameters": false,

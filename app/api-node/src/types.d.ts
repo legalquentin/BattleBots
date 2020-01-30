@@ -1,2 +1,2 @@
 // TypeRest aliases
-export interface NoResponse {};
+export interface NoResponse {}

@@ -4,9 +4,10 @@ import * as http from 'http';
 import * as morgan from 'morgan';
 import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt';
 import { PassportAuthenticator, Server } from 'typescript-rest';
+import Config from './service/config';
 
 export class ApiServer {
-    public PORT: number = +process.env.PORT || 3000;
+    public PORT: number = 8080; // +process.env.PORT || 8080;
 
     private readonly app: express.Application;
     private server: http.Server = null;
@@ -18,14 +19,22 @@ export class ApiServer {
         Server.useIoC();
 
         Server.loadServices(this.app, 'controller/*', __dirname);
-        
+
         // Note : This disable auto-nexting
         // If we need it in a controller, we will use :
         // Context.next()
         //   Server.ignoreNextMiddlewares(true);
 
-        this.app.use("*", function(req, res, next) {
-            if (!res.headersSent) res.render("App/index.html");
+
+
+        const bodyParser = require('body-parser');
+        this.app.use(bodyParser.urlencoded({ extended: true }));
+        this.app.use(bodyParser.json());
+
+        this.app.use("*", function (req, res, next) {
+
+            //if (!res.headersSent) { res.status(404).send("Not found") }
+            if (!res.headersSent) { res.render("App/index.html"); }
             next();
         });
         // Disable swagger at this time
@@ -73,42 +82,48 @@ export class ApiServer {
      */
     private config(): void {
         // Native Express configuration
-        
+
+        this.app.use(function (req, res, next) {
+            res.header("Access-Control-Allow-Origin", "http://192.168.1.36:8080");
+            res.header("Access-Control-Allow-Credentials", "true");
+            res.header("Access-Control-Allow-Headers", "Origin, Referer, UserAgent, charset, X-Requested-With, Content-Type, Accept");
+            res.status(200);
+            next();
+        });
 
         this.app.use("/public", express.static(__dirname + '/public'));
-        
-        this.app.engine('html', require('ejs').renderFile); 
+
+        this.app.engine('html', require('ejs').renderFile);
         this.app.set('views', __dirname + '/public');
         this.app.use(cors());
-        this.app.use(morgan('combined'));
-
-        
+        if (process.env.NODE_ENV !== "test") {
+            this.app.use(morgan('combined'));
+        }
 
         this.configureAuthenticator();
-
-        
     }
 
     private configureAuthenticator() {
-        const JWT_SECRET: string = 'some-jwt-secret';
+        const JWT_SECRET: string = new Config().getSecret();
         const jwtConfig: StrategyOptions = {
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             secretOrKey: Buffer.from(JWT_SECRET)
         };
         const strategy = new Strategy(jwtConfig, (payload: any, done: (err: any, user: any) => void) => {
-            done(null, payload);
+            const o = {
+                sub: payload.sub,
+                roles: [payload.role]
+            };
+
+            done(null, o);
         });
         const authenticator = new PassportAuthenticator(strategy, {
-            deserializeUser: (user: string) => JSON.parse(user),
-            serializeUser: (user: any) => {
-                return JSON.stringify(user);
+            authOptions: {
+                session: false,
             }
         });
+
         Server.registerAuthenticator(authenticator);
         Server.registerAuthenticator(authenticator, 'secondAuthenticator');
-
-
-
-        
     }
 }
