@@ -1,6 +1,7 @@
 package main
 
 import (
+	"TIC-GPE5/Worker/game"
 	"context"
 	"errors"
 	"fmt"
@@ -31,7 +32,7 @@ func startHTTPServer() *http.Server {
 	go func() {
 		if err := srv.ListenAndServeTLS("cert.pem",
 			"key.pem"); err != nil {
-			log.Println(prefixErr, err)
+			log.Fatalln(prefixLog, err.Error())
 		}
 	}()
 
@@ -50,13 +51,12 @@ func getSecret() (string, error) {
 
 func main() {
 
-	if r, e := getSecret(); e != nil {
+	r, e := getSecret()
+	if e != nil {
 		fmt.Println(prefixErr, e)
 		return
-	} else {
-		println(r)
-		// game.WorkerCtx.Secret = r
 	}
+	game.WorkerCtx.Secret = r
 
 	log.Println(prefixLog, "Starting HTTP server on port:", port)
 	srv := startHTTPServer()

@@ -1,8 +1,12 @@
 package handlers
 
 import (
-	"fmt"
+	"encoding/json"
+	"log"
 	"net/http"
+	"strings"
+
+	"../game"
 
 	"github.com/gorilla/mux"
 )
@@ -21,11 +25,33 @@ func NewRouter() *mux.Router {
 // PreProcessHandler called before handler calls
 // use it to set cors headers, validation, and generic stuff..
 func PreProcessHandler(w http.ResponseWriter, r *http.Request, router *mux.Router) {
-	fmt.Printf("Handled %s from [%s]\n", r.RequestURI, r.RemoteAddr)
+	log.Println(prefixLog, r.RemoteAddr, r.RequestURI)
 	setupResponse(&w)
 	if (*r).Method == "OPTIONS" {
 		return
 	}
+
+	for _, v := range Routes {
+		if v.Pattern == r.RequestURI && v.secure {
+			if strings.Split(r.RemoteAddr, ":")[0] != "127.0.0.1" {
+				log.Println(prefixWarn, "invalid host triggering 'CreateGame'")
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(403)
+				json.NewEncoder(w).Encode(game.Response{Message: "forbidden", Code: 403})
+				return
+			}
+
+			rToken := r.Header.Get("x-api-key")
+			if len(rToken) == 0 || rToken != game.WorkerCtx.Secret {
+				log.Println(prefixWarn, "invalid token ["+rToken+"]")
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(403)
+				json.NewEncoder(w).Encode(&game.Response{Message: "forbidden", Code: 403})
+				return
+			}
+		}
+	}
+
 	router.ServeHTTP(w, r)
 }
 
