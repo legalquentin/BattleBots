@@ -1,4 +1,5 @@
-.docker/postgres-volume
+infra/.docker/postgres-volume
 .DS_Store
-API/src/public/App
 dist
+cert.pem
+key.pem
