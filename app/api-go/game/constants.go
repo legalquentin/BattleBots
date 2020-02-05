@@ -11,7 +11,7 @@ const prefixWarn = "[WARN](GAME)"
 
 // WorkerCtx hold control data such as the secret provided in entry params only shared between it and
 // the api
-var WorkerCtx = Worker{""}
+var WorkerCtx = Worker{}
 
 // BaseGameInstances hold all game instances
 var baseGameInstances = make(map[string]Game)
@@ -23,5 +23,5 @@ var availableBots = []Bot{
 }
 
 var appartement = Environment{
-	1, "quentin's appartement", []*Bot{&availableBots[0], &availableBots[1]}, true,
+	1, "quentin's appartement", []*Bot{&availableBots[0]}, true,
 }

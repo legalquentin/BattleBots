@@ -1,7 +1,6 @@
 package main
 
 import (
-	"TIC-GPE5/Worker/game"
 	"context"
 	"errors"
 	"fmt"
@@ -11,7 +10,7 @@ import (
 	"os/signal"
 	"time"
 
-	// "./game"
+	"./game"
 	"./handlers"
 )
 
@@ -30,8 +29,8 @@ func startHTTPServer() *http.Server {
 	srv := &http.Server{Addr: (":" + port), Handler: handler}
 
 	go func() {
-		if err := srv.ListenAndServeTLS("cert.pem",
-			"key.pem"); err != nil {
+		if err := srv.ListenAndServeTLS("/Users/quentin/D.PERS/BattleBots/app/api-go/cert.pem",
+			"/Users/quentin/D.PERS/BattleBots/app/api-go/key.pem"); err != nil {
 			log.Fatalln(prefixLog, err.Error())
 		}
 	}()
@@ -56,9 +55,11 @@ func main() {
 		fmt.Println(prefixErr, e)
 		return
 	}
+
 	game.WorkerCtx.Secret = r
 
 	log.Println(prefixLog, "Starting HTTP server on port:", port)
+	log.Println(prefixLog, "secret is :", game.WorkerCtx.Secret)
 	srv := startHTTPServer()
 
 	// Setting up signal capturing

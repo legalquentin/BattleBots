@@ -21,4 +21,26 @@ undefined
 undefined
 undefined
 undefined
-Error {"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":5432}
+undefined
+undefined
+undefined
+undefined
+undefined
+undefined
+undefined
+undefined
+undefined
+undefined
+undefined
+undefined
+undefined
+undefined
+undefined
+undefined
+undefined
+Error {"diagnosticText":"src/service/BattleWorkerService.ts(51,17): error TS1005: ',' expected.\n","diagnosticCodes":[1005]}
+undefined
+Error {"diagnosticText":"src/service/BattleWorkerService.ts(51,17): error TS1005: ',' expected.\n","diagnosticCodes":[1005]}
+undefined
+undefined
+undefined
