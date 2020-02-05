@@ -32,11 +32,6 @@ export class Games1580907456635 implements MigrationInterface {
                 },
                 {
                     type: "timestamp",
-                    name: "game_created",
-                    isNullable: false
-                },
-                {
-                    type: "timestamp",
                     name: "created_at",
                     default: "CURRENT_TIMESTAMP",
                     isNullable: false
