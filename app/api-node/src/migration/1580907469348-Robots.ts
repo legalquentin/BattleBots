@@ -64,11 +64,6 @@ export class Robots1580907469348 implements MigrationInterface {
                     isNullable: false
                 },
                 {
-                    name: "game_id",
-                    type: "int",
-                    isNullable: false
-                },
-                {
                     type: "timestamp",
                     name: "created_at",
                     default: "CURRENT_TIMESTAMP",
@@ -84,23 +79,9 @@ export class Robots1580907469348 implements MigrationInterface {
         }));
 
         await queryRunner.createForeignKey("robots", new TableForeignKey({
-            name: "fk_robots_game_id",
-            columnNames: ["game_id"],
-            referencedTableName: "games",
-            referencedColumnNames: ["id"]
-        }));
-
-        await queryRunner.createForeignKey("robots", new TableForeignKey({
             name: "fk_robots_player_id",
             columnNames: ["player_id"],
             referencedTableName: "user",
-            referencedColumnNames: ["id"]
-        }));
-
-        await queryRunner.createForeignKey("robots", new TableForeignKey({
-            name: "fk_robots_arena_id",
-            columnNames: ["arena_id"],
-            referencedTableName: "arena",
             referencedColumnNames: ["id"]
         }));
     }
