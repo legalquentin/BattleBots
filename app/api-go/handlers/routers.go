@@ -43,7 +43,7 @@ func PreProcessHandler(w http.ResponseWriter, r *http.Request, router *mux.Route
 
 			rToken := r.Header.Get("x-api-key")
 			if len(rToken) == 0 || rToken != game.WorkerCtx.Secret {
-				log.Println(prefixWarn, "invalid token ["+rToken+"]")
+				log.Println(prefixWarn, "invalid token ["+rToken+"] secret is: ", game.WorkerCtx.Secret)
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(403)
 				json.NewEncoder(w).Encode(&game.Response{Message: "forbidden", Code: 403})

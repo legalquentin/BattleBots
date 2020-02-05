@@ -39,6 +39,7 @@ node_modules/
 dist_electron
 SHASUMS256.txt
 **/package-lock.json
+yarn.lock
 compile_commands.json
 .envrc
 

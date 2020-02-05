@@ -20,11 +20,12 @@ func main() {
 	err := rpio.Open()
 	if err != nil {
 		log.Println(prefixWarn, "RPIO unavailable, starting as stub...")
-		http.HandleFunc("/ctrl", stub.WsStubCtrl)
+		http.HandleFunc("/", stub.WsStubCtrl)
+		http.HandleFunc("/video", stub.WsStubVideoStream)
 	} else {
 		defer rpio.Close()
 		bot.SetUpPins()
-		http.HandleFunc("/ctrl", bot.WsBotCtrl)
+		http.HandleFunc("/", bot.WsBotCtrl)
 	}
 	log.Fatal(http.ListenAndServe(*addr, nil))
 }

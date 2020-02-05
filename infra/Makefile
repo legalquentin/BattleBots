@@ -1,6 +1,6 @@
 
 all:
-	$(info Avalaible commands : run:postgres, serve:api, serve:front, deploy:api deploy:front)
+	$(info Avalaible commands : run:postgres, serve:api, serve:front, deploy:api deploy:front, serve\:bot-stub)
 
 prepare:
 	cd ../app/api-node && yarn
@@ -14,6 +14,12 @@ logs\:postgres:
 
 serve\:api:
 	cd ../app/api-node && yarn run dev
+
+serve\:api-bot:
+	cd ../app/api-go && go run main.go 12345678910
+
+serve\:stub-bot:
+	cd ../app/api-bot/go/ && go run main.go
 
 serve\:front:
 	cd ../app/vuejs && yarn run serve
