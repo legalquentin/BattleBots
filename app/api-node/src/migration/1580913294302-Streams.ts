@@ -3,7 +3,7 @@ import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm
 export class Streams1580913294302 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<any> {
-        queryRunner.createTable(new Table({
+        await queryRunner.createTable(new Table({
             name: "streams",
             columns: [
                 {
@@ -68,14 +68,14 @@ export class Streams1580913294302 implements MigrationInterface {
             ]
         }));
 
-        queryRunner.createForeignKey("streams", new TableForeignKey({
+        await queryRunner.createForeignKey("streams", new TableForeignKey({
             name: "fk_streams_game_id",
             columnNames: ["game_id"],
             referencedTableName: "games",
             referencedColumnNames: ["id"]
         }));
 
-        queryRunner.createForeignKey("streams", new TableForeignKey({
+        await queryRunner.createForeignKey("streams", new TableForeignKey({
             name: "fk_streams_robot_id",
             columnNames: ["robot_id"],
             referencedTableName: "robots",
