@@ -17,8 +17,9 @@ var WorkerCtx = Worker{""}
 var baseGameInstances = make(map[string]Game)
 
 var availableBots = []Bot{
-	Bot{2, "192.168.1.66", false, false, "Rocinante", 6, 10, 10, 5},
-	Bot{1, "192.168.1.31", false, false, "Razorback", 10, 4, 6, 10},
+	// Bot{2, "192.168.1.66", false, false, "Rocinante", 6, 10, 10, 5},
+	// Bot{1, "192.168.1.31", false, false, "Razorback", 10, 4, 6, 10},
+	Bot{1, "127.0.0.1", false, false, "stubRobot", 10, 2, 6, 10},
 }
 
 var appartement = Environment{
