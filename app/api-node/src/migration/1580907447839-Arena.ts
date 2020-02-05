@@ -1,10 +1,10 @@
-import {MigrationInterface, QueryRunner, Table } from "typeorm";
+import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
-export class Battle1572536074324 implements MigrationInterface {
+export class Arena1580907447839 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.createTable(new Table({
-            name: "battle",
+            name: "arena",
             columns: [
                 {
                     name: "id",
@@ -14,24 +14,29 @@ export class Battle1572536074324 implements MigrationInterface {
                     generationStrategy: "increment"
                 },
                 {
-                    name: "name",
+                    name: "arena_name",
                     type: "varchar",
                     isNullable: false
                 },
                 {
-                    name: "created_at",
-                    type: "timestamp",
+                    name: "available",
+                    type: "int",
                     isNullable: false,
-                    default: "CURRENT_TIMESTAMP"
                 },
                 {
-                    name: "updated_at",
                     type: "timestamp",
-                    isNullable: false,
-                    onUpdate: "CURRENT_TIMESTAMP"
+                    name: "created_at",
+                    default: "CURRENT_TIMESTAMP",
+                    isNullable: false
+                },
+                {
+                    type: "timestamp",
+                    name: "updated_at",
+                    onUpdate: "CURRENT_TIMESTAMP",
+                    isNullable: false
                 }
             ]
-        }), true);
+        }));
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {

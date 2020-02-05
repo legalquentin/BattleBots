@@ -146,10 +146,17 @@ export default class BattleController {
                 // find the coressponding worker and get the redirection
                 end(this.battleWorkerService.joinGame(battleJoin.battleId.toString()));
 
+                /*
+                const response : Response<{Location}> = {
+                    httpCode: 302,
+                    data: {
+                        Location: ""
+                    },
+                    message: ""
+                };
                 // TODO: AND WHY THE FUCK I CANNOT DO THAT ???
-                // end(new SendResource<Response<any>>("BattleController", 302, {
-                //     Location: url
-                // }))
+                end(new SendResource<Response<any>>("BattleController", response.httpCode, response));
+                */
             } catch (e) {
                 const response: Response<IResourceId> = {
                     data: null,
