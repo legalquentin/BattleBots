@@ -54,11 +54,6 @@ export class Robots1580907469348 implements MigrationInterface {
                     isNullable: false
                 },
                 {
-                    name: "arena_id",
-                    type: "int",
-                    isNullable: false
-                },
-                {
                     name: "player_id",
                     type: "int",
                     isNullable: false

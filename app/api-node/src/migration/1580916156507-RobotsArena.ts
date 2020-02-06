@@ -7,6 +7,13 @@ export class RobotsArena1580916156507 implements MigrationInterface {
             "name": "robots_arena",
             "columns": [
                 {
+                    "name": "id",
+                    "type": "int",
+                    'isGenerated': true,
+                    "isPrimary": true,
+                    "generationStrategy": "increment"
+                },
+                {
                     "name": "bot_id",
                     "type": "int",
                     "isNullable": false

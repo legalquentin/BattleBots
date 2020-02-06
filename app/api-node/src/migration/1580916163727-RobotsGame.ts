@@ -7,6 +7,13 @@ export class RobotsGame1580916163727 implements MigrationInterface {
             "name": "robots_game",
             "columns": [
                 {
+                    "name": "id",
+                    "type": "int",
+                    'isGenerated': true,
+                    "isPrimary": true,
+                    "generationStrategy": "increment"
+                },
+                {
                     "name": "bot_id",
                     "type": "int",
                     "isNullable": false
