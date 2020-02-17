@@ -10,7 +10,7 @@ import { SendResource } from '../../lib/ReturnExtended';
 import Response from "../http-models/Response";
 import * as request from 'request';
 import * as kill from 'tree-kill';
-import IBattleResource from '../http-models/IBattleResource';
+import { IGameResource } from "../http-models/IGameResource";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 let Workers: IWorkerMeta = null;
@@ -28,20 +28,20 @@ export default class BattleWorkerService {
     /**
      * startGoWorker will start a go process on the server add it to the listof  "WorkerProcesses"
      */
-    public async startGoWorker(battle: IBattleResource) {
+    public async startGoWorker(game: IGameResource) {
         const p = await new Promise(async rslv => {
             const WORKER_PATH = '/Users/quentin/D.PERS/BattleBots/app/api-go/main.go'; // '/home/quentin/go/src/TIC-GPE5/Worker';
-            const secret =  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            const secret = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
             if (Workers == null) {
                 const child = cp.spawn('go', ['run', WORKER_PATH, secret], { stdio: [process.stdin, process.stdout, process.stderr] });
-                Workers = {process: child, url: "127.0.0.1:1234", key: secret};
+                Workers = { process: child, url: "127.0.0.1:1234", key: secret };
                 // give 3 sec to start the worker
                 await new Promise(resolve => setTimeout(resolve, 3000));
             }
-            battle.token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            game.token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
             request({
-                agentOptions: { rejectUnauthorized: false},
-                body: battle,
+                agentOptions: { rejectUnauthorized: false },
+                body: game,
                 headers: {
                     'x-api-key': secret
                 },
@@ -49,12 +49,12 @@ export default class BattleWorkerService {
                 method: "POST",
                 strictSSL: false,
                 url: "https://127.0.0.1:443/api/game/create"
-            },  (error, response, body) => {
+            }, (error, response, body) => {
                 console.log("#################################");
                 console.log(response, body);
-                rslv({token: battle.token, secret: secret});
+                rslv({ token: game.token, secret: secret });
             });
-        });        
+        });
         return p;
     }
 
@@ -75,13 +75,13 @@ export default class BattleWorkerService {
         if (typeof gameMeta === 'undefined') {
             console.log('[ERROR](JOIN)', 'lost handle on worker process... do $> pkill Worker');
             return (new SendResource<Response<any>>("BattleController", 404, {
-                data:null,
+                data: null,
                 httpCode: 404,
                 message: `Game instance could not be found, contact an administrator`
             }));
         } else {
             return new SendResource<Response<any>>("BattleController", 200, {
-                data: {url: gameMeta.url},
+                data: { url: gameMeta.url },
                 httpCode: 200,
                 message: `game instance address`
             });
