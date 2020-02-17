@@ -29,3 +29,6 @@ deploy\:api:
 
 deploy\:front:
 	cd ../app/vuejs && yarn run build
+
+all\:stop:
+	cd .docker && docker-compose stop
