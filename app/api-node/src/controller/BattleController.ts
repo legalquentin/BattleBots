@@ -13,6 +13,7 @@ import BattleWorkerService from '../service/BattleWorkerService';
 import { battleResourceDecoder, battleJoinDecoder } from "../service/Validation";
 import UserEntity from '../database/entities/UserEntity';
 import UserBattleEntityAsm from '../service/UserBattleEntityAsm';
+import { IGameResource } from "../http-models/IGameResource";
 
 @Path("/battle")
 export default class BattleController {
@@ -43,7 +44,7 @@ export default class BattleController {
     @Path("/")
     @POST
     @Security("ROLE_USER")
-    public register(battle: IBattleResource): Promise<SendResource<Response<IResourceId>>> {
+    public register(battle: IGameResource): Promise<SendResource<Response<IResourceId>>> {
         const entity = this.asm.toEntity(battle);
 
         return new Promise<SendResource<Response<IResourceId>>>(async (end) => {
