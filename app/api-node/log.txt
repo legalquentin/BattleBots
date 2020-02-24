@@ -44,3 +44,28 @@ Error {"diagnosticText":"src/service/BattleWorkerService.ts(51,17): error TS1005
 undefined
 undefined
 undefined
+undefined
+Error {"diagnosticText":"src/database/entities/RobotsArenaEntity.ts(1,1): error TS6133: 'AbstractEntity' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+undefined
+Error {}
+undefined
+Error {}
+undefined
+Error {}
+undefined
+Error {}
+undefined
+Error {}
+undefined
+Error {}
+undefined
+Error {}
+undefined
+Error {"name":"MissingPrimaryColumnError","message":"Entity \"RobotGameEntity\" does not have a primary column. Primary column is required to have in all your entities. Use @PrimaryColumn decorator to add a primary column to your entity."}
+undefined
+Error {"diagnosticText":"src/controller/BattleController.ts(48,42): error TS2345: Argument of type 'IGameResource' is not assignable to parameter of type 'IBattleResource'.\n  Property 'name' is missing in type 'IGameResource' but required in type 'IBattleResource'.\nsrc/controller/BattleController.ts(77,24): error TS2339: Property 'id' does not exist on type 'IGameResource'.\n","diagnosticCodes":[2345,2339]}
+undefined
+Error {"diagnosticText":"src/controller/UserController.ts(109,27): error TS6133: 'playerRet' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+undefined
+undefined
+undefined

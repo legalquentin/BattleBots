@@ -6,11 +6,11 @@ import { Entity, Column } from "typeorm";
 })
 export class GameEntity extends AbstractEntity {
     @Column({ name: "game_name", nullable: false })
-    game_name: string;
+    public game_name: string;
 
     @Column({ name: "arena_id", nullable: false })
-    arena_id: number;
+    public arena_id: number;
 
     @Column({ name: "game_status", nullable: false })
-    game_status: number;
+    public game_status: number;
 }

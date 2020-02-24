@@ -14,14 +14,18 @@ import ITokenHttp from "../http-models/ITokenHttp";
 import Response from "../http-models/Response";
 import { SendResource } from "../../lib/ReturnExtended";
 import { userResourceDecoder } from "../service/Validation";
+import { PlayerEntity } from "../database/entities/PlayerEntity";
+import * as _ from "lodash";
 
 @Path('/users')
 export class UserController {
 
     repository: Repository<UserEntity>;
+    playerRepository: Repository<PlayerEntity>;
 
     constructor() {
         this.repository = getRepository(UserEntity);
+        this.playerRepository = getRepository(PlayerEntity);
     }
 
     @Path('/login')
@@ -57,7 +61,8 @@ export class UserController {
     }
 
     @Path('/')
-    @POST public register(user: IUserResource): Promise<SendResource<Response<IResourceId>>> {
+    @POST 
+    public register(user: IUserResource): Promise<SendResource<Response<IResourceId>>> {
         const asm = new UserEntityAsm();
         const entity = asm.toEntity(user);
 
@@ -75,10 +80,10 @@ export class UserController {
             user.updatedAt = (+new Date()).toString();
 
             // TODO: check regex user credentials
-            if (user.password === "") {
+            if (_.trim(user.password).length === 0) {
                 response.message = "password cannot be null";
                 return end(new SendResource<Response<IResourceId>>("UserController", response.httpCode, response));
-            } else if (user.pseudo === "" || user.email === "") {
+            } else if (_.trim(user.pseudo).length === 0 || _.trim(user.email).length === 0) {
                 response.message = "fields cannot be null";
                 return end(new SendResource<Response<IResourceId>>("UserController", response.httpCode, response));
             }
@@ -89,21 +94,20 @@ export class UserController {
                 response.message = e.message;
                 return end(new SendResource<Response<IResourceId>>("UserController", response.httpCode, response));
             }
-
-            // TODO: check regex user credentials
-
-
             if (user.password !== user.confirmation) {
                 response.message = "Password doesn't match confirmation field";
                 return end(new SendResource<Response<IResourceId>>("UserController", response.httpCode, response));
             }
             const list = await this.repository.find({ where: { pseudo: entity.pseudo } });
 
-            console.info(list);
-
             if (list.length === 0) {
                 try {
                     ret = await this.repository.save(entity);
+                    const player : PlayerEntity = {
+                        user: ret,
+                        total_points: 0
+                    };
+                    await this.playerRepository.save(player);
                     response.httpCode = 201;
                 }
                 catch (e) {
@@ -142,15 +146,16 @@ export class UserController {
 
     @Path('/')
     @Security("ROLE_USER")
-    @GET public list(): Promise<SendResource<Response<IUserResource[]>>> {
+    @GET 
+    public list(): Promise<SendResource<Response<IUserResource[]>>> {
         const asm = new UserEntityAsm();
 
         return new Promise<SendResource<Response<IUserResource[]>>>(async end => {
-            const list = await this.repository.find();
+            const list = await this.playerRepository.find();
             const response: Response<IUserResource[]> = {
                 httpCode: 200,
                 message: "list user",
-                data: asm.toResources(list)
+                data: asm.toPlayerResources(list)
             };
 
             end(new SendResource<Response<IUserResource[]>>("UserController", response.httpCode, response));

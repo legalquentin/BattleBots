@@ -1,3 +1,5 @@
+import IGameProfileResource from "./IGameProfileResource";
+
 export default interface IUserResource {
     id?: number;
     firstname?: string;
@@ -9,4 +11,5 @@ export default interface IUserResource {
     updatedAt?: string;
     password?: string;
     confirmation?: string;
+    gameProfile?: IGameProfileResource
 };

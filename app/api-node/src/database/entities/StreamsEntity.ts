@@ -1,28 +1,31 @@
 import { AbstractEntity } from "./AbstractEntity";
-import { Column } from "typeorm";
+import { Column, Entity } from "typeorm";
 
+@Entity({
+    name: "streams"
+})
 export class StreamsEntity extends AbstractEntity {
     @Column({name: "game_id"})
-    gameId: number;
+    public gameId: number;
 
     @Column({name: "robot_id"})
-    robotId: number;
+    public robotId: number;
 
     @Column({name: "kinesis_url"})
-    kinesisUrl: string;
+    public kinesisUrl: string;
 
     @Column({name: "s3_url"})
-    s3Url: string;
+    public s3Url: string;
 
     @Column({name: "private"})
-    private: number;
+    public private: number;
 
     @Column({name: "running"})
-    running: number;
+    public running: number;
 
     @Column({name: "duration"})
-    duration: number;
+    public duration: number;
 
     @Column({name: "encodage"})
-    encodage: string;
+    public encodage: string;
 }

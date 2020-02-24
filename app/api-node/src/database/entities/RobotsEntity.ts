@@ -6,29 +6,29 @@ import { Entity, Column } from "typeorm";
 })
 export class RobotsEntity extends AbstractEntity {
     @Column({name: "bot_ip"})
-    botIp: string;
+    public botIp: string;
 
     @Column({name: "running"})
-    running: number;
+    public running: number;
 
     @Column({name: "taken"})
-    taken: number;
+    public taken: number;
 
     @Column({name: "name"})
-    name: string;
+    public name: string;
 
     @Column({name: "speed"})
-    speed: number;
+    public speed: number;
 
     @Column({name: "damage"})
-    damage: number;
+    public damage: number;
 
     @Column({name: "fire_rate"})
-    fireRate: number;
+    public fireRate: number;
 
     @Column({name: "armor"})
-    armor: number;
+    public armor: number;
 
     @Column({name: "player_id"})
-    playerId: number;
+    public playerId: number;
 }

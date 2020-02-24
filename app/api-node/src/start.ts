@@ -24,7 +24,7 @@ export async function start(): Promise<ApiServer> {
             password: "p@ssw0rd",
             database: process.env.NODE_ENV === "test" ? "db_test" : "db",
             entities: [
-                `${__dirname}/database/entities/*.ts`
+                `${__dirname}/database/entities/**/*.ts`
             ],
             synchronize: true,
             logging: process.env.NODE_ENV !== "test"
@@ -117,6 +117,7 @@ export async function start(): Promise<ApiServer> {
             resolve(apiServer);
         }).catch((error: Error) => {
             console.dir(error);
+            console.log(error.message);
             fs.appendFileSync('./log.txt', `Error ${JSON.stringify(error)}\n`);
         });
     });

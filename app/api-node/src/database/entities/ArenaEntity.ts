@@ -6,8 +6,8 @@ import { Entity, Column } from "typeorm";
 })
 export class ArenaEntity extends AbstractEntity {
     @Column({ name: "arena_name" })
-    arena_name: string;
+    public arena_name: string;
 
     @Column({ name: "available" })
-    available: number;
+    public available: number;
 }

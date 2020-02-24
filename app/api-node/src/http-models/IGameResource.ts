@@ -1,3 +1,7 @@
 export class IGameResource {
-    token: string;
+    id?: number;
+    name: string;
+    token?: string;
+    createdAt?: string;
+    updatedAt?: string;
 }

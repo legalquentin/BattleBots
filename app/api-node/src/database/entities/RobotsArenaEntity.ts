@@ -1,16 +1,15 @@
-import { AbstractEntity } from "./AbstractEntity";
-import { Entity, Column } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({
     name: "robots_arena"
 })
 export class RobotsArenaEntity  {
-    @Column({name: "id"})
-    id: number;
+    @PrimaryGeneratedColumn({name: "id"})
+    public id: number;
 
     @Column({name: "robot_id"})
-    robotId: number;
+    public robotId: number;
 
     @Column({name: "arena_id"})
-    arenaId: number;
+    public arenaId: number;
 }

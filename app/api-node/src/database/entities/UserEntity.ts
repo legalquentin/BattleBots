@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import { AbstractEntity } from './AbstractEntity';
 import UserBattleEntity from './UserBattleEntity';
+import { PlayerEntity } from './PlayerEntity';
 
 @Entity({ name: 'user' })
 export default class UserEntity extends AbstractEntity {
@@ -24,5 +25,8 @@ export default class UserEntity extends AbstractEntity {
 
     @OneToMany(type => UserBattleEntity, game => game.user)
     public userGames: Array<UserBattleEntity>;
+
+    @OneToMany(type => PlayerEntity, player => player.user)
+    public players: Array<PlayerEntity>;
 
 }

@@ -1,15 +1,15 @@
-import { Entity, Column } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({
     name: "robots_game"
 })
 export class RobotGameEntity {
-    @Column({name: "id"})
-    id: number;
+    @PrimaryGeneratedColumn({name: "id"})
+    public id: number;
 
     @Column({name: "bot_id"})
-    botId: number;
+    public botId: number;
 
     @Column({name: "game_id"})
-    gameId: number;
+    public gameId: number;
 }

@@ -86,7 +86,7 @@ export class ApiServer {
         // Native Express configuration
 
         this.app.use(function (req, res, next) {
-            res.header("Access-Control-Allow-Origin", "http://192.168.1.36:8080");
+            res.header("Access-Control-Allow-Origin", req.get("Origin"));
             res.header("Access-Control-Allow-Credentials", "true");
             res.header("Access-Control-Allow-Headers", "Origin, Referer, UserAgent, charset, X-Requested-With, Content-Type, Accept");
             res.status(200);
@@ -126,6 +126,6 @@ export class ApiServer {
         });
 
         Server.registerAuthenticator(authenticator);
-        Server.registerAuthenticator(authenticator, 'secondAuthenticator');
+       // Server.registerAuthenticator(authenticator, 'secondAuthenticator');
     }
 }
