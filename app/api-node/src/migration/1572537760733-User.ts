@@ -46,11 +46,6 @@ export class User1572537760733 implements MigrationInterface {
                     isNullable: false
                 },
                 {
-                    name: "salt",
-                    type: "varchar",
-                    isNullable: false
-                },
-                {
                     name: "created_at",
                     type: "timestamp",
                     isNullable: false,

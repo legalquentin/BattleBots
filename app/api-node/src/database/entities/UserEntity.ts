@@ -13,9 +13,6 @@ export default class UserEntity extends AbstractEntity {
     @Column({ type: 'text', name: 'hash' })
     public hash: string;
 
-    @Column({ type: 'text', name: 'salt' })
-    public salt: string;
-
     @Column({name: "email", unique: true})
     public email: string;
     
