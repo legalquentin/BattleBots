@@ -2,24 +2,21 @@
 
 import * as chai from 'chai';
 import { after, before, describe, it } from 'mocha';
-//import * as request from 'request';
 import { HttpMethod, Server } from 'typescript-rest';
-import { ApiServer } from '../src/api-server';
+import { ApiServer } from "../src/api-server";
 
 const expect = chai.expect;
 
-const apiServer: ApiServer = new ApiServer();
-//const helloRequest: request.RequestAPI<request.Request, request.CoreOptions, request.RequiredUriUrl>
-  //  = request.defaults({ baseUrl: `http://localhost:${apiServer.PORT}` });
+let apiServer = new ApiServer();
 
 describe('Hello Controller Tests', () => {
 
-    before(() => {
-        return apiServer.start();
+    before(async () => {
+        await apiServer.start();
     });
 
-    after(() => {
-        return apiServer.stop();
+    after(async () => {
+        await apiServer.stop();
     });
 
     describe('The Rest Server', () => {
@@ -38,86 +35,4 @@ describe('Hello Controller Tests', () => {
             expect(Server.getHttpMethods('/users/')).to.have.members([HttpMethod.GET, HttpMethod.POST]);
         });
     });
-
-    /*
-    describe('/hello/:name', () => {
-        it('should return the name informed for GET requests', (done) => {
-            helloRequest('/hello/joe', (error: any, response, body) => {
-                expect(response.statusCode).to.eq(200);
-                expect(body).to.eq('Hello joe');
-                done();
-            });
-        });
-
-        it('should return 405 for POST requests', (done) => {
-            helloRequest.post({
-                body: 'joe',
-                url: '/hello/joe'
-            }, (error, response, body) => {
-                expect(response.statusCode).to.eq(405);
-                done();
-            });
-        });
-    });
-
-    describe('/hello-objects/:name', () => {
-        it('should return the object with field "name" informed for GET requests', (done) => {
-            helloRequest('/hello-objects/joe', (error: any, response, body) => {
-                expect(response.statusCode).to.eq(200);
-                expect(JSON.parse(body)).to.eql({ greeting: 'joe' });
-                done();
-            });
-        });
-
-        it('should return 405 for POST requests', (done) => {
-            helloRequest.post({
-                body: 'joe',
-                url: '/hello-objects/joe'
-            }, (error, response, body) => {
-                expect(response.statusCode).to.eq(405);
-                done();
-            });
-        });
-    });
-
-    describe('/hello-ioc-direct/:name', () => {
-        it('should return the name informed for GET requests', (done) => {
-            helloRequest('/hello-ioc-direct/mike', (error: any, response, body) => {
-                expect(response.statusCode).to.eq(200);
-                expect(body).to.eq('Hello, mike');
-                done();
-            });
-        });
-
-        it('should return 405 for POST requests', (done) => {
-            helloRequest.post({
-                body: 'mike',
-                url: '/hello-ioc-direct/mike'
-            }, (error, response, body) => {
-                expect(response.statusCode).to.eq(405);
-                done();
-            });
-        });
-    });
-
-    describe('/hello-ioc-base/:name', () => {
-        it('should return the name informed for GET requests', (done) => {
-            helloRequest('/hello-ioc-base/sam', (error: any, response, body) => {
-                expect(response.statusCode).to.eq(200);
-                expect(body).to.eq('Hi sam!');
-                done();
-            });
-        });
-
-        it('should return 405 for POST requests', (done) => {
-            helloRequest.post({
-                body: 'sam',
-                url: '/hello-ioc-base/sam'
-            }, (error, response, body) => {
-                expect(response.statusCode).to.eq(405);
-                done();
-            });
-        });
-    });
-    */
 });

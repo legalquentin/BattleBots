@@ -43,6 +43,10 @@ export class ApiServer {
         // Server.swagger(this.app, { filePath: './dist/swagger.json' });
     }
 
+    public getApp() : Express.Application {
+        return (this.app);
+    }
+
     /**
      * Start the server
      */

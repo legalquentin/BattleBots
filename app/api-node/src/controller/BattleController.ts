@@ -1,9 +1,7 @@
 import { getRepository, Repository } from "typeorm";
 import { DELETE, GET, Path, PathParam, POST, Security } from "typescript-rest";
 import { SendResource } from "../../lib/ReturnExtended";
-import { BattleEntity } from "../database/entities/BattleEntity";
 import { SpellEntity } from "../database/entities/SpellEntity";
-import UserBattleEntity from "../database/entities/UserBattleEntity";
 import IBattleJoin from "../http-models/IBattleJoin";
 import IBattleResource from "../http-models/IBattleResource";
 import IResourceId from "../http-models/IResourceId";
@@ -12,28 +10,22 @@ import BattleEntityAsm from "../service/BattleEntityAsm";
 import BattleWorkerService from '../service/BattleWorkerService';
 import { battleResourceDecoder, battleJoinDecoder } from "../service/Validation";
 import UserEntity from '../database/entities/UserEntity';
-import UserBattleEntityAsm from '../service/UserBattleEntityAsm';
 import { IGameResource } from "../http-models/IGameResource";
-import { Inject } from "typescript-ioc";
+import { Inject, AutoWired } from "typescript-ioc";
 
+@AutoWired
 @Path("/battle")
 export default class BattleController {
-    public repository: Repository<BattleEntity>;
-    public userBattleRepository: Repository<UserBattleEntity>;
     public userRepository: Repository<UserEntity>;
     public spellRepository: Repository<SpellEntity>;
     public asm: BattleEntityAsm;
-    public userBattleEntityAsm: UserBattleEntityAsm;
     @Inject
     public battleWorkerService: BattleWorkerService;
 
     constructor() {
-        this.repository = getRepository(BattleEntity);
-        this.userBattleRepository = getRepository(UserBattleEntity);
         this.spellRepository = getRepository(SpellEntity);
         this.userRepository = getRepository(UserEntity);
         this.asm = new BattleEntityAsm();
-        this.userBattleEntityAsm = new UserBattleEntityAsm();
     }
 
     /**
@@ -46,7 +38,8 @@ export default class BattleController {
     @POST
     @Security("ROLE_USER")
     public register(battle: IGameResource): Promise<SendResource<Response<IResourceId>>> {
-        const entity = this.asm.toEntity(battle);
+      //  const entity = this.asm.toEntity(battle);
+      //  let entity = null;
 
         return new Promise<SendResource<Response<IResourceId>>>(async (end) => {
             let ret = null;
@@ -64,7 +57,7 @@ export default class BattleController {
                 return end(new SendResource<Response<IResourceId>>("BattleController", response.httpCode, response));
             }
             try {
-                ret = await this.repository.save(entity);
+               // ret = await this.repository.save(entity);
             }
             catch (e) {
                 response.httpCode = 400;
@@ -95,7 +88,7 @@ export default class BattleController {
     @Security("ROLE_USER")
     public list(): Promise<SendResource<Response<Array<IBattleResource>>>> {
         return new Promise<SendResource<Response<Array<IBattleResource>>>>(async (end) => {
-            const list = await this.repository.find();
+            const list = []//await this.repository.find();
             const resources = this.asm.toResources(list);
             const response: Response<Array<IBattleResource>> = {
                 data: resources,
@@ -124,7 +117,8 @@ export default class BattleController {
         return new Promise<SendResource<Response<any>>>(async (end) => {
             try {
                 battleJoinDecoder.runWithException(battleJoin);
-                const battleEntity = await this.repository.findOne(battleJoin.battleId);
+//                const battleEntity = await this.repository.findOne(battleJoin.battleId);
+                let battleEntity = null;
                 if (battleEntity == null) {
                     end(new SendResource<Response<any>>("BattleController", 404, {
                         httpCode: 404,
@@ -133,16 +127,18 @@ export default class BattleController {
                     }));
                 }
 
-                const user: UserEntity = await this.userRepository.findOne(battleJoin.userId);
-                const entity = this.userBattleEntityAsm.toEntity(user, battleEntity);
-                let userEntity = await this.userBattleRepository.findOne({ where: { user: entity.user } });
+               // const user: UserEntity = await this.userRepository.findOne(battleJoin.userId);
+                let userEntity = null;
+               // let entity = null;
+                //   const entity = this.userBattleEntityAsm.toEntity(user, battleEntity);
+               // let userEntity = await this.userBattleRepository.findOne({ where: { user: entity.user } });
 
                 //TODO: Check if game has available slots for new players
                 if (userEntity != null) {
                     // player aready joined, just return him the worker endpoint address
                     end(this.battleWorkerService.joinGame(battleJoin.battleId.toString()));
                 } else {
-                    userEntity = await this.userBattleRepository.save(entity);
+                  //  userEntity = await this.userBattleRepository.save(entity);
                 }
 
                 // find the coressponding worker and get the redirection
@@ -202,12 +198,13 @@ export default class BattleController {
     @Security("ROLE_USER")
     public delete(@PathParam("battleId") battleId: number) {
         return new Promise<SendResource<Response<any>>>(async (end) => {
-            const battle = await this.repository.findOne(battleId);
+           // const battle = await this.repository.findOne(battleId);
+            let battle = null;
 
             if (battle) {
                 // remove foreign keys 
-                await this.userBattleRepository.remove(battle.userBattles);
-                await this.repository.remove(battle);
+              //  await this.userBattleRepository.remove(battle.userBattles);
+                //await this.repository.remove(battle);
 
                 this.battleWorkerService.killGoWorker();
                 end(new SendResource<Response<any>>("BattleController", 200, {
