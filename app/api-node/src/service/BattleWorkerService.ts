@@ -24,7 +24,7 @@ interface IWorkerMeta {
 }
 
 @Provides(IBattleWorkerService)
-export default class BattleWorkerService {
+export default class BattleWorkerService implements IBattleWorkerService{
     // Workers hold ref to all running games
 
 
