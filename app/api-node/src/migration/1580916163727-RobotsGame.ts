@@ -43,6 +43,9 @@ export class RobotsGame1580916163727 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
+        await queryRunner.dropForeignKey("robots_game", "fk_robots_game_bot_game_id");
+        await queryRunner.dropForeignKey("robots_game", "fk_robots_game_game_id_bot");
+        await queryRunner.dropTable("robots_game");
     }
 
 }

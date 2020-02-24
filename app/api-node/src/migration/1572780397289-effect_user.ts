@@ -42,6 +42,8 @@ export class effectUser1572780397289 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
+        await queryRunner.dropForeignKey("effect_user", "fk_effect_user_effect_id");
+        await queryRunner.dropForeignKey("effect_user", "fk_effect_user_user_id");
+        await queryRunner.dropTable("effect_user");
     }
-
 }

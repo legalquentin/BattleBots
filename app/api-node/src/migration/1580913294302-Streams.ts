@@ -84,6 +84,8 @@ export class Streams1580913294302 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
+        await queryRunner.dropForeignKey("streams", "fk_streams_robot_id");
+        await queryRunner.dropForeignKey("streams", "fk_streams_game_id");
+        await queryRunner.dropTable("streams");
     }
-
 }

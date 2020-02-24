@@ -40,6 +40,7 @@ export class spell1572776513129 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
+        await queryRunner.dropTable("spell");
     }
 
 }

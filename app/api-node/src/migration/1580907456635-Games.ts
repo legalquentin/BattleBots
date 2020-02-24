@@ -54,6 +54,8 @@ export class Games1580907456635 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
+        await queryRunner.dropForeignKey("games", "fk_games_arena_id");
+        await queryRunner.dropTable("games");
     }
 
 }

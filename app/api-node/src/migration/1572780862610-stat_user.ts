@@ -40,6 +40,8 @@ export class statUser1572780862610 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
+        await queryRunner.dropForeignKey("stat_user", "fk_stat_user_user_id");
+        await queryRunner.dropTable("stat_user");
     }
 
 }

@@ -22,7 +22,8 @@
     "typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ./src/ormconfig.ts",
     "typeorm:migration:create": "npm run typeorm:cli -- migration:create -n ",
     "typeorm:migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run -c app",
-    "typeorm:migration:test": "ts-node ./node_modules/typeorm/cli.js migration:run -c test"
+    "typeorm:migration:test": "ts-node ./node_modules/typeorm/cli.js migration:run -c test",
+    "typeorm:migration:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert -c app"
   },
   "dependencies": {
     "@mojotech/json-type-validation": "^3.1.0",

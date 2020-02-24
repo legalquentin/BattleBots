@@ -45,6 +45,7 @@ export class effect1572778879472 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
+        await queryRunner.dropTable("effect");
     }
 
 }

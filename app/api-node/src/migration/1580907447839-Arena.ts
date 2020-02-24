@@ -40,6 +40,7 @@ export class Arena1580907447839 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
+        await queryRunner.dropTable("arena");
     }
 
 }

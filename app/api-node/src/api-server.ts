@@ -31,12 +31,14 @@ export class ApiServer {
         this.app.use(bodyParser.urlencoded({ extended: true }));
         this.app.use(bodyParser.json());
 
-        this.app.use("*", function (req, res, next) {
+        /*
+            this.app.use("*", function (req, res, next) {
 
-            //if (!res.headersSent) { res.status(404).send("Not found") }
-            if (!res.headersSent) { res.render("App/index.html"); }
-            next();
-        });
+                //if (!res.headersSent) { res.status(404).send("Not found") }
+                if (!res.headersSent) { res.render("App/index.html"); }
+                next();
+            });
+        */
         // Disable swagger at this time
         // Server.swagger(this.app, { filePath: './dist/swagger.json' });
     }
