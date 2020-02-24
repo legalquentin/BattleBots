@@ -18,7 +18,7 @@ describe('API Testing', async () => {
     });
 
     after(async () => {
-        apiServer.stop();
+        await apiServer.stop();
     });
 
     describe("User", async () => {
