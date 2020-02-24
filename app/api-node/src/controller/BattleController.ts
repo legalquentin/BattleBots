@@ -14,6 +14,7 @@ import { battleResourceDecoder, battleJoinDecoder } from "../service/Validation"
 import UserEntity from '../database/entities/UserEntity';
 import UserBattleEntityAsm from '../service/UserBattleEntityAsm';
 import { IGameResource } from "../http-models/IGameResource";
+import { Inject } from "typescript-ioc";
 
 @Path("/battle")
 export default class BattleController {
@@ -23,6 +24,7 @@ export default class BattleController {
     public spellRepository: Repository<SpellEntity>;
     public asm: BattleEntityAsm;
     public userBattleEntityAsm: UserBattleEntityAsm;
+    @Inject
     public battleWorkerService: BattleWorkerService;
 
     constructor() {
@@ -30,7 +32,6 @@ export default class BattleController {
         this.userBattleRepository = getRepository(UserBattleEntity);
         this.spellRepository = getRepository(SpellEntity);
         this.userRepository = getRepository(UserEntity);
-        this.battleWorkerService = new BattleWorkerService();
         this.asm = new BattleEntityAsm();
         this.userBattleEntityAsm = new UserBattleEntityAsm();
     }

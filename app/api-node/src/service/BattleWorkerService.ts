@@ -11,6 +11,8 @@ import Response from "../http-models/Response";
 import * as request from 'request';
 import * as kill from 'tree-kill';
 import { IGameResource } from "../http-models/IGameResource";
+import { Provides } from 'typescript-ioc';
+import IBattleWorkerService from './IBattleWorkerService';
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 let Workers: IWorkerMeta = null;
@@ -21,6 +23,7 @@ interface IWorkerMeta {
     url: string;
 }
 
+@Provides(IBattleWorkerService)
 export default class BattleWorkerService {
     // Workers hold ref to all running games
 
