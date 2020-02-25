@@ -6,13 +6,13 @@
  * Author @quentin
  */
 import * as cp from 'child_process';
-import { SendResource } from '../../lib/ReturnExtended';
-import Response from "../http-models/Response";
+import { SendResource } from '../../../lib/ReturnExtended';
+import Response from "../../resources/Response";
 import * as request from 'request';
 import * as kill from 'tree-kill';
-import { IGameResource } from "../http-models/IGameResource";
-import { Provides } from 'typescript-ioc';
-import IBattleWorkerService from './IBattleWorkerService';
+import { IGameResource } from "../../resources/IGameResource";
+import { Provides, Singleton } from 'typescript-ioc';
+import IBattleWorkerService from '../IBattleWorkerService';
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 let Workers: IWorkerMeta = null;
@@ -23,6 +23,7 @@ interface IWorkerMeta {
     url: string;
 }
 
+@Singleton
 @Provides(IBattleWorkerService)
 export default class BattleWorkerService implements IBattleWorkerService{
     // Workers hold ref to all running games

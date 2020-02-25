@@ -4,7 +4,7 @@ import * as http from 'http';
 import * as morgan from 'morgan';
 import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt';
 import { PassportAuthenticator, Server } from 'typescript-rest';
-import Config from './service/config';
+import Config from './service/impl/Config';
 
 export class ApiServer {
     public PORT: number = 8080; // +process.env.PORT || 8080;
@@ -31,19 +31,19 @@ export class ApiServer {
         this.app.use(bodyParser.urlencoded({ extended: true }));
         this.app.use(bodyParser.json());
 
-        
-            this.app.use("*", function (req, res, next) {
 
-               // if (!res.headersSent) { res.status(404).send("Not found") }
-                if (!res.headersSent) { res.render("App/index.html"); }
-                next();
-            });
-        
+        this.app.use("*", function (req, res, next) {
+
+            // if (!res.headersSent) { res.status(404).send("Not found") }
+            if (!res.headersSent) { res.render("App/index.html"); }
+            next();
+        });
+
         // Disable swagger at this time
         // Server.swagger(this.app, { filePath: './dist/swagger.json' });
     }
 
-    public getApp() : Express.Application {
+    public getApp(): Express.Application {
         return (this.app);
     }
 
@@ -130,6 +130,6 @@ export class ApiServer {
         });
 
         Server.registerAuthenticator(authenticator);
-       // Server.registerAuthenticator(authenticator, 'secondAuthenticator');
+        // Server.registerAuthenticator(authenticator, 'secondAuthenticator');
     }
 }

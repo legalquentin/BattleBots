@@ -33,6 +33,7 @@ export class Arena1580907447839 implements MigrationInterface {
                     type: "timestamp",
                     name: "updated_at",
                     onUpdate: "CURRENT_TIMESTAMP",
+                    default: "CURRENT_TIMESTAMP",
                     isNullable: false
                 }
             ]

@@ -1,33 +1,26 @@
 'use strict';
 import { ApiServer } from './api-server';
 import "reflect-metadata";
-import { Connection, createConnection, getRepository } from 'typeorm';
-import { SpellEntity } from './database/entities/SpellEntity';
+import { Connection, createConnection } from 'typeorm';
 import * as fs from "fs";
-//import UserEntity from './database/entities/UserEntity';
-
-// import { MongoConnector } from "./mongo-connector";
-
 
 export async function start(): Promise<ApiServer> {
 
     // const mongoConnector = new MongoConnector();
     // TODO : Create config files (db settings and entities declarations)
     return new Promise((resolve, reject) => {
-        console.dir(process.env.NODE_ENV);
-        fs.appendFileSync('./log.txt', process.env.NODE_ENV + "\n");
         createConnection({
+            name: "app",
             type: "postgres",
             host: "localhost",
-            port: process.env.NODE_ENV === "test" ? 5434 : 5432,
+            port: 5432,
             username: "root",
             password: "p@ssw0rd",
-            database: process.env.NODE_ENV === "test" ? "db_test" : "db",
+            database: "db",
             entities: [
                 `${__dirname}/database/entities/**/*.ts`
             ],
-            synchronize: true,
-            logging: process.env.NODE_ENV !== "test"
+            logging: true
         }).then(async (connection: Connection) => {
             console.log("Connexion établie");
 
@@ -66,6 +59,7 @@ export async function start(): Promise<ApiServer> {
             */
             // So while we receive ISO json, we can insert it in db with two lines of code !
 
+            /*
             const spellRepository = getRepository(SpellEntity);
 
             const tab = await spellRepository.find({
@@ -103,6 +97,7 @@ export async function start(): Promise<ApiServer> {
                 s3.formula = "{c.health}";
                 await spellRepository.save(s3);
             }
+            */
 
             const apiServer = new ApiServer();
 

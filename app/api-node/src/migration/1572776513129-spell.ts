@@ -2,7 +2,7 @@ import {MigrationInterface, QueryRunner, Table} from "typeorm";
 
 export class spell1572776513129 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<any> {
-        queryRunner.createTable(new Table({
+        await queryRunner.createTable(new Table({
             name: "spell",
             columns: [
                 {
@@ -33,6 +33,7 @@ export class spell1572776513129 implements MigrationInterface {
                     name: "updatedAt",
                     type: "timestamp",
                     isNullable: false,
+                    default: "CURRENT_TIMESTAMP",
                     onUpdate: "CURRENT_TIMESTAMP"
                 }
             ]

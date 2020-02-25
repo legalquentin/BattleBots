@@ -1,8 +1,8 @@
-import IUserResource from "../http-models/IUserResource";
-import UserEntity from "../database/entities/UserEntity";
+import IUserResource from "../IUserResource";
+import UserEntity from "../../database/entities/UserEntity";
 import { hashSync } from "bcrypt";
-import Config from "./config";
-import { PlayerEntity } from "../database/entities/PlayerEntity";
+import Config from "../../service/impl/Config";
+import { PlayerEntity } from "../../database/entities/PlayerEntity";
 
 export default class UserEntityAsm {
     public toEntity(user: IUserResource) : UserEntity{

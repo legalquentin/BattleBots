@@ -33,20 +33,21 @@ export class player1582536574248 implements MigrationInterface {
                     "name": "updated_at",
                     "type": "timestamp",
                     "onUpdate": "CURRENT_TIMESTAMP",
+                    "default": "CURRENT_TIMESTAMP",
                     "isNullable": false
                 }
             ]
         }));
         await queryRunner.createForeignKey("player", new TableForeignKey({
+            name: "fk_player_user_id",
             columnNames: ["user_id"],
-            referencedTableName: "user",
-            referencedColumnNames: ["id"],
-            name: "fk_player_user_user_id"
+            referencedTableName: "users",
+            referencedColumnNames: ["id"]
         }));
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
-        await queryRunner.dropForeignKey("player", "fk_player_user_user_id");
+        await queryRunner.dropForeignKey("player", "fk_player_user_id");
         await queryRunner.dropTable("player");
     }
 

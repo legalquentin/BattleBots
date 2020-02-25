@@ -2,30 +2,30 @@ import { getRepository, Repository } from "typeorm";
 import { DELETE, GET, Path, PathParam, POST, Security } from "typescript-rest";
 import { SendResource } from "../../lib/ReturnExtended";
 import { SpellEntity } from "../database/entities/SpellEntity";
-import IBattleJoin from "../http-models/IBattleJoin";
-import IBattleResource from "../http-models/IBattleResource";
-import IResourceId from "../http-models/IResourceId";
-import Response from "../http-models/Response";
-import BattleEntityAsm from "../service/BattleEntityAsm";
-import BattleWorkerService from '../service/BattleWorkerService';
-import { battleResourceDecoder, battleJoinDecoder } from "../service/Validation";
+import IBattleJoin from "../resources/IBattleJoin";
+import IBattleResource from "../resources/IBattleResource";
+import IResourceId from "../resources/IResourceId";
+import Response from "../resources/Response";
+import BattleWorkerService from '../service/impl/BattleWorkerService';
+import { battleResourceDecoder, battleJoinDecoder } from "../validation/Validation";
 import UserEntity from '../database/entities/UserEntity';
-import { IGameResource } from "../http-models/IGameResource";
+import { IGameResource } from "../resources/IGameResource";
 import { Inject, AutoWired } from "typescript-ioc";
 
 @AutoWired
 @Path("/battle")
 export default class BattleController {
+
+    @Inject
     public userRepository: Repository<UserEntity>;
+
     public spellRepository: Repository<SpellEntity>;
-    public asm: BattleEntityAsm;
+
     @Inject
     public battleWorkerService: BattleWorkerService;
 
     constructor() {
         this.spellRepository = getRepository(SpellEntity);
-        this.userRepository = getRepository(UserEntity);
-        this.asm = new BattleEntityAsm();
     }
 
     /**
@@ -88,10 +88,8 @@ export default class BattleController {
     @Security("ROLE_USER")
     public list(): Promise<SendResource<Response<Array<IBattleResource>>>> {
         return new Promise<SendResource<Response<Array<IBattleResource>>>>(async (end) => {
-            const list = []//await this.repository.find();
-            const resources = this.asm.toResources(list);
             const response: Response<Array<IBattleResource>> = {
-                data: resources,
+                data: [],
                 httpCode: 200,
                 message: "list battle"
             };

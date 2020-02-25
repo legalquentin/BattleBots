@@ -63,7 +63,8 @@ export class Streams1580913294302 implements MigrationInterface {
                     "name": "updated_at",
                     "isNullable": false,
                     "type": "timestamp",
-                    "onUpdate": "CURRENT_TIMESTAMP"
+                    "onUpdate": "CURRENT_TIMESTAMP",
+                    "default": "CURRENT_TIMESTAMP",
                 }
             ]
         }));

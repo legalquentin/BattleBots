@@ -1,7 +1,7 @@
 import { Path, Security, GET } from "typescript-rest";
-import { SpellResource } from "../http-models/SpellResource";
-import Response from "../http-models/Response";
-import SpellEntityAsm from "../service/SpellEntityAsm";
+import { SpellResource } from "../resources/SpellResource";
+import Response from "../resources/Response";
+import SpellEntityAsm from "../resources/asm/SpellEntityAsm";
 import { Repository, getRepository } from "typeorm";
 import { SpellEntity } from "../database/entities/SpellEntity";
 import { SendResource } from "../../lib/ReturnExtended";

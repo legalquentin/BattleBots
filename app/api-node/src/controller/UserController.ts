@@ -1,67 +1,81 @@
 'use strict';
 
 import { Path, POST, GET, PathParam, Security } from "typescript-rest";
-import IUserResource from "../http-models/IUserResource";
-import IUserHttpModel from "../http-models/IUserHttpModel";
-import { getRepository, Repository } from "typeorm";
-import UserEntityAsm from "../service/UserEntityAsm";
+import IUserResource from "../resources/IUserResource";
+import IUserHttpModel from "../resources/IUserHttpModel";
+import UserEntityAsm from "../resources/asm/UserEntityAsm";
 import UserEntity from "../database/entities/UserEntity";
-import IResourceId from "../http-models/IResourceId";
+import IResourceId from "../resources/IResourceId";
 import { encode } from "jwt-simple";
 import { compare } from "bcrypt";
-import Config from "../service/config";
-import ITokenHttp from "../http-models/ITokenHttp";
-import Response from "../http-models/Response";
+import Config from "../service/impl/Config";
+import ITokenHttp from "../resources/ITokenHttp";
+import Response from "../resources/Response";
 import { SendResource } from "../../lib/ReturnExtended";
-import { userResourceDecoder } from "../service/Validation";
+import { userResourceDecoder } from "../validation/Validation";
 import { PlayerEntity } from "../database/entities/PlayerEntity";
 import * as _ from "lodash";
+import { Container } from "typescript-ioc";
+import { UserRepository } from "../database/repositories/UserRepository";
+import { PlayerRepository } from "../database/repositories/PlayerRepository";
 
 @Path('/users')
 export class UserController {
 
-    repository: Repository<UserEntity>;
-    playerRepository: Repository<PlayerEntity>;
+    repository: UserRepository;
+    playerRepository: PlayerRepository;
 
     constructor() {
-        this.repository = getRepository(UserEntity);
-        this.playerRepository = getRepository(PlayerEntity);
+        this.repository = Container.get(UserRepository);
+        this.playerRepository = Container.get(PlayerRepository);
     }
 
     @Path('/login')
     @POST public loginRoute(user: IUserHttpModel) {
         return new Promise<SendResource<Response<ITokenHttp>>>(async (end) => {
-            const users = await this.repository.find({ where: { pseudo: user.username } });
-
-            for (let player of users) {
-                if (await compare(user.password, player.hash)) {
-                    const payload: any = {};
-                    payload.sub = player.id;
-                    payload.role = "ROLE_USER";
-                    const data = encode(payload, new Config().getSecret());
-                    const token: ITokenHttp = {
-                        data: data
-                    };
-                    const response: Response<ITokenHttp> = {
-                        message: "User find",
-                        httpCode: 200,
-                        data: token
-                    };
-                    end(new SendResource<Response<ITokenHttp>>("UserController", response.httpCode, response));
-                    return;
+            try {
+                let users = await this.repository.find({ where: { pseudo: user.username } });
+                if (!users) {
+                    users = [];
                 }
+                for (let player of users) {
+                    if (await compare(user.password, player.hash)) {
+                        const payload: any = {};
+                        payload.sub = player.id;
+                        payload.role = "ROLE_USER";
+                        const data = encode(payload, new Config().getSecret());
+                        const token: ITokenHttp = {
+                            data: data
+                        };
+                        const response: Response<ITokenHttp> = {
+                            message: "User find",
+                            httpCode: 200,
+                            data: token
+                        };
+                        end(new SendResource<Response<ITokenHttp>>("UserController", response.httpCode, response));
+                        return;
+                    }
+                }
+                const response: Response<ITokenHttp> = {
+                    data: null,
+                    message: "user not found",
+                    httpCode: 404
+                };
+                end(new SendResource<Response<ITokenHttp>>("UserController", response.httpCode, response));
             }
-            const response: Response<ITokenHttp> = {
-                data: null,
-                message: "user not found",
-                httpCode: 404
-            };
-            end(new SendResource<Response<ITokenHttp>>("UserController", response.httpCode, response));
+            catch (e) {
+                const response: Response<ITokenHttp> = {
+                    data: null,
+                    message: "internal error",
+                    httpCode: 500
+                };
+                end(new SendResource<Response<ITokenHttp>>("UserController", response.httpCode, response));
+            }
         });
     }
 
     @Path('/')
-    @POST 
+    @POST
     public register(user: IUserResource): Promise<SendResource<Response<IResourceId>>> {
         const asm = new UserEntityAsm();
         const entity = asm.toEntity(user);
@@ -76,10 +90,7 @@ export class UserController {
                 httpCode: 400,
                 message: "User created"
             };
-            user.createdAt = (+new Date()).toString();
-            user.updatedAt = (+new Date()).toString();
 
-            // TODO: check regex user credentials
             if (_.trim(user.password).length === 0) {
                 response.message = "password cannot be null";
                 return end(new SendResource<Response<IResourceId>>("UserController", response.httpCode, response));
@@ -90,7 +101,7 @@ export class UserController {
             try {
                 userResourceDecoder.runWithException(user);
             }
-            catch (e){
+            catch (e) {
                 response.message = e.message;
                 return end(new SendResource<Response<IResourceId>>("UserController", response.httpCode, response));
             }
@@ -98,15 +109,18 @@ export class UserController {
                 response.message = "Password doesn't match confirmation field";
                 return end(new SendResource<Response<IResourceId>>("UserController", response.httpCode, response));
             }
-            const list = await this.repository.find({ where: { pseudo: entity.pseudo } });
-
+            let list = await this.repository.find({ where: { pseudo: entity.pseudo } });
+            if (!list) {
+                list = [];
+            }
             if (list.length === 0) {
                 try {
                     ret = await this.repository.save(entity);
-                    const player : PlayerEntity = {
+                    const player: PlayerEntity = {
                         user: ret,
                         total_points: 0
                     };
+                    console.log(player);
                     await this.playerRepository.save(player);
                     response.httpCode = 201;
                 }
@@ -146,11 +160,10 @@ export class UserController {
 
     @Path('/')
     @Security("ROLE_USER")
-    @GET 
+    @GET
     public list(): Promise<SendResource<Response<IUserResource[]>>> {
         const asm = new UserEntityAsm();
-
-        return new Promise<SendResource<Response<IUserResource[]>>>(async end => {
+        return new Promise<SendResource<Response<IUserResource[]>>>(async (end) => {
             const list = await this.playerRepository.find();
             const response: Response<IUserResource[]> = {
                 httpCode: 200,

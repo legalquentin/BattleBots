@@ -68,6 +68,7 @@ export class Robots1580907469348 implements MigrationInterface {
                     type: "timestamp",
                     name: "updated_at",
                     onUpdate: "CURRENT_TIMESTAMP",
+                    default: "CURRENT_TIMESTAMP",
                     isNullable: false
                 }
             ]
@@ -76,7 +77,7 @@ export class Robots1580907469348 implements MigrationInterface {
         await queryRunner.createForeignKey("robots", new TableForeignKey({
             name: "fk_robots_player_id",
             columnNames: ["player_id"],
-            referencedTableName: "user",
+            referencedTableName: "users",
             referencedColumnNames: ["id"]
         }));
     }

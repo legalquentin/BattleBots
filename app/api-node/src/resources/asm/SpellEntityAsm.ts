@@ -1,5 +1,5 @@
-import { SpellResource } from "../http-models/SpellResource";
-import { SpellEntity } from "../database/entities/SpellEntity";
+import { SpellResource } from "../SpellResource";
+import { SpellEntity } from "../../database/entities/SpellEntity";
 
 export default class SpellEntityAsm {
     public toEntity(resource: SpellResource){

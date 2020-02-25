@@ -40,6 +40,7 @@ export class Games1580907456635 implements MigrationInterface {
                     type: "timestamp",
                     name: "updated_at",
                     onUpdate: "CURRENT_TIMESTAMP",
+                    default: "CURRENT_TIMESTAMP",
                     isNullable: false
                 }
             ]

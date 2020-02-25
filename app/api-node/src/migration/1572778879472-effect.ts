@@ -3,7 +3,7 @@ import {MigrationInterface, QueryRunner, Table } from "typeorm";
 export class effect1572778879472 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<any> {
-        queryRunner.createTable(new Table({
+        await queryRunner.createTable(new Table({
             name: "effect",
             columns: [
                 {
@@ -38,6 +38,7 @@ export class effect1572778879472 implements MigrationInterface {
                     name: "updatedAt",
                     type: "timestamp",
                     isNullable: false,
+                    default: "CURRENT_TIMESTAMP",
                     onUpdate: "CURRENT_TIMESTAMP"
                 }
             ]

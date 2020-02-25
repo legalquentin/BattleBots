@@ -1,7 +1,7 @@
 import { Decoder, object, string, optional, number } from '@mojotech/json-type-validation';
-import IUserResource from "../http-models/IUserResource";
-import IBattleResource from "../http-models/IBattleResource"
-import IBattleJoin from '../http-models/IBattleJoin';
+import IUserResource from "../resources/IUserResource";
+import IBattleResource from "../resources/IBattleResource"
+import IBattleJoin from '../resources/IBattleJoin';
 
 export const userResourceDecoder: Decoder<IUserResource> = object({
     firstname: optional(string()),
