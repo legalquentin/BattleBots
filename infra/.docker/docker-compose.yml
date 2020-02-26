@@ -1,0 +1,12 @@
+version: '3.1'
+services:
+  db:
+    image: postgres:11.5
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: p@ssw0rd
+      POSTGRES_USER: root
+      POSTGRES_DB: db
+    container_name: db
+    ports:
+      - "5432:5432"

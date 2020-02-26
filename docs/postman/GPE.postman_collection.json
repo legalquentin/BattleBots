@@ -1,0 +1,352 @@
+{
+	"info": {
+		"_postman_id": "e8134ae8-a90f-4833-a9b1-193dc1d7fded",
+		"name": "GPE",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}"
+				},
+				"url": {
+					"raw": "{{API_ADDRESS}}/users/login",
+					"host": [
+						"{{API_ADDRESS}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8d0ef3b4-2150-472a-bd5e-a8a5ca990a83",
+						"exec": [
+							"",
+							"pm.test(\"Authentified\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.environment.set(\"AUTH\", \"Bearer \" + jsonData.data.data);",
+							"    pm.expect(jsonData.httpCode).to.eql(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\":\"qlegal\",\n\t\"password\": \"test123\"\n}"
+				},
+				"url": {
+					"raw": "{{API_ADDRESS}}/users/login",
+					"host": [
+						"{{API_ADDRESS}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Battle_List",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{AUTH}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{API_ADDRESS}}/battle",
+					"host": [
+						"{{API_ADDRESS}}"
+					],
+					"path": [
+						"battle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Battle_Create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c9a622a4-9b70-41e0-b800-77e3dc4dd260",
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.environment.set(\"GAMEID\", jsonData.data.id);",
+							"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{AUTH}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"first blood\"\n}"
+				},
+				"url": {
+					"raw": "{{API_ADDRESS}}/battle",
+					"host": [
+						"{{API_ADDRESS}}"
+					],
+					"path": [
+						"battle"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Battle_Join",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{AUTH}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"battleId\": {{GAMEID}},\n\t\"userId\": 5\n}"
+				},
+				"url": {
+					"raw": "{{API_ADDRESS}}/battle/join",
+					"host": [
+						"{{API_ADDRESS}}"
+					],
+					"path": [
+						"battle",
+						"join"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Battle_Delete",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{AUTH}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{API_ADDRESS}}/battle/{{GAMEID}}",
+					"host": [
+						"{{API_ADDRESS}}"
+					],
+					"path": [
+						"battle",
+						"{{GAMEID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Worker_Health_Check ",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{API_ADDRESS}}:443/api/health",
+					"host": [
+						"{{API_ADDRESS}}"
+					],
+					"port": "443",
+					"path": [
+						"api",
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "WORKER-CREATE",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "234",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://127.0.0.1:1234/api/game/join",
+					"protocol": "https",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "1234",
+					"path": [
+						"api",
+						"game",
+						"join"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "WORKER-JOIN",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "234",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"GameID\": \"26\",\n\t\"PlayerID\": \"654\"\n}"
+				},
+				"url": {
+					"raw": "https://{{API_ADDRESS}}:443/api/game/join",
+					"protocol": "https",
+					"host": [
+						"{{API_ADDRESS}}"
+					],
+					"port": "443",
+					"path": [
+						"api",
+						"game",
+						"join"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "WORKER-INFO",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{API_ADDRESS}}:443/api/health",
+					"host": [
+						"{{API_ADDRESS}}"
+					],
+					"port": "443",
+					"path": [
+						"api",
+						"health"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
