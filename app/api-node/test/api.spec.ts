@@ -1,5 +1,5 @@
-import * as chai from 'chai';
-import { after, before, describe, it } from 'mocha';
+import { expect } from 'chai';
+//import { after, before, describe, it } from 'mocha';
 import * as request from 'request';
 import { start } from '../src/start';
 import * as sinon from "sinon";
@@ -8,12 +8,9 @@ import Config from '../src/service/impl/Config';
 import { Container } from "typescript-ioc";
 import ServiceFactory from '../src/service/impl/ServiceFactory';
 
-const expect = chai.expect;
 const client: request.RequestAPI<request.Request, request.CoreOptions, request.RequiredUriUrl>
     = request.defaults({ baseUrl: `http://localhost:${8080}` });
-
 const serviceFactory = Container.get(ServiceFactory);
-
 let apiServer = null;
 
 describe('API Testing', async () => {
