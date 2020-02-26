@@ -34,7 +34,7 @@ export default class BattleWorkerService implements IBattleWorkerService{
      */
     public async startGoWorker(game: IGameResource) {
         const p = await new Promise(async rslv => {
-            const WORKER_PATH = '/Users/quentin/D.PERS/BattleBots/app/api-go/main.go'; // '/home/quentin/go/src/TIC-GPE5/Worker';
+            const WORKER_PATH = `${__dirname}/../../../../api-go/main.go`; // '/home/quentin/go/src/TIC-GPE5/Worker';
             const secret = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
             if (Workers == null) {
                 const child = cp.spawn('go', ['run', WORKER_PATH, secret], { stdio: [process.stdin, process.stdout, process.stderr] });
