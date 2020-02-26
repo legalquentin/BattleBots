@@ -3,8 +3,14 @@ import UserEntity from "../../database/entities/UserEntity";
 import { hashSync } from "bcrypt";
 import Config from "../../service/impl/Config";
 import { PlayerEntity } from "../../database/entities/PlayerEntity";
+import { Singleton, Inject } from "typescript-ioc";
 
-export default class UserEntityAsm {
+@Singleton
+export default class UserAsm {
+
+    @Inject
+    config: Config;
+
     public toEntity(user: IUserResource) : UserEntity{
         const entity = new UserEntity();
 
@@ -16,7 +22,7 @@ export default class UserEntityAsm {
         entity.updatedAt = new Date(parseInt(user.updatedAt, 10));
         entity.address = user.address? user.address : "";
         entity.email = user.email;
-        entity.hash = hashSync(user.password, new Config().genSalt());
+        entity.hash = hashSync(user.password, this.config.genSalt());
         return (entity);
     }
 

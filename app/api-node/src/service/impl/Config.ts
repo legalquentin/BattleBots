@@ -3,7 +3,7 @@ import IConfig from "../IConfig";
 
 @Provides(IConfig)
 @Singleton
-export default class Config {
+export default class Config implements IConfig{
     salt = 10;
     secret = "azerty123";
 

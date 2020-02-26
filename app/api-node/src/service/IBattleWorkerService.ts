@@ -1,9 +1,9 @@
 import { IGameResource } from "../resources/IGameResource";
 import { SendResource } from "../../lib/ReturnExtended";
-import Response from "../resources/Response";
+import HttpResponseModel from "../resources/HttpResponseModel";
 
 export default abstract class IBattleWorkerService {
     abstract startGoWorker(game: IGameResource);
     abstract killGoWorker(): boolean;
-    abstract joinGame(battleId: string) : SendResource<Response<any>>;
+    abstract joinGame(battleId: string) : SendResource<HttpResponseModel<any>>;
 };

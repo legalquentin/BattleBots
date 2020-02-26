@@ -7,7 +7,7 @@
  */
 import * as cp from 'child_process';
 import { SendResource } from '../../../lib/ReturnExtended';
-import Response from "../../resources/Response";
+import HttpResponseModel from "../../resources/HttpResponseModel";
 import * as request from 'request';
 import * as kill from 'tree-kill';
 import { IGameResource } from "../../resources/IGameResource";
@@ -74,17 +74,17 @@ export default class BattleWorkerService implements IBattleWorkerService{
         return false;
     }
 
-    public joinGame(battleId: string): SendResource<Response<any>> {
+    public joinGame(battleId: string): SendResource<HttpResponseModel<any>> {
         const gameMeta = Workers[battleId];
         if (typeof gameMeta === 'undefined') {
             console.log('[ERROR](JOIN)', 'lost handle on worker process... do $> pkill Worker');
-            return (new SendResource<Response<any>>("BattleController", 404, {
+            return (new SendResource<HttpResponseModel<any>>("BattleController", 404, {
                 data: null,
                 httpCode: 404,
                 message: `Game instance could not be found, contact an administrator`
             }));
         } else {
-            return new SendResource<Response<any>>("BattleController", 200, {
+            return new SendResource<HttpResponseModel<any>>("BattleController", 200, {
                 data: { url: gameMeta.url },
                 httpCode: 200,
                 message: `game instance address`

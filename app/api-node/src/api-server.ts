@@ -5,20 +5,22 @@ import * as morgan from 'morgan';
 import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt';
 import { PassportAuthenticator, Server } from 'typescript-rest';
 import Config from './service/impl/Config';
+import { Container } from 'typescript-ioc';
 
 export class ApiServer {
     public PORT: number = 8080; // +process.env.PORT || 8080;
 
     private readonly app: express.Application;
     private server: http.Server = null;
+    private serviceConfig: Config;
 
     constructor() {
         this.app = express();
+        this.serviceConfig = Container.get(Config);
         this.config();
 
         Server.useIoC();
-
-        Server.loadServices(this.app, 'controller/*', __dirname);
+        Server.loadServices(this.app, 'controller/**/*.ts', __dirname);
 
         // Note : This disable auto-nexting
         // If we need it in a controller, we will use :
@@ -30,17 +32,19 @@ export class ApiServer {
         const bodyParser = require('body-parser');
         this.app.use(bodyParser.urlencoded({ extended: true }));
         this.app.use(bodyParser.json());
-
-
+        Server.swagger(this.app, { 
+            swaggerUiOptions: {
+                customSiteTitle: 'BattleBots'
+            },
+            filePath: 'swagger.yaml',
+            endpoint: "api-docs",
+            host: "localhost:8080",
+            schemes: ["http"]
+         });
         this.app.use("*", function (req, res, next) {
-
-            // if (!res.headersSent) { res.status(404).send("Not found") }
             if (!res.headersSent) { res.render("App/index.html"); }
             next();
         });
-
-        // Disable swagger at this time
-        // Server.swagger(this.app, { filePath: './dist/swagger.json' });
     }
 
     public getApp(): Express.Application {
@@ -60,7 +64,6 @@ export class ApiServer {
                 // TODO: replace with Morgan call
                 // tslint:disable-next-line:no-console
                 console.log(`Listening to http://127.0.0.1:${this.PORT}`);
-
                 return resolve();
             });
         });
@@ -87,8 +90,6 @@ export class ApiServer {
      * Configure the express app.
      */
     private config(): void {
-        // Native Express configuration
-
         this.app.use(function (req, res, next) {
             res.header("Access-Control-Allow-Origin", req.get("Origin"));
             res.header("Access-Control-Allow-Credentials", "true");
@@ -96,21 +97,18 @@ export class ApiServer {
             res.status(200);
             next();
         });
-
         this.app.use("/public", express.static(__dirname + '/public'));
-
         this.app.engine('html', require('ejs').renderFile);
         this.app.set('views', __dirname + '/public');
         this.app.use(cors());
         if (process.env.NODE_ENV !== "test") {
             this.app.use(morgan('combined'));
         }
-
         this.configureAuthenticator();
     }
 
     private configureAuthenticator() {
-        const JWT_SECRET: string = new Config().getSecret();
+        const JWT_SECRET: string = this.serviceConfig.getSecret();
         const jwtConfig: StrategyOptions = {
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             secretOrKey: Buffer.from(JWT_SECRET)
@@ -129,7 +127,6 @@ export class ApiServer {
             }
         });
 
-        Server.registerAuthenticator(authenticator);
-        // Server.registerAuthenticator(authenticator, 'secondAuthenticator');
+        Server.registerAuthenticator(authenticator, "Bearer");
     }
 }

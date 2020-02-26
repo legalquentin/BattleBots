@@ -1,0 +1,16 @@
+{
+    "swagger": {
+        "basePath": "/",
+        "outputFormat": "OpenApi_3",
+        "outputDirectory": ".",
+        "entryFile": "src/controller/**/*.ts",
+        "description": "BattleBots API",
+        "name": "BattleBots",
+        "securityDefinitions": {
+            "Bearer": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    }
+}

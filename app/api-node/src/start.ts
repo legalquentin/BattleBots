@@ -22,8 +22,6 @@ export async function start(): Promise<ApiServer> {
             ],
             logging: true
         }).then(async (connection: Connection) => {
-            console.log("Connexion établie");
-
             // Create a new table entry using classic class creation
             // The constructor can also be used for this
             /*
@@ -112,7 +110,6 @@ export async function start(): Promise<ApiServer> {
             resolve(apiServer);
         }).catch((error: Error) => {
             console.dir(error);
-            console.log(error.message);
             fs.appendFileSync('./log.txt', `Error ${JSON.stringify(error)}\n`);
         });
     });

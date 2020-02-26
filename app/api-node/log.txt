@@ -219,3 +219,12 @@ undefined
 undefined
 undefined
 Error {"diagnosticText":"src/database/repositories/PlayerRepository.ts(11,14): error TS2540: Cannot assign to 'metadata' because it is a read-only property.\n","diagnosticCodes":[2540]}
+Error {"code":"MODULE_NOT_FOUND","requireStack":["/Users/simoes_t/Documents/ETNA3/BattleBots/app/api-node/src/controller/BattleController.ts","/Users/simoes_t/Documents/ETNA3/BattleBots/app/api-node/node_modules/require-glob/src/require-glob.js","/Users/simoes_t/Documents/ETNA3/BattleBots/app/api-node/node_modules/typescript-rest/dist/server/server.js","/Users/simoes_t/Documents/ETNA3/BattleBots/app/api-node/node_modules/typescript-rest/dist/server/config.js","/Users/simoes_t/Documents/ETNA3/BattleBots/app/api-node/node_modules/typescript-rest/dist/typescript-rest.js","/Users/simoes_t/Documents/ETNA3/BattleBots/app/api-node/src/api-server.ts","/Users/simoes_t/Documents/ETNA3/BattleBots/app/api-node/src/start.ts","/Users/simoes_t/Documents/ETNA3/BattleBots/app/api-node/src/index.ts"]}
+Error {"code":"MODULE_NOT_FOUND","requireStack":["/Users/simoes_t/Documents/ETNA3/BattleBots/app/api-node/src/controller/SpellController.ts","/Users/simoes_t/Documents/ETNA3/BattleBots/app/api-node/node_modules/require-glob/src/require-glob.js","/Users/simoes_t/Documents/ETNA3/BattleBots/app/api-node/node_modules/typescript-rest/dist/server/server.js","/Users/simoes_t/Documents/ETNA3/BattleBots/app/api-node/node_modules/typescript-rest/dist/server/config.js","/Users/simoes_t/Documents/ETNA3/BattleBots/app/api-node/node_modules/typescript-rest/dist/typescript-rest.js","/Users/simoes_t/Documents/ETNA3/BattleBots/app/api-node/src/api-server.ts","/Users/simoes_t/Documents/ETNA3/BattleBots/app/api-node/src/start.ts","/Users/simoes_t/Documents/ETNA3/BattleBots/app/api-node/src/index.ts"]}
+Error {"errno":-2,"syscall":"open","code":"ENOENT","path":"/Users/simoes_t/Documents/ETNA3/BattleBots/app/swagger.yaml"}
+Error {}
+Error {}
+Error {}
+Error {}
+Error {}
+Error {}
