@@ -1,7 +1,7 @@
 'use strict';
 
 import { expect } from 'chai';
-//import { describe, it } from 'mocha';
+import { describe, it } from 'mocha';
 import { HttpMethod, Server } from 'typescript-rest';
 
 describe('Hello Controller Tests', async () => {

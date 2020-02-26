@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-//import { after, before, describe, it } from 'mocha';
+import { after, before, describe, it } from 'mocha';
 import * as request from 'request';
 import { start } from '../src/start';
 import * as sinon from "sinon";
