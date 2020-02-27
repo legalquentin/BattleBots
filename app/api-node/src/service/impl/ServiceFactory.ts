@@ -11,7 +11,7 @@ export default class ServiceFactory implements IServiceFactory {
     @Inject
     private playerRepository: PlayerRepository;
 
-    public getUserRepository() : UserRepository{
+    public getUserRepository() : UserRepository {
         return (this.userRepository);
     }
 

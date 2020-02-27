@@ -1,12 +1,12 @@
 import { expect } from 'chai';
 import { after, before, describe, it } from 'mocha';
 import * as request from 'request';
-import { start } from '../src/start';
 import * as sinon from "sinon";
 import { hashSync } from "bcrypt";
 import Config from '../src/service/impl/Config';
 import { Container } from "typescript-ioc";
 import ServiceFactory from '../src/service/impl/ServiceFactory';
+import { ApiServer } from '../src/api-server';
 
 const client: request.RequestAPI<request.Request, request.CoreOptions, request.RequiredUriUrl>
     = request.defaults({ baseUrl: `http://localhost:${8080}` });
@@ -16,7 +16,9 @@ let apiServer = null;
 describe('API Testing', async () => {
 
     before(async () => {
-        apiServer = await start();
+        apiServer = new ApiServer();
+
+        await apiServer.start();
     });
 
     after(async () => {
