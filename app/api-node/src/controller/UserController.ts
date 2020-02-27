@@ -44,7 +44,7 @@ export class UserController {
     @POST 
     public loginRoute(user: IUserHttpModel) {
         return new Promise<SendResource<HttpResponseModel<ITokenHttp>>>(async (end) => {
-            let users = await this.repository.find({ where: { pseudo: user.username } });
+            let users = await this.repository.find({ where: [{ pseudo: user.username }, { email: user.username }] });
             if (!users) {
                 users = [];
             }
