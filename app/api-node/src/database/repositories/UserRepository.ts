@@ -4,7 +4,7 @@ import { Singleton, Provider, Provided } from "typescript-ioc";
 
 const provider : Provider = {
     get: () => {
-        return process.env.NODE_ENV === "test" ? { find: () => {}, save: () => {}} : new UserRepository(null, null);
+        return process.env.NODE_ENV === "test" ? { find: () => {}, save: () => {}} : new UserRepository( );
     }
 };
 
@@ -12,7 +12,10 @@ const provider : Provider = {
 @Provided(provider)
 @Singleton
 export class UserRepository extends Repository<UserEntity> {
-    constructor(public manager: EntityManager, public metadata: EntityMetadata) {
+    manager: EntityManager;
+    metadata: EntityMetadata;
+    
+    constructor() {
         super();
         this.manager = getManager("app");
         this.metadata = getConnection("app").getMetadata("users");
