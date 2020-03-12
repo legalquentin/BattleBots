@@ -7,10 +7,11 @@ import { Singleton } from "typescript-ioc";
 export class UserRepository extends Repository<UserEntity> {
     manager: EntityManager;
     metadata: EntityMetadata;
-    
+
     constructor() {
         super();
+
         this.manager = getManager(process.env.NODE_ENV);
-        this.metadata = getConnection(process.env.NODE_ENV).getMetadata("users");
+        this.metadata = getConnection(process.env.NODE_ENV).getMetadata(UserEntity);
     }
 }

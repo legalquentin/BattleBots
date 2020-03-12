@@ -11,6 +11,6 @@ export class PlayerRepository extends Repository<PlayerEntity> {
     constructor(){
         super();
         this.manager = getManager(process.env.NODE_ENV);
-        this.metadata = getConnection(process.env.NODE_ENV).getMetadata("player");
+        this.metadata = getConnection(process.env.NODE_ENV).getMetadata(PlayerEntity);
     }
 }
