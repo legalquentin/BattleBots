@@ -3,7 +3,7 @@ import { after, before, describe, it } from 'mocha';
 import * as request from 'request';
 import * as sinon from "sinon";
 import { hashSync } from "bcrypt";
-import Config from '../src/service/impl/Config';
+import IConfig from '../src/service/IConfig';
 import { Container } from "typescript-ioc";
 import ServiceFactory from '../src/service/impl/ServiceFactory';
 import { ApiServer } from '../src/api-server';
@@ -12,6 +12,7 @@ const client: request.RequestAPI<request.Request, request.CoreOptions, request.R
     = request.defaults({ baseUrl: `http://localhost:${8080}` });
 const serviceFactory = Container.get(ServiceFactory);
 let apiServer = null;
+let config = null;
 
 describe('API Testing', async () => {
 
@@ -19,6 +20,7 @@ describe('API Testing', async () => {
         apiServer = new ApiServer();
 
         await apiServer.start();
+        config = Container.get(IConfig);
     });
 
     after(async () => {
@@ -117,7 +119,7 @@ describe('API Testing', async () => {
                         lastname: "SIMOES",
                         pseudo: "simoes_t",
                         email: "simoes_t@etna-alternance.net",
-                        hash: hashSync("azerty123", new Config().genSalt()),
+                        hash: hashSync("azerty123", config.genSalt()),
                         address: "7 rue des ulysses"
                     }
                 ]);
@@ -205,7 +207,7 @@ describe('API Testing', async () => {
                         lastname: "SIMOES",
                         pseudo: "simoes_t",
                         email: "simoes_t@etna-alternance.net",
-                        hash: hashSync("azerty123", new Config().genSalt()),
+                        hash: hashSync("azerty123", config.genSalt()),
                         address: "7 rue des ulysses"
                     }
                 ]);

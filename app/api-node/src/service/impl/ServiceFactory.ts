@@ -1,9 +1,8 @@
 import IServiceFactory from "../IServiceFactory";
-import { Inject, Singleton } from "typescript-ioc";
+import { Inject } from "typescript-ioc";
 import { UserRepository } from "../../database/repositories/UserRepository";
 import { PlayerRepository } from "../../database/repositories/PlayerRepository";
 
-@Singleton
 export default class ServiceFactory implements IServiceFactory {
     @Inject
     private userRepository : UserRepository;

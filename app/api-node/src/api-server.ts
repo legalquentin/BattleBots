@@ -4,23 +4,34 @@ import * as http from 'http';
 import * as morgan from 'morgan';
 import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt';
 import { PassportAuthenticator, Server } from 'typescript-rest';
-import Config from './service/impl/Config';
+import { PlayerRepository } from './database/repositories/PlayerRepository';
+import { UserRepository } from './database/repositories/UserRepository';
+import { GameRepository } from './database/repositories/GameRepository';
+import { FakeRepository } from './database/repositories/FakeRepository';
 import { Container } from 'typescript-ioc';
+import { UserService } from './service/UserService';
+import { UserServiceImpl } from './service/impl/UserServiceImpl';
+import { BattleService } from './service/BattleService';
+import { BattleServiceImpl } from './service/impl/BattleServiceImpl';
+import IServiceFactory from './service/IServiceFactory';
+import ServiceFactory from './service/impl/ServiceFactory';
+import IConfig from './service/IConfig';
+import Config from './service/impl/Config';
 
 export class ApiServer {
     public PORT: number = 8080; // +process.env.PORT || 8080;
 
     private readonly app: express.Application;
     private server: http.Server = null;
-    private serviceConfig: Config;
+    private serviceConfig: IConfig;
 
     constructor() {
         this.app = express();
-        this.serviceConfig = Container.get(Config);
         this.config();
 
         Server.useIoC();
         Server.loadServices(this.app, 'controller/**/*.ts', __dirname);
+
 
         // Note : This disable auto-nexting
         // If we need it in a controller, we will use :
@@ -86,6 +97,25 @@ export class ApiServer {
         });
     }
 
+    private initIoc(){
+        Container.bind(UserService).to(UserServiceImpl);
+        Container.bind(BattleService).to(BattleServiceImpl);
+    
+        Container.bind(IServiceFactory).to(ServiceFactory);
+        Container.bind(IConfig).to(Config);
+
+        if (process.env.NODE_ENV !== "test"){
+            Container.bind(PlayerRepository).to(PlayerRepository);
+            Container.bind(UserRepository).to(UserRepository);
+            Container.bind(GameRepository).to(GameRepository);
+        }
+        else {
+            Container.bind(PlayerRepository).to(FakeRepository);
+            Container.bind(UserRepository).to(FakeRepository);
+            Container.bind(GameRepository).to(FakeRepository);
+        }
+    }
+
     /**
      * Configure the express app.
      */
@@ -104,10 +134,12 @@ export class ApiServer {
         if (process.env.NODE_ENV !== "test") {
             this.app.use(morgan('combined'));
         }
+        this.initIoc();
         this.configureAuthenticator();
     }
 
     private configureAuthenticator() {
+        this.serviceConfig = Container.get(IConfig);
         const JWT_SECRET: string = this.serviceConfig.getSecret();
         const jwtConfig: StrategyOptions = {
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

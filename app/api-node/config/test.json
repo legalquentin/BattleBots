@@ -1,0 +1,7 @@
+{
+    "env": "test",
+    "secrets": {
+        "secret": "azerty123",
+        "salt": 10
+    }
+}
