@@ -1,30 +1,17 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import CocoAsticot from '../views/CocoAsticot'
+
+import SplashView from '../views/SplashScreen/index.vue';
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: Home
+    name: 'splash',
+    component: SplashView
   },
-  {
-    path: '/coco',
-    name: 'coco-asticot',
-    component: CocoAsticot, 
-  },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
-]
+];
 
 const router = new VueRouter({
   mode: 'hash',
