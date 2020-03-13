@@ -68,7 +68,6 @@ export class UserController {
             }
         }
         catch (e){
-            console.log(e.message);
             const response : HttpResponseModel<ITokenHttp> = {
                 httpCode: 400,
                 data: null,
