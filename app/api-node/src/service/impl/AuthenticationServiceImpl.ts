@@ -25,7 +25,7 @@ export class AuthenticationServiceImpl implements AuthenticationService {
                 }
             ]
         });
-        if (await compare(password, user.hash))
+        if (user != null && await compare(password, user.hash))
         {
             const payload: any = {};
             payload.sub = user.id;

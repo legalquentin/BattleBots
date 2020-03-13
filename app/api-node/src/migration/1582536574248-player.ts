@@ -15,7 +15,7 @@ export class player1582536574248 implements MigrationInterface {
                 },
                 {
                     "name": "name",
-                    "type": "string",
+                    "type": "varchar",
                     "isNullable": false,
                     "isUnique": true
                 },

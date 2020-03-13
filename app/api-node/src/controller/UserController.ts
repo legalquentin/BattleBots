@@ -68,6 +68,7 @@ export class UserController {
             }
         }
         catch (e){
+            console.log(e.message);
             const response : HttpResponseModel<ITokenHttp> = {
                 httpCode: 400,
                 data: null,
@@ -79,13 +80,14 @@ export class UserController {
     }
 
     @Produces("application/json;charset=UTF-8")
-    @Consumes("applicaiton/json;charset=UTF-8")
+    @Consumes("application/json;charset=UTF-8")
     @Response<HttpResponseModel<IResourceId>>(201, "User created")
     @Response<HttpResponseModel<IResourceId>>(409, "User already exist")
     @Response<HttpResponseModel<IResourceId>>(400)
     @Path('/')
     @POST
     public async register(user: IUserResource): Promise<SendResource<HttpResponseModel<IResourceId>>> {
+        console.log(user);
         if (user.password === user.confirmation){
             const entity : UserEntity = {
                 firstname: user.firstname,
@@ -95,7 +97,10 @@ export class UserController {
                 address: user.address,
                 pseudo: user.pseudo,
             };
-            entity.hash = hashSync(user.password, this.config.genSalt());
+            console.log(entity);
+            console.log(this.config.genSalt());
+            entity.hash = hashSync(entity.hash, this.config.genSalt());
+            console.log(entity);
             try {
                 const savedUser = await this.userService.saveOrUpdate(entity);
                 const resourceId: IResourceId = {
@@ -113,7 +118,7 @@ export class UserController {
                 const response: HttpResponseModel<IResourceId> = {
                     httpCode: 409,
                     data: null,
-                    message: e.message
+                    message: "User already exist"
                 };
 
                 return Promise.resolve(new SendResource<HttpResponseModel<IResourceId>>("UserController", response.httpCode, response));
@@ -145,6 +150,7 @@ export class UserController {
                 total_points: player.totalPoints,
                 name: player.name,
             };
+            console.log(entity);
             const finded = await this.playerService.search({
                 where: [
                     {
@@ -152,6 +158,7 @@ export class UserController {
                     }
                 ]
             });
+            console.log(finded);
             if (!finded){
                 const response: HttpResponseModel<IResourceId> = {
                     data: null,
@@ -192,8 +199,19 @@ export class UserController {
     @GET
     public async read(@PathParam("id") id: number): Promise<SendResource<HttpResponseModel<IUserResource>>> {
         try {
-            const user = await this.userService.findOne(id);
-            const players = await user.players;
+            const user : UserEntity = await this.userService.findOne(id);
+            const notFound : HttpResponseModel<IUserResource> = {
+                httpCode: 404,
+                message: "User not found",
+                data: null
+            };
+            if (!user){
+                return Promise.resolve(new SendResource<HttpResponseModel<IUserResource>>("UserController", notFound.httpCode, notFound));
+            }
+            let players = await user.players;
+            if (!players){
+                players = [];
+            }
             const resource: IUserResource = {
                 id: user.id,
                 firstname: user.firstname,
@@ -221,6 +239,7 @@ export class UserController {
             return Promise.resolve(new SendResource<HttpResponseModel<IUserResource>>("UserController", response.httpCode, response));
         }
         catch (e){
+            console.log(e.message);
             const response: HttpResponseModel<IUserResource> = {
                 data: null,
                 httpCode: 400,

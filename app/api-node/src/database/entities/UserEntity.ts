@@ -32,5 +32,5 @@ export default class UserEntity extends AbstractEntity {
     @OneToMany(type => PlayerEntity, player => player.user, {
         cascade: ["remove"]
     })
-    public players?: Array<PlayerEntity>;
+    public players?: Promise<Array<PlayerEntity>>;
 }
