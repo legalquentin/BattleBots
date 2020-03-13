@@ -10,7 +10,6 @@ export class UserRepository extends Repository<UserEntity> {
 
     constructor() {
         super();
-
         this.manager = getManager(process.env.NODE_ENV);
         this.metadata = getConnection(process.env.NODE_ENV).getMetadata(UserEntity);
     }

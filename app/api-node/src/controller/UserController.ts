@@ -86,44 +86,33 @@ export class UserController {
     @Path('/')
     @POST
     public async register(user: IUserResource): Promise<SendResource<HttpResponseModel<IResourceId>>> {
-        if (user.password === user.confirmation){
-            const entity : UserEntity = {
-                firstname: user.firstname,
-                lastname: user.lastname,
-                email: user.email,
-                hash: user.password,
-                address: user.address,
-                pseudo: user.pseudo,
+        const entity: UserEntity = {
+            firstname: user.firstname,
+            lastname: user.lastname,
+            email: user.email,
+            hash: user.password,
+            address: user.address,
+            pseudo: user.pseudo,
+        };
+        entity.hash = hashSync(entity.hash, this.config.genSalt());
+        try {
+            const savedUser = await this.userService.saveOrUpdate(entity);
+            const resourceId: IResourceId = {
+                id: savedUser.id
             };
-            entity.hash = hashSync(entity.hash, this.config.genSalt());
-            try {
-                const savedUser = await this.userService.saveOrUpdate(entity);
-                const resourceId: IResourceId = {
-                    id: savedUser.id
-                };
-                const response: HttpResponseModel<IResourceId> = {
-                    httpCode: 201,
-                    message: "User registerd",
-                    data: resourceId
-                };
-
-                return Promise.resolve(new SendResource<HttpResponseModel<IResourceId>>("UserController", response.httpCode, response));
-            }
-            catch (e){
-                const response: HttpResponseModel<IResourceId> = {
-                    httpCode: 409,
-                    data: null,
-                    message: "User already exist"
-                };
-
-                return Promise.resolve(new SendResource<HttpResponseModel<IResourceId>>("UserController", response.httpCode, response));
-            }
-        }
-        else {
             const response: HttpResponseModel<IResourceId> = {
-                httpCode: 400,
-                message: "Password field is different of confirmation field",
-                data: null
+                httpCode: 201,
+                message: "User registerd",
+                data: resourceId
+            };
+
+            return Promise.resolve(new SendResource<HttpResponseModel<IResourceId>>("UserController", response.httpCode, response));
+        }
+        catch (e){
+            const response: HttpResponseModel<IResourceId> = {
+                httpCode: 409,
+                data: null,
+                message: "User already exist"
             };
 
             return Promise.resolve(new SendResource<HttpResponseModel<IResourceId>>("UserController", response.httpCode, response));
