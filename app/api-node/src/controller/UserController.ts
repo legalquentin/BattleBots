@@ -87,7 +87,6 @@ export class UserController {
     @Path('/')
     @POST
     public async register(user: IUserResource): Promise<SendResource<HttpResponseModel<IResourceId>>> {
-        console.log(user);
         if (user.password === user.confirmation){
             const entity : UserEntity = {
                 firstname: user.firstname,
@@ -97,10 +96,7 @@ export class UserController {
                 address: user.address,
                 pseudo: user.pseudo,
             };
-            console.log(entity);
-            console.log(this.config.genSalt());
             entity.hash = hashSync(entity.hash, this.config.genSalt());
-            console.log(entity);
             try {
                 const savedUser = await this.userService.saveOrUpdate(entity);
                 const resourceId: IResourceId = {
