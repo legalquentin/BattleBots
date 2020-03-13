@@ -146,7 +146,6 @@ export class UserController {
                 total_points: player.totalPoints,
                 name: player.name,
             };
-            console.log(entity);
             const finded = await this.playerService.search({
                 where: [
                     {
@@ -154,7 +153,6 @@ export class UserController {
                     }
                 ]
             });
-            console.log(finded);
             if (!finded){
                 const response: HttpResponseModel<IResourceId> = {
                     data: null,
@@ -235,7 +233,6 @@ export class UserController {
             return Promise.resolve(new SendResource<HttpResponseModel<IUserResource>>("UserController", response.httpCode, response));
         }
         catch (e){
-            console.log(e.message);
             const response: HttpResponseModel<IUserResource> = {
                 data: null,
                 httpCode: 400,
