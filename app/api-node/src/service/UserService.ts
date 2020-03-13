@@ -1,13 +1,8 @@
-import IUserHttpModel from "../resources/IUserHttpModel";
-import IUserResource from "../resources/IUserResource";
-import { SendResource } from "../../lib/ReturnExtended";
-import HttpResponseModel from "../resources/HttpResponseModel";
-import IResourceId from "../resources/IResourceId";
-import ITokenHttp from "../resources/ITokenHttp";
+import UserEntity from "../database/entities/UserEntity";
 
 export abstract class UserService {
-    public async abstract  login(user: IUserHttpModel): Promise<SendResource<HttpResponseModel<ITokenHttp>>>;
-    public async abstract register(user: IUserResource): Promise<SendResource<HttpResponseModel<IResourceId>>>;
-    public abstract profile(id: number): Promise<SendResource<HttpResponseModel<IUserResource>>>;
-    public abstract list(): Promise<SendResource<HttpResponseModel<IUserResource[]>>>;
+    public async abstract saveOrUpdate(user: UserEntity): Promise<UserEntity>;
+    public async abstract findAll(): Promise<Array<UserEntity>>;
+    public async abstract deleteOne(id: number) : Promise<Boolean>;
+    public async abstract findOne(id: number) : Promise<UserEntity>;
 }

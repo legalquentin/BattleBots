@@ -17,6 +17,15 @@ import IServiceFactory from './service/IServiceFactory';
 import ServiceFactory from './service/impl/ServiceFactory';
 import IConfig from './service/IConfig';
 import Config from './service/impl/Config';
+import { GameService } from './service/GameService';
+import { GameServiceImpl } from './service/impl/GameServiceImpl';
+import { ArenaService } from './service/ArenaService';
+import { ArenaServiceImpl } from './service/impl/ArenaServiceImpl';
+import { AuthenticationService } from './service/AuthenticationService';
+import { AuthenticationServiceImpl } from './service/impl/AuthenticationServiceImpl';
+import { PlayerService } from './service/PlayerService';
+import { PlayerServiceImpl } from './service/impl/PlayerServiceImpl';
+import { ArenaRepository } from './database/repositories/ArenaRepository';
 
 export class ApiServer {
     public PORT: number = 8080; // +process.env.PORT || 8080;
@@ -31,15 +40,10 @@ export class ApiServer {
 
         Server.useIoC();
         Server.loadServices(this.app, 'controller/**/*.ts', __dirname);
-
-
         // Note : This disable auto-nexting
         // If we need it in a controller, we will use :
         // Context.next()
         //   Server.ignoreNextMiddlewares(true);
-
-
-
         const bodyParser = require('body-parser');
         this.app.use(bodyParser.urlencoded({ extended: true }));
         this.app.use(bodyParser.json());
@@ -100,19 +104,24 @@ export class ApiServer {
     private initIoc(){
         Container.bind(UserService).to(UserServiceImpl);
         Container.bind(BattleService).to(BattleServiceImpl);
+        Container.bind(GameService).to(GameServiceImpl);
+        Container.bind(ArenaService).to(ArenaServiceImpl);
+        Container.bind(AuthenticationService).to(AuthenticationServiceImpl);
+        Container.bind(PlayerService).to(PlayerServiceImpl);
     
         Container.bind(IServiceFactory).to(ServiceFactory);
         Container.bind(IConfig).to(Config);
-
         if (process.env.NODE_ENV !== "test"){
             Container.bind(PlayerRepository).to(PlayerRepository);
             Container.bind(UserRepository).to(UserRepository);
             Container.bind(GameRepository).to(GameRepository);
+            Container.bind(ArenaRepository).to(ArenaRepository);
         }
         else {
             Container.bind(PlayerRepository).to(FakeRepository);
             Container.bind(UserRepository).to(FakeRepository);
             Container.bind(GameRepository).to(FakeRepository);
+            Container.bind(ArenaRepository).to(FakeRepository);
         }
     }
 

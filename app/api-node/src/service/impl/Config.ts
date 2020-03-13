@@ -1,6 +1,8 @@
 import IConfig from "../IConfig";
 import * as config from "config";
+import { Singleton } from "typescript-ioc";
 
+@Singleton
 export default class Config extends IConfig{
 
     constructor(){

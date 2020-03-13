@@ -7,12 +7,17 @@ import IConfig from '../src/service/IConfig';
 import { Container } from "typescript-ioc";
 import ServiceFactory from '../src/service/impl/ServiceFactory';
 import { ApiServer } from '../src/api-server';
+import { AuthenticationService } from '../src/service/AuthenticationService';
+//import { UserService } from '../src/service/UserService';
 
 const client: request.RequestAPI<request.Request, request.CoreOptions, request.RequiredUriUrl>
     = request.defaults({ baseUrl: `http://localhost:${8080}` });
-const serviceFactory = Container.get(ServiceFactory);
+
 let apiServer = null;
 let config = null;
+let serviceFactory = null;
+let authService = null;
+//let userService = null;
 
 describe('API Testing', async () => {
 
@@ -21,6 +26,9 @@ describe('API Testing', async () => {
 
         await apiServer.start();
         config = Container.get(IConfig);
+        serviceFactory = Container.get(ServiceFactory);
+        authService = Container.get(AuthenticationService);
+    //     userService = Container.get(UserService);
     });
 
     after(async () => {
@@ -31,8 +39,8 @@ describe('API Testing', async () => {
         let callbackFind = null;
 
         before(() => {
-            callbackFind = sinon.stub(serviceFactory.getUserRepository(), "find");
-            callbackFind.returns(Promise.resolve([]));
+            callbackFind = sinon.stub(authService, "authenticate");
+            callbackFind.returns(Promise.resolve(null));
         });
 
         after(() => {
@@ -62,8 +70,6 @@ describe('API Testing', async () => {
 
     describe("User#2", async () => {
         let callbackInsert = null;
-        let callbackFind = null;
-        let callbackPlayerInsert = null;
         let callbackFind2 = null;
 
         before(() => {
@@ -73,26 +79,16 @@ describe('API Testing', async () => {
                 lastname: "SIMOES",
                 pseudo: "simoes_t",
                 email: "simoes_t@etna-alternance.net",
-                hash: "azerty123",
+                hash: hashSync("azerty123", config.genSalt()),
                 address: "7 rue des ulysses"
             };
 
             callbackInsert = sinon.stub(serviceFactory.getUserRepository(), "save");
-            callbackFind = sinon.stub(serviceFactory.getUserRepository(), "find");
-            callbackPlayerInsert = sinon.stub(serviceFactory.getPlayerRepository(), "save");
-            callbackFind.resolves([]);
             callbackInsert.resolves(o);
-            callbackPlayerInsert.resolves({
-                user: o,
-                total_points: 0,
-                id: 1
-            });
         });
 
         after(() => {
             callbackInsert.restore();
-            callbackPlayerInsert.restore();
-            callbackFind2.restore();
         });
 
         it('should insert and retrieve user', (done) => {
@@ -110,10 +106,8 @@ describe('API Testing', async () => {
                     "address": "7 rue des ulysses"
                 })
             }, (err, response, body) => {
-                callbackFind.restore();
-                callbackFind2 = sinon.stub(serviceFactory.getUserRepository(), "find");
-                callbackFind2.resolves([
-                    {
+                callbackFind2 = sinon.stub(serviceFactory.getUserRepository(), "findOne");
+                callbackFind2.resolves({
                         id: 1,
                         firstname: "Thomas",
                         lastname: "SIMOES",
@@ -121,8 +115,7 @@ describe('API Testing', async () => {
                         email: "simoes_t@etna-alternance.net",
                         hash: hashSync("azerty123", config.genSalt()),
                         address: "7 rue des ulysses"
-                    }
-                ]);
+                });
                 expect(response.statusCode).to.equal(201);
                 client.post('/users/login', {
                     headers: {
@@ -133,6 +126,7 @@ describe('API Testing', async () => {
                         password: "azerty123"
                     })
                 }, (err, response, body) => {
+                    callbackFind2.restore();
                     if (err) {
                         console.log(err.message);
                     }
@@ -148,7 +142,7 @@ describe('API Testing', async () => {
     describe("User#3", () => {
         let token = null;
         let callbackInsert = null;
-        let callbackFind = null;
+      //  let callbackFind = null;
         let callbackFind2 = null;
         let callbackPlayerInsert = null;
         let callbackFind3 = null;
@@ -160,11 +154,11 @@ describe('API Testing', async () => {
                 lastname: "SIMOES",
                 pseudo: "simoes_t",
                 email: "simoes_t@etna-alternance.net",
-                hash: "azerty123",
+                hash: hashSync("azerty123", config.genSalt()),
                 address: "7 rue des ulysses"
             };
 
-            callbackFind = sinon.stub(serviceFactory.getUserRepository(), "find");
+           // callbackFind = sinon.stub(serviceFactory.getUserRepository(), "find");
             callbackInsert = sinon.stub(serviceFactory.getUserRepository(), "save");
             callbackPlayerInsert = sinon.stub(serviceFactory.getPlayerRepository(), "save");
             callbackInsert.resolves(o);
@@ -173,7 +167,7 @@ describe('API Testing', async () => {
                 total_points: 0,
                 user: o
             });
-            callbackFind.resolves([]);
+            //callbackFind.resolves([]);
         });
 
         after(() => {
@@ -198,10 +192,9 @@ describe('API Testing', async () => {
                 })
             }, (err, response, body) => {
                 expect(response.statusCode).to.equal(201);
-                callbackFind.restore();
-                callbackFind2 = sinon.stub(serviceFactory.getUserRepository(), "find");
-                callbackFind2.resolves([
-                    {
+               // callbackFind.restore();
+                callbackFind2 = sinon.stub(serviceFactory.getUserRepository(), "findOne");
+                callbackFind2.resolves({
                         id: 1,
                         firstname: "Thomas",
                         lastname: "SIMOES",
@@ -209,8 +202,7 @@ describe('API Testing', async () => {
                         email: "simoes_t@etna-alternance.net",
                         hash: hashSync("azerty123", config.genSalt()),
                         address: "7 rue des ulysses"
-                    }
-                ]);
+                });
                 client.post('/users/login', {
                     headers: {
                         "Content-Type": "application/json"
@@ -224,21 +216,17 @@ describe('API Testing', async () => {
                     const data = JSON.parse(body).data.data;
                     token = data;
                     callbackFind2.restore();
-                    callbackFind3 = sinon.stub(serviceFactory.getPlayerRepository(), "find");
+                    callbackFind3 = sinon.stub(serviceFactory.getUserRepository(), "find");
                     callbackFind3.resolves([
                         {
-                            user: {
-                                id: 1,
-                                firstname: "Thomas",
-                                lastname: "SIMOES",
-                                pseudo: "simoes_t",
-                                email: "simoes_t@etna-alternance.net",
-                                address: "7 rue des ulysses",
-                                createdAt: new Date(),
-                                updatedAt: new Date()
-                            },
-                            total_points: 0,
-                            id: 1
+                            id: 1,
+                            firstname: "Thomas",
+                            lastname: "SIMOES",
+                            pseudo: "simoes_t",
+                            email: "simoes_t@etna-alternance.net",
+                            address: "7 rue des ulysses",
+                            createdAt: new Date(),
+                            updatedAt: new Date()
                         }
                     ]);
                     client.get('/users', {
