@@ -1,23 +1,16 @@
 import { Repository, EntityRepository, EntityMetadata, EntityManager, getManager, getConnection } from "typeorm";
 import UserEntity from "../entities/UserEntity";
-import { Singleton, Provider, Provided } from "typescript-ioc";
-
-const provider : Provider = {
-    get: () => {
-        return process.env.NODE_ENV === "test" ? { find: () => {}, save: () => {}} : new UserRepository( );
-    }
-};
+import { Singleton } from "typescript-ioc";
 
 @EntityRepository(UserEntity)
-@Provided(provider)
 @Singleton
 export class UserRepository extends Repository<UserEntity> {
     manager: EntityManager;
     metadata: EntityMetadata;
-    
+
     constructor() {
         super();
-        this.manager = getManager("app");
-        this.metadata = getConnection("app").getMetadata("users");
+        this.manager = getManager(process.env.NODE_ENV);
+        this.metadata = getConnection(process.env.NODE_ENV).getMetadata(UserEntity);
     }
 }

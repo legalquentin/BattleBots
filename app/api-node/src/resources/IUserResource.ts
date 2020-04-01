@@ -10,6 +10,5 @@ export default interface IUserResource {
     createdAt?: string;
     updatedAt?: string;
     password?: string;
-    confirmation?: string;
-    gameProfile?: IGameProfileResource
+    gameProfile?: Array<IGameProfileResource>
 };

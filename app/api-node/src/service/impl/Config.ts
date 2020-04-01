@@ -1,17 +1,21 @@
-import { Provides, Singleton } from "typescript-ioc";
 import IConfig from "../IConfig";
+import * as config from "config";
+import { Singleton } from "typescript-ioc";
 
-@Provides(IConfig)
 @Singleton
-export default class Config implements IConfig{
-    salt = 10;
-    secret = "azerty123";
+export default class Config extends IConfig{
 
-    genSalt(){
+    constructor(){
+        super();
+        this.secret = config.get('secrets.secret');
+        this.salt = config.get('secrets.salt');
+    }
+
+    genSalt(): string{
         return (this.salt);
     }
 
-    getSecret(){
+    getSecret(): string{
         return (this.secret);
     }
 };

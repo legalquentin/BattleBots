@@ -14,6 +14,12 @@ export class player1582536574248 implements MigrationInterface {
                     "generationStrategy": "increment"
                 },
                 {
+                    "name": "name",
+                    "type": "varchar",
+                    "isNullable": false,
+                    "isUnique": true
+                },
+                {
                     "name": "user_id",
                     "type": "int",
                     "isNullable": false
