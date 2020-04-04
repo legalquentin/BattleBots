@@ -4,41 +4,12 @@ import * as http from 'http';
 import * as morgan from 'morgan';
 import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt';
 import { PassportAuthenticator, Server } from 'typescript-rest';
-import { PlayerRepository } from './database/repositories/PlayerRepository';
-import { UserRepository } from './database/repositories/UserRepository';
-import { GameRepository } from './database/repositories/GameRepository';
-import { FakeRepository } from './database/repositories/FakeRepository';
 import { Container } from 'typescript-ioc';
-import { UserService } from './service/UserService';
-import { UserServiceImpl } from './service/impl/UserServiceImpl';
-import { BattleService } from './service/BattleService';
-import { BattleServiceImpl } from './service/impl/BattleServiceImpl';
-import IServiceFactory from './service/IServiceFactory';
-import ServiceFactory from './service/impl/ServiceFactory';
+import config from "./ioc.config";
 import IConfig from './service/IConfig';
-import Config from './service/impl/Config';
-import { GameService } from './service/GameService';
-import { GameServiceImpl } from './service/impl/GameServiceImpl';
-import { ArenaService } from './service/ArenaService';
-import { ArenaServiceImpl } from './service/impl/ArenaServiceImpl';
-import { AuthenticationService } from './service/AuthenticationService';
-import { AuthenticationServiceImpl } from './service/impl/AuthenticationServiceImpl';
-import { PlayerService } from './service/PlayerService';
-import { PlayerServiceImpl } from './service/impl/PlayerServiceImpl';
-import { ArenaRepository } from './database/repositories/ArenaRepository';
-import { BotsRepository } from './database/repositories/BotsRepository';
-import { BotsService } from './service/BotsService';
-import { BotsServiceImpl } from './service/impl/BotsServiceImpl';
-import { LogRepository } from './database/repositories/LogRepository';
-import { StreamsRepository } from './database/repositories/StreamsRepository';
-import { LogService } from './service/LogService';
-import { LogServiceImpl } from './service/impl/LogServiceImpl';
-import { StreamsService } from './service/StreamsService';
-import { StreamsServiceImpl } from './service/impl/StreamsServiceImpl';
-import UserEntity from './database/entities/UserEntity';
-import { BotArenaRepository } from './database/repositories/BotArenaRepository';
-import { BotArenaService } from './service/BotArenaService';
-import { BotArenaServiceImpl } from './service/impl/BotArenaServiceImpl';
+import { UserService } from './service/UserService';
+import UserEntity from "../src/database/entities/UserEntity";
+import { NamespaceConfiguration } from 'typescript-ioc/dist/model';
 
 export class ApiServer {
     public PORT: number = 8080; // +process.env.PORT || 8080;
@@ -119,42 +90,6 @@ export class ApiServer {
         });
     }
 
-    private initIoc(){
-        Container.bind(UserService).to(UserServiceImpl);
-        Container.bind(BattleService).to(BattleServiceImpl);
-        Container.bind(GameService).to(GameServiceImpl);
-        Container.bind(ArenaService).to(ArenaServiceImpl);
-        Container.bind(AuthenticationService).to(AuthenticationServiceImpl);
-        Container.bind(PlayerService).to(PlayerServiceImpl);
-        Container.bind(BotsService).to(BotsServiceImpl);
-        Container.bind(StreamsService).to(StreamsServiceImpl);
-        Container.bind(LogService).to(LogServiceImpl);
-        Container.bind(BotArenaService).to(BotArenaServiceImpl);
-    
-        Container.bind(IServiceFactory).to(ServiceFactory);
-        Container.bind(IConfig).to(Config);
-        if (process.env.NODE_ENV !== "test"){
-            Container.bind(PlayerRepository).to(PlayerRepository);
-            Container.bind(UserRepository).to(UserRepository);
-            Container.bind(GameRepository).to(GameRepository);
-            Container.bind(ArenaRepository).to(ArenaRepository);
-            Container.bind(BotsRepository).to(BotsRepository);
-            Container.bind(StreamsRepository).to(StreamsRepository);
-            Container.bind(LogRepository).to(LogRepository);
-            Container.bind(BotArenaRepository).to(BotArenaRepository);
-        }
-        else {
-            Container.bind(PlayerRepository).to(FakeRepository);
-            Container.bind(UserRepository).to(FakeRepository);
-            Container.bind(GameRepository).to(FakeRepository);
-            Container.bind(ArenaRepository).to(FakeRepository);
-            Container.bind(BotsRepository).to(FakeRepository);
-            Container.bind(StreamsRepository).to(FakeRepository);
-            Container.bind(LogRepository).to(FakeRepository);
-            Container.bind(BotArenaRepository).to(FakeRepository);
-        }
-    }
-
     /**
      * Configure the express app.
      */
@@ -173,7 +108,8 @@ export class ApiServer {
         if (process.env.NODE_ENV !== "test") {
             this.app.use(morgan('combined'));
         }
-        this.initIoc();
+        Container.configure(config as NamespaceConfiguration);
+        Container.environment(process.env.NODE_ENV);
         this.configureAuthenticator();
     }
 
@@ -200,7 +136,6 @@ export class ApiServer {
 
                     done(null, o);
                 }
-
             }
             catch (e){
                 done(e.message, null);

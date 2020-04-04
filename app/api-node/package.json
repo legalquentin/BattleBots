@@ -49,7 +49,7 @@
     "sinon": "^9.0.0",
     "tree-kill": "^1.2.1",
     "typeorm": "^0.2.18",
-    "typescript-ioc": "^2.0.0",
+    "typescript-ioc": "^3.2.1",
     "typescript-rest": "^2.2.0",
     "typescript-rest-swagger": "^1.1.1"
   },

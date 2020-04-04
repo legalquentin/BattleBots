@@ -17,3 +17,8 @@ Error {"diagnosticText":"src/resources/asm/UserResourceAsm.ts(5,21): error TS613
 Error {"diagnosticText":"src/resources/asm/ArenaResourceAsm.ts(11,13): error TS6133: 'botArenaService' is declared but its value is never read.\n","diagnosticCodes":[6133]}
 Error {"diagnosticText":"src/resources/asm/ArenaResourceAsm.ts(5,1): error TS6133: 'BotArenaService' is declared but its value is never read.\n","diagnosticCodes":[6133]}
 Error {"diagnosticText":"src/resources/asm/ArenaResourceAsm.ts(43,28): error TS1005: ';' expected.\n","diagnosticCodes":[1005]}
+Error {}
+Error {}
+Error {}
+Error {}
+Error {}
