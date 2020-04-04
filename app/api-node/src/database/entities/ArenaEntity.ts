@@ -22,8 +22,8 @@ export class ArenaEntity extends AbstractEntity {
     })
     public games?: Promise<Array<GameEntity>>;
 
-    @OneToMany(type => RobotsArenaEntity, robotArena => robotArena.arena, {
-        cascade: ["insert", "update", "remove"]
+    @OneToMany(type => RobotsArenaEntity, robotArena => robotArena.arena,{
+        cascade: ["insert", "remove", "update"]
     })
     public robotArena?: Promise<Array<RobotsArenaEntity>>;
 }

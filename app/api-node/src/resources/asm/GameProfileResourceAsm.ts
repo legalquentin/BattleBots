@@ -1,38 +1,32 @@
 import { PlayerEntity } from "../../database/entities/PlayerEntity";
 import IGameProfileResource  from "../../resources/IGameProfileResource";
-import { UserResourceAsm } from "./UserResourceAsm";
-import { Inject } from "typescript-ioc";
-import { ERolesStatus } from "../ERolesStatus";
+import {  Singleton, Inject } from "typescript-ioc";
+import { UserGameProfileResourceAsm } from "./UserGameProfileResourceAsm";
 
+@Singleton
 export class GameProfileResourceAsm {
+
     @Inject
-    private userResourceAsm: UserResourceAsm;
-
+    private userGameProfileResourceAsm: UserGameProfileResourceAsm;
+ 
     public toEntity(resource: IGameProfileResource){
-        const player: PlayerEntity = {
-            total_points: resource.total_points,
-            name: resource.name,
-            id: resource.id,
-            user: this.userResourceAsm.toEntity(resource.user)
-        };
-        if (resource.user.roles === ERolesStatus.ROLE_ADMIN){
-            player.user.roles = ERolesStatus.ROLE_ADMIN;
-        }
-
-        return (player);
+        return this.userGameProfileResourceAsm.toPlayerEntity(resource);
     }
 
-    public toResource(player: PlayerEntity){
-        const p : IGameProfileResource = {
-            total_points: player.total_points,
-            id: player.id,
-            name: player.name
-        };
-
-        return (p);
+    public async toResource(player: PlayerEntity){
+        return this.userGameProfileResourceAsm.toPlayerResource(player);
     }
 
-    public toResources(players: Array<PlayerEntity>){
-        return players.map(player => this.toResource(player));
+    public async toResources(players: Array<PlayerEntity>){
+        const resources = (async (players) => {
+            let resources = [];
+
+            for (let player of players){
+                resources.push(await this.toResource(player));
+            }
+            return (resources);
+        })(players);
+
+        return (resources);
     }
 }

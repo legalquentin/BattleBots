@@ -24,7 +24,7 @@ export class GameEntity extends AbstractEntity {
         nullable: true,
         cascade: ["insert", "update"]
     })
-    public arena: ArenaEntity;
+    public arena?: ArenaEntity;
 
     @Column({ name: "game_status", nullable: false })
     @IsInt()

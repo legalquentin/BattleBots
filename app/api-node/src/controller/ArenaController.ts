@@ -106,7 +106,7 @@ export class ArenaController {
     public async update(arena: IArenaResource) : Promise<SendResource<HttpResponseModel<IArenaResource>>>
     {
         const entity = await this.arenaResourceAsm.toEntity(arena);
-        try {
+         try {
             const updated = await this.arenaService.saveOrUpdate(entity);
             const resource = await this.arenaResourceAsm.toResource(updated);
             const response : HttpResponseModel<IArenaResource> = {

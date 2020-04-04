@@ -251,7 +251,7 @@ export class UserController {
         }
     }
 
-    @Path('/players/:userId')
+    @Path('/:userId/players')
     @Security("ROLE_USER", "Bearer")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
@@ -267,7 +267,7 @@ export class UserController {
                     }
                 ]
             });
-            const resources : IGameProfileResource[] = this.gameProfileResourceAsm.toResources(players);
+            const resources : IGameProfileResource[] = await this.gameProfileResourceAsm.toResources(players);
             const response: HttpResponseModel<IGameProfileResource[]> = {
                 httpCode: 200,
                 message: "User list",
@@ -276,6 +276,7 @@ export class UserController {
 
             return (Promise.resolve(new SendResource<HttpResponseModel<IGameProfileResource[]>>("UserController", response.httpCode, response)));
         } catch (e){
+            console.log(e.message);
             const response: HttpResponseModel<IGameProfileResource[]> = {
                 httpCode: 400,
                 message: "Bad request",

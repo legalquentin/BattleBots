@@ -18,21 +18,36 @@ export class GameServiceImpl implements GameService {
     public async start(id: number): Promise<GameEntity> {
         const game = await this.findOne(id);
 
+        if (!game){
+            return (null);
+        }
         game.game_status = EGameStatus.STARTED;
+        delete game.updatedAt;
+        delete game.createdAt;
         return this.saveOrUpdate(game);
     }
     
     public async stop(id: number): Promise<GameEntity> {
         const game = await this.findOne(id);
 
+        if (!game){
+            return (null);
+        }
         game.game_status = EGameStatus.STOPPED;
+        delete game.updatedAt;
+        delete game.createdAt;
         return this.saveOrUpdate(game);
     }
 
     public async end(id: number): Promise<GameEntity> {
         const game = await this.findOne(id);
 
+        if (!game){
+            return (null);
+        }
         game.game_status = EGameStatus.ENDED;
+        delete game.updatedAt;
+        delete game.createdAt;
         return this.saveOrUpdate(game);
     }
 
@@ -40,14 +55,8 @@ export class GameServiceImpl implements GameService {
     {
             try {
                 if (game.id){
-
-                    const toFind = await this.serviceFactory.getGameRepository().findOne(game.id);
-
-                    toFind.game_name = game.game_name;
-                    toFind.game_status = game.game_status;
-                    toFind.arena = game.arena;
-                    await this.serviceFactory.getGameRepository().update(toFind.id, toFind);
-                    return (toFind);
+                    await this.serviceFactory.getGameRepository().update(game.id, game);
+                    return (game);
                 }
                 else {
                     const saved = await this.serviceFactory.getGameRepository().save(game);
@@ -71,7 +80,7 @@ export class GameServiceImpl implements GameService {
             return (false);
         }
         catch (e){
-            return (false);
+            throw e;
         }
     }
 

@@ -24,6 +24,18 @@ export class LogEntity extends AbstractEntity{
     @Column({name: "body"})
     public body?: string;
 
+    @Column({name: 'start_time'})
+    public startTime?: Date;
+
+    @Column({name: 'end_time'})
+    public endTime?: Date;
+
+    @Column({name: 'duration'})
+    public duration?: Date;
+
+    @Column({name: 'response_code'})
+    public responseCode?: number;
+
     @JoinColumn({
         name: "user",
         referencedColumnName: "id"

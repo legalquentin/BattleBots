@@ -2,14 +2,9 @@ import { IArenaResource } from "../IArenaResource";
 import { ArenaEntity } from "../../database/entities/ArenaEntity";
 import { BotResourceAsm } from "../../resources/asm/BotResourceAsm";
 import { Singleton, Inject } from "typescript-ioc";
-import { BotArenaService } from "../../service/BotArenaService";
 
 @Singleton
 export class ArenaResourceAsm {
-
-    @Inject
-    private botArenaService: BotArenaService;
-
     @Inject
     private botResourceAsm: BotResourceAsm;
 
@@ -19,31 +14,22 @@ export class ArenaResourceAsm {
             available: resource.available,
             id: resource.id
         };
-        const robotArena = (async (resource, entity) => {
+
+        if (!resource.bots){
+            resource.bots = [];
+        }
+        await (async (resource, entity) => {
             try {
-                const botsArena = [];
-
-                if (!resource.bots){
-                    resource.bots = [];
-                }
                 for (let bot of resource.bots){
-                    let botArena = await this.botArenaService.findOne(bot.id, entity.id);
-    
-                    if (!botArena){
-                        botArena = {};
+                    const botEntity = this.botResourceAsm.toEntity(bot);
 
-                        botArena.arena = entity;
-                        botArena.robot = this.botResourceAsm.toResource(bot);
-                    }
-                    botsArena.push(botArena);
+                    await this.botResourceAsm.AddArenaEntity(botEntity, entity);
                 }
-                return (botsArena);
             }
             catch (e){
                 throw e;
             }
         })(resource, entity);
-        entity.robotArena = robotArena;
         return (entity);
     }
 
@@ -53,14 +39,19 @@ export class ArenaResourceAsm {
             available: entity.available,
             id: entity.id
         };
+
         let robotArena = await entity.robotArena;
         if (!robotArena){
             robotArena = [];
         }
-        const bots = robotArena.map(botArena => {
-            return this.botResourceAsm.toResource(botArena.robot);
-        });
+        let bots = await (async () => {
+            let bots = [];
 
+            for (let _robotArena of robotArena){
+                bots.push(await this.botResourceAsm.toResource(_robotArena.robot));
+            }
+            return (bots);
+        })();
         resource.bots = bots;
         return (resource);
     }

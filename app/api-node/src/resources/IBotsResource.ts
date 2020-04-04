@@ -1,3 +1,5 @@
+import IGameProfileResource from "./IGameProfileResource";
+
 export interface IBotsResource {
     id: number;
     botIp: string;
@@ -8,4 +10,5 @@ export interface IBotsResource {
     damage: number;
     fireRate: number;
     armor: number;
+    gameProfile?: IGameProfileResource;
 }

@@ -34,6 +34,26 @@ export class log1585918847674 implements MigrationInterface {
                     isNullable: true
                 },
                 {
+                    name: 'response_code',
+                    type: "integer",
+                    isNullable: true  
+                },
+                {
+                    name: 'start_time',
+                    type: "timestamp",
+                    isNullable: true
+                },
+                {
+                    name: 'end_time',
+                    type: "timestamp",
+                    isNullable: true
+                },
+                {
+                    name: 'duration',
+                    type: 'timestamp',
+                    isNullable: true
+                },
+                {
                     name: "complete",
                     type: "integer",
                     isNullable: true

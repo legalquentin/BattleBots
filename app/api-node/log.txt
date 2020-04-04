@@ -11,3 +11,9 @@ Error {"name":"error","length":106,"severity":"FATAL","code":"57P03","file":"pos
 Error {"diagnosticText":"src/resources/asm/ArenaResourceAsm.ts(3,1): error TS6133: 'RobotsArenaEntity' is declared but its value is never read.\n","diagnosticCodes":[6133]}
 Error {"name":"MissingPrimaryColumnError","message":"Entity \"RobotsArenaEntity\" does not have a primary column. Primary column is required to have in all your entities. Use @PrimaryColumn decorator to add a primary column to your entity."}
 Error {"name":"MissingPrimaryColumnError","message":"Entity \"RobotsArenaEntity\" does not have a primary column. Primary column is required to have in all your entities. Use @PrimaryColumn decorator to add a primary column to your entity."}
+Error {"diagnosticText":"src/resources/asm/GameProfileResourceAsm.ts(4,10): error TS6133: 'Inject' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/resources/asm/GameProfileResourceAsm.ts(4,22): error TS6133: 'Container' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/resources/asm/UserResourceAsm.ts(5,21): error TS6133: 'Container' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/resources/asm/ArenaResourceAsm.ts(11,13): error TS6133: 'botArenaService' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/resources/asm/ArenaResourceAsm.ts(5,1): error TS6133: 'BotArenaService' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/resources/asm/ArenaResourceAsm.ts(43,28): error TS1005: ';' expected.\n","diagnosticCodes":[1005]}

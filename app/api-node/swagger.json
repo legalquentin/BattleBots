@@ -205,6 +205,151 @@
 				]
 			}
 		},
+		"/api/games/start/{id}": {
+			"put": {
+				"operationId": "GameStart",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "",
+				"parameters": [
+					{
+						"description": "",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "number",
+							"format": "double"
+						}
+					}
+				]
+			}
+		},
+		"/api/games/stop/{id}": {
+			"put": {
+				"operationId": "GameStop",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "",
+				"parameters": [
+					{
+						"description": "",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "number",
+							"format": "double"
+						}
+					}
+				]
+			}
+		},
+		"/api/games/create": {
+			"post": {
+				"operationId": "GameCreate",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IGameResource"
+							}
+						}
+					},
+					"required": true
+				}
+			}
+		},
+		"/api/games/end/{id}": {
+			"put": {
+				"operationId": "GameEnd",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "",
+				"parameters": [
+					{
+						"description": "",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "number",
+							"format": "double"
+						}
+					}
+				]
+			}
+		},
+		"/api/games/": {
+			"get": {
+				"operationId": "GameList",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": ""
+			}
+		},
+		"/api/games/{id}": {
+			"get": {
+				"operationId": "GameDetail",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "",
+				"parameters": [
+					{
+						"description": "",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "number",
+							"format": "double"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "GameDelete",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "",
+				"parameters": [
+					{
+						"description": "",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "number",
+							"format": "double"
+						}
+					}
+				]
+			}
+		},
 		"/api/logs/": {
 			"get": {
 				"operationId": "LogList",
@@ -501,7 +646,7 @@
 				]
 			}
 		},
-		"/api/users/players/{userId}": {
+		"/api/users/{userId}/players": {
 			"get": {
 				"operationId": "UserPlayers",
 				"responses": {
@@ -564,6 +709,88 @@
 			}
 		},
 		"schemas": {
+			"IGameProfileResource": {
+				"description": "",
+				"properties": {
+					"total_points": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"id": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"name": {
+						"type": "string",
+						"description": ""
+					},
+					"user": {
+						"$ref": "#/components/schemas/IUserResource"
+					}
+				},
+				"type": "object"
+			},
+			"IUserResource": {
+				"description": "",
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"firstname": {
+						"type": "string",
+						"description": ""
+					},
+					"lastname": {
+						"type": "string",
+						"description": ""
+					},
+					"pseudo": {
+						"type": "string",
+						"description": ""
+					},
+					"email": {
+						"type": "string",
+						"description": ""
+					},
+					"roles": {
+						"type": "string",
+						"description": ""
+					},
+					"address": {
+						"type": "string",
+						"description": ""
+					},
+					"createdAt": {
+						"type": "string",
+						"description": ""
+					},
+					"updatedAt": {
+						"type": "string",
+						"description": ""
+					},
+					"password": {
+						"type": "string",
+						"description": ""
+					},
+					"gameProfile": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/IGameProfileResource"
+						},
+						"description": ""
+					}
+				},
+				"type": "object",
+				"required": [
+					"pseudo",
+					"email",
+					"roles"
+				]
+			},
 			"IBotsResource": {
 				"description": "",
 				"properties": {
@@ -609,6 +836,9 @@
 						"type": "number",
 						"format": "double",
 						"description": ""
+					},
+					"gameProfile": {
+						"$ref": "#/components/schemas/IGameProfileResource"
 					}
 				},
 				"type": "object",
@@ -692,6 +922,48 @@
 					"body"
 				]
 			},
+			"IGameResource": {
+				"description": "",
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"name": {
+						"type": "string",
+						"description": ""
+					},
+					"arenaId": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"status": {
+						"enum": [
+							"CREATED",
+							"STARTED",
+							"STOPPED",
+							"ENDED"
+						],
+						"type": "string",
+						"description": ""
+					},
+					"createdAt": {
+						"type": "string",
+						"description": ""
+					},
+					"updatedAt": {
+						"type": "string",
+						"description": ""
+					}
+				},
+				"type": "object",
+				"required": [
+					"name",
+					"status"
+				]
+			},
 			"ITokenHttp": {
 				"description": "",
 				"properties": {
@@ -769,88 +1041,6 @@
 					},
 					"data": {
 						"$ref": "#/components/schemas/IResourceId"
-					}
-				},
-				"type": "object"
-			},
-			"IUserResource": {
-				"description": "",
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double",
-						"description": ""
-					},
-					"firstname": {
-						"type": "string",
-						"description": ""
-					},
-					"lastname": {
-						"type": "string",
-						"description": ""
-					},
-					"pseudo": {
-						"type": "string",
-						"description": ""
-					},
-					"email": {
-						"type": "string",
-						"description": ""
-					},
-					"roles": {
-						"type": "string",
-						"description": ""
-					},
-					"address": {
-						"type": "string",
-						"description": ""
-					},
-					"createdAt": {
-						"type": "string",
-						"description": ""
-					},
-					"updatedAt": {
-						"type": "string",
-						"description": ""
-					},
-					"password": {
-						"type": "string",
-						"description": ""
-					},
-					"gameProfile": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/IGameProfileResource"
-						},
-						"description": ""
-					}
-				},
-				"type": "object",
-				"required": [
-					"pseudo",
-					"email",
-					"roles"
-				]
-			},
-			"IGameProfileResource": {
-				"description": "",
-				"properties": {
-					"total_points": {
-						"type": "number",
-						"format": "double",
-						"description": ""
-					},
-					"id": {
-						"type": "number",
-						"format": "double",
-						"description": ""
-					},
-					"name": {
-						"type": "string",
-						"description": ""
-					},
-					"user": {
-						"$ref": "#/components/schemas/IUserResource"
 					}
 				},
 				"type": "object"
