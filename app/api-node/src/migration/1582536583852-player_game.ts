@@ -9,11 +9,13 @@ export class playerGame1582536583852 implements MigrationInterface {
                 {
                     "name": "player_id",
                     "type": "int",
+                    "isPrimary": true,
                     "isNullable": false
                 },
                 {
                     "name": "game_id",
                     "type": "int",
+                    "isPrimary": true,
                     "isNullable": false
                 },
                 {

@@ -3,6 +3,8 @@ import UserEntity from "../../../src/database/entities/UserEntity";
 import * as _ from "lodash";
 import IServiceFactory from "../IServiceFactory";
 import { Singleton, Inject } from "typescript-ioc";
+import { hashSync } from "bcrypt";
+import IConfig from "../IConfig";
 
 @Singleton
 export class UserServiceImpl implements UserService {
@@ -10,28 +12,35 @@ export class UserServiceImpl implements UserService {
     @Inject
     factory: IServiceFactory;
 
-    public async saveOrUpdate(user: UserEntity): Promise<UserEntity>{
-        if (user.id){
-            try {
-                const toFind = await this.factory.getUserRepository().findOne(user.id);
+    @Inject
+    config: IConfig;
 
-                toFind.address = user.address;
-                toFind.email = user.email;
-                toFind.firstname = user.firstname;
-                toFind.lastname = user.lastname;
-                toFind.pseudo = user.pseudo;
-                toFind.hash = user.hash;
-                await this.factory.getUserRepository().update(toFind.id, toFind);
-                return (toFind);
+    public async saveOrUpdate(user: UserEntity): Promise<UserEntity>{
+            try {
+                if (user.id)
+                {
+                    const toFind = await this.factory.getUserRepository().findOne(user.id);
+
+                    toFind.address = user.address;
+                    toFind.email = user.email;
+                    toFind.firstname = user.firstname;
+                    toFind.lastname = user.lastname;
+                    toFind.pseudo = user.pseudo;
+                    toFind.hash = user.hash;
+                    await this.factory.getUserRepository().update(toFind.id, toFind);
+                    return (toFind);
+                }
+                else {
+                    user.hash = hashSync(user.hash, this.config.genSalt());
+
+                    const saved : UserEntity = await this.factory.getUserRepository().save(user);
+                    return (saved);
+                }
+
             }
             catch (e){
-                return Promise.reject(null);
+                throw e;
             }            
-        }
-        else {
-            const saved : UserEntity = await this.factory.getUserRepository().save(user);
-            return (saved);
-        }
     }
 
     public async findAll(): Promise<Array<UserEntity>>{
@@ -43,7 +52,7 @@ export class UserServiceImpl implements UserService {
             const user = await this.factory.getUserRepository().findOne(id);
 
             if (user){
-                await this.factory.getUserRepository().delete(user);
+                await this.factory.getUserRepository().delete(user.id)
                 return (true);
             }
             return (false);

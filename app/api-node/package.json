@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "cross-env NODE_ENV=app nodemon",
-    "start": "cross-env NODE_ENV=app ts-node src/index.ts",
+    "start": "npm run swagger && cross-env NODE_ENV=app ts-node src/index.ts",
     "start:in:docker": "node dist/index.js",
     "start:cluster": "cross-env NODE_ENV=app ts-node src/cluster.ts",
     "build": "npm run clean && npm run tsc && npm run swagger",

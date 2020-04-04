@@ -8,6 +8,7 @@ import { IsInt, IsString } from "class-validator";
     name: "player"
 })
 export class PlayerEntity extends AbstractEntity {
+
     @Column({name: "total_points"})
     @IsInt()
     public total_points?: number;
@@ -23,5 +24,5 @@ export class PlayerEntity extends AbstractEntity {
     public name?: string;
 
     @OneToMany(type => RobotsEntity, robotEntity => robotEntity.player)
-    public robots?:  Array<RobotsEntity>;
+    public robots?:  Promise<Array<RobotsEntity>>;
 }

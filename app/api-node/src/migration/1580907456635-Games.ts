@@ -23,10 +23,10 @@ export class Games1580907456635 implements MigrationInterface {
                 {
                     type: "int",
                     name: "arena_id",
-                    isNullable: false
+                    isNullable: true
                 },
                 {
-                    type: "int",
+                    type: "varchar",
                     name: "game_status",
                     isNullable: false
                 },

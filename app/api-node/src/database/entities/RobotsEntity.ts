@@ -10,6 +10,7 @@ import { IsString, IsInt } from "class-validator";
     name: "robots"
 })
 export class RobotsEntity extends AbstractEntity {
+
     @Column({name: "bot_ip"})
     @IsString()
     public botIp: string;
@@ -43,15 +44,21 @@ export class RobotsEntity extends AbstractEntity {
     public armor: number;
 
     @JoinColumn({name: "player_id"})
-    @ManyToOne(type => PlayerEntity, playerEntity => playerEntity.robots)
-    public player: PlayerEntity;
+    @ManyToOne(type => PlayerEntity, playerEntity => playerEntity.robots, {
+        eager: true
+    })
+    public player?: PlayerEntity;
 
-    @OneToMany(type => RobotGameEntity, robotGame => robotGame.bot)
-    public robotGame: Array<RobotGameEntity>;
+    @OneToMany(type => RobotGameEntity, robotGame => robotGame.bot, {
+        cascade: ["remove"]
+    })
+    public robotGame?: Promise<Array<RobotGameEntity>>;
 
     @OneToMany(type => RobotsArenaEntity, robotArena => robotArena.robot)
-    public robotArena: Array<RobotsArenaEntity>;
+    public robotsArena?: Promise<Array<RobotsArenaEntity>>;
 
-    @OneToMany(type => StreamsEntity, streams => streams.robot)
-    public streams: Array<StreamsEntity>;
+    @OneToMany(type => StreamsEntity, streams => streams.robot, {
+        cascade: ["insert", "update"]
+    })
+    public streams?: Promise<Array<StreamsEntity>>;
 }

@@ -29,10 +29,10 @@ export class AuthenticationServiceImpl implements AuthenticationService {
         {
             const payload: any = {};
             payload.sub = user.id;
-            payload.role = "ROLE_USER";
+            payload.role = user.roles;
             const data = encode(payload, this.config.getSecret());
             return (data);
         }
-        return (Promise.resolve(null));
+        return (null);
     }
 }

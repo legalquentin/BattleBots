@@ -1,0 +1,13 @@
+Error {"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":5432}
+Error {"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":5432}
+Error {"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":5432}
+Error {"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":5432}
+Error {"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":5432}
+Error {"diagnosticText":"src/controller/BotsController.ts(11,13): error TS6133: 'botsService' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/controller/GameController.ts(11,13): error TS6133: 'gameService' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/controller/GameController.ts(11,13): error TS6133: 'gameService' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/controller/StreamsController.ts(11,13): error TS6133: 'streamsService' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"name":"error","length":106,"severity":"FATAL","code":"57P03","file":"postmaster.c","line":"2211","routine":"ProcessStartupPacket"}
+Error {"diagnosticText":"src/resources/asm/ArenaResourceAsm.ts(3,1): error TS6133: 'RobotsArenaEntity' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"name":"MissingPrimaryColumnError","message":"Entity \"RobotsArenaEntity\" does not have a primary column. Primary column is required to have in all your entities. Use @PrimaryColumn decorator to add a primary column to your entity."}
+Error {"name":"MissingPrimaryColumnError","message":"Entity \"RobotsArenaEntity\" does not have a primary column. Primary column is required to have in all your entities. Use @PrimaryColumn decorator to add a primary column to your entity."}

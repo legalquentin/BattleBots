@@ -2,6 +2,7 @@ import { GameService } from "../GameService";
 import { Inject, Singleton } from "typescript-ioc";
 import IServiceFactory from "../IServiceFactory";
 import { GameEntity } from "../../database/entities/GameEntity";
+import { EGameStatus } from "../../resources/EGameStatus";
 
 @Singleton
 export class GameServiceImpl implements GameService {
@@ -9,25 +10,54 @@ export class GameServiceImpl implements GameService {
     @Inject
     private serviceFactory: IServiceFactory;
 
+    public async create(game: GameEntity): Promise<GameEntity> {
+        game.game_status = EGameStatus.CREATED;
+        return this.saveOrUpdate(game);
+    }
+ 
+    public async start(id: number): Promise<GameEntity> {
+        const game = await this.findOne(id);
+
+        game.game_status = EGameStatus.STARTED;
+        return this.saveOrUpdate(game);
+    }
+    
+    public async stop(id: number): Promise<GameEntity> {
+        const game = await this.findOne(id);
+
+        game.game_status = EGameStatus.STOPPED;
+        return this.saveOrUpdate(game);
+    }
+
+    public async end(id: number): Promise<GameEntity> {
+        const game = await this.findOne(id);
+
+        game.game_status = EGameStatus.ENDED;
+        return this.saveOrUpdate(game);
+    }
+
     public async saveOrUpdate(game: GameEntity): Promise<GameEntity>
     {
-        if (game.id){
             try {
-                const toFind = await this.serviceFactory.getGameRepository().findOne(game.id);
+                if (game.id){
 
-                toFind.game_name = game.game_name;
-                toFind.game_status = game.game_status;
-                toFind.arena = game.arena;
-                await this.serviceFactory.getGameRepository().update(toFind.id, toFind);
-                return (toFind);
+                    const toFind = await this.serviceFactory.getGameRepository().findOne(game.id);
+
+                    toFind.game_name = game.game_name;
+                    toFind.game_status = game.game_status;
+                    toFind.arena = game.arena;
+                    await this.serviceFactory.getGameRepository().update(toFind.id, toFind);
+                    return (toFind);
+                }
+                else {
+                    const saved = await this.serviceFactory.getGameRepository().save(game);
+        
+                    return (saved);
+                }
             }
             catch (e){
-                return (Promise.reject(null));
+                throw e;
             }
-        }
-        else {
-            return (Promise.reject(null));
-        }
     }
 
     public async deleteOne(id: number): Promise<Boolean> {
@@ -35,7 +65,7 @@ export class GameServiceImpl implements GameService {
             const game = await this.serviceFactory.getGameRepository().findOne(id);
         
             if (game){
-                await this.serviceFactory.getGameRepository().delete(game);
+                await this.serviceFactory.getGameRepository().delete(game.id);
                 return (true);
             }
             return (false);

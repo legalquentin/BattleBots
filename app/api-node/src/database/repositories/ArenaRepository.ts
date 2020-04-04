@@ -8,7 +8,8 @@ export class ArenaRepository extends Repository<ArenaEntity> {
     public manager: EntityManager;
     public metadata: EntityMetadata;
 
-    public ArenaRepository(){
+    constructor(){
+        super();
         this.metadata = getConnection(process.env.NODE_ENV).getMetadata(ArenaEntity);
         this.manager = getManager(process.env.NODE_ENV);
     }

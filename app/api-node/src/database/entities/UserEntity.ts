@@ -2,9 +2,12 @@ import { Column, Entity, OneToMany } from 'typeorm';
 import { AbstractEntity } from './AbstractEntity';
 import { PlayerEntity } from './PlayerEntity';
 import { IsString, IsEmail } from 'class-validator';
+import { LogEntity } from './LogEntity';
+import { ERolesStatus } from '../../resources/ERolesStatus';
 
 @Entity({ name: 'users' })
 export default class UserEntity extends AbstractEntity {
+
     @Column({ name: 'firstname', length: 255 })
     @IsString()
     public firstname: string;
@@ -13,7 +16,11 @@ export default class UserEntity extends AbstractEntity {
     @IsString()
     public lastname: string;
 
-    @Column({ type: 'text', name: 'hash' })
+    @Column({name: "roles"})
+    @IsString()
+    public roles: ERolesStatus;
+
+    @Column({ name: 'hash' })
     @IsString()
     public hash: string;
 
@@ -30,7 +37,10 @@ export default class UserEntity extends AbstractEntity {
     public address: string;
 
     @OneToMany(type => PlayerEntity, player => player.user, {
-        cascade: ["remove"]
+        cascade: ["remove", "insert", "update"]
     })
     public players?: Promise<Array<PlayerEntity>>;
+
+    @OneToMany(type => LogEntity, log => log.user)
+    public logs?: Promise<Array<LogEntity>>;
 }

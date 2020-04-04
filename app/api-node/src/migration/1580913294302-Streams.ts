@@ -15,12 +15,12 @@ export class Streams1580913294302 implements MigrationInterface {
                 },
                 {
                     "name": "game_id",
-                    "isNullable": false,
+                    "isNullable": true,
                     "type": "int"
                 },
                 {
                     "name": "robot_id",
-                    "isNullable": false,
+                    "isNullable": true,
                     "type": "int"
                 },
                 {

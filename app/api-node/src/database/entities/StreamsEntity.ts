@@ -8,11 +8,18 @@ import { IsString, IsInt } from "class-validator";
     name: "streams"
 })
 export class StreamsEntity extends AbstractEntity {
-    @ManyToOne(type => GameEntity, game => game.streams)
+
+    @ManyToOne(type => GameEntity, game => game.streams, {
+        eager: true,
+        nullable: true
+    })
     @JoinColumn({name: "game_id"})
     public game: GameEntity;
 
-    @ManyToOne(type => RobotsEntity, bot => bot.streams)
+    @ManyToOne(type => RobotsEntity, bot => bot.streams, {
+        eager: true,
+        nullable: true
+    })
     @JoinColumn({name: "robot_id"})
     public robot: RobotsEntity;
 

@@ -2,6 +2,10 @@ import { UserRepository } from "../database/repositories/UserRepository";
 import { PlayerRepository } from "../database/repositories/PlayerRepository";
 import { GameRepository } from "../database/repositories/GameRepository";
 import { ArenaRepository } from "../database/repositories/ArenaRepository";
+import { BotsRepository } from "../database/repositories/BotsRepository";
+import { StreamsRepository } from "../database/repositories/StreamsRepository";
+import { LogRepository } from "../database/repositories/LogRepository";
+import { BotArenaRepository } from "../database/repositories/BotArenaRepository";
 
 
 export default abstract class IServiceFactory {
@@ -9,4 +13,8 @@ export default abstract class IServiceFactory {
     public abstract getPlayerRepository() : PlayerRepository;
     public abstract getGameRepository(): GameRepository;
     public abstract getArenaRepository(): ArenaRepository;
+    public abstract getBotsRepository(): BotsRepository;
+    public abstract getBotsArenaRepository(): BotArenaRepository;
+    public abstract getStreamsRepository(): StreamsRepository;
+    public abstract getLogRepository(): LogRepository;
 }

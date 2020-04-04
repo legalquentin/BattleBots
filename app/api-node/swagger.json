@@ -1,0 +1,900 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"description": "BattleBots API",
+		"license": {
+			"name": "MIT"
+		},
+		"title": "BattleBots",
+		"version": "0.0.1"
+	},
+	"paths": {
+		"/api/arena/": {
+			"post": {
+				"operationId": "ArenaSave",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SendResourceHttpResponseModel"
+								}
+							}
+						}
+					}
+				},
+				"description": "",
+				"requestBody": {
+					"$ref": "#/components/requestBodies/IArenaResource"
+				}
+			},
+			"get": {
+				"operationId": "ArenaList",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SendResourceHttpResponseModel"
+								}
+							}
+						}
+					}
+				},
+				"description": ""
+			},
+			"put": {
+				"operationId": "ArenaUpdate",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SendResourceHttpResponseModel"
+								}
+							}
+						}
+					}
+				},
+				"description": "",
+				"requestBody": {
+					"$ref": "#/components/requestBodies/IArenaResource"
+				}
+			}
+		},
+		"/api/arena/{id}": {
+			"delete": {
+				"operationId": "ArenaDelete",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SendResourceHttpResponseModel"
+								}
+							}
+						}
+					}
+				},
+				"description": "",
+				"parameters": [
+					{
+						"description": "",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "number",
+							"format": "double"
+						}
+					}
+				]
+			},
+			"get": {
+				"operationId": "ArenaDetails",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "",
+				"parameters": [
+					{
+						"description": "",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "number",
+							"format": "double"
+						}
+					}
+				]
+			}
+		},
+		"/api/arena/{id}/disable": {
+			"put": {
+				"operationId": "ArenaDisable",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "",
+				"parameters": [
+					{
+						"description": "",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "number",
+							"format": "double"
+						}
+					}
+				]
+			}
+		},
+		"/api/arena/{id}/enable": {
+			"put": {
+				"operationId": "ArenaEnable",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "",
+				"parameters": [
+					{
+						"description": "",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "number",
+							"format": "double"
+						}
+					}
+				]
+			}
+		},
+		"/": {
+			"get": {
+				"operationId": "DefaultServeRoute",
+				"responses": {
+					"200": {
+						"description": ""
+					},
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": ""
+			}
+		},
+		"/health": {
+			"get": {
+				"operationId": "DefaultHealth",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": ""
+			}
+		},
+		"/secure_health": {
+			"get": {
+				"operationId": "DefaultSecure_health",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "",
+				"security": [
+					{
+						"Bearer": [
+							"ROLE_USER"
+						]
+					}
+				]
+			}
+		},
+		"/api/logs/": {
+			"get": {
+				"operationId": "LogList",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "",
+				"security": [
+					{
+						"Bearer": [
+							"ROLE_USER"
+						]
+					}
+				]
+			}
+		},
+		"/api/users/login": {
+			"post": {
+				"operationId": "UserLoginRoute",
+				"responses": {
+					"200": {
+						"description": "User find",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelITokenHttp"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "user not found",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelITokenHttp"
+								}
+							}
+						}
+					}
+				},
+				"description": "",
+				"requestBody": {
+					"content": {
+						"application/json;charset=UTF-8": {
+							"schema": {
+								"$ref": "#/components/schemas/IUserHttpModel"
+							}
+						}
+					},
+					"required": true
+				}
+			}
+		},
+		"/api/users/": {
+			"post": {
+				"operationId": "UserRegister",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/SendResourceHttpResponseModel"
+								}
+							}
+						}
+					},
+					"201": {
+						"description": "User created",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelIResourceId"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelIResourceId"
+								}
+							}
+						}
+					},
+					"409": {
+						"description": "User already exist",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelIResourceId"
+								}
+							}
+						}
+					}
+				},
+				"description": "",
+				"requestBody": {
+					"content": {
+						"application/json;charset=UTF-8": {
+							"schema": {
+								"$ref": "#/components/schemas/IUserResource"
+							}
+						}
+					},
+					"required": true
+				}
+			},
+			"get": {
+				"operationId": "UserList",
+				"responses": {
+					"200": {
+						"description": "User list",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelIUserResourceArray"
+								}
+							}
+						}
+					}
+				},
+				"description": "",
+				"security": [
+					{
+						"Bearer": [
+							"ROLE_USER"
+						]
+					}
+				]
+			}
+		},
+		"/api/users/{id}/player": {
+			"post": {
+				"operationId": "UserRegisterPlayer",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/SendResourceHttpResponseModel"
+								}
+							}
+						}
+					},
+					"201": {
+						"description": "Player created",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelIResourceId"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelIResourceId"
+								}
+							}
+						}
+					},
+					"409": {
+						"description": "Player already exist",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelIResourceId"
+								}
+							}
+						}
+					}
+				},
+				"description": "",
+				"security": [
+					{
+						"Bearer": [
+							"ROLE_USER"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "number",
+							"format": "double"
+						}
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json;charset=UTF-8": {
+							"schema": {
+								"$ref": "#/components/schemas/IGameProfileResource"
+							}
+						}
+					},
+					"required": true
+				}
+			}
+		},
+		"/api/users/profile/{id}": {
+			"get": {
+				"operationId": "UserRead",
+				"responses": {
+					"200": {
+						"description": "User find",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelIUserResource"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not found",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelIUserResource"
+								}
+							}
+						}
+					}
+				},
+				"description": "",
+				"security": [
+					{
+						"Bearer": [
+							"ROLE_USER"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "number",
+							"format": "double"
+						}
+					}
+				]
+			}
+		},
+		"/api/users/profile": {
+			"get": {
+				"operationId": "UserProfile",
+				"responses": {
+					"200": {
+						"description": "User find",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelIUserResource"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "User not found",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelIUserResource"
+								}
+							}
+						}
+					}
+				},
+				"description": "",
+				"security": [
+					{
+						"Bearer": [
+							"ROLE_USER"
+						]
+					}
+				]
+			}
+		},
+		"/api/users/players/{userId}": {
+			"get": {
+				"operationId": "UserPlayers",
+				"responses": {
+					"200": {
+						"description": "User list",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelIUserResourceArray"
+								}
+							}
+						}
+					}
+				},
+				"description": "",
+				"security": [
+					{
+						"Bearer": [
+							"ROLE_USER"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "",
+						"in": "path",
+						"name": "userId",
+						"required": true,
+						"schema": {
+							"type": "number",
+							"format": "double"
+						}
+					}
+				]
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	],
+	"components": {
+		"requestBodies": {
+			"IArenaResource": {
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/IArenaResource"
+						}
+					}
+				},
+				"required": true
+			}
+		},
+		"securitySchemes": {
+			"Bearer": {
+				"type": "http",
+				"scheme": "bearer"
+			}
+		},
+		"schemas": {
+			"IBotsResource": {
+				"description": "",
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"botIp": {
+						"type": "string",
+						"description": ""
+					},
+					"running": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"taken": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"name": {
+						"type": "string",
+						"description": ""
+					},
+					"speed": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"damage": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"fireRate": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"armor": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					}
+				},
+				"type": "object",
+				"required": [
+					"id",
+					"botIp",
+					"running",
+					"taken",
+					"name",
+					"speed",
+					"damage",
+					"fireRate",
+					"armor"
+				]
+			},
+			"IArenaResource": {
+				"description": "",
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"arena_name": {
+						"type": "string",
+						"description": ""
+					},
+					"available": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"bots": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/IBotsResource"
+						},
+						"description": ""
+					}
+				},
+				"type": "object"
+			},
+			"HttpResponseModelIArenaResource": {
+				"description": "",
+				"properties": {
+					"message": {
+						"type": "string",
+						"description": ""
+					},
+					"httpCode": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"data": {
+						"$ref": "#/components/schemas/IArenaResource"
+					}
+				},
+				"type": "object"
+			},
+			"SendResourceHttpResponseModel": {
+				"description": "This function indicate body and http code  returned to the client",
+				"properties": {
+					"location": {
+						"type": "string",
+						"description": ""
+					},
+					"statusCode": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"body": {
+						"$ref": "#/components/schemas/HttpResponseModelIArenaResource"
+					}
+				},
+				"type": "object",
+				"required": [
+					"location",
+					"statusCode",
+					"body"
+				]
+			},
+			"ITokenHttp": {
+				"description": "",
+				"properties": {
+					"data": {
+						"type": "string",
+						"description": ""
+					}
+				},
+				"type": "object",
+				"required": [
+					"data"
+				]
+			},
+			"HttpResponseModelITokenHttp": {
+				"description": "",
+				"properties": {
+					"message": {
+						"type": "string",
+						"description": ""
+					},
+					"httpCode": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"data": {
+						"$ref": "#/components/schemas/ITokenHttp"
+					}
+				},
+				"type": "object"
+			},
+			"IUserHttpModel": {
+				"description": "",
+				"properties": {
+					"username": {
+						"type": "string",
+						"description": ""
+					},
+					"password": {
+						"type": "string",
+						"description": ""
+					}
+				},
+				"type": "object",
+				"required": [
+					"username",
+					"password"
+				]
+			},
+			"IResourceId": {
+				"description": "",
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					}
+				},
+				"type": "object",
+				"required": [
+					"id"
+				]
+			},
+			"HttpResponseModelIResourceId": {
+				"description": "",
+				"properties": {
+					"message": {
+						"type": "string",
+						"description": ""
+					},
+					"httpCode": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"data": {
+						"$ref": "#/components/schemas/IResourceId"
+					}
+				},
+				"type": "object"
+			},
+			"IUserResource": {
+				"description": "",
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"firstname": {
+						"type": "string",
+						"description": ""
+					},
+					"lastname": {
+						"type": "string",
+						"description": ""
+					},
+					"pseudo": {
+						"type": "string",
+						"description": ""
+					},
+					"email": {
+						"type": "string",
+						"description": ""
+					},
+					"roles": {
+						"type": "string",
+						"description": ""
+					},
+					"address": {
+						"type": "string",
+						"description": ""
+					},
+					"createdAt": {
+						"type": "string",
+						"description": ""
+					},
+					"updatedAt": {
+						"type": "string",
+						"description": ""
+					},
+					"password": {
+						"type": "string",
+						"description": ""
+					},
+					"gameProfile": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/IGameProfileResource"
+						},
+						"description": ""
+					}
+				},
+				"type": "object",
+				"required": [
+					"pseudo",
+					"email",
+					"roles"
+				]
+			},
+			"IGameProfileResource": {
+				"description": "",
+				"properties": {
+					"total_points": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"id": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"name": {
+						"type": "string",
+						"description": ""
+					},
+					"user": {
+						"$ref": "#/components/schemas/IUserResource"
+					}
+				},
+				"type": "object"
+			},
+			"HttpResponseModelIUserResource": {
+				"description": "",
+				"properties": {
+					"message": {
+						"type": "string",
+						"description": ""
+					},
+					"httpCode": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"data": {
+						"$ref": "#/components/schemas/IUserResource"
+					}
+				},
+				"type": "object"
+			},
+			"HttpResponseModelIUserResourceArray": {
+				"description": "",
+				"properties": {
+					"message": {
+						"type": "string",
+						"description": ""
+					},
+					"httpCode": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"data": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/IUserResource"
+						},
+						"description": ""
+					}
+				},
+				"type": "object"
+			}
+		}
+	}
+}

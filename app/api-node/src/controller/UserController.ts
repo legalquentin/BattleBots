@@ -1,6 +1,6 @@
 'use strict';
 
-import { Path, POST, GET, PathParam, Security, ContextRequest } from "typescript-rest";
+import { Path, POST, GET, PathParam, Security, ContextRequest, PreProcessor, PostProcessor } from "typescript-rest";
 import IUserResource from "../resources/IUserResource";
 import IUserHttpModel from "../resources/IUserHttpModel";
 import IResourceId from "../resources/IResourceId";
@@ -16,23 +16,28 @@ import { AuthenticationService } from "../service/AuthenticationService";
 import UserEntity from "../database/entities/UserEntity";
 import { PlayerEntity } from "../database/entities/PlayerEntity";
 import { PlayerService } from "../service/PlayerService";
-import { IPlayerResource } from "../resources/IPlayerResource";
 import IGameProfileResource from "../resources/IGameProfileResource";
-import IConfig from "../service/IConfig";
-import { hashSync } from "bcrypt";
+import { preRequest } from "../service/interceptors/preRequest/preRequest";
+import { postRequest } from "../service/interceptors/postRequest/postRequest";
+import { UserResourceAsm } from "../resources/asm/UserResourceAsm";
+import { GameProfileResourceAsm } from "../resources/asm/GameProfileResourceAsm";
 
-@Path('/users')
+@Path('/api/users')
+@PreProcessor(preRequest)
+@PostProcessor(postRequest)
 export class UserController {
     private userService: UserService;
     private playerService: PlayerService;
     private authService: AuthenticationService;
-    private config: IConfig;
+    private userResourceAsm: UserResourceAsm;
+    private gameProfileResourceAsm: GameProfileResourceAsm;
 
     constructor() {
         this.userService = Container.get(UserService);
         this.authService = Container.get(AuthenticationService);
         this.playerService = Container.get(PlayerService);
-        this.config = Container.get(IConfig);
+        this.userResourceAsm = Container.get(UserResourceAsm);
+        this.gameProfileResourceAsm = Container.get(GameProfileResourceAsm);
     }
 
     @Consumes("application/json;charset=UTF-8")
@@ -86,15 +91,8 @@ export class UserController {
     @Path('/')
     @POST
     public async register(user: IUserResource): Promise<SendResource<HttpResponseModel<IResourceId>>> {
-        const entity: UserEntity = {
-            firstname: user.firstname,
-            lastname: user.lastname,
-            email: user.email,
-            hash: user.password,
-            address: user.address,
-            pseudo: user.pseudo,
-        };
-        entity.hash = hashSync(entity.hash, this.config.genSalt());
+        const entity = this.userResourceAsm.toEntity(user);
+
         try {
             const savedUser = await this.userService.saveOrUpdate(entity);
             const resourceId: IResourceId = {
@@ -127,11 +125,11 @@ export class UserController {
     @Response<HttpResponseModel<IResourceId>>(409, "Player already exist")
     @Response<HttpResponseModel<IResourceId>>(400)
     @POST
-    public async registerPlayer(player: IPlayerResource): Promise<SendResource<HttpResponseModel<IResourceId>>> {
+    public async registerPlayer(player: IGameProfileResource, @PathParam("id") id: number): Promise<SendResource<HttpResponseModel<IResourceId>>> {
         try {
             const entity: PlayerEntity = {
-                user: await this.userService.findOne(player.userId),
-                total_points: player.totalPoints,
+                user: await this.userService.findOne(id),
+                total_points: player.total_points,
                 name: player.name,
             };
             const finded = await this.playerService.search({
@@ -190,28 +188,7 @@ export class UserController {
             if (!user){
                 return Promise.resolve(new SendResource<HttpResponseModel<IUserResource>>("UserController", notFound.httpCode, notFound));
             }
-            let players = await user.players;
-            if (!players){
-                players = [];
-            }
-            const resource: IUserResource = {
-                id: user.id,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                address: user.address,
-                password: user.hash,
-                pseudo: user.pseudo,
-                email: user.email,
-                gameProfile: players.map(player => {
-                    const p : IGameProfileResource = {
-                        total_points: player.total_points,
-                        id: player.id,
-                        name: player.name
-                    };
-
-                    return (p);
-                })
-            };
+            const resource: IUserResource = await  this.userResourceAsm.toResource(user);
             const response: HttpResponseModel<IUserResource> = {
                 data: resource,
                 httpCode: 200,
@@ -251,19 +228,11 @@ export class UserController {
     @GET
     public async list(): Promise<SendResource<HttpResponseModel<IUserResource[]>>> {
         try {
-            const users = await this.userService.findAll();
-            const resources : IUserResource[] = users.map((user) => {
-                const resource: IUserResource = {
-                    firstname: user.firstname,
-                    lastname: user.lastname,
-                    address: user.address,
-                    password: user.hash,
-                    pseudo: user.pseudo,
-                    email: user.email
-                };
-
-                return (resource);
-            });
+            let users = await this.userService.findAll();
+            if (!users){
+                users = [];
+            }
+            const resources : IUserResource[] = await this.userResourceAsm.toResources(users);
             const response: HttpResponseModel<IUserResource[]> = {
                 httpCode: 200,
                 message: "User list",
@@ -298,15 +267,7 @@ export class UserController {
                     }
                 ]
             });
-            const resources : IGameProfileResource[] = players.map((player) => {
-                const resource: IGameProfileResource = {
-                    total_points: player.total_points,
-                    name: player.name,
-                    id: player.id
-                };
-
-                return (resource);
-            });
+            const resources : IGameProfileResource[] = this.gameProfileResourceAsm.toResources(players);
             const response: HttpResponseModel<IGameProfileResource[]> = {
                 httpCode: 200,
                 message: "User list",

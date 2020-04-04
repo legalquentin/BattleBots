@@ -8,6 +8,7 @@ import { RobotsArenaEntity } from "./RobotsArenaEntity";
     name: "arena"
 })
 export class ArenaEntity extends AbstractEntity {
+
     @Column({ name: "arena_name" })
     @IsString()
     public arena_name: string;
@@ -19,8 +20,10 @@ export class ArenaEntity extends AbstractEntity {
     @OneToMany(type => GameEntity, game => game.arena, {
         cascade: ["remove"]
     })
-    public games: Array<GameEntity>;
+    public games?: Promise<Array<GameEntity>>;
 
-    @OneToMany(type => RobotsArenaEntity, robotArena => robotArena.arena)
-    public robotArena: Array<RobotsArenaEntity>;
+    @OneToMany(type => RobotsArenaEntity, robotArena => robotArena.arena, {
+        cascade: ["insert", "update", "remove"]
+    })
+    public robotArena?: Promise<Array<RobotsArenaEntity>>;
 }

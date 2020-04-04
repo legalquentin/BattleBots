@@ -24,7 +24,7 @@ export class PlayerServiceImpl implements PlayerService {
             }
         }
         catch (e){
-            return Promise.reject(e.message);
+            throw e;
         }
     }
 
@@ -33,7 +33,7 @@ export class PlayerServiceImpl implements PlayerService {
             const player = await this.factory.getPlayerRepository().findOne(id);
 
             if (player){
-                this.factory.getPlayerRepository().delete(player);
+                this.factory.getPlayerRepository().delete(player.id);
 
                 return (true);
             }

@@ -26,6 +26,19 @@ import { AuthenticationServiceImpl } from './service/impl/AuthenticationServiceI
 import { PlayerService } from './service/PlayerService';
 import { PlayerServiceImpl } from './service/impl/PlayerServiceImpl';
 import { ArenaRepository } from './database/repositories/ArenaRepository';
+import { BotsRepository } from './database/repositories/BotsRepository';
+import { BotsService } from './service/BotsService';
+import { BotsServiceImpl } from './service/impl/BotsServiceImpl';
+import { LogRepository } from './database/repositories/LogRepository';
+import { StreamsRepository } from './database/repositories/StreamsRepository';
+import { LogService } from './service/LogService';
+import { LogServiceImpl } from './service/impl/LogServiceImpl';
+import { StreamsService } from './service/StreamsService';
+import { StreamsServiceImpl } from './service/impl/StreamsServiceImpl';
+import UserEntity from './database/entities/UserEntity';
+import { BotArenaRepository } from './database/repositories/BotArenaRepository';
+import { BotArenaService } from './service/BotArenaService';
+import { BotArenaServiceImpl } from './service/impl/BotArenaServiceImpl';
 
 export class ApiServer {
     public PORT: number = 8080; // +process.env.PORT || 8080;
@@ -39,14 +52,19 @@ export class ApiServer {
         this.config();
 
         Server.useIoC();
+        const bodyParser = require('body-parser');
+        this.app.use(bodyParser.json({ verify: function(req, res, buf, encoding){
+            req.rawBody = buf.toString();
+        }}));
+        this.app.use(bodyParser.raw({ type: "*/*", verify: function(req, res, buf, encoding){
+            req.rawBody = buf.toString();
+        }}));
         Server.loadServices(this.app, 'controller/**/*.ts', __dirname);
         // Note : This disable auto-nexting
         // If we need it in a controller, we will use :
         // Context.next()
         //   Server.ignoreNextMiddlewares(true);
-        const bodyParser = require('body-parser');
-        this.app.use(bodyParser.urlencoded({ extended: true }));
-        this.app.use(bodyParser.json());
+
         Server.swagger(this.app, { 
             swaggerUiOptions: {
                 customSiteTitle: 'BattleBots'
@@ -108,6 +126,10 @@ export class ApiServer {
         Container.bind(ArenaService).to(ArenaServiceImpl);
         Container.bind(AuthenticationService).to(AuthenticationServiceImpl);
         Container.bind(PlayerService).to(PlayerServiceImpl);
+        Container.bind(BotsService).to(BotsServiceImpl);
+        Container.bind(StreamsService).to(StreamsServiceImpl);
+        Container.bind(LogService).to(LogServiceImpl);
+        Container.bind(BotArenaService).to(BotArenaServiceImpl);
     
         Container.bind(IServiceFactory).to(ServiceFactory);
         Container.bind(IConfig).to(Config);
@@ -116,12 +138,20 @@ export class ApiServer {
             Container.bind(UserRepository).to(UserRepository);
             Container.bind(GameRepository).to(GameRepository);
             Container.bind(ArenaRepository).to(ArenaRepository);
+            Container.bind(BotsRepository).to(BotsRepository);
+            Container.bind(StreamsRepository).to(StreamsRepository);
+            Container.bind(LogRepository).to(LogRepository);
+            Container.bind(BotArenaRepository).to(BotArenaRepository);
         }
         else {
             Container.bind(PlayerRepository).to(FakeRepository);
             Container.bind(UserRepository).to(FakeRepository);
             Container.bind(GameRepository).to(FakeRepository);
             Container.bind(ArenaRepository).to(FakeRepository);
+            Container.bind(BotsRepository).to(FakeRepository);
+            Container.bind(StreamsRepository).to(FakeRepository);
+            Container.bind(LogRepository).to(FakeRepository);
+            Container.bind(BotArenaRepository).to(FakeRepository);
         }
     }
 
@@ -149,18 +179,32 @@ export class ApiServer {
 
     private configureAuthenticator() {
         this.serviceConfig = Container.get(IConfig);
+        const userService = Container.get(UserService);
         const JWT_SECRET: string = this.serviceConfig.getSecret();
         const jwtConfig: StrategyOptions = {
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             secretOrKey: Buffer.from(JWT_SECRET)
         };
-        const strategy = new Strategy(jwtConfig, (payload: any, done: (err: any, user: any) => void) => {
-            const o = {
-                sub: payload.sub,
-                roles: [payload.role]
-            };
+        const strategy = new Strategy(jwtConfig, async (payload: any, done: (err: any, user: any) => void) => {
+            try {
+                const user : UserEntity = await userService.findOne(payload.sub);
 
-            done(null, o);
+                if (!user){
+                    done("User not exist", null);
+                }
+                else {
+                    const o = {
+                        sub: user.id,
+                        roles: user.roles
+                    };
+
+                    done(null, o);
+                }
+
+            }
+            catch (e){
+                done(e.message, null);
+            }
         });
         const authenticator = new PassportAuthenticator(strategy, {
             authOptions: {
