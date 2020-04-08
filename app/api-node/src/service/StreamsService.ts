@@ -6,4 +6,5 @@ export abstract class StreamsService {
     public abstract findOne(id: number) : Promise<StreamsEntity>;
     public abstract search(options: any): Promise<StreamsEntity[]>;
     public abstract findAll(): Promise<Array<StreamsEntity>>;
+    public abstract deleteByBot(botId: number): Promise<any>;
 }

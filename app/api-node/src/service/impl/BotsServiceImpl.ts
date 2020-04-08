@@ -2,11 +2,15 @@ import { BotsService } from "../BotsService";
 import { RobotsEntity } from "../../database/entities/RobotsEntity";
 import IServiceFactory from "../IServiceFactory";
 import { Inject, Singleton } from "typescript-ioc";
+import { StreamsService } from "../StreamsService";
 
 @Singleton
 export class BotsServiceImpl implements BotsService {
     @Inject
     private service: IServiceFactory;
+
+    @Inject
+    private streamService: StreamsService;
 
     public async saveOrUpdate(bots: RobotsEntity): Promise<RobotsEntity>
     {
@@ -22,6 +26,7 @@ export class BotsServiceImpl implements BotsService {
                 }
             }
             if (bots.streams){
+                await this.streamService.deleteByBot(bots.id);
                 const streams = await bots.streams;
                 delete bots.streams;
 

@@ -64,8 +64,10 @@ export class StreamsServiceImpl implements StreamsService {
         }
     }
 
-    public deleteByBot(botId: number){
-        
+    public async deleteByBot(botId: number){
+        return this.service.getStreamsRepository().createQueryBuilder().delete().from(StreamsEntity).where("robot_id = :id", {
+            "id": botId
+        }).execute();
     }
 
     public async findOne(id: number): Promise<StreamsEntity> {
