@@ -10,55 +10,72 @@ export class BotsServiceImpl implements BotsService {
 
     public async saveOrUpdate(bots: RobotsEntity): Promise<RobotsEntity>
     {
-            try {
-                if (bots.id)
-                {
-                    const finded = await this.service.getBotsRepository().findOne(bots.id);
-
-                    finded.armor = bots.armor;
-                    finded.botIp = bots.botIp;
-                    finded.damage = bots.damage;
-                    finded.fireRate = bots.fireRate;
-                    finded.name = bots.name;
-                    finded.running = bots.running;
-                    finded.speed = bots.speed;
-                    finded.taken = bots.taken;
-                    if (bots.player)
-                    {
-                        finded.player = bots.player;
-                    }
-                    if (bots.robotsArena)
-                    {
-                        finded.robotsArena = bots.robotsArena;
-                    }
-                    if (bots.robotGame)
-                    {
-                        finded.robotGame = bots.robotGame;
-                    }
-                    if (bots.streams)
-                    {
-                        finded.streams = bots.streams;
-                    }
-                    await this.service.getBotsRepository().update(finded.id, finded);
-    
-                    return (finded);
+        try {
+            if (bots.player){
+                if (bots.player.id){
+                    await this.service.getPlayerRepository().update(bots.player.id, bots.player);
                 }
                 else {
-                    const saved = this.service.getBotsRepository().save(bots);
-
-                    return (saved);
+                    const ret = await this.service.getPlayerRepository().save(bots.player);
+    
+                    bots.player.id = ret.id;
                 }
+            }
+            if (bots.streams){
+                const streams = await bots.streams;
+                delete bots.streams;
 
+                for (let stream of streams){
+                    stream.robot = bots;
+                    if (stream.id){
+                        await this.service.getStreamsRepository().update(stream.id, stream);
+                    }
+                    else{
+                        const ret = await this.service.getStreamsRepository().save(stream);
+
+                        stream.id = ret.id;
+                    }
+                    delete stream.robot;
+                }
+                bots.streams = Promise.resolve(streams);
             }
-            catch (e)
+            if (bots.id)
             {
-                throw e;
+               const toUpdate = new RobotsEntity();
+
+               toUpdate.id = bots.id;
+               toUpdate.botIp = bots.botIp;
+               toUpdate.damage = bots.damage;
+               toUpdate.armor = bots.armor;
+               toUpdate.taken = bots.taken;
+               toUpdate.speed = bots.speed;
+               toUpdate.fireRate = bots.fireRate;
+               toUpdate.running = bots.running;
+               toUpdate.name = bots.name;
+               toUpdate.player = bots.player;
+               await this.service.getBotsRepository().update(toUpdate.id, toUpdate);
+               return (bots);
             }
+            else {
+                const saved = await this.service.getBotsRepository().save(bots);
+
+                return (saved);
+            }
+        }
+        catch (e)
+        {
+            throw e;
+        }
     }
 
-    public async findOne(id: number): Promise<RobotsEntity>
+    public findOne(id: number): Promise<RobotsEntity>
     {
-        return (this.service.getBotsRepository().findOne(id));
+        return (this.service.getBotsRepository().
+        createQueryBuilder("bots").
+        leftJoinAndSelect("bots.player", "player").
+        where("bots.id = :id", {
+            "id": id
+        }).getOne());
     }
 
     public async findAll(): Promise<Array<RobotsEntity>>
@@ -73,7 +90,9 @@ export class BotsServiceImpl implements BotsService {
 
             if (bots)
             {
-                await this.service.getBotsRepository().delete(bots.id);
+                await this.service.getBotsRepository().createQueryBuilder("bot").delete().from(RobotsEntity, "bot").where("id = :id", {
+                    id: id
+                }).execute();
                 return (true);
             }
             else
@@ -83,7 +102,7 @@ export class BotsServiceImpl implements BotsService {
         }
         catch (e)
         {
-            return (false);
+            throw e;
         }
     }
 

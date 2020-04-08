@@ -4,8 +4,6 @@ import { GameRepository } from './database/repositories/GameRepository';
 import { FakeRepository } from './database/repositories/FakeRepository';
 import { UserService } from './service/UserService';
 import { UserServiceImpl } from './service/impl/UserServiceImpl';
-import { BattleService } from './service/BattleService';
-import { BattleServiceImpl } from './service/impl/BattleServiceImpl';
 import IServiceFactory from './service/IServiceFactory';
 import ServiceFactory from './service/impl/ServiceFactory';
 import IConfig from './service/IConfig';
@@ -72,10 +70,6 @@ const config =  {
                 {
                     bind: UserService,
                     to: UserServiceImpl
-                },
-                {
-                    bind: BattleService,
-                    to: BattleServiceImpl
                 },
                 {
                     bind: GameService,

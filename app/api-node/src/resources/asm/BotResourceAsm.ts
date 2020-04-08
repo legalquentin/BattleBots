@@ -4,12 +4,21 @@ import { Singleton, Inject } from "typescript-ioc";
 import { GameProfileResourceAsm } from "./GameProfileResourceAsm";
 import { ArenaEntity } from "../../database/entities/ArenaEntity";
 import { RobotsArenaEntity } from "../../database/entities/RobotsArenaEntity";
+import { GameResourceAsm } from "./GameResourceAsm";
+import { StreamsResourceAsm } from "./StreamsResourceAsm";
+import { RobotGameEntity } from "../../database/entities/RobotGameEntity";
 
 @Singleton
 export class BotResourceAsm {
 
     @Inject
     private gameProfileResourceAsm: GameProfileResourceAsm;
+
+    @Inject
+    private gameResourceAsm: GameResourceAsm;
+
+    @Inject
+    private streamResourceAsm: StreamsResourceAsm;
 
     public async toResource(robot: RobotsEntity) {
         const resource : IBotsResource = {
@@ -27,24 +36,74 @@ export class BotResourceAsm {
         if (robot.player){
             resource.gameProfile = await this.gameProfileResourceAsm.toResource(robot.player);
         }
+        if (robot.robotGame){
+            const botGames = await robot.robotGame;
+            const gameResources = [];
+
+            for (let botGame of botGames){
+                const game = await this.gameResourceAsm.toResource(botGame.game);
+
+                gameResources.push(game);
+            }
+            resource.games = gameResources;
+        }
+        if (robot.streams){
+            const streams = await robot.streams;
+            const resources = [];
+
+            for (let stream of streams){
+                resources.push(await this.streamResourceAsm.toResource(stream));
+            }
+            resource.streams = resources;
+        }
         return (resource);
     }
 
-    public toEntity(bot: IBotsResource) {
-        const robot: RobotsEntity = {
-            id: bot.id,
-            botIp: bot.botIp,
-            damage: bot.damage,
-            armor: bot.armor,
-            taken: bot.taken,
-            speed: bot.speed,
-            fireRate: bot.fireRate,
-            running: bot.running,
-            name: bot.name 
-        };
+    public async toResources(robots: Array<RobotsEntity>){
+        const resources = [];
 
+        for (let robot of robots){
+            resources.push(await this.toResource(robot));
+        }   
+        return (resources);
+    }
+
+    public async toEntity(bot: IBotsResource) {
+        const robot = new RobotsEntity();
+
+        robot.id = bot.id;
+        robot.botIp = bot.botIp;
+        robot.damage = bot.damage;
+        robot.armor = bot.armor;
+        robot.taken = bot.taken;
+        robot.speed = bot.speed;
+        robot.fireRate = bot.fireRate;
+        robot.running = bot.running;
+        robot.name = bot.name;
         if (bot.gameProfile){
             robot.player = this.gameProfileResourceAsm.toEntity(bot.gameProfile);
+        }
+        if (bot.streams){
+            const streams = bot.streams;
+            const streamEntities = [];
+
+            for (let stream of streams){
+                streamEntities.push(await this.streamResourceAsm.toEntity(stream));
+            }
+            robot.streams = Promise.resolve(streamEntities);
+        }
+        if (bot.games){
+            const games = bot.games;
+            const gameEntities = [];
+
+            for (let game of games){
+                const botGame: RobotGameEntity = {};
+
+                botGame.game = await this.gameResourceAsm.toEntity(game);
+                botGame.bot = robot;
+                gameEntities.push(botGame);
+            }
+            robot.robotGame = Promise.resolve(gameEntities);
         }
         return (robot);
     }

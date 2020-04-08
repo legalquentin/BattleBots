@@ -7,4 +7,5 @@ export abstract class ArenaService {
     public abstract deleteOne(id: number) : Promise<Boolean>;
     public abstract disable(id: number): Promise<Boolean>;
     public abstract enable(id: number): Promise<Boolean>;
+    public abstract linkBot(arenaId: number, botId: number): Promise<ArenaEntity>;
 } 

@@ -6,11 +6,12 @@ import { LogEntity } from "../../../database/entities/LogEntity";
 export async function preRequestLog(req: any){
     const logService = Container.get(LogService);
     const userService  = Container.get(UserService);
-    const log : LogEntity = {};
+    const log = new LogEntity();
 
     log.complete = 0;
     log.method = req.method;
     log.path = req.path;
+    log.startTime = new Date();
     if (req.rawBody){
         log.body = req.rawBody;
     }

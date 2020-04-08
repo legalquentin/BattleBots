@@ -4,7 +4,8 @@ import IServiceFactory from "../IServiceFactory";
 import { Inject, Singleton } from "typescript-ioc";
 import { RobotsArenaEntity } from "../../database/entities/RobotsArenaEntity";
 import { BotsService } from "../BotsService";
-import { BotArenaRepository } from "../../database/repositories/BotArenaRepository";
+import { EntityError } from "../../../lib/EntityError";
+import { EEntityStatus } from "../../../lib/EEntityStatus";
 
 @Singleton
 export class ArenaServiceImpl implements ArenaService {
@@ -15,39 +16,34 @@ export class ArenaServiceImpl implements ArenaService {
     @Inject
     private botsService: BotsService;
 
-    @Inject
-    private botArenaRepository: BotArenaRepository;
-
     public async saveOrUpdate(arena: ArenaEntity): Promise<ArenaEntity>
     {
-            try {
-                if (arena.id) {
-                    let botsArena : Array<RobotsArenaEntity> = await arena.robotArena;
+        let botsArena : Array<RobotsArenaEntity> = await arena.robotArena;
 
-                    if (!botsArena){
-                        botsArena = [];
-                    }
-                    await this.deleteRobotArena(arena.id);
-                    for (let botArena of botsArena){
-                        if (await this.botsService.findOne(botArena.robot.id) == null){
-                            await this.botsService.saveOrUpdate(botArena.robot);
-                        }
-                        await this.botArenaRepository.save(botArena);
-                    }
-                    delete arena.robotArena;
-                    await this.factory.getArenaRepository().update(arena.id, arena);
-                    arena.robotArena = Promise.resolve(botsArena);
-                    return (arena);
-                }
-                else {
-                    const saved = await this.factory.getArenaRepository().save(arena);
+        if (!botsArena){
+            botsArena = [];
+        }
+        await this.deleteRobotArena(arena.id);
+        for (let botArena of botsArena){
+            await this.botsService.saveOrUpdate(botArena.robot);
+            await this.factory.getBotsArenaRepository().save(botArena);
+        }
+        delete arena.robotArena;
+        try {
+            if (arena.id) {
+                await this.factory.getArenaRepository().update(arena.id, arena);
+                arena.robotArena = Promise.resolve(botsArena);
+                return (arena);
+            }
+            else {
+                const saved = await this.factory.getArenaRepository().save(arena);
                     
-                    return (saved);
-                }
+                return (saved);
             }
-            catch (e){
-                throw e;
-            }
+        }
+        catch (e){
+            throw e;
+        }
     }
 
     public async findOne(id: number): Promise<ArenaEntity>
@@ -84,12 +80,11 @@ export class ArenaServiceImpl implements ArenaService {
     {
         try {
             const arena: ArenaEntity = await this.factory.getArenaRepository().findOne(id);
-            const toUpdate: ArenaEntity = {
-                arena_name: arena.arena_name,
-                available: 0,
-                id: arena.id
-            };
+            const toUpdate = new ArenaEntity();
 
+            toUpdate.arena_name = arena.arena_name;
+            toUpdate.available = 0;
+            toUpdate.id = arena.id;
             await this.factory.getArenaRepository().update(toUpdate.id, toUpdate);
             return (true);
         }
@@ -102,12 +97,11 @@ export class ArenaServiceImpl implements ArenaService {
     {
         try {
             const arena: ArenaEntity = await this.factory.getArenaRepository().findOne(id);
-            const toUpdate: ArenaEntity = {
-                arena_name: arena.arena_name,
-                available: 1,
-                id: arena.id
-            };
+            const toUpdate = new ArenaEntity();
 
+            toUpdate.arena_name = arena.arena_name;
+            toUpdate.available = 1;
+            toUpdate.id = arena.id;
             await this.factory.getArenaRepository().update(toUpdate.id, toUpdate);
             return (true);
         }
@@ -120,5 +114,32 @@ export class ArenaServiceImpl implements ArenaService {
         await this.factory.getBotsArenaRepository().createQueryBuilder("robotarena").delete().where("arena_id = :arena_id", {
             arena_id: arenaId
         }).execute();
+    }
+
+    public async linkBot(arenaId: number, botId: number): Promise<ArenaEntity> {
+        try {
+            const arena = await this.findOne(arenaId);
+
+            if (!arena){
+                throw new EntityError(EEntityStatus.NOT_FOUND, "arena not found");
+            }
+            const bot = await this.botsService.findOne(botId);
+
+            if (!bot){
+                throw new EntityError(EEntityStatus.NOT_FOUND, "bot not found");
+            }
+            const robotArena: RobotsArenaEntity = {};
+            const robotsArena = await arena.robotArena;
+
+            robotArena.arena = arena;
+            robotArena.robot = bot;
+            robotsArena.push(robotArena);
+            await this.factory.getBotsArenaRepository().save(robotArena);
+            arena.robotArena = Promise.resolve(robotsArena);
+            return (arena);
+        }
+        catch (e){
+            throw new EntityError(EEntityStatus.INTERNAL_ERROR, e.message);
+        }
     }
 }

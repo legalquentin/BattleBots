@@ -9,7 +9,6 @@ export class UserResourceAsm {
     @Inject
     private userGameProfileResourceAsm: UserGameProfileResourceAsm;
 
-
     public async toResource(user: UserEntity){
         return this.userGameProfileResourceAsm.toUserResource(user);
     }

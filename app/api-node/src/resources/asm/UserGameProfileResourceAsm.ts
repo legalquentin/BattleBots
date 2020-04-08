@@ -8,15 +8,16 @@ import { ERolesStatus } from "../ERolesStatus";
 @Singleton
 export class UserGameProfileResourceAsm {
     public toPlayerEntity(resource: IGameProfileResource){
-        const player: PlayerEntity = {
-            total_points: resource.total_points,
-            name: resource.name,
-            id: resource.id,
-            user: this.toUserEntity(resource.user)
-        };
+        const player = new PlayerEntity();
 
-        if (resource.user.roles === ERolesStatus.ROLE_ADMIN){
-            player.user.roles = ERolesStatus.ROLE_ADMIN;
+        player.total_points = resource.total_points;
+        player.name = resource.name;
+        player.id = resource.id;
+        if (resource.user){
+            player.user = this.toUserEntity(resource.user);
+            if (resource.user.roles === ERolesStatus.ROLE_ADMIN){
+                player.user.roles = ERolesStatus.ROLE_ADMIN;
+            }
         }
         return (player);
     }
@@ -39,16 +40,15 @@ export class UserGameProfileResourceAsm {
     }
 
     public toUserEntity(resource: IUserResource){
-        const entity : UserEntity = {
-            firstname: resource.firstname,
-            lastname: resource.lastname,
-            address: resource.address,
-            pseudo: resource.pseudo,
-            email: resource.email,
-            roles: ERolesStatus.ROLE_USER,
-            hash: resource.password
-        };
+        const entity = new UserEntity();
 
+        entity.firstname = resource.firstname;
+        entity.lastname = resource.lastname;
+        entity.address = resource.address;
+        entity.pseudo = resource.pseudo;
+        entity.email = resource.email;
+        entity.roles = ERolesStatus.ROLE_USER;
+        entity.hash = resource.password;
         if (!resource.gameProfile){
             resource.gameProfile = [];
         }

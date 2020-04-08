@@ -122,28 +122,24 @@ export class ApiServer {
             secretOrKey: Buffer.from(JWT_SECRET)
         };
         const strategy = new Strategy(jwtConfig, async (payload: any, done: (err: any, user: any) => void) => {
-            try {
-                const user : UserEntity = await userService.findOne(payload.sub);
+            const user : UserEntity = await userService.findOne(payload.sub);
 
-                if (!user){
-                    done("User not exist", null);
-                }
-                else {
-                    const o = {
-                        sub: user.id,
-                        roles: user.roles
-                    };
-
-                    done(null, o);
-                }
+            if (!user){
+                done("User not exist", null);
             }
-            catch (e){
-                done(e.message, null);
+            else {
+                const o = {
+                    sub: user.id,
+                    roles: user.roles
+                };
+
+                done(null, o);
             }
         });
         const authenticator = new PassportAuthenticator(strategy, {
-            authOptions: {
+             authOptions: {
                 session: false,
+                failWithError: true,
             }
         });
 

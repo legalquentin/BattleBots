@@ -4,7 +4,6 @@ import { RobotGameEntity } from "./RobotGameEntity";
 import { PlayerEntity } from "./PlayerEntity";
 import { RobotsArenaEntity } from "./RobotsArenaEntity";
 import { StreamsEntity } from "./StreamsEntity";
-import { IsString, IsInt } from "class-validator";
 
 @Entity({
     name: "robots"
@@ -12,35 +11,27 @@ import { IsString, IsInt } from "class-validator";
 export class RobotsEntity extends AbstractEntity {
 
     @Column({name: "bot_ip"})
-    @IsString()
     public botIp: string;
 
     @Column({name: "running"})
-    @IsInt()
     public running: number;
 
     @Column({name: "taken"})
-    @IsInt()
     public taken: number;
 
     @Column({name: "name"})
-    @IsString()
     public name: string;
 
     @Column({name: "speed"})
-    @IsInt()
     public speed: number;
 
     @Column({name: "damage"})
-    @IsInt()
     public damage: number;
 
     @Column({name: "fire_rate"})
-    @IsInt()
     public fireRate: number;
 
     @Column({name: "armor"})
-    @IsInt()
     public armor: number;
 
     @JoinColumn({name: "player_id"})
@@ -49,16 +40,12 @@ export class RobotsEntity extends AbstractEntity {
     })
     public player?: PlayerEntity;
 
-    @OneToMany(type => RobotGameEntity, robotGame => robotGame.bot, {
-        cascade: ["remove"]
-    })
+    @OneToMany(type => RobotGameEntity, robotGame => robotGame.bot)
     public robotGame?: Promise<Array<RobotGameEntity>>;
 
     @OneToMany(type => RobotsArenaEntity, robotArena => robotArena.robot)
     public robotsArena?: Promise<Array<RobotsArenaEntity>>;
 
-    @OneToMany(type => StreamsEntity, streams => streams.robot, {
-        cascade: ["insert", "update"]
-    })
+    @OneToMany(type => StreamsEntity, streams => streams.robot)
     public streams?: Promise<Array<StreamsEntity>>;
 }

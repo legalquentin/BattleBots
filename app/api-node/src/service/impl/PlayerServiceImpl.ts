@@ -12,11 +12,8 @@ export class PlayerServiceImpl implements PlayerService {
     public async saveOrUpdate(player: PlayerEntity): Promise<PlayerEntity> {
         try {
             if (player.id){
-                const toFind = await this.factory.getPlayerRepository().findOne(player.id);
-            
-                toFind.total_points = player.total_points;
-                await this.factory.getPlayerRepository().update(toFind.id, toFind);
-                return (toFind);
+                await this.factory.getPlayerRepository().update(player.id, player);
+                return (player);
             }
             else {
                 await this.factory.getPlayerRepository().save(player);

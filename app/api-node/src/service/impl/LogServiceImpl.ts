@@ -17,19 +17,20 @@ export class LogServiceImpl implements LogService {
         }
     }
 
-    public async complete(id: number): Promise<LogEntity> {
+    public async update(log: LogEntity) : Promise<LogEntity> {
         try {
-            const log: LogEntity  = await this.service.getLogRepository().findOne(id);
-
-            log.complete = 1;
-            delete log.createdAt;
-            delete log.updatedAt;
-            await this.service.getLogRepository().update(id, log);
+            await this.service.getLogRepository().update(log.id, log);
             return (log);
-        } catch (e){
+        }
+        catch (e){
             throw e;
         }
-    } 
+    }
+
+    public async findOne(id: number): Promise<LogEntity> {
+        return this.service.getLogRepository().findOne(id);
+    }
+
 
     public async list(): Promise<LogEntity[]> {
         return this.service.getLogRepository().find();

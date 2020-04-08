@@ -118,20 +118,20 @@ export class UserController {
     }
 
     @Path("/:id/player")
+    @POST
     @Security("ROLE_USER", "Bearer")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @Response<HttpResponseModel<IResourceId>>(201, "Player created")
     @Response<HttpResponseModel<IResourceId>>(409, "Player already exist")
     @Response<HttpResponseModel<IResourceId>>(400)
-    @POST
     public async registerPlayer(player: IGameProfileResource, @PathParam("id") id: number): Promise<SendResource<HttpResponseModel<IResourceId>>> {
         try {
-            const entity: PlayerEntity = {
-                user: await this.userService.findOne(id),
-                total_points: player.total_points,
-                name: player.name,
-            };
+            const entity = new PlayerEntity();
+
+            entity.user = await this.userService.findOne(id);
+            entity.total_points = player.total_points;
+            entity.name = player.name;
             const finded = await this.playerService.search({
                 where: [
                     {
@@ -225,6 +225,7 @@ export class UserController {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @Response<HttpResponseModel<IUserResource[]>>(200, "User list")
+    @Response<HttpResponseModel<IUserResource[]>>(400, "Bad request")
     @GET
     public async list(): Promise<SendResource<HttpResponseModel<IUserResource[]>>> {
         try {
@@ -256,6 +257,7 @@ export class UserController {
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @Response<HttpResponseModel<IUserResource[]>>(200, "User list")
+    @Response<HttpResponseModel<IUserResource[]>>(400)
     @GET
     public async players(@PathParam("userId")userId: number): Promise<SendResource<HttpResponseModel<IGameProfileResource[]>>> {
         try {
@@ -276,7 +278,6 @@ export class UserController {
 
             return (Promise.resolve(new SendResource<HttpResponseModel<IGameProfileResource[]>>("UserController", response.httpCode, response)));
         } catch (e){
-            console.log(e.message);
             const response: HttpResponseModel<IGameProfileResource[]> = {
                 httpCode: 400,
                 message: "Bad request",

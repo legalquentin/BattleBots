@@ -12,7 +12,7 @@ export class RobotGameEntity {
         cascade: ["insert", "update"],
         primary: true
     })
-    public bot: RobotsEntity;
+    public bot?: RobotsEntity;
 
     @JoinColumn({name: "game_id"})
     @ManyToOne(type => GameEntity, game => game.robots, {
@@ -20,5 +20,5 @@ export class RobotGameEntity {
         cascade: ["insert", "update"],
         primary: true
     })
-    public game: GameEntity;
+    public game?: GameEntity;
 }

@@ -56,7 +56,7 @@ export class Robots1580907469348 implements MigrationInterface {
                 {
                     name: "player_id",
                     type: "int",
-                    isNullable: false
+                    isNullable: true
                 },
                 {
                     type: "timestamp",

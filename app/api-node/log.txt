@@ -22,3 +22,6 @@ Error {}
 Error {}
 Error {}
 Error {}
+Error {"diagnosticText":"src/controller/ArenaController.ts(19,13): error TS6133: 'botService' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/controller/BotsController.ts(7,1): error TS6133: 'RobotsEntity' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/controller/GameController.ts(12,1): error TS6133: 'IArenaResource' is declared but its value is never read.\n","diagnosticCodes":[6133]}

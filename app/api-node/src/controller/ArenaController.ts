@@ -1,4 +1,4 @@
-import { Path, POST, DELETE, PathParam, PUT, GET, PreProcessor, PostProcessor } from "typescript-rest";
+import { Path, POST, DELETE, PathParam, PUT, GET, PreProcessor, PostProcessor, Security } from "typescript-rest";
 import { ArenaService } from "../service/ArenaService";
 import { IArenaResource } from "../resources/IArenaResource";
 import { Container } from "typescript-ioc";
@@ -7,6 +7,8 @@ import { SendResource } from "../../lib/ReturnExtended";
 import { preRequest } from "../service/interceptors/preRequest/preRequest";
 import { postRequest } from "../service/interceptors/postRequest/postRequest";
 import { ArenaResourceAsm } from "../resources/asm/ArenaResourceAsm";
+import { Produces, Consumes, Response } from "typescript-rest-swagger";
+import { EEntityStatus } from "../../lib/EEntityStatus";
 
 @Path("/api/arena")
 @PreProcessor(preRequest)
@@ -20,6 +22,11 @@ export class ArenaController {
         this.arenaResourceAsm = Container.get(ArenaResourceAsm);
     }
 
+    @Produces("application/json;charset=UTF-8")
+    @Consumes("application/json;charset=UTF-8")
+    @Response<HttpResponseModel<IArenaResource>>(201, "Arena inserted")
+    @Response<HttpResponseModel<IArenaResource>>(400)
+    @Security("ROLE_USER", "Bearer")
     @Path("/")
     @POST
     public async save(arena: IArenaResource) : Promise<SendResource<HttpResponseModel<IArenaResource>>>
@@ -46,6 +53,10 @@ export class ArenaController {
         }
     }
 
+    @Produces("application/json;charset=UTF-8")
+    @Response<HttpResponseModel<IArenaResource[]>>(200, "Arena list")
+    @Response<HttpResponseModel<IArenaResource[]>>(400)
+    @Security("ROLE_USER", "Bearer")
     @Path("/")
     @GET
     public async list() : Promise<SendResource<HttpResponseModel<IArenaResource[]>>>
@@ -71,6 +82,11 @@ export class ArenaController {
         }
     }
 
+    @Produces("application/json;charset=UTF-8")
+    @Response<HttpResponseModel<IArenaResource>>(200, "Arena deleted")
+    @Response<HttpResponseModel<IArenaResource>>(404, "Arena not found")
+    @Response<HttpResponseModel<IArenaResource>>(400)
+    @Security("ROLE_USER", "Bearer")
     @Path("/:id")
     @DELETE
     public async delete(@PathParam("id") id: number) : Promise<SendResource<HttpResponseModel<IArenaResource>>>
@@ -86,7 +102,7 @@ export class ArenaController {
             }
             else
             {
-                response.message = "Error";
+                response.message = "Arena not found";
                 response.httpCode = 404;
             }
             return Promise.resolve(new SendResource<HttpResponseModel<IArenaResource>>("ArenaController", response.httpCode, response));       
@@ -101,6 +117,11 @@ export class ArenaController {
         }
     }
 
+    @Produces("application/json;charset=UTF-8")
+    @Consumes("application/json;charset=UTF-8")
+    @Response<HttpResponseModel<IArenaResource>>(200, "Arena updated")
+    @Response<HttpResponseModel<IArenaResource>>(400)
+    @Security("ROLE_USER", "Bearer")
     @PUT
     @Path("/")
     public async update(arena: IArenaResource) : Promise<SendResource<HttpResponseModel<IArenaResource>>>
@@ -127,6 +148,10 @@ export class ArenaController {
         }
     }
 
+    @Produces("application/json;charset=UTF-8")
+    @Response<HttpResponseModel<IArenaResource>>(200, "Arena disable")
+    @Response<HttpResponseModel<IArenaResource>>(400)
+    @Security("ROLE_USER", "Bearer")
     @Path("/:id/disable")
     @PUT
     public async disable(@PathParam("id") id: number)
@@ -150,6 +175,11 @@ export class ArenaController {
         }
     }
 
+    @Produces("application/json;charset=UTF-8")
+    @Response<HttpResponseModel<IArenaResource>>(200, "Arena details")
+    @Response<HttpResponseModel<IArenaResource>>(404, "Arena not found")
+    @Response<HttpResponseModel<IArenaResource>>(400)
+    @Security("ROLE_USER", "Bearer")
     @Path("/:id")
     @GET
     public async details(@PathParam("id") id: number){
@@ -182,6 +212,10 @@ export class ArenaController {
         }
     }
 
+    @Produces("application/json;charset=UTF-8")
+    @Response<HttpResponseModel<IArenaResource>>(200, "Arena enable")
+    @Response<HttpResponseModel<IArenaResource>>(400)
+    @Security("ROLE_USER", "Bearer")
     @Path("/:id/enable")
     @PUT
     public async enable(@PathParam("id") id: number)
@@ -202,6 +236,39 @@ export class ArenaController {
             };
 
             return Promise.resolve(new SendResource<HttpResponseModel<IArenaResource>>("ArenaController", response.httpCode, response));        
+        }
+    }
+
+    @Produces("application/json;charset=UTF-8")
+    @Consumes("application/json;charset=UTF-8")
+    @Response<HttpResponseModel<IArenaResource>>(200, "link bot to arena")
+    @Response<HttpResponseModel<IArenaResource>>(404)
+    @Response<HttpResponseModel<IArenaResource>>(400)
+    @Security("ROLE_USER", "Bearer")
+    @PUT
+    @Path("/:arenaId/bot/:botId")
+    public async linkBot(@PathParam("arenaId") arenaId: number, @PathParam("botId") botId: number){
+        try {
+            const arena = await this.arenaService.linkBot(arenaId, botId);
+            const resource = await this.arenaResourceAsm.toResource(arena);
+            const response: HttpResponseModel<IArenaResource> = {
+                httpCode: 200,
+                data: resource,
+                message: `link bot ${botId} to arena ${arenaId}`
+            };
+            
+            return (Promise.resolve(new SendResource<HttpResponseModel<IArenaResource>>("ArenaController", response.httpCode, response)));
+        }   
+        catch (e){
+            const response: HttpResponseModel<IArenaResource> = {
+                httpCode: 400,
+                message: e.message
+            };
+            
+            if (e.code == EEntityStatus.NOT_FOUND){
+                response.httpCode = 404;
+            }
+            return (Promise.resolve(new SendResource<HttpResponseModel<IArenaResource>>("ArenaController", response.httpCode, response)));
         }
     }
 }

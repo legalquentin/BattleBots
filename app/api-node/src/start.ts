@@ -22,7 +22,7 @@ export async function start(): Promise<ApiServer> {
             entities: [
                 `${__dirname}/database/entities/**/*.ts`
             ],
-            logging: true
+          //  logging: true
         }).then(async (connection: Connection) => {        
             const apiServer = new ApiServer();
 

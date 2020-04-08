@@ -9,19 +9,18 @@ export class ArenaResourceAsm {
     private botResourceAsm: BotResourceAsm;
 
     public async toEntity(resource: IArenaResource){
-        const entity : ArenaEntity = {
-            arena_name: resource.arena_name,
-            available: resource.available,
-            id: resource.id
-        };
+        const entity = new ArenaEntity();
 
+        entity.arena_name = resource.arena_name;
+        entity.available = resource.available;
+        entity.id = resource.id;
         if (!resource.bots){
             resource.bots = [];
         }
         await (async (resource, entity) => {
             try {
                 for (let bot of resource.bots){
-                    const botEntity = this.botResourceAsm.toEntity(bot);
+                    const botEntity = await this.botResourceAsm.toEntity(bot);
 
                     await this.botResourceAsm.AddArenaEntity(botEntity, entity);
                 }
@@ -63,7 +62,6 @@ export class ArenaResourceAsm {
             for (let entity of entities){
                 resources.push(await this.toResource(entity));   
             }
-
             return (resources);
         })();
 

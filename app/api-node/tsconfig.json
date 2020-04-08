@@ -20,7 +20,8 @@
   },
   "include": [
     "src/**/*.ts",
-    "test/**/*.ts"
+    "test/**/*.ts",
+    "lib/"
   ],
   "exclude": [
     "node_modules"

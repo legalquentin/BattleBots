@@ -13,32 +13,68 @@ paths:
                 '200':
                     description: Ok
                     content:
-                        application/json:
+                        application/json;charset=UTF-8:
                             schema:
                                 $ref: '#/components/schemas/SendResourceHttpResponseModel'
+                '201':
+                    description: 'Arena inserted'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIArenaResource'
+                '400':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIArenaResource'
             description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
             requestBody:
                 $ref: '#/components/requestBodies/IArenaResource'
         get:
             operationId: ArenaList
             responses:
                 '200':
-                    description: Ok
+                    description: 'Arena list'
                     content:
-                        application/json:
+                        application/json;charset=UTF-8:
                             schema:
-                                $ref: '#/components/schemas/SendResourceHttpResponseModel'
+                                $ref: '#/components/schemas/HttpResponseModelIArenaResourceArray'
+                '400':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIArenaResourceArray'
             description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
         put:
             operationId: ArenaUpdate
             responses:
                 '200':
-                    description: Ok
+                    description: 'Arena updated'
                     content:
-                        application/json:
+                        application/json;charset=UTF-8:
                             schema:
-                                $ref: '#/components/schemas/SendResourceHttpResponseModel'
+                                $ref: '#/components/schemas/HttpResponseModelIArenaResource'
+                '400':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIArenaResource'
             description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
             requestBody:
                 $ref: '#/components/requestBodies/IArenaResource'
     '/api/arena/{id}':
@@ -46,12 +82,28 @@ paths:
             operationId: ArenaDelete
             responses:
                 '200':
-                    description: Ok
+                    description: 'Arena deleted'
                     content:
-                        application/json:
+                        application/json;charset=UTF-8:
                             schema:
-                                $ref: '#/components/schemas/SendResourceHttpResponseModel'
+                                $ref: '#/components/schemas/HttpResponseModelIArenaResource'
+                '400':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIArenaResource'
+                '404':
+                    description: 'Arena not found'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIArenaResource'
             description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
             parameters:
                 -
                     description: ""
@@ -64,9 +116,31 @@ paths:
         get:
             operationId: ArenaDetails
             responses:
+                '200':
+                    description: 'Arena details'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIArenaResource'
                 '204':
                     description: 'No content'
+                '400':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIArenaResource'
+                '404':
+                    description: 'Arena not found'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIArenaResource'
             description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
             parameters:
                 -
                     description: ""
@@ -80,9 +154,25 @@ paths:
         put:
             operationId: ArenaDisable
             responses:
+                '200':
+                    description: 'Arena disable'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIArenaResource'
                 '204':
                     description: 'No content'
+                '400':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIArenaResource'
             description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
             parameters:
                 -
                     description: ""
@@ -96,9 +186,211 @@ paths:
         put:
             operationId: ArenaEnable
             responses:
+                '200':
+                    description: 'Arena enable'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIArenaResource'
+                '204':
+                    description: 'No content'
+                '400':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIArenaResource'
+            description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
+            parameters:
+                -
+                    description: ""
+                    in: path
+                    name: id
+                    required: true
+                    schema:
+                        type: number
+                        format: double
+    '/api/arena/{arenaId}/bot/{botId}':
+        put:
+            operationId: ArenaLinkBot
+            responses:
+                '200':
+                    description: 'link bot to arena'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIArenaResource'
+                '204':
+                    description: 'No content'
+                '400':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIArenaResource'
+                '404':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIArenaResource'
+            description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
+            parameters:
+                -
+                    description: ""
+                    in: path
+                    name: arenaId
+                    required: true
+                    schema:
+                        type: number
+                        format: double
+                -
+                    description: ""
+                    in: path
+                    name: botId
+                    required: true
+                    schema:
+                        type: number
+                        format: double
+    /api/bots/:
+        get:
+            operationId: BotsList
+            responses:
+                '200':
+                    description: 'bot list'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIStreamResource'
                 '204':
                     description: 'No content'
             description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
+        post:
+            operationId: BotsInsert
+            responses:
+                '201':
+                    description: 'bot inserted'
+                    content:
+                        'application/json; charset=UTF-8':
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIStreamResource'
+                '204':
+                    description: 'No content'
+                '400':
+                    description: ""
+                    content:
+                        'application/json; charset=UTF-8':
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIStreamResource'
+            description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
+            requestBody:
+                $ref: '#/components/requestBodies/IBotsResource'
+        put:
+            operationId: BotsUpdate
+            responses:
+                '200':
+                    description: 'bot updated'
+                    content:
+                        'application/json; charset=UTF-8':
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIStreamResource'
+                '204':
+                    description: 'No content'
+                '400':
+                    description: ""
+                    content:
+                        'application/json; charset=UTF-8':
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIStreamResource'
+            description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
+            requestBody:
+                $ref: '#/components/requestBodies/IBotsResource'
+    '/api/bots/{id}':
+        delete:
+            operationId: BotsDelete
+            responses:
+                '200':
+                    description: 'bot deleted'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIStreamResource'
+                '204':
+                    description: 'No content'
+                '400':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIStreamResource'
+                '404':
+                    description: 'bot not found'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIStreamResource'
+            description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
+            parameters:
+                -
+                    description: ""
+                    in: path
+                    name: id
+                    required: true
+                    schema:
+                        type: number
+                        format: double
+        get:
+            operationId: BotsDetails
+            responses:
+                '200':
+                    description: 'bot details'
+                    content:
+                        'application/json; charset=UTF-8':
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIStreamResource'
+                '204':
+                    description: 'No content'
+                '400':
+                    description: ""
+                    content:
+                        'application/json; charset=UTF-8':
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIStreamResource'
+                '404':
+                    description: 'bot not found'
+                    content:
+                        'application/json; charset=UTF-8':
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIStreamResource'
+            description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
             parameters:
                 -
                     description: ""
@@ -139,9 +431,31 @@ paths:
         put:
             operationId: GameStart
             responses:
+                '200':
+                    description: 'game started'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
                 '204':
                     description: 'No content'
+                '400':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
+                '404':
+                    description: 'game not found'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
             description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
             parameters:
                 -
                     description: ""
@@ -155,9 +469,31 @@ paths:
         put:
             operationId: GameStop
             responses:
+                '200':
+                    description: 'game stopped'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
                 '204':
                     description: 'No content'
+                '400':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
+                '404':
+                    description: 'game not found'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
             description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
             parameters:
                 -
                     description: ""
@@ -171,12 +507,28 @@ paths:
         post:
             operationId: GameCreate
             responses:
+                '201':
+                    description: 'game created'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
                 '204':
                     description: 'No content'
+                '400':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
             description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
             requestBody:
                 content:
-                    application/json:
+                    appplication/json;charset=UTF-8:
                         schema:
                             $ref: '#/components/schemas/IGameResource'
                 required: true
@@ -184,9 +536,31 @@ paths:
         put:
             operationId: GameEnd
             responses:
+                '200':
+                    description: 'game ended'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
                 '204':
                     description: 'No content'
+                '400':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
+                '404':
+                    description: 'game not found'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
             description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
             parameters:
                 -
                     description: ""
@@ -200,16 +574,82 @@ paths:
         get:
             operationId: GameList
             responses:
+                '200':
+                    description: 'game list'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
                 '204':
                     description: 'No content'
+                '400':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
             description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
+        put:
+            operationId: GameUpdate
+            responses:
+                '200':
+                    description: 'game updated'
+                    content:
+                        'application/json; charset=UTF-8':
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
+                '204':
+                    description: 'No content'
+                '400':
+                    description: ""
+                    content:
+                        'application/json; charset=UTF-8':
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
+            description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
+            requestBody:
+                content:
+                    'application/json; charset=UTF-8':
+                        schema:
+                            $ref: '#/components/schemas/IGameResource'
+                required: true
     '/api/games/{id}':
         get:
             operationId: GameDetail
             responses:
+                '200':
+                    description: 'game detail'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
                 '204':
                     description: 'No content'
+                '400':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
+                '404':
+                    description: 'game not found'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
             description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
             parameters:
                 -
                     description: ""
@@ -222,9 +662,31 @@ paths:
         delete:
             operationId: GameDelete
             responses:
+                '200':
+                    description: 'game deleted'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
                 '204':
                     description: 'No content'
+                '400':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
+                '404':
+                    description: 'game not found'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
             description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
             parameters:
                 -
                     description: ""
@@ -245,6 +707,140 @@ paths:
                 -
                     Bearer:
                         - ROLE_USER
+    /api/streams/:
+        get:
+            operationId: StreamsContollerList
+            responses:
+                '200':
+                    description: 'Stream list'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIStreamResource'
+                '204':
+                    description: 'No content'
+            description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
+        post:
+            operationId: StreamsContollerInsert
+            responses:
+                '201':
+                    description: 'Stream inserted'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIStreamResource'
+                '204':
+                    description: 'No content'
+                '400':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIStreamResource'
+            description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
+            requestBody:
+                $ref: '#/components/requestBodies/IStreamResource'
+        put:
+            operationId: StreamsContollerUpdate
+            responses:
+                '200':
+                    description: 'stream updated'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIStreamResource'
+                '204':
+                    description: 'No content'
+                '400':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIStreamResource'
+            description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
+            requestBody:
+                $ref: '#/components/requestBodies/IStreamResource'
+    '/api/streams/{id}':
+        delete:
+            operationId: StreamsContollerDelete
+            responses:
+                '200':
+                    description: 'Stream deleted'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIStreamResource'
+                '204':
+                    description: 'No content'
+                '400':
+                    description: error
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIStreamResource'
+                '404':
+                    description: 'Stream not found'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIStreamResource'
+            description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
+            parameters:
+                -
+                    description: ""
+                    in: path
+                    name: id
+                    required: true
+                    schema:
+                        type: number
+                        format: double
+        get:
+            operationId: StreamsContollerDetail
+            responses:
+                '200':
+                    description: 'Stream finded'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIStreamResource'
+                '204':
+                    description: 'No content'
+                '404':
+                    description: 'Stream not found'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIStreamResource'
+            description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
+            parameters:
+                -
+                    description: ""
+                    in: path
+                    name: id
+                    required: true
+                    schema:
+                        type: number
+                        format: double
     /api/users/login:
         post:
             operationId: UserLoginRoute
@@ -308,6 +904,12 @@ paths:
             responses:
                 '200':
                     description: 'User list'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIUserResourceArray'
+                '400':
+                    description: 'Bad request'
                     content:
                         application/json;charset=UTF-8:
                             schema:
@@ -426,6 +1028,12 @@ paths:
                         application/json;charset=UTF-8:
                             schema:
                                 $ref: '#/components/schemas/HttpResponseModelIUserResourceArray'
+                '400':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIUserResourceArray'
             description: ""
             security:
                 -
@@ -447,15 +1055,190 @@ components:
     requestBodies:
         IArenaResource:
             content:
-                application/json:
+                application/json;charset=UTF-8:
                     schema:
                         $ref: '#/components/schemas/IArenaResource'
+            required: true
+        IBotsResource:
+            content:
+                'application/json; charset=UTF-8':
+                    schema:
+                        $ref: '#/components/schemas/IBotsResource'
+            required: true
+        IStreamResource:
+            content:
+                application/json;charset=UTF-8:
+                    schema:
+                        $ref: '#/components/schemas/IStreamResource'
             required: true
     securitySchemes:
         Bearer:
             type: http
             scheme: bearer
     schemas:
+        IArenaResource:
+            description: ""
+            properties:
+                id:
+                    type: number
+                    format: double
+                    description: ""
+                arena_name:
+                    type: string
+                    description: ""
+                available:
+                    type: number
+                    format: double
+                    description: ""
+                bots:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/IBotsResource'
+                    description: ""
+            type: object
+        IBotsResource:
+            description: ""
+            properties:
+                id:
+                    type: number
+                    format: double
+                    description: ""
+                botIp:
+                    type: string
+                    description: ""
+                running:
+                    type: number
+                    format: double
+                    description: ""
+                taken:
+                    type: number
+                    format: double
+                    description: ""
+                name:
+                    type: string
+                    description: ""
+                speed:
+                    type: number
+                    format: double
+                    description: ""
+                damage:
+                    type: number
+                    format: double
+                    description: ""
+                fireRate:
+                    type: number
+                    format: double
+                    description: ""
+                armor:
+                    type: number
+                    format: double
+                    description: ""
+                streams:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/IStreamResource'
+                    description: ""
+                games:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/IGameResource'
+                    description: ""
+                gameProfile:
+                    $ref: '#/components/schemas/IGameProfileResource'
+            type: object
+            required:
+                - id
+                - botIp
+                - running
+                - taken
+                - name
+                - speed
+                - damage
+                - fireRate
+                - armor
+        IStreamResource:
+            description: ""
+            properties:
+                game:
+                    $ref: '#/components/schemas/IGameResource'
+                robot:
+                    $ref: '#/components/schemas/IBotsResource'
+                kinesisUrl:
+                    type: string
+                    description: ""
+                s3Url:
+                    type: string
+                    description: ""
+                private:
+                    type: number
+                    format: double
+                    description: ""
+                running:
+                    type: number
+                    format: double
+                    description: ""
+                duration:
+                    type: number
+                    format: double
+                    description: ""
+                encodage:
+                    type: string
+                    description: ""
+                id:
+                    type: number
+                    format: double
+                    description: ""
+            type: object
+            required:
+                - kinesisUrl
+                - s3Url
+                - private
+                - running
+                - duration
+                - encodage
+        IGameResource:
+            description: ""
+            properties:
+                id:
+                    type: number
+                    format: double
+                    description: ""
+                name:
+                    type: string
+                    description: ""
+                arena:
+                    $ref: '#/components/schemas/IArenaResource'
+                bots:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/IBotsResource'
+                    description: ""
+                streams:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/IStreamResource'
+                    description: ""
+                status:
+                    enum:
+                        - CREATED
+                        - STARTED
+                        - STOPPED
+                        - ENDED
+                    type: string
+                    description: ""
+                createdAt:
+                    type: string
+                    description: ""
+                updatedAt:
+                    type: string
+                    description: ""
+                token:
+                    type: string
+                    description: ""
+            type: object
+            required:
+                - name
+                - status
         IGameProfileResource:
             description: ""
             properties:
@@ -517,76 +1300,6 @@ components:
                 - pseudo
                 - email
                 - roles
-        IBotsResource:
-            description: ""
-            properties:
-                id:
-                    type: number
-                    format: double
-                    description: ""
-                botIp:
-                    type: string
-                    description: ""
-                running:
-                    type: number
-                    format: double
-                    description: ""
-                taken:
-                    type: number
-                    format: double
-                    description: ""
-                name:
-                    type: string
-                    description: ""
-                speed:
-                    type: number
-                    format: double
-                    description: ""
-                damage:
-                    type: number
-                    format: double
-                    description: ""
-                fireRate:
-                    type: number
-                    format: double
-                    description: ""
-                armor:
-                    type: number
-                    format: double
-                    description: ""
-                gameProfile:
-                    $ref: '#/components/schemas/IGameProfileResource'
-            type: object
-            required:
-                - id
-                - botIp
-                - running
-                - taken
-                - name
-                - speed
-                - damage
-                - fireRate
-                - armor
-        IArenaResource:
-            description: ""
-            properties:
-                id:
-                    type: number
-                    format: double
-                    description: ""
-                arena_name:
-                    type: string
-                    description: ""
-                available:
-                    type: number
-                    format: double
-                    description: ""
-                bots:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/IBotsResource'
-                    description: ""
-            type: object
         HttpResponseModelIArenaResource:
             description: ""
             properties:
@@ -617,38 +1330,48 @@ components:
                 - location
                 - statusCode
                 - body
-        IGameResource:
+        HttpResponseModelIArenaResourceArray:
             description: ""
             properties:
-                id:
+                message:
+                    type: string
+                    description: ""
+                httpCode:
                     type: number
                     format: double
                     description: ""
-                name:
-                    type: string
-                    description: ""
-                arenaId:
-                    type: number
-                    format: double
-                    description: ""
-                status:
-                    enum:
-                        - CREATED
-                        - STARTED
-                        - STOPPED
-                        - ENDED
-                    type: string
-                    description: ""
-                createdAt:
-                    type: string
-                    description: ""
-                updatedAt:
-                    type: string
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/IArenaResource'
                     description: ""
             type: object
-            required:
-                - name
-                - status
+        HttpResponseModelIStreamResource:
+            description: ""
+            properties:
+                message:
+                    type: string
+                    description: ""
+                httpCode:
+                    type: number
+                    format: double
+                    description: ""
+                data:
+                    $ref: '#/components/schemas/IStreamResource'
+            type: object
+        HttpResponseModelIGameResource:
+            description: ""
+            properties:
+                message:
+                    type: string
+                    description: ""
+                httpCode:
+                    type: number
+                    format: double
+                    description: ""
+                data:
+                    $ref: '#/components/schemas/IGameResource'
+            type: object
         ITokenHttp:
             description: ""
             properties:
