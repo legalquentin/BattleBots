@@ -53,7 +53,7 @@ export class ApiServer {
             },
             filePath: 'swagger.yaml',
             endpoint: "api-docs",
-            host: "hardwar.ddns.net:8080",
+            host: "hardwar.ddns.net",
             schemes: ["http"]
          });
         this.app.use("*", function (req, res, next) {
