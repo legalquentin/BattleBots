@@ -8,7 +8,7 @@ import Config from './service/impl/Config';
 import { Container } from 'typescript-ioc';
 
 export class ApiServer {
-    public PORT: number = 8080; // +process.env.PORT || 8080;
+    public PORT: number = 80; // +process.env.PORT || 8080;
 
     private readonly app: express.Application;
     private server: http.Server = null;
@@ -38,7 +38,7 @@ export class ApiServer {
             },
             filePath: 'swagger.yaml',
             endpoint: "api-docs",
-            host: "localhost:8080",
+            host: "hardwar.ddns.net:8080",
             schemes: ["http"]
          });
         this.app.use("*", function (req, res, next) {
@@ -63,7 +63,7 @@ export class ApiServer {
 
                 // TODO: replace with Morgan call
                 // tslint:disable-next-line:no-console
-                console.log(`Listening to http://127.0.0.1:${this.PORT}`);
+                console.log(`Listening to http://0.0.0.0:${this.PORT}`);
                 return resolve();
             });
         });
