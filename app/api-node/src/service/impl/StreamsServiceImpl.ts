@@ -10,26 +10,6 @@ export class StreamsServiceImpl implements StreamsService {
     private service: IServiceFactory;
 
     public async saveOrUpdate(stream: StreamsEntity): Promise<StreamsEntity> {
-        if (stream.robot){
-            const isSaved = await this.service.getBotsRepository().findOne(stream.robot.id) != null;
-
-            if (isSaved){
-                await this.service.getBotsRepository().update(stream.robot.id, stream.robot);
-            }
-            else{
-                await this.service.getBotsRepository().save(stream.robot);
-            }
-        }
-        if (stream.game){
-            const isSaved = await this.service.getGameRepository().findOne(stream.game.id) != null;
-
-            if (isSaved){
-                await this.service.getGameRepository().update(stream.game.id, stream.game);
-            }
-            else{
-                await this.service.getGameRepository().save(stream.game);
-            }
-        }
         try {
             if (stream.id){
                 await this.service.getStreamsRepository().update(stream.id, stream);
@@ -37,7 +17,7 @@ export class StreamsServiceImpl implements StreamsService {
                 return (stream);
             }
             else {
-                const saved = this.service.getStreamsRepository().save(stream);
+                const saved = await this.service.getStreamsRepository().save(stream);
 
                 return (saved);
             }

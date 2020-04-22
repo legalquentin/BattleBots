@@ -63,6 +63,7 @@ export class ArenaController {
     {
         try {
             const list = await this.arenaService.findAll();
+            console.log(list);
             const resources = await this.arenaResourceAsm.toResources(list);
             const response : HttpResponseModel<IArenaResource[]> = {
                 httpCode: 200,
@@ -185,6 +186,9 @@ export class ArenaController {
     public async details(@PathParam("id") id: number){
         try {
             const arena = await this.arenaService.findOne(id);
+            console.log(arena);
+            console.log(await arena.robotArena);
+            console.log(arena.robotArena);
             if (!arena){
                 const response: HttpResponseModel<IArenaResource> = {
                     httpCode: 404,

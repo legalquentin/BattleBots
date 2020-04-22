@@ -9,7 +9,6 @@ export class RobotsArenaEntity  {
     @JoinColumn({name: "bot_id", referencedColumnName: "id"})
     @ManyToOne(type => RobotsEntity, robot => robot.robotsArena, {
         eager: true,
-        cascade: ["insert", "update"],
         primary: true,
         nullable: false
     })

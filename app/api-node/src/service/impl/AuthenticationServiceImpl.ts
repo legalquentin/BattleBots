@@ -30,6 +30,7 @@ export class AuthenticationServiceImpl implements AuthenticationService {
             const payload: any = {};
             payload.sub = user.id;
             payload.role = user.roles;
+            payload.creationTime = Date.now();
             const data = encode(payload, this.config.getSecret());
             return (data);
         }

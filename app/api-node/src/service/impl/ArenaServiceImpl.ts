@@ -18,21 +18,9 @@ export class ArenaServiceImpl implements ArenaService {
 
     public async saveOrUpdate(arena: ArenaEntity): Promise<ArenaEntity>
     {
-        let botsArena : Array<RobotsArenaEntity> = await arena.robotArena;
-
-        if (!botsArena){
-            botsArena = [];
-        }
-        await this.deleteRobotArena(arena.id);
-        for (let botArena of botsArena){
-            await this.botsService.saveOrUpdate(botArena.robot);
-            await this.factory.getBotsArenaRepository().save(botArena);
-        }
-        delete arena.robotArena;
         try {
             if (arena.id) {
                 await this.factory.getArenaRepository().update(arena.id, arena);
-                arena.robotArena = Promise.resolve(botsArena);
                 return (arena);
             }
             else {
@@ -123,19 +111,18 @@ export class ArenaServiceImpl implements ArenaService {
             if (!arena){
                 throw new EntityError(EEntityStatus.NOT_FOUND, "arena not found");
             }
-            const bot = await this.botsService.findOne(botId);
+            const bot = await this.botsService.__findOne(botId);
 
             if (!bot){
                 throw new EntityError(EEntityStatus.NOT_FOUND, "bot not found");
             }
-            const robotArena: RobotsArenaEntity = {};
-            const robotsArena = await arena.robotArena;
-
+            let robotArenas: Array<RobotsArenaEntity> = await arena.robotArena;
+            let robotArena : RobotsArenaEntity= {};
             robotArena.arena = arena;
             robotArena.robot = bot;
-            robotsArena.push(robotArena);
+            robotArenas.push(robotArena);
             await this.factory.getBotsArenaRepository().save(robotArena);
-            arena.robotArena = Promise.resolve(robotsArena);
+            arena.robotArena = robotArenas;
             return (arena);
         }
         catch (e){

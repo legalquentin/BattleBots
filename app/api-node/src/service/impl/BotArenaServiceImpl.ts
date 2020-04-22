@@ -15,7 +15,6 @@ export class BotArenaServiceImpl implements BotArenaService {
             return (saved);
         }
         catch (e){
-            console.log(e.message);
             throw e;
         }
     }    

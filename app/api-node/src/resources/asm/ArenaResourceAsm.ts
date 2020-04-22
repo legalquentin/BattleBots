@@ -1,12 +1,15 @@
 import { IArenaResource } from "../IArenaResource";
 import { ArenaEntity } from "../../database/entities/ArenaEntity";
-import { BotResourceAsm } from "../../resources/asm/BotResourceAsm";
-import { Singleton, Inject } from "typescript-ioc";
+import { Singleton } from "typescript-ioc";
+//import { RobotsArenaEntity } from "../../database/entities/RobotsArenaEntity";
 
 @Singleton
 export class ArenaResourceAsm {
-    @Inject
-    private botResourceAsm: BotResourceAsm;
+//    private botResourceAsm: BotResourceAsm;
+
+    constructor(){
+//        this.botResourceAsm = Container.get(BotResourceAsm);
+    }
 
     public async toEntity(resource: IArenaResource){
         const entity = new ArenaEntity();
@@ -14,6 +17,7 @@ export class ArenaResourceAsm {
         entity.arena_name = resource.arena_name;
         entity.available = resource.available;
         entity.id = resource.id;
+        /*
         if (!resource.bots){
             resource.bots = [];
         }
@@ -29,6 +33,7 @@ export class ArenaResourceAsm {
                 throw e;
             }
         })(resource, entity);
+        */
         return (entity);
     }
 
@@ -39,19 +44,21 @@ export class ArenaResourceAsm {
             id: entity.id
         };
 
-        let robotArena = await entity.robotArena;
-        if (!robotArena){
-            robotArena = [];
+        /*
+        let robotsArena: Array<RobotsArenaEntity> = await entity.robotArena;
+        if (!this.botsArenaIsInitialized(robotsArena)){
+            robotsArena = [];
         }
         let bots = await (async () => {
             let bots = [];
 
-            for (let _robotArena of robotArena){
+            for (let _robotArena of robotsArena){
                 bots.push(await this.botResourceAsm.toResource(_robotArena.robot));
             }
             return (bots);
         })();
         resource.bots = bots;
+        */
         return (resource);
     }
 
@@ -67,4 +74,10 @@ export class ArenaResourceAsm {
 
         return (resources);
     }
+
+    /*
+    private botsArenaIsInitialized(botsArena: Array<RobotsArenaEntity>){
+        return (botsArena.length > 0 && botsArena[0].robot != null);
+    }
+    */
 }

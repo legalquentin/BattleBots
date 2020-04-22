@@ -30,7 +30,7 @@ export class PlayerServiceImpl implements PlayerService {
             const player = await this.factory.getPlayerRepository().findOne(id);
 
             if (player){
-                this.factory.getPlayerRepository().delete(player.id);
+                await this.factory.getPlayerRepository().delete(player.id);
 
                 return (true);
             }
@@ -51,5 +51,9 @@ export class PlayerServiceImpl implements PlayerService {
 
     public search(options: any): Promise<PlayerEntity[]> {
         return (this.factory.getPlayerRepository().find(options));
+    }
+
+    public async playerExist(id: number){
+        return (await this.factory.getPlayerRepository().findOne(id) != null);
     }
 }

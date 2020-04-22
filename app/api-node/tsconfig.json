@@ -1,6 +1,10 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
+    "lib": [
+      "ES2015",
+      "ES2016"
+    ],
     "declaration": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
@@ -13,15 +17,15 @@
     "noUnusedParameters": false,
     "noUnusedLocals": true,
     "outDir": "dist",
-    "skipLibCheck": true,
+    "skipLibCheck": false,
     "sourceMap": true,
     "strictNullChecks": false,
-    "target": "es2016"
+    "target": "ES2016"
   },
   "include": [
     "src/**/*.ts",
     "test/**/*.ts",
-    "lib/"
+    "lib/**/*.ts"
   ],
   "exclude": [
     "node_modules"

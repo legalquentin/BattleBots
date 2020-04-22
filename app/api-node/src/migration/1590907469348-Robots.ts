@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm";
 
-export class Robots1580907469348 implements MigrationInterface {
+export class Robots1590907469348 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.createTable(new Table({
@@ -77,7 +77,7 @@ export class Robots1580907469348 implements MigrationInterface {
         await queryRunner.createForeignKey("robots", new TableForeignKey({
             name: "fk_robots_player_id",
             columnNames: ["player_id"],
-            referencedTableName: "users",
+            referencedTableName: "player",
             referencedColumnNames: ["id"]
         }));
     }

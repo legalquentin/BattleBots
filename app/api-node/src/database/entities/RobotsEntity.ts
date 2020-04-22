@@ -40,12 +40,18 @@ export class RobotsEntity extends AbstractEntity {
     })
     public player?: PlayerEntity;
 
-    @OneToMany(type => RobotGameEntity, robotGame => robotGame.bot)
-    public robotGame?: Promise<Array<RobotGameEntity>>;
+    @OneToMany(type => RobotGameEntity, robotGame => robotGame.bot, {
+        lazy: true
+    })
+    public robotGame?: Array<RobotGameEntity>;
 
-    @OneToMany(type => RobotsArenaEntity, robotArena => robotArena.robot)
-    public robotsArena?: Promise<Array<RobotsArenaEntity>>;
+    @OneToMany(type => RobotsArenaEntity, robotArena => robotArena.robot, {
+        lazy: true
+    })
+    public robotsArena?: Array<RobotsArenaEntity>;
 
-    @OneToMany(type => StreamsEntity, streams => streams.robot)
-    public streams?: Promise<Array<StreamsEntity>>;
+    @OneToMany(type => StreamsEntity, streams => streams.robot, {
+        lazy: true
+    })
+    public streams?: Array<StreamsEntity>;
 }

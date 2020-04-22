@@ -13,4 +13,5 @@ export class ArenaRepository extends Repository<ArenaEntity> {
         this.metadata = getConnection(process.env.NODE_ENV).getMetadata(ArenaEntity);
         this.manager = getManager(process.env.NODE_ENV);
     }
+
 }

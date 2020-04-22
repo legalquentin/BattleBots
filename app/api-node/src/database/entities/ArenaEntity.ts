@@ -17,7 +17,9 @@ export class ArenaEntity extends AbstractEntity {
     @OneToMany(type => GameEntity, game => game.arena)
     public games?: Promise<Array<GameEntity>>;
 
-    @OneToMany(type => RobotsArenaEntity, robotArena => robotArena.arena)
-    public robotArena?: Promise<Array<RobotsArenaEntity>>;
+    @OneToMany(type => RobotsArenaEntity, robotArena => robotArena.arena, {
+        lazy: true
+    })
+    public robotArena?: Array<RobotsArenaEntity>;
 
 }

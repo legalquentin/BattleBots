@@ -28,7 +28,7 @@ export class StreamsContoller {
     @GET
     public async list(){
         const list = await this.streamsService.findAll();
-        const resources = this.streamResourceAsm.toResources(list);
+        const resources = await this.streamResourceAsm.toResources(list);
         const response: HttpResponseModel<Array<IStreamResource>> = {
             data: resources,
             httpCode: 200,
@@ -144,8 +144,7 @@ export class StreamsContoller {
     public async detail(@PathParam("id")id: number){
         const stream = await this.streamsService.findOne(id);
         const resource = await this.streamResourceAsm.toResource(stream);
-        
-        if (resource){
+         if (resource){
             const response: HttpResponseModel<IStreamResource> = {
                 httpCode: 200,
                 message: "Stream finded",
