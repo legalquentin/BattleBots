@@ -1,14 +1,15 @@
 <template src="./template.html"></template>
 <style lang="scss" scoped src="./style.scss"></style>
 
-<script>
+<script lang="ts">
 
 import { Vue, Component, Provide } from 'vue-property-decorator';
 
 import SplashComponent from '../../components/Splash/index.vue';
 import _ from 'lodash';
 
-import electron from 'electron';
+import electron, { BrowserWindow } from 'electron';
+import isElectron from 'is-electron';
 
 @Component({
     components : { Splash: SplashComponent }
@@ -32,15 +33,15 @@ export default class SplashScreenView extends Vue {
 
     currentSplashDatas = {
         imgName: '',
-        durationMS: '',
+        durationMS: -1,
         isActive: false,
     };
 
     mounted() {
-        // TODO: if using electron
-        const eWindow = electron.remote.getCurrentWindow();
-        eWindow.setFullScreen(true);
-        // :TODO
+        if (isElectron()) {
+            const eWindow: BrowserWindow = electron.remote.getCurrentWindow();
+            eWindow.setFullScreen(true);
+        }
 
         // mounted is unset from 'this' after it initial call
         this.recMounted(); // we call recMounted who will recurse
@@ -66,7 +67,7 @@ export default class SplashScreenView extends Vue {
     }
 
     postPone() {
-        console.log('postPone');
+        this.$router.push({ name: 'MainFrame' });
     }
 };
 </script>
