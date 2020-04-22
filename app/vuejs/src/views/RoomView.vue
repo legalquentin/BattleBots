@@ -37,7 +37,7 @@ import Axios, { AxiosInstance } from 'axios';
 export default class RoomView extends Vue
 {
     private tmpToken = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjUsInJvbGUiOiJST0xFX1VTRVIifQ.USstzodwyIxpFBHGY9tARQewcafO099sASMQMPfYhn0";
-    private tmpURL = "127.0.0.1" || "localhost:3000";
+    private tmpURL = "hardwar.ddns.net"
 
     private gameName: string = "";
 
@@ -54,7 +54,7 @@ export default class RoomView extends Vue
     }
 
     private createGameButtonClick(): void {
-        this.http.post(`http://${this.tmpURL}:8080/battle`, { name: this.gameName })
+        this.http.post(`http://hardwar.ddns.net/battle`, { name: this.gameName })
             .then(rep => {
                 console.log(rep)
                 this.$router.push({ name: '@player_view', params: { gameData: rep.data } })

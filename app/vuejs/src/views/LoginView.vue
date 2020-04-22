@@ -42,7 +42,7 @@ export default class LoginView extends Vue
         const axios: AxiosInstance = Axios.create({ headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'charset' : 'utf-8' } });
         console.log(this.nov(this.loginForm))
         console.log(this.nov(this.loginForm))
-        axios.post('http://localhost:3000/users/register', this.nov(this.loginForm))
+        axios.post('http://hardwar.ddns.net/users/register', this.nov(this.loginForm))
             .then(rep => console.log(rep));
     }
 }
