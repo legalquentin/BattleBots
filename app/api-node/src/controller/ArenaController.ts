@@ -8,7 +8,6 @@ import { preRequest } from "../service/interceptors/preRequest/preRequest";
 import { postRequest } from "../service/interceptors/postRequest/postRequest";
 import { ArenaResourceAsm } from "../resources/asm/ArenaResourceAsm";
 import { Produces, Consumes, Response } from "typescript-rest-swagger";
-import { EEntityStatus } from "../../lib/EEntityStatus";
 
 @Path("/api/arena")
 @PreProcessor(preRequest)
@@ -252,27 +251,6 @@ export class ArenaController {
     @PUT
     @Path("/:arenaId/bot/:botId")
     public async linkBot(@PathParam("arenaId") arenaId: number, @PathParam("botId") botId: number){
-        try {
-            const arena = await this.arenaService.linkBot(arenaId, botId);
-            const resource = await this.arenaResourceAsm.toResource(arena);
-            const response: HttpResponseModel<IArenaResource> = {
-                httpCode: 200,
-                data: resource,
-                message: `link bot ${botId} to arena ${arenaId}`
-            };
-            
-            return (Promise.resolve(new SendResource<HttpResponseModel<IArenaResource>>("ArenaController", response.httpCode, response)));
-        }   
-        catch (e){
-            const response: HttpResponseModel<IArenaResource> = {
-                httpCode: 400,
-                message: e.message
-            };
-            
-            if (e.code == EEntityStatus.NOT_FOUND){
-                response.httpCode = 404;
-            }
-            return (Promise.resolve(new SendResource<HttpResponseModel<IArenaResource>>("ArenaController", response.httpCode, response)));
-        }
+        return (this.arenaService.linkBot(arenaId, botId));
     }
 }

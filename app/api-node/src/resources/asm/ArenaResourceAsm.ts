@@ -1,15 +1,12 @@
 import { IArenaResource } from "../IArenaResource";
 import { ArenaEntity } from "../../database/entities/ArenaEntity";
-import { Singleton } from "typescript-ioc";
+import { Singleton, Container } from "typescript-ioc";
+import { RobotsArenaEntity } from "../../database/entities/RobotsArenaEntity";
+import { BotResourceAsm } from "./BotResourceAsm";
 //import { RobotsArenaEntity } from "../../database/entities/RobotsArenaEntity";
 
 @Singleton
 export class ArenaResourceAsm {
-//    private botResourceAsm: BotResourceAsm;
-
-    constructor(){
-//        this.botResourceAsm = Container.get(BotResourceAsm);
-    }
 
     public async toEntity(resource: IArenaResource){
         const entity = new ArenaEntity();
@@ -17,23 +14,6 @@ export class ArenaResourceAsm {
         entity.arena_name = resource.arena_name;
         entity.available = resource.available;
         entity.id = resource.id;
-        /*
-        if (!resource.bots){
-            resource.bots = [];
-        }
-        await (async (resource, entity) => {
-            try {
-                for (let bot of resource.bots){
-                    const botEntity = await this.botResourceAsm.toEntity(bot);
-
-                    await this.botResourceAsm.AddArenaEntity(botEntity, entity);
-                }
-            }
-            catch (e){
-                throw e;
-            }
-        })(resource, entity);
-        */
         return (entity);
     }
 
@@ -44,22 +24,21 @@ export class ArenaResourceAsm {
             id: entity.id
         };
 
-        /*
+        return (resource);
+    }
+
+    public async addBotResource(entity: ArenaEntity, resource: IArenaResource){
+        const botResourceAsm = Container.get(BotResourceAsm);
         let robotsArena: Array<RobotsArenaEntity> = await entity.robotArena;
-        if (!this.botsArenaIsInitialized(robotsArena)){
-            robotsArena = [];
-        }
         let bots = await (async () => {
             let bots = [];
 
             for (let _robotArena of robotsArena){
-                bots.push(await this.botResourceAsm.toResource(_robotArena.robot));
+                bots.push(await botResourceAsm.toResource(_robotArena.robot));
             }
             return (bots);
         })();
         resource.bots = bots;
-        */
-        return (resource);
     }
 
     public async toResources(entities: Array<ArenaEntity>){
@@ -74,10 +53,4 @@ export class ArenaResourceAsm {
 
         return (resources);
     }
-
-    /*
-    private botsArenaIsInitialized(botsArena: Array<RobotsArenaEntity>){
-        return (botsArena.length > 0 && botsArena[0].robot != null);
-    }
-    */
 }

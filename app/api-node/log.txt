@@ -30,3 +30,4 @@ Error {"diagnosticText":"src/controller/BotsController.ts(53,63): error TS2345: 
 Error {"diagnosticText":"src/resources/asm/ArenaResourceAsm.ts(78,13): error TS6133: 'botsArenaIsInitialized' is declared but its value is never read.\n","diagnosticCodes":[6133]}
 Error {"diagnosticText":"src/resources/asm/ArenaResourceAsm.ts(4,1): error TS6133: 'RobotsArenaEntity' is declared but its value is never read.\n","diagnosticCodes":[6133]}
 Error {"diagnosticText":"src/controller/BotsController.ts(11,1): error TS6133: 'IStreamResource' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/controller/ArenaController.ts(11,1): error TS6133: 'EEntityStatus' is declared but its value is never read.\n","diagnosticCodes":[6133]}

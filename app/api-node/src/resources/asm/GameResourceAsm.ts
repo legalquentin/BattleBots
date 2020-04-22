@@ -12,53 +12,12 @@ import { ArenaResourceAsm } from "./ArenaResourceAsm";
 @Singleton
 export class GameResourceAsm {
 
-    /*
-    private arenaResourceAsm: ArenaResourceAsm;
-    private botResourceAsm: BotResourceAsm;
-    private streamResourceAsm: StreamsResourceAsm;
-    */
-
-    constructor(){
-        /*
-        this.arenaResourceAsm = Container.get(ArenaResourceAsm);
-        this.botResourceAsm = Container.get(BotResourceAsm);
-        this.streamResourceAsm = Container.get(StreamsResourceAsm);
-        */
-    }
-
     public async toEntity(game: IGameResource){
         const entity = new GameEntity();
 
         entity.id = game.id;
         entity.game_name = game.name;
         entity.game_status = game.status;
-        /*
-        let gameRobots = [];
-        if (game.arena){
-            entity.arena = await this.arenaResourceAsm.toEntity(game.arena);
-        }
-        if (game.bots){
-            for (let bot of game.bots){
-                let gameRobot : RobotGameEntity = {};
-
-
-                gameRobot.bot = await this.botResourceAsm.toEntity(bot);
-                gameRobot.game = entity;
-                gameRobots.push(gameRobot);
-            }
-            entity.robots = Promise.resolve(gameRobots);
-        }
-        if (game.streams){
-            let streams = [];
-
-            for (let stream of game.streams){
-                const streamResource = this.streamResourceAsm.toEntity(stream);
-
-                streams.push(streamResource);
-            }
-            entity.streams = Promise.resolve(streams);
-        }
-        */
         return (entity);
     }
 
@@ -78,6 +37,7 @@ export class GameResourceAsm {
 
         if (entity.arena){
             resource.arena = await arenaResourceAsm.toResource(entity.arena);
+            await arenaResourceAsm.addBotResource(entity.arena, resource.arena);
         }
         return (resource);
     }

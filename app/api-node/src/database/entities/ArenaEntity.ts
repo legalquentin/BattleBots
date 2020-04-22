@@ -14,8 +14,8 @@ export class ArenaEntity extends AbstractEntity {
     @Column({ name: "available" })
     public available: number;
 
-    @OneToMany(type => GameEntity, game => game.arena)
-    public games?: Promise<Array<GameEntity>>;
+    @OneToMany(type => GameEntity, game => game.arena, )
+    public games?: Array<GameEntity>;
 
     @OneToMany(type => RobotsArenaEntity, robotArena => robotArena.arena, {
         lazy: true

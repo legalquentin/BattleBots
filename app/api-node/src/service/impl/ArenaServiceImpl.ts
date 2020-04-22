@@ -1,11 +1,15 @@
 import { ArenaService } from "../ArenaService";
 import { ArenaEntity } from "../../database/entities/ArenaEntity";
 import IServiceFactory from "../IServiceFactory";
-import { Inject, Singleton } from "typescript-ioc";
+import { Inject, Singleton, Container } from "typescript-ioc";
 import { RobotsArenaEntity } from "../../database/entities/RobotsArenaEntity";
 import { BotsService } from "../BotsService";
 import { EntityError } from "../../../lib/EntityError";
 import { EEntityStatus } from "../../../lib/EEntityStatus";
+import { ArenaResourceAsm } from "../../resources/asm/ArenaResourceAsm";
+import HttpResponseModel from "../../resources/HttpResponseModel";
+import { SendResource } from "../../../lib/ReturnExtended";
+import { IArenaResource } from "../../resources/IArenaResource";
 
 @Singleton
 export class ArenaServiceImpl implements ArenaService {
@@ -104,7 +108,7 @@ export class ArenaServiceImpl implements ArenaService {
         }).execute();
     }
 
-    public async linkBot(arenaId: number, botId: number): Promise<ArenaEntity> {
+    public async __linkBot(arenaId: number, botId: number): Promise<ArenaEntity> {
         try {
             const arena = await this.findOne(arenaId);
 
@@ -127,6 +131,32 @@ export class ArenaServiceImpl implements ArenaService {
         }
         catch (e){
             throw new EntityError(EEntityStatus.INTERNAL_ERROR, e.message);
+        }
+    }
+
+    public async linkBot(arenaId: number, botId: number) {
+        const arenaResourceAsm = Container.get(ArenaResourceAsm);
+        try {
+            const arena = await this.__linkBot(arenaId, botId);
+            const resource = await arenaResourceAsm.toResource(arena);
+            const response: HttpResponseModel<IArenaResource> = {
+                httpCode: 200,
+                data: resource,
+                message: `link bot ${botId} to arena ${arenaId}`
+            };
+            
+            return (Promise.resolve(new SendResource<HttpResponseModel<IArenaResource>>("ArenaController", response.httpCode, response)));
+        }   
+        catch (e){
+            const response: HttpResponseModel<IArenaResource> = {
+                httpCode: 400,
+                message: e.message
+            };
+            
+            if (e.code == EEntityStatus.NOT_FOUND){
+                response.httpCode = 404;
+            }
+            return (Promise.resolve(new SendResource<HttpResponseModel<IArenaResource>>("ArenaController", response.httpCode, response)));
         }
     }
 }

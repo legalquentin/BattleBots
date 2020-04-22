@@ -200,7 +200,6 @@ export class BotsServiceImpl implements BotsService {
                 throw new EntityError(EEntityStatus.NOT_FOUND, "player not found");
             }
             bot.player = player;
-            console.log(bot);
             await this.service.getBotsRepository().update(bot.id, bot);
             return (bot);
         }
