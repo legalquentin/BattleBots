@@ -6,7 +6,6 @@
    "username": "root",
    "password": "p@ssw0rd",
    "database": "db",
-   "synchronize": true,
    "logging": true,
    "entities": [
       "src/database/entities/**/*.ts"

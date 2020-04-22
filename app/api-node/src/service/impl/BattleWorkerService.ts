@@ -11,7 +11,7 @@ import HttpResponseModel from "../../resources/HttpResponseModel";
 import * as request from 'request';
 import * as kill from 'tree-kill';
 import { IGameResource } from "../../resources/IGameResource";
-import { Provides, Singleton } from 'typescript-ioc';
+import { Singleton } from 'typescript-ioc';
 import IBattleWorkerService from '../IBattleWorkerService';
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -24,7 +24,6 @@ interface IWorkerMeta {
 }
 
 @Singleton
-@Provides(IBattleWorkerService)
 export default class BattleWorkerService implements IBattleWorkerService{
     // Workers hold ref to all running games
 

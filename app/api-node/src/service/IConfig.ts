@@ -1,7 +1,7 @@
 export default abstract class IConfig {
-    salt = 10;
-    secret = "azerty123";
+    protected salt: string;
+    protected secret: string;
 
-    abstract genSalt();
-    abstract getSecret();
+    abstract genSalt(): string;
+    abstract getSecret(): string;
 };
