@@ -14,7 +14,7 @@ export async function start(): Promise<ApiServer> {
         createConnection({
             name: config.get('env').toString(),
             type: "postgres",
-            host: "localhost",
+            host: config.get('host').toString(),
             port: 5432,
             username: "root",
             password: "p@ssw0rd",

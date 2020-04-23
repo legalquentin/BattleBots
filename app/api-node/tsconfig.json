@@ -1,11 +1,6 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "lib": [
-      "ES2015",
-      "ES2016"
-    ],
-    "declaration": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "module": "commonjs",
@@ -20,7 +15,6 @@
     "skipLibCheck": false,
     "sourceMap": true,
     "strictNullChecks": false,
-    "target": "ES2016"
   },
   "include": [
     "src/**/*.ts",
