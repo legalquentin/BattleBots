@@ -6,7 +6,7 @@ prepare:
 	cd ../app/api-node && yarn
 	cd ../app/vuejs && yarn
 
-run\:postgres:
+run\:battlebots:
 	cd .docker && docker-compose up -d
 
 logs\:postgres:

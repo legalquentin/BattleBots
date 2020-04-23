@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3'
 services:
   db:
     image: postgres:11.5
@@ -8,6 +8,8 @@ services:
       POSTGRES_USER: root
       POSTGRES_DB: db
     container_name: db
+    networks: 
+      - gpe
     ports:
       - "5432:5432"
   app:
@@ -18,5 +20,14 @@ services:
     ports: 
       - "8080:8080"
     container_name: battlebots-node
+    networks: 
+      - gpe
     restart: always
-#    command: wait-for-it/wait-for-it.sh db:5432 -- npm run start:docker
+    command: wait-for-it/wait-for-it.sh db:5432 -- npm run start:docker
+
+networks: 
+  gpe:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.16.28.0/24"

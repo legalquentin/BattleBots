@@ -19,7 +19,7 @@
     "test": "cross-env NODE_ENV=test ts-mocha 'test/**/*.ts'",
     "test:coverage": "nyc npm run test",
     "swagger": "swaggerGen -c ./swaggerConfig.json",
-    "tsc": "tsc",
+    "tsc": "rm -rf dist && tsc && cp -r src/public dist/src",
     "typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ./src/ormconfig.ts",
     "typeorm:migration:create": "npm run typeorm:cli -- migration:create -n ",
     "typeorm:migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run -c app",

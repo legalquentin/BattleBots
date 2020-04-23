@@ -21,7 +21,7 @@ class DefaultController
     @Path("/health")
     public health(@ContextResponse res: Response){
         res.status(200);
-        res.end();
+        res.end(new Date().toISOString());
     }
 
     @GET
