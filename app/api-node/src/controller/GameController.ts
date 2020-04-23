@@ -110,6 +110,7 @@ export class GameController {
         try {
             const entity = await this.gameResourceAsm.toEntity(game);
             const saved = await this.gameService.create(entity);
+            console.log(saved);
             const resource = await this.gameResourceAsm.toResource(saved);
             const response : HttpResponseModel<IGameResource> = {
                 httpCode: 201,
@@ -118,7 +119,6 @@ export class GameController {
             };
     
             return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));        
-    
         }
         catch (e){
             const response: HttpResponseModel<IGameResource> = {
@@ -126,6 +126,7 @@ export class GameController {
                 message: e.message
             };
 
+            console.log(e.message);
             return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));
         }
     }
@@ -205,33 +206,7 @@ export class GameController {
     @Response<HttpResponseModel<IGameResource>>(404, "game not found")
     @Response<HttpResponseModel<IGameResource>>(400)
     public async detail(@PathParam("id")id: number){
-        try {
-            const game = await this.gameService.findOne(id);
-
-            if (!game){
-                const response : HttpResponseModel<IGameResource> = {
-                    httpCode: 404,
-                    message: "game not found",
-                };
-        
-                return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));        
-            }
-            const response : HttpResponseModel<IGameResource> = {
-                httpCode: 200,
-                message: "game detail",
-                data: await this.gameResourceAsm.toResource(game)
-            };
-    
-            return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));            
-        }
-        catch (e){
-            const response: HttpResponseModel<IGameResource> = {
-                httpCode: 400,
-                message: e.message
-            };
-
-            return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));
-        }
+        return (this.gameService.findOne(id));
     }
 
     @DELETE
@@ -300,5 +275,38 @@ export class GameController {
 
             return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));
         }
+    }
+
+    @PUT
+    @Path("/:gameId/bot/:botId")
+    @Security("ROLE_USER", "Bearer")
+    @Consumes("application/json; charset=UTF-8")
+    @Produces("application/json; charset=UTF-8")
+    @Response<HttpResponseModel<IGameResource>>(200)
+    @Response<HttpResponseModel<IGameResource>>(400)
+    public async linkBotToGame(@PathParam("botId") botId: number, @PathParam("gameId")gameId: number){
+        return (this.gameService.linkBotToGame(botId, gameId));
+    }
+
+    @PUT
+    @Path("/:gameId/stream/:streamId")
+    @Security("ROLE_USER", "Bearer")
+    @Consumes("application/json; charset=UTF-8")
+    @Produces("application/json; charset=UTF-8")
+    @Response<HttpResponseModel<IGameResource>>(200)
+    @Response<HttpResponseModel<IGameResource>>(400)
+    public async linkStreamToGame(@PathParam("gameId") gameId: number,@PathParam("streamId") streamId: number){
+        return (this.gameService.linkStreamToGame(streamId, gameId));
+    }
+
+    @PUT
+    @Path("/:gameId/arena/:arenaId")
+    @Security("ROLE_USER", "Bearer")
+    @Consumes("application/json; charset=UTF-8")
+    @Produces("application/json; charset=UTF-8")
+    @Response<HttpResponseModel<IGameResource>>(200)
+    @Response<HttpResponseModel<IGameResource>>(400)
+    public async linkArenaToGame(@PathParam("arenaId") arenaId: number, @PathParam("gameId") gameId: number){
+        return (await this.gameService.linkArenaToGame(arenaId, gameId));
     }
 }

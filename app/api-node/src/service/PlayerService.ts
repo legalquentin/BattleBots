@@ -6,4 +6,6 @@ export abstract class PlayerService {
     public abstract findOne(id: number) : Promise<PlayerEntity>;
     public abstract search(options: any): Promise<PlayerEntity[]>;
     public abstract findAll(): Promise<Array<PlayerEntity>>;
+
+    public abstract playerExist(id: number);
 }

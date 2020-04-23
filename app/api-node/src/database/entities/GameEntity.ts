@@ -25,10 +25,14 @@ export class GameEntity extends AbstractEntity {
     @Column({ name: "game_status", nullable: false })
     public game_status: EGameStatus;
 
-    @OneToMany(type => RobotGameEntity, robotGame => robotGame.game)
-    public robots?: Promise<Array<RobotGameEntity>>;
+    @OneToMany(type => RobotGameEntity, robotGame => robotGame.game, {
+        lazy: true
+    })
+    public robots?: Array<RobotGameEntity>;
 
-    @OneToMany(type => StreamsEntity, streams => streams.game)
-    public streams?: Promise<Array<StreamsEntity>>;
+    @OneToMany(type => StreamsEntity, streams => streams.game, {
+        lazy: true
+    })
+    public streams?: Array<StreamsEntity>;
 
 }

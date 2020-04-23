@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm";
 
-export class RobotsArena1580916156507 implements MigrationInterface {
+export class RobotsGame1620916163727 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.createTable(new Table({
-            "name": "robots_arena",
+            "name": "robots_game",
             "columns": [
                 {
                     "name": "bot_id",
@@ -14,23 +14,23 @@ export class RobotsArena1580916156507 implements MigrationInterface {
                 },
                 {
                     "type": "int",
-                    "name": "arena_id",
+                    "name": "game_id",
                     "isNullable": false,
                     "isPrimary": true
                 }
             ]
         }));
 
-        await queryRunner.createForeignKey("robots_arena", new TableForeignKey({
-            name: "fk_robots_arena_bot_id",
-            columnNames: ["arena_id"],
-            referencedTableName: "arena",
+        await queryRunner.createForeignKey("robots_game", new TableForeignKey({
+            name: "fk_robots_game_bot_game_id",
+            columnNames: ["game_id"],
+            referencedTableName: "games",
             referencedColumnNames: ["id"]
         }));
 
 
-        await queryRunner.createForeignKey("robots_arena", new TableForeignKey({
-            name: "fk_robots_arena_arena_id_bot",
+        await queryRunner.createForeignKey("robots_game", new TableForeignKey({
+            name: "fk_robots_game_game_id_bot",
             columnNames: ["bot_id"],
             referencedTableName: "robots",
             referencedColumnNames: ["id"]
@@ -38,8 +38,9 @@ export class RobotsArena1580916156507 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
-        await queryRunner.dropForeignKey("robots_arena", "fk_robots_arena_bot_id");
-        await queryRunner.dropForeignKey("robots_arena", "fk_robots_arena_arena_id_bot");
-        await queryRunner.dropTable("robots_arena");
+        await queryRunner.dropForeignKey("robots_game", "fk_robots_game_bot_game_id");
+        await queryRunner.dropForeignKey("robots_game", "fk_robots_game_game_id_bot");
+        await queryRunner.dropTable("robots_game");
     }
+
 }

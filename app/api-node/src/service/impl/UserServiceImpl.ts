@@ -19,16 +19,8 @@ export class UserServiceImpl implements UserService {
             try {
                 if (user.id)
                 {
-                    const toFind = await this.factory.getUserRepository().findOne(user.id);
-
-                    toFind.address = user.address;
-                    toFind.email = user.email;
-                    toFind.firstname = user.firstname;
-                    toFind.lastname = user.lastname;
-                    toFind.pseudo = user.pseudo;
-                    toFind.hash = user.hash;
-                    await this.factory.getUserRepository().update(toFind.id, toFind);
-                    return (toFind);
+                    await this.factory.getUserRepository().update(user.id, user);
+                    return (user);
                 }
                 else {
                     user.hash = hashSync(user.hash, this.config.genSalt());

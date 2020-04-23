@@ -1,4 +1,4 @@
 export enum EEntityStatus {
-    NOT_FOUND = 0,
-    INTERNAL_ERROR = 1
+    NOT_FOUND = 404,
+    INTERNAL_ERROR = 500
 };

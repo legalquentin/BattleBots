@@ -1,14 +1,17 @@
 import { PlayerEntity } from "../../database/entities/PlayerEntity";
 import IGameProfileResource  from "../../resources/IGameProfileResource";
-import {  Singleton, Inject } from "typescript-ioc";
+import {  Singleton, Container } from "typescript-ioc";
 import { UserGameProfileResourceAsm } from "./UserGameProfileResourceAsm";
 
 @Singleton
 export class GameProfileResourceAsm {
 
-    @Inject
     private userGameProfileResourceAsm: UserGameProfileResourceAsm;
- 
+
+    constructor(){
+        this.userGameProfileResourceAsm = Container.get(UserGameProfileResourceAsm);
+    }
+
     public toEntity(resource: IGameProfileResource){
         return this.userGameProfileResourceAsm.toPlayerEntity(resource);
     }

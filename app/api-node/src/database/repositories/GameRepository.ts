@@ -13,4 +13,5 @@ export class GameRepository extends Repository<GameEntity> {
         this.manager = getManager(process.env.NODE_ENV);
         this.metadata = getConnection(process.env.NODE_ENV).getMetadata(GameEntity);
     }
+
 }

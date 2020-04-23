@@ -10,3 +10,13 @@ services:
     container_name: db
     ports:
       - "5432:5432"
+  app:
+    build: ../../app/api-node
+    working_dir: /app
+    environment: 
+      NODE_ENV: app
+    ports: 
+      - "8080:8080"
+    container_name: battlebots-node
+    restart: always
+#    command: wait-for-it/wait-for-it.sh db:5432 -- npm run start:docker

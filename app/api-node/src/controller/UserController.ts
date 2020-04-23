@@ -1,6 +1,6 @@
 'use strict';
 
-import { Path, POST, GET, PathParam, Security, ContextRequest, PreProcessor, PostProcessor } from "typescript-rest";
+import { Path, POST, GET, PathParam, Security, ContextRequest, PreProcessor, PostProcessor, DELETE } from "typescript-rest";
 import IUserResource from "../resources/IUserResource";
 import IUserHttpModel from "../resources/IUserHttpModel";
 import IResourceId from "../resources/IResourceId";
@@ -107,6 +107,7 @@ export class UserController {
             return Promise.resolve(new SendResource<HttpResponseModel<IResourceId>>("UserController", response.httpCode, response));
         }
         catch (e){
+            console.log(e.message);
             const response: HttpResponseModel<IResourceId> = {
                 httpCode: 409,
                 data: null,
@@ -277,6 +278,84 @@ export class UserController {
             };
 
             return (Promise.resolve(new SendResource<HttpResponseModel<IGameProfileResource[]>>("UserController", response.httpCode, response)));
+        } catch (e){
+            const response: HttpResponseModel<IGameProfileResource[]> = {
+                httpCode: 400,
+                message: "Bad request",
+                data: null
+            };
+
+            return (Promise.resolve(new SendResource<HttpResponseModel<IGameProfileResource[]>>("UserController", response.httpCode, response)));
+        }
+    }
+
+    @Path('/player/:playerId')
+    @Security("ROLE_USER", "Bearer")
+    @Consumes("application/json;charset=UTF-8")
+    @Produces("application/json;charset=UTF-8")
+    @Response<HttpResponseModel<IUserResource[]>>(200, "Player deleted")
+    @Response<HttpResponseModel<IUserResource[]>>(404, "Player not found")
+    @Response<HttpResponseModel<IUserResource[]>>(400)
+    @DELETE
+    public async deletePlayer(@PathParam("playerId")playerId:  number){
+        try {
+            const flag = await this.playerService.deleteOne(playerId);
+
+            if (flag){
+                const response: HttpResponseModel<IGameProfileResource[]> = {
+                    httpCode: 200,
+                    message: "Player deleted"
+                };
+
+                return (Promise.resolve(new SendResource<HttpResponseModel<IGameProfileResource[]>>("UserController", response.httpCode, response)));
+            }
+            else{
+                const response: HttpResponseModel<IGameProfileResource[]> = {
+                    httpCode: 404,
+                    message: "Player not found"
+                };
+
+                return (Promise.resolve(new SendResource<HttpResponseModel<IGameProfileResource[]>>("UserController", response.httpCode, response)));
+            }
+        }
+        catch (e){
+            const response: HttpResponseModel<IGameProfileResource[]> = {
+                httpCode: 400,
+                message: "Bad request",
+            };
+
+            return (Promise.resolve(new SendResource<HttpResponseModel<IGameProfileResource[]>>("UserController", response.httpCode, response)));
+        }
+    }
+
+    @Path('/:userId')
+    @Security("ROLE_USER", "Bearer")
+    @Consumes("application/json;charset=UTF-8")
+    @Produces("application/json;charset=UTF-8")
+    @Response<HttpResponseModel<IUserResource[]>>(200, "User deleted")
+    @Response<HttpResponseModel<IUserResource[]>>(404, "User not found")
+    @Response<HttpResponseModel<IUserResource[]>>(400)
+    @DELETE
+    public async deleteUser(@PathParam("userId")userId: number): Promise<SendResource<HttpResponseModel<IGameProfileResource[]>>> {
+        try {
+            const flag = await this.userService.deleteOne(userId);
+
+            if (flag){
+                const response: HttpResponseModel<IGameProfileResource[]> = {
+                    httpCode: 200,
+                    message: "User deleted"
+                };
+
+                return (Promise.resolve(new SendResource<HttpResponseModel<IGameProfileResource[]>>("UserController", response.httpCode, response)));
+            }
+            else {
+                const response: HttpResponseModel<IGameProfileResource[]> = {
+                    httpCode: 404,
+                    message: "User not found"
+                };
+
+                return (Promise.resolve(new SendResource<HttpResponseModel<IGameProfileResource[]>>("UserController", response.httpCode, response)));
+            }
         } catch (e){
             const response: HttpResponseModel<IGameProfileResource[]> = {
                 httpCode: 400,
