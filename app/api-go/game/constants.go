@@ -3,7 +3,7 @@ package game
 // TODO: check if it the best way to store default game data
 
 // Constants file is where all default data reltive to game instances will be declared
-// eg: arenas, environements, battlebots specs, etc...
+// eg: arenas, environments, battlebots specs, etc...
 
 const prefixErr = "[ERR](GAME)"
 const prefixLog = "[LOG](GAME)"
