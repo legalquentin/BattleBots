@@ -2,10 +2,13 @@ package config
 
 import (
 	"encoding/json"
+	"log"
 	"os"
 
 	"../game"
 )
+
+const prefixWarn = "[WARN](CONFIG)"
 
 // ReadConfig read a json file with constant definitions based on the environment variable "ENV"
 // Possible values are: 'localhost', 'dev', 'prod'
@@ -16,6 +19,7 @@ func ReadConfig() *error {
 
 	file, err := os.Open("env/config." + env + ".json")
 	if err != nil {
+		log.Println(prefixWarn, "ENV must be of: 'localhost', 'dev' or 'prod'. starting with default configuration")
 		return &err
 	}
 

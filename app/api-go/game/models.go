@@ -67,7 +67,7 @@ type Bot struct {
 type Environment struct {
 	ID        int16
 	Name      string
-	Bots      []*Bot
+	Bots      []Bot
 	Available bool
 }
 

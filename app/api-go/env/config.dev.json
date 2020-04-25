@@ -12,6 +12,6 @@
 		"BaseSpeed":    100,
 		"BaseDamage":   100,
 		"BaseHull":     100,
-		"BaseFireRate": 100,
+		"BaseFireRate": 100
 	}]
 }

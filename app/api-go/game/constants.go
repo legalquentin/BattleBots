@@ -21,5 +21,5 @@ var AvailableBots = []Bot{}
 
 // Todo: put this in a config file too ?
 var appartement = Environment{
-	1, "martin's appartement", []*Bot{&AvailableBots[0]}, true,
+	1, "martin's appartement", AvailableBots, true,
 }

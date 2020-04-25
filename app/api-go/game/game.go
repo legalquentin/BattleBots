@@ -67,7 +67,7 @@ func JoinGame(res http.ResponseWriter, req *http.Request) {
 		for _, b := range selected.Env.Bots {
 			if b.Taken == false {
 				// TODO: add a real token generation
-				p = Player{t.PlayerID, tokenGenerator(), b, Context{false, 100, 0}}
+				p = Player{t.PlayerID, tokenGenerator(), &b, Context{false, 100, 0}}
 				b.Taken = true
 				var g = baseGameInstances[t.GameID]
 				g.Players = append(g.Players, p)

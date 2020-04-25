@@ -51,7 +51,7 @@ func main() {
 
 	err := config.ReadConfig()
 	if err != nil {
-		log.Println(prefixWarn, "Environment variable not defined, running with default parameters")
+		log.Println(prefixWarn, (*err).Error())
 	}
 
 	r, e := getSecret()
