@@ -23,7 +23,7 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	u := url.URL{Scheme: "ws", Host: player.BotSpecs.Address + ":8088", Path: "/"}
+	u := url.URL{Scheme: "ws", Host: player.BotSpecs.Address + ":8088", Path: "/wsctrl"}
 
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
 	if err != nil {

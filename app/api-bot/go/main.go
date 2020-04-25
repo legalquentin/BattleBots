@@ -18,7 +18,7 @@ const prefixWarn = "[WARN](MAIN)"
 func main() {
 	err := config.ReadConfig()
 	if err != nil {
-		log.Println(prefixWarn, "Environement variable not defined, running with default parameters")
+		log.Println(prefixWarn, "Environment variable not defined, running with default parameters")
 	}
 	// rpio open() try to open rpio  in the pi, if it fail, the program start a stub server and there's no video feed
 	e := rpio.Open()

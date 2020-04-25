@@ -1,0 +1,17 @@
+{
+	"Local":   "127.0.0.1",
+	"Port":    "8888",
+	"Env":     "dev",
+	"KeyPath": "/Users/quentin/D.PERS/BattleBots/app/api-go/",
+	"Bots": [{
+		"ID":           1,
+		"Address":      "127.0.0.1",
+		"Running":      true,
+		"Taken":        false,
+		"Name":         "Stub-Robot",
+		"BaseSpeed":    100,
+		"BaseDamage":   100,
+		"BaseHull":     100,
+		"BaseFireRate": 100,
+	}]
+}

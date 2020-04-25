@@ -10,6 +10,7 @@ import (
 	"os/signal"
 	"time"
 
+	"./config"
 	"./game"
 	"./handlers"
 )
@@ -18,19 +19,17 @@ const prefixErr = "[ERR](MAIN)"
 const prefixLog = "[LOG](MAIN)"
 const prefixWarn = "[WARN](MAIN)"
 
-const port = "443"
-
 func startHTTPServer() *http.Server {
 
 	router := handlers.NewRouter()
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		handlers.PreProcessHandler(w, r, router)
 	})
-	srv := &http.Server{Addr: (":" + port), Handler: handler}
+	srv := &http.Server{Addr: (":" + config.Config.Port), Handler: handler}
 
 	go func() {
-		if err := srv.ListenAndServeTLS("/Users/quentin/D.PERS/BattleBots/app/api-go/cert.pem",
-			"/Users/quentin/D.PERS/BattleBots/app/api-go/key.pem"); err != nil {
+		kp := config.Config.KeyPath
+		if err := srv.ListenAndServeTLS(kp+"cert.pem", kp+"key.pem"); err != nil {
 			log.Fatalln(prefixLog, err.Error())
 		}
 	}()
@@ -50,15 +49,19 @@ func getSecret() (string, error) {
 
 func main() {
 
+	err := config.ReadConfig()
+	if err != nil {
+		log.Println(prefixWarn, "Environment variable not defined, running with default parameters")
+	}
+
 	r, e := getSecret()
 	if e != nil {
 		fmt.Println(prefixErr, e)
 		return
 	}
-
 	game.WorkerCtx.Secret = r
 
-	log.Println(prefixLog, "Starting HTTP server on port:", port)
+	log.Println(prefixLog, "Starting HTTP server on port:", config.Config.Port)
 	log.Println(prefixLog, "secret is :", game.WorkerCtx.Secret)
 	srv := startHTTPServer()
 

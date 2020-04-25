@@ -16,12 +16,10 @@ var WorkerCtx = Worker{}
 // BaseGameInstances hold all game instances
 var baseGameInstances = make(map[string]Game)
 
-var availableBots = []Bot{
-	// Bot{2, "192.168.1.66", false, false, "Rocinante", 6, 10, 10, 5},
-	// Bot{1, "192.168.1.31", false, false, "Razorback", 10, 4, 6, 10},
-	Bot{1, "127.0.0.1", false, false, "stubRobot", 10, 2, 6, 10},
-}
+// AvailableBots in the arena
+var AvailableBots = []Bot{}
 
+// Todo: put this in a config file too ?
 var appartement = Environment{
-	1, "quentin's appartement", []*Bot{&availableBots[0]}, true,
+	1, "martin's appartement", []*Bot{&AvailableBots[0]}, true,
 }

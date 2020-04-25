@@ -4,7 +4,7 @@ package config
 var Config = Configuration{
 	Local: "127.0.0.1",
 	Port:  "8888",
-	Env:   "Default",
+	Env:   "default",
 }
 
 // Configuration of the robot server

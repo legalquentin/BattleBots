@@ -50,7 +50,7 @@ type BotAttr struct {
 // think about the attributes that shouldn't be changed (ip, id, basestats)
 type Bot struct {
 	// technical stuff
-	id      int16
+	ID      int16
 	Address string
 	Running bool
 	Taken   bool
