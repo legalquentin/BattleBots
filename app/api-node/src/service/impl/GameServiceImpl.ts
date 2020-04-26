@@ -18,6 +18,7 @@ export class GameServiceImpl implements GameService {
     private serviceFactory: IServiceFactory;
 
     public async saveOrUpdate(game: IGameResource) {
+        game.status = EGameStatus.CREATED;
         const gameResourceAsm = Container.get(GameResourceAsm);
         try {
             const entity = await gameResourceAsm.toEntity(game);
