@@ -77,7 +77,7 @@ export class GameServiceImpl implements GameService {
                 data: await gameResourceAsm.toResource(game)
             };
 
-            gameResourceAsm.AddStreamResouce(game, response.data);
+            await gameResourceAsm.AddStreamResouce(game, response.data);
             return (Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response)));
         }
         catch (e){
@@ -196,7 +196,7 @@ export class GameServiceImpl implements GameService {
                 data: resource
             };
 
-            gameResourceAsm.AddBotsResource(game, response.data);
+            await gameResourceAsm.AddBotsResource(game, response.data);
             return (Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response)));
         }
         catch (e){
