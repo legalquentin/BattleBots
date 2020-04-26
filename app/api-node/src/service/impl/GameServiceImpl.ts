@@ -1,9 +1,7 @@
 import { GameService } from "../GameService";
 import { Inject, Singleton, Container } from "typescript-ioc";
 import IServiceFactory from "../IServiceFactory";
-import { GameEntity } from "../../database/entities/GameEntity";
 import { EGameStatus } from "../../resources/EGameStatus";
-import { RobotGameEntity } from "../../database/entities/RobotGameEntity";
 import { EntityError } from "../../../lib/EntityError";
 import { EEntityStatus } from "../../../lib/EEntityStatus";
 import HttpResponseModel from "../../resources/HttpResponseModel";
