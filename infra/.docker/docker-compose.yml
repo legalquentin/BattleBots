@@ -10,11 +10,11 @@ services:
     container_name: db
     ports:
       - "5432:5432"
-  app:
+  production:
     build: ../../app/api-node
     working_dir: /app
     environment: 
-      NODE_ENV: app
+      NODE_ENV: production
     ports: 
       - "8080:8080"
     container_name: battlebots-node

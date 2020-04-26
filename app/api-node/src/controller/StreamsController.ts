@@ -5,8 +5,6 @@ import { preRequest } from "../service/interceptors/preRequest/preRequest";
 import { postRequest } from "../service/interceptors/postRequest/postRequest";
 import HttpResponseModel from "../resources/HttpResponseModel";
 import { IStreamResource } from "../resources/IStreamResource";
-import { StreamsResourceAsm } from "../resources/asm/StreamsResourceAsm";
-import { SendResource } from "../../lib/ReturnExtended";
 import { Produces, Consumes, Response } from "typescript-rest-swagger";
 
 @Path("/api/streams")
@@ -14,11 +12,9 @@ import { Produces, Consumes, Response } from "typescript-rest-swagger";
 @PostProcessor(postRequest)
 export class StreamsContoller {
     private streamsService: StreamsService;
-    private streamResourceAsm: StreamsResourceAsm;
 
     constructor(){
         this.streamsService = Container.get(StreamsService);
-        this.streamResourceAsm  = Container.get(StreamsResourceAsm);
     }
 
     @Produces("application/json;charset=UTF-8")
@@ -27,15 +23,7 @@ export class StreamsContoller {
     @Path("/")
     @GET
     public async list(){
-        const list = await this.streamsService.findAll();
-        const resources = await this.streamResourceAsm.toResources(list);
-        const response: HttpResponseModel<Array<IStreamResource>> = {
-            data: resources,
-            httpCode: 200,
-            message: "Stream list"
-        };
-
-        return Promise.resolve(new SendResource<HttpResponseModel<Array<IStreamResource>>>("StreamController", response.httpCode, response));
+        return this.streamsService.findAll();
     }
 
     @Produces("application/json;charset=UTF-8")
@@ -46,27 +34,7 @@ export class StreamsContoller {
     @POST
     @Path("/")
     public async insert(stream: IStreamResource){
-        const entity = await this.streamResourceAsm.toEntity(stream);
-
-        try {
-            const finded = await this.streamsService.saveOrUpdate(entity);
-            const resource = await this.streamResourceAsm.toResource(finded);
-            const response: HttpResponseModel<IStreamResource> = {
-                data: resource,
-                httpCode: 201,
-                message: "Stream inserted"
-            };
-
-            return Promise.resolve(new SendResource<HttpResponseModel<IStreamResource>>("StreamController", response.httpCode, response));
-        }
-        catch (e){
-            const response: HttpResponseModel<IStreamResource> = {
-                httpCode: 400,
-                message: e.message
-            };
-
-            return Promise.resolve(new SendResource<HttpResponseModel<IStreamResource>>("StreamController", response.httpCode, response));
-        }
+        return this.streamsService.saveOrUpdate(stream);
     }
 
     @Produces("application/json;charset=UTF-8")
@@ -77,32 +45,7 @@ export class StreamsContoller {
     @DELETE
     @Path("/:id")
     public async delete(@PathParam("id")id: number){
-        try {
-            const flag = await this.streamsService.deleteOne(id);
-
-            if (flag){
-                const response: HttpResponseModel<IStreamResource> = {
-                    httpCode: 200,
-                    message: "Stream deleted"
-                };
-    
-                return Promise.resolve(new SendResource<HttpResponseModel<IStreamResource>>("StreamController", response.httpCode, response));
-            }
-            const response: HttpResponseModel<IStreamResource> = {
-                httpCode: 404,
-                message: "Stream not found"
-            };
-    
-            return Promise.resolve(new SendResource<HttpResponseModel<IStreamResource>>("StreamController", response.httpCode, response));    
-        }
-        catch (e){
-            const response: HttpResponseModel<IStreamResource> = {
-                httpCode: 400,
-                message: "error"
-            };
-
-            return Promise.resolve(new SendResource<HttpResponseModel<IStreamResource>>("StreamController", response.httpCode, response));    
-        }
+        return (this.streamsService.deleteOne(id));
     }
 
     @Produces("application/json;charset=UTF-8")
@@ -113,26 +56,7 @@ export class StreamsContoller {
     @PUT
     @Path("/")
     public async update(streamResource: IStreamResource){
-        try {
-            const entity = await this.streamResourceAsm.toEntity(streamResource);
-            const updated = await this.streamsService.saveOrUpdate(entity);
-            const resource = await this.streamResourceAsm.toResource(updated);
-            const response: HttpResponseModel<IStreamResource> = {
-                httpCode: 200,
-                message: "stream updated",
-                data: resource
-            };
-
-            return Promise.resolve(new SendResource<HttpResponseModel<IStreamResource>>("StreamController", response.httpCode, response));
-        }
-        catch (e){
-            const response: HttpResponseModel<IStreamResource> = {
-                httpCode: 400,
-                message: e.message,
-            };
-
-            return Promise.resolve(new SendResource<HttpResponseModel<IStreamResource>>("StreamController", response.httpCode, response));
-        }
+        return (this.streamsService.saveOrUpdate(streamResource));
     }
 
     @Produces("application/json;charset=UTF-8")
@@ -142,21 +66,6 @@ export class StreamsContoller {
     @GET
     @Path("/:id")
     public async detail(@PathParam("id")id: number){
-        const stream = await this.streamsService.findOne(id);
-        const resource = await this.streamResourceAsm.toResource(stream);
-         if (resource){
-            const response: HttpResponseModel<IStreamResource> = {
-                httpCode: 200,
-                message: "Stream finded",
-                data: resource
-            };
-
-            return Promise.resolve(new SendResource<HttpResponseModel<IStreamResource>>("StreamController", response.httpCode, response));
-        }
-        const response: HttpResponseModel<IStreamResource> = {
-            httpCode: 404,
-            message: "Stream not found"   
-        };
-        return Promise.resolve(new SendResource<HttpResponseModel<IStreamResource>>("StreamController", response.httpCode, response));
+        return (this.streamsService.getOne(id));
     }
 }

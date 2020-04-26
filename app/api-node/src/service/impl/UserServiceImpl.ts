@@ -2,9 +2,15 @@ import { UserService } from "../UserService";
 import UserEntity from "../../../src/database/entities/UserEntity";
 import * as _ from "lodash";
 import IServiceFactory from "../IServiceFactory";
-import { Singleton, Inject } from "typescript-ioc";
+import { Singleton, Inject, Container } from "typescript-ioc";
 import { hashSync } from "bcrypt";
 import IConfig from "../IConfig";
+import { UserResourceAsm } from "../../resources/asm/UserResourceAsm";
+import IUserResource from "../../resources/IUserResource";
+import IResourceId from "../../resources/IResourceId";
+import HttpResponseModel from "../../resources/HttpResponseModel";
+import { SendResource } from "../../../lib/ReturnExtended";
+import IGameProfileResource from "../../resources/IGameProfileResource";
 
 @Singleton
 export class UserServiceImpl implements UserService {
@@ -15,45 +21,121 @@ export class UserServiceImpl implements UserService {
     @Inject
     config: IConfig;
 
-    public async saveOrUpdate(user: UserEntity): Promise<UserEntity>{
-            try {
-                if (user.id)
-                {
-                    await this.factory.getUserRepository().update(user.id, user);
-                    return (user);
-                }
-                else {
-                    user.hash = hashSync(user.hash, this.config.genSalt());
+    public async saveOrUpdate(user: IUserResource){
+        const userResourceAsm = Container.get(UserResourceAsm);
+        const entity = userResourceAsm.toEntity(user);
 
-                    const saved : UserEntity = await this.factory.getUserRepository().save(user);
-                    return (saved);
-                }
-
-            }
-            catch (e){
-                throw e;
-            }            
-    }
-
-    public async findAll(): Promise<Array<UserEntity>>{
-        return (this.factory.getUserRepository().find());
-    }
-
-    public async deleteOne(id: number) : Promise<Boolean>{
         try {
-            const user = await this.factory.getUserRepository().findOne(id);
+            const savedUser = await this.factory.getUserRepository().saveOrUpdate(entity);
+            const resourceId: IResourceId = {
+                id: savedUser.id
+            };
+            const response: HttpResponseModel<IResourceId> = {
+                httpCode: 201,
+                message: "User registerd",
+                data: resourceId
+            };
 
-            if (user){
-                await this.factory.getUserRepository().delete(user.id)
-                return (true);
+            return Promise.resolve(new SendResource<HttpResponseModel<IResourceId>>("UserController", response.httpCode, response));
+        }
+        catch (e){
+            const response: HttpResponseModel<IResourceId> = {
+                httpCode: 409,
+                data: null,
+                message: "User already exist"
+            };
+
+            return Promise.resolve(new SendResource<HttpResponseModel<IResourceId>>("UserController", response.httpCode, response));
+        }           
+    }
+
+    public async findAll(){
+        const userResourceAsm = Container.get(UserResourceAsm);
+        try {
+            let users = await this.factory.getUserRepository().find();
+            if (!users){
+                users = [];
             }
-            return (false);
+            const resources : IUserResource[] = await userResourceAsm.toResources(users);
+            const response: HttpResponseModel<IUserResource[]> = {
+                httpCode: 200,
+                message: "User list",
+                data: resources
+            };
+
+            return (Promise.resolve(new SendResource<HttpResponseModel<IUserResource[]>>("UserController", response.httpCode, response)));
         } catch (e){
-            return (false);
+            const response: HttpResponseModel<IUserResource[]> = {
+                httpCode: 400,
+                message: "Bad request",
+                data: null
+            };
+
+            return (Promise.resolve(new SendResource<HttpResponseModel<IUserResource[]>>("UserController", response.httpCode, response)));
         }
     }
 
-    public async findOne(id: number) : Promise<UserEntity>{
-        return (this.factory.getUserRepository().findOne(id));
+    public async deleteOne(id: number){
+        try {
+            const user = await this.factory.getUserRepository().findOne(id);
+
+            if (user == null){
+                await this.factory.getUserRepository().delete(user.id);
+                const response: HttpResponseModel<IGameProfileResource[]> = {
+                    httpCode: 200,
+                    message: "User deleted"
+                };
+
+                return (Promise.resolve(new SendResource<HttpResponseModel<IGameProfileResource[]>>("UserController", response.httpCode, response)));
+            }
+            else {
+                const response: HttpResponseModel<IGameProfileResource[]> = {
+                    httpCode: 404,
+                    message: "User not found"
+                };
+
+                return (Promise.resolve(new SendResource<HttpResponseModel<IGameProfileResource[]>>("UserController", response.httpCode, response)));
+            }
+        } catch (e){
+            const response: HttpResponseModel<IGameProfileResource[]> = {
+                httpCode: 400,
+                message: "Bad request",
+                data: null
+            };
+
+            return (Promise.resolve(new SendResource<HttpResponseModel<IGameProfileResource[]>>("UserController", response.httpCode, response)));
+        }
+    }
+
+    public async findOne(id: number){
+        const userResourceAsm = Container.get(UserResourceAsm);
+        try {
+            const user : UserEntity = await this.factory.getUserRepository().findOne(id);
+            const notFound : HttpResponseModel<IUserResource> = {
+                httpCode: 404,
+                message: "User not found",
+                data: null
+            };
+            if (!user){
+                return Promise.resolve(new SendResource<HttpResponseModel<IUserResource>>("UserController", notFound.httpCode, notFound));
+            }
+            const resource: IUserResource = await userResourceAsm.toResource(user);
+            const response: HttpResponseModel<IUserResource> = {
+                data: resource,
+                httpCode: 200,
+                message: "Profile user"
+            };
+
+            return Promise.resolve(new SendResource<HttpResponseModel<IUserResource>>("UserController", response.httpCode, response));
+        }
+        catch (e){
+            const response: HttpResponseModel<IUserResource> = {
+                data: null,
+                httpCode: 400,
+                message: "Error user"
+            };
+
+            return Promise.resolve(new SendResource<HttpResponseModel<IUserResource>>("UserController", response.httpCode, response));
+        }
     }
 }

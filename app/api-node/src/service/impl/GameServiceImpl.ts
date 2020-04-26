@@ -17,25 +17,33 @@ export class GameServiceImpl implements GameService {
     @Inject
     private serviceFactory: IServiceFactory;
 
-    public async __linkArenaToGame(arenaId: number, gameId: number) {
-        const arena = await this.serviceFactory.getArenaRepository().findOne(arenaId);
-
-        if (!arena){
-            throw new EntityError(EEntityStatus.NOT_FOUND, "arena not found");
+    public async saveOrUpdate(game: IGameResource) {
+        const gameResourceAsm = Container.get(GameResourceAsm);
+        try {
+            const entity = await gameResourceAsm.toEntity(game);
+            const saved = await this.serviceFactory.getGameRepository().saveOrUpdate(entity);
+            const resource = await gameResourceAsm.toResource(saved);
+            const response : HttpResponseModel<IGameResource> = {
+                httpCode: 200,
+                message: "game create",
+                data: resource
+            };
+    
+            return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));        
         }
-        const game = await this.serviceFactory.getGameRepository().findOne(gameId);
+        catch (e){
+            const response: HttpResponseModel<IGameResource> = {
+                httpCode: 400,
+                message: e.message
+            };
 
-        if (!game){
-            throw new EntityError(EEntityStatus.NOT_FOUND, "game not found");
+            return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));
         }
-        game.arena = arena;
-        await this.serviceFactory.getGameRepository().update(game.id, game);
-        return (game);
     }
 
     public async linkArenaToGame(arenaId: number, gameId: number) {
         try {
-            const game = await this.__linkArenaToGame(arenaId, gameId);
+            const game = await this.serviceFactory.getGameRepository().linkArenaToGame(arenaId, gameId);
             const gameResourceAsm = Container.get(GameResourceAsm);
             const response = {
                 httpCode: 200,
@@ -60,42 +68,10 @@ export class GameServiceImpl implements GameService {
         }
     }
 
-    public async __linkStreamToGame(streamId: number, gameId: number) {
-        const stream = await this.serviceFactory.getStreamsRepository().findOne(streamId);
-
-        if (!stream){
-            throw new EntityError(EEntityStatus.NOT_FOUND, "stream not found");
-        }
-        const game = await this.serviceFactory.getGameRepository().createQueryBuilder("games").leftJoinAndSelect("games.streams", "streams").where("games.id = :id", {
-            "id": gameId
-        }).getOne();
-
-        if (!game){
-            throw new EntityError(EEntityStatus.NOT_FOUND, "game not found");
-        }
-        const streams = await game.streams;
-        if (streams){
-            for (let s of streams){
-                if (s.id === stream.id){
-                    throw new EntityError(EEntityStatus.INTERNAL_ERROR, "already join");
-                }
-            }
-            streams.push(stream);
-            stream.game = game;
-            game.streams = streams;
-        }
-        else{
-            stream.game = game;
-            game.streams = [stream];
-        }
-        await this.serviceFactory.getStreamsRepository().update(stream.id, stream);
-        return (game);
-    }
-
     public async linkStreamToGame(streamId: number, gameId: number) {
         try {
             const gameResourceAsm = Container.get(GameResourceAsm);
-            const game  = await this.__linkStreamToGame(streamId, gameId);
+            const game  = await this.serviceFactory.getGameRepository().linkStreamToGame(streamId, gameId);
             const response = {
                 message: `link stream ${streamId} to game ${gameId}`,
                 httpCode: 200,
@@ -115,123 +91,64 @@ export class GameServiceImpl implements GameService {
         }
     }
 
-    public async create(game: GameEntity): Promise<GameEntity> {
-        game.game_status = EGameStatus.CREATED;
-        return this.saveOrUpdate(game);
-    }
- 
-    public async start(id: number): Promise<GameEntity> {
-        const game = await this.__findOne(id);
-
-        if (!game){
-            return (null);
-        }
-        game.game_status = EGameStatus.STARTED;
-        return this.saveOrUpdate(game);
-    }
-    
-    public async stop(id: number): Promise<GameEntity> {
-        const game = await this.__findOne(id);
-
-        if (!game){
-            return (null);
-        }
-        game.game_status = EGameStatus.STOPPED;
-        return this.saveOrUpdate(game);
-    }
-
-    public async end(id: number): Promise<GameEntity> {
-        const game = await this.__findOne(id);
-
-        if (!game){
-            return (null);
-        }
-        game.game_status = EGameStatus.ENDED;
-        return this.saveOrUpdate(game);
-    }
-
-    public async saveOrUpdate(game: GameEntity): Promise<GameEntity>
-    {
-        try {
-                if (game.id){
-                    await this.serviceFactory.getGameRepository().update(game.id, game);
-                    return (game);
-                }
-                else {
-                    const saved = await this.serviceFactory.getGameRepository().save(game);
-        
-                    return (saved);
-                }
-        }
-        catch (e){
-            throw e;
-        }
-    }
-
-    public async deleteOne(id: number): Promise<Boolean> {
+    public async deleteOne(id: number) {
         try {
             const game = await this.serviceFactory.getGameRepository().findOne(id);
-        
-            if (game){
+
+            if (game !== null){
+                const response: HttpResponseModel<IGameResource> = {
+                    message: "game deleted",
+                    httpCode: 200
+                };
+
                 await this.serviceFactory.getGameRepository().delete(game.id);
-                return (true);
+                return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));
             }
-            return (false);
+            else {
+                const response: HttpResponseModel<IGameResource> = {
+                    message: "game not found",
+                    httpCode: 404
+                };
+
+                return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));
+            }
         }
         catch (e){
-            throw e;
+            const response: HttpResponseModel<IGameResource> = {
+                message: e.message,
+                httpCode: 400
+            };
+
+            return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));
         }
     }
 
-    public async findAll(): Promise<Array<GameEntity>> {
-        return (this.serviceFactory.getGameRepository().find());
-    }
+    public async findAll(): Promise<SendResource<HttpResponseModel<Array<IGameResource>>>> {
+        const gameResourceAsm = Container.get(GameResourceAsm);
+        try {
+            const list = await this.serviceFactory.getGameRepository().find();
+            const resources = await gameResourceAsm.toResources(list);
+            const response : HttpResponseModel<Array<IGameResource>> = {
+                httpCode: 200,
+                message: "game list",
+                data: resources
+            };
+    
+            return Promise.resolve(new SendResource<HttpResponseModel<Array<IGameResource>>>("GameController", response.httpCode, response));        
+        }
+        catch (e){
+            const response: HttpResponseModel<Array<IGameResource>> = {
+                httpCode: 400,
+                message: e.message
+            };
 
-    public async __findOne(id: number): Promise<GameEntity> {
-        return (this.serviceFactory.getGameRepository().
-        createQueryBuilder("game").
-        leftJoinAndSelect("game.robots", "robots").
-        leftJoinAndSelect("robots.bot", "bot").
-        leftJoinAndSelect("bot.streams", "stream_1").
-        leftJoinAndSelect("game.arena", "arena").
-        leftJoinAndSelect("arena.robotArena", "robotArena").
-        leftJoinAndSelect("robotArena.robot", "robot").
-        leftJoinAndSelect("robot.streams", "stream_2").
-        leftJoinAndSelect("game.streams", "streams").
-        leftJoinAndSelect("bot.player", "player").
-        where("game.id = :game_id", {
-            "game_id": id
-        }).
-        getOne());
-    }
-
-    public async hasBots(game_id: number){
-        const entities = await this.serviceFactory.getBotsRepository().createQueryBuilder("bots").leftJoinAndSelect("bots.robotGame", "robotGame").leftJoinAndSelect("robotGame.game", "game").where("game.id = :id", {
-            id: game_id
-        }).getMany();
-
-        return (entities && entities.length > 0);
-    }
-
-    public async hasArena(game_id: number){
-        const entities = await this.serviceFactory.getArenaRepository().createQueryBuilder("arena").leftJoinAndSelect("arena.games", "games").where("games.id = :id", {
-            "id": game_id
-        }).getMany();
-
-        return (entities && entities.length > 0);
-    }
-
-    public async hasStream(gameId: number){
-        const entities = await this.serviceFactory.getStreamsRepository().createQueryBuilder("streams").leftJoinAndSelect("streams.game", "game").where("game.id = :id", {
-            "id": gameId
-        }).getMany();
-
-        return (entities && entities.length > 0);
+            return Promise.resolve(new SendResource<HttpResponseModel<Array<IGameResource>>>("GameController", response.httpCode, response));
+        }
     }
 
     public async findOne(id: number){
         try {
-            const game = await this.__findOne(id);
+            const game = await this.serviceFactory.getGameRepository().getOne(id);
             const gameResourceAsm = Container.get(GameResourceAsm);
 
             if (!game){
@@ -243,13 +160,13 @@ export class GameServiceImpl implements GameService {
                 return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));        
             }
             const resource = await gameResourceAsm.toResource(game);
-            if (await this.hasStream(id)){
+            if (await this.serviceFactory.getStreamsRepository().hasStream(id)){
                 await gameResourceAsm.AddStreamResouce(game, resource);
             }
-            if (await this.hasArena(id)){
+            if (await this.serviceFactory.getArenaRepository().hasArena(id)){
                 await gameResourceAsm.AddArenaResource(game, resource);
             }
-            if (await this.hasBots(id)){
+            if (await this.serviceFactory.getBotsRepository().hasBots(id)){
                 await gameResourceAsm.AddBotsResource(game, resource);
             }
             const response : HttpResponseModel<IGameResource> = {
@@ -257,8 +174,6 @@ export class GameServiceImpl implements GameService {
                 message: "game detail",
                 data: resource
             };
-            console.log(game);
-            console.log(response.data);
             return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));            
         }
         catch (e){
@@ -271,46 +186,9 @@ export class GameServiceImpl implements GameService {
         }
     }
 
-    public deleteAllBotGame(game: GameEntity){
-        return (this.serviceFactory.getBotGameRepository().createQueryBuilder().delete().from(RobotGameEntity).where("game_id = :id", {
-            "id": game.id
-        }).execute());
-    }
-
-    public async __linkBotToGame(botId: number, gameId: number) {
-        const bot = await this.serviceFactory.getBotsRepository().createQueryBuilder("robots").where("robots.id = :id", {
-            id: botId
-        }).getOne();
-
-        if (!bot){
-            throw new EntityError(EEntityStatus.NOT_FOUND, "bot not found");
-        }
-        const game = await this.serviceFactory.getGameRepository().createQueryBuilder("games").leftJoinAndSelect("games.robots", "robot").leftJoinAndSelect("robot.bot", "bot").where("games.id = :id", {
-            id: gameId
-        }).getOne();
-        if (!game){
-            throw new EntityError(EEntityStatus.NOT_FOUND, "game not found");
-        }
-        const robotGames = await game.robots;
-        if (robotGames){
-            for (let robotGame of robotGames){
-                if (robotGame.bot.id === bot.id){
-                    throw new EntityError(EEntityStatus.INTERNAL_ERROR, "already join")
-                }
-            }
-        }
-        const robotGame: RobotGameEntity = {
-            bot: bot,
-            game: game
-        };
-        console.log(robotGame);
-        await this.serviceFactory.getBotGameRepository().save(robotGame);
-        return (game);
-    }
-
     public async linkBotToGame(botId: number, gameId: number){
         try {
-            const game = await this.__linkBotToGame(botId, gameId);
+            const game = await this.serviceFactory.getBotGameRepository().linkBotToGame(botId, gameId);
             const gameResourceAsm = Container.get(GameResourceAsm);
             const resource = await gameResourceAsm.toResource(game);
             const response: HttpResponseModel<IGameResource> = {

@@ -1,10 +1,11 @@
 import { StreamsEntity } from "../database/entities/StreamsEntity";
+import { IStreamResource } from "../resources/IStreamResource";
 
 export abstract class StreamsService {
-    public abstract saveOrUpdate(stream: StreamsEntity) : Promise<StreamsEntity>;
-    public abstract deleteOne(id: number) : Promise<Boolean>;
-    public abstract findOne(id: number) : Promise<StreamsEntity>;
+    public abstract saveOrUpdate(stream: IStreamResource);
+    public abstract deleteOne(id: number);
+    public abstract getOne(id: number);
     public abstract search(options: any): Promise<StreamsEntity[]>;
-    public abstract findAll(): Promise<Array<StreamsEntity>>;
+    public abstract findAll();
     public abstract deleteByBot(botId: number): Promise<any>;
 }

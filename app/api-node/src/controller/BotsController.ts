@@ -4,9 +4,7 @@ import { Container } from "typescript-ioc";
 import { preRequest } from "../service/interceptors/preRequest/preRequest";
 import { postRequest } from "../service/interceptors/postRequest/postRequest";
 import HttpResponseModel from "../resources/HttpResponseModel";
-import { SendResource } from "../../lib/ReturnExtended";
 import { IBotsResource } from "../resources/IBotsResource";
-import { BotResourceAsm } from "../resources/asm/BotResourceAsm";
 import { Produces, Response, Consumes } from "typescript-rest-swagger";
 
 @Path("/api/bots")
@@ -14,11 +12,9 @@ import { Produces, Response, Consumes } from "typescript-rest-swagger";
 @PostProcessor(postRequest)
 export class BotsController {
     private botsService: BotsService;
-    private botResourceAsm: BotResourceAsm;
 
     constructor(){
         this.botsService = Container.get(BotsService);
-        this.botResourceAsm = Container.get(BotResourceAsm);
     }
 
     @Path("/")
@@ -27,15 +23,7 @@ export class BotsController {
     @Response<HttpResponseModel<IBotsResource>>(200, "bot list")
     @Security("ROLE_USER", "Bearer")
     public async list(){
-        const robots = await this.botsService.findAll();
-        const resources = await this.botResourceAsm.toResources(robots);
-        const response= {
-            httpCode: 200,
-            message: "bot list",
-            data: resources
-        };
-
-        return Promise.resolve(new SendResource<HttpResponseModel<Array<IBotsResource>>>("BotController", response.httpCode, response));
+        return await this.botsService.findAll();
     }
 
     @Path("/")
@@ -57,32 +45,7 @@ export class BotsController {
     @Response<HttpResponseModel<IBotsResource>>(404, "bot not found")
     @Response<HttpResponseModel<IBotsResource>>(400)
     public async delete(@PathParam("id")id: number){
-        try {
-            const flag = await this.botsService.deleteOne(id);
-
-            if (!flag){
-                const response: HttpResponseModel<IBotsResource> = {
-                    httpCode: 404,
-                    message: "bot not found"
-                };
-
-                return Promise.resolve(new SendResource<HttpResponseModel<IBotsResource>>("BotController", response.httpCode, response));
-            }
-            const response: HttpResponseModel<IBotsResource> = {
-                httpCode: 200,
-                message: "bot deleted"
-            };
-
-            return Promise.resolve(new SendResource<HttpResponseModel<IBotsResource>>("BotController", response.httpCode, response));
-        }
-        catch(e){
-            const response: HttpResponseModel<IBotsResource> = {
-                httpCode: 400,
-                message: "internal error"
-            };
-
-            return Promise.resolve(new SendResource<HttpResponseModel<IBotsResource>>("BotController", response.httpCode, response));
-        }
+        await this.botsService.deleteOne(id);
     }
 
     @Path("/")
@@ -93,29 +56,7 @@ export class BotsController {
     @Response<HttpResponseModel<IBotsResource>>(200, "bot updated")
     @Response<HttpResponseModel<IBotsResource>>(400)
     public async update(bot : IBotsResource){
-        const entity = await this.botResourceAsm.toEntity(bot);
-
-        console.log(entity);
-        try {
-            const updated = await this.botsService.__saveOrUpdate(entity);
-            const resource = await this.botResourceAsm.toResource(updated);
-            const response : HttpResponseModel<IBotsResource> = {
-                httpCode: 200,
-                data: resource,
-                message: "bot updated"
-            };
-
-            return Promise.resolve(new SendResource<HttpResponseModel<IBotsResource>>("BotController", response.httpCode, response));
-        }
-        catch (e){
-            console.log(e.message);
-            const response: HttpResponseModel<IBotsResource> = {
-                httpCode: 400,
-                message: "error"
-            };
-
-            return (Promise.resolve(new SendResource<HttpResponseModel<IBotsResource>>("BotsController", response.httpCode, response)));
-        }
+        await this.botsService.update(bot);
     }
 
     @Path("/:id")

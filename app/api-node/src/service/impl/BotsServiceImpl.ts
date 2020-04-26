@@ -6,30 +6,66 @@ import { IBotsResource } from "../../resources/IBotsResource";
 import { SendResource } from "../../../lib/ReturnExtended";
 import HttpResponseModel from "../../resources/HttpResponseModel";
 import { BotResourceAsm } from "../../resources/asm/BotResourceAsm";
-import { EntityError } from "../../../lib/EntityError";
 import { EEntityStatus } from "../../../lib/EEntityStatus";
 
 @Singleton
 export class BotsServiceImpl implements BotsService {
-
     @Inject
     private service: IServiceFactory;
 
+    public async update(resource: IBotsResource) {
+        const botResourceAsm = Container.get(BotResourceAsm);
+        const entity = await botResourceAsm.toEntity(resource);
 
-    public async __saveOrUpdate(bots: RobotsEntity): Promise<RobotsEntity>
-    {
         try {
-            if (bots.id){
-                await this.service.getBotsRepository().update(bots.id, bots);
-            }
-            else {
-                await this.service.getBotsRepository().save(bots);
-            }
-            return bots;
+            const updated = await this.service.getBotsRepository().saveOrUpdate(entity);
+            const resource = await botResourceAsm.toResource(updated);
+            const response : HttpResponseModel<IBotsResource> = {
+                httpCode: 200,
+                data: resource,
+                message: "bot updated"
+            };
+
+            return Promise.resolve(new SendResource<HttpResponseModel<IBotsResource>>("BotController", response.httpCode, response));
         }
-        catch (e)
-        {
-            throw e;
+        catch (e){
+            console.log(e.message);
+            const response: HttpResponseModel<IBotsResource> = {
+                httpCode: 400,
+                message: "error"
+            };
+
+            return (Promise.resolve(new SendResource<HttpResponseModel<IBotsResource>>("BotsController", response.httpCode, response)));
+        }
+    }
+
+    public async deleteOne(id: number) {
+        try {
+            const bot = await this.service.getBotsRepository().findOne(id);
+
+            if (bot == null){
+                const response: HttpResponseModel<IBotsResource> = {
+                    httpCode: 404,
+                    message: "bot not found"
+                };
+
+                return Promise.resolve(new SendResource<HttpResponseModel<IBotsResource>>("BotController", response.httpCode, response));
+            }
+            await this.service.getBotsRepository().delete(bot.id);
+            const response: HttpResponseModel<IBotsResource> = {
+                httpCode: 200,
+                message: "bot deleted"
+            };
+
+            return Promise.resolve(new SendResource<HttpResponseModel<IBotsResource>>("BotController", response.httpCode, response));
+        }
+        catch(e){
+            const response: HttpResponseModel<IBotsResource> = {
+                httpCode: 400,
+                message: "internal error"
+            };
+
+            return Promise.resolve(new SendResource<HttpResponseModel<IBotsResource>>("BotController", response.httpCode, response));
         }
     }
 
@@ -39,7 +75,7 @@ export class BotsServiceImpl implements BotsService {
         const entity = await botResourceAsm.toEntity(bots);
 
         try {
-            const saved = await this.__saveOrUpdate(entity);
+            const saved = await this.service.getBotsRepository().saveOrUpdate(entity);
             const resource = await botResourceAsm.toResource(saved);
             const response = {
                 httpCode: 201,
@@ -59,22 +95,11 @@ export class BotsServiceImpl implements BotsService {
         }
     }
 
-    public __findOne(id: number): Promise<RobotsEntity>
-    {
-        return (this.service.getBotsRepository().
-        createQueryBuilder("bots").
-        leftJoinAndSelect("bots.player", "player").
-        where("bots.id = :id", {
-            "id": id
-        }).getOne());
-    }
-
     public async findOne(id: number): Promise<SendResource<HttpResponseModel<IBotsResource>>> {
         try {
-            const bot = await this.__findOne(id);
+            const bot = await this.service.getBotsRepository().getOne(id);
             const botResourceAsm = Container.get(BotResourceAsm);
 
-            console.log(bot);
             if (!bot){
                 const response: HttpResponseModel<IBotsResource> = {
                     httpCode: 404,
@@ -84,7 +109,6 @@ export class BotsServiceImpl implements BotsService {
                 return (Promise.resolve(new SendResource<HttpResponseModel<IBotsResource>>("BotsController", response.httpCode, response)));
             }
             const resource = await botResourceAsm.toResource(bot);
-            console.log(resource);
             const response: HttpResponseModel<IBotsResource> = {
                 httpCode: 200,
                 data: resource,
@@ -103,122 +127,23 @@ export class BotsServiceImpl implements BotsService {
         }
     }
 
-    public async findAll(): Promise<Array<RobotsEntity>>
+    public async findAll()
     {
-        return (this.service.getBotsRepository().find());
-    }
+        const botResourceAsm = Container.get(BotResourceAsm);
+        const robots = await this.service.getBotsRepository().find();
+        const resources = await botResourceAsm.toResources(robots);
+        const response= {
+            httpCode: 200,
+            message: "bot list",
+            data: resources
+        };
 
-    public async deleteOne(id: number) : Promise<Boolean>
-    {
-        try {
-            const bots = await this.__findOne(id);
-
-            if (bots)
-            {
-                await this.service.getBotsRepository().createQueryBuilder("bot").delete().from(RobotsEntity, "bot").where("id = :id", {
-                    id: id
-                }).execute();
-                return (true);
-            }
-            else
-            {
-                return (false);
-            }
-        }
-        catch (e)
-        {
-            throw e;
-        }
-    }
-
-    public async enable(id: number): Promise<RobotsEntity>
-    {
-        try {
-            const bots = await this.__findOne(id);
-
-            bots.running = 1;
-            return this.__saveOrUpdate(bots);
-        }
-        catch (e)
-        {
-            throw e;
-        }
-    }
-
-    public async disable(id: number): Promise<RobotsEntity>
-    {
-        try {
-            const bots = await this.__findOne(id);
-
-            bots.running = 0;
-            return this.__saveOrUpdate(bots);
-        }
-        catch (e)
-        {
-            throw e;
-        }
-    }  
-
-    public async take(id: number): Promise<RobotsEntity>
-    {
-        try {
-            const bots = await this.__findOne(id);
-
-            bots.taken = 1;
-            return this.__saveOrUpdate(bots);
-        }
-        catch (e)
-        {
-            throw e;
-        }
-    }
-
-    public async release(id: number): Promise<RobotsEntity>
-    {
-        try {
-            const bots = await this.__findOne(id);
-
-            bots.taken = 0;
-            return this.__saveOrUpdate(bots);
-        }
-        catch (e)
-        {
-            throw e;
-        }
-    }
-
-    public async __linkBotToPlayer(botId: number, playerId: number): Promise<RobotsEntity> {
-        try {
-            const bot = await this.service.getBotsRepository().findOne(botId);
-
-            if (!bot){
-                throw new EntityError(EEntityStatus.NOT_FOUND, "bot not found");
-            }
-            const player = await this.service.getPlayerRepository().findOne(playerId);
-
-            if (!player){
-                throw new EntityError(EEntityStatus.NOT_FOUND, "player not found");
-            }
-            bot.player = player;
-            await this.service.getBotsRepository().update(bot.id, bot);
-            return (bot);
-        }
-        catch (e){
-            throw new EntityError(EEntityStatus.INTERNAL_ERROR, e.message);
-        }
-    }
-
-    public async __findByUser(userId: number): Promise<RobotsEntity[]> {
-        const bots = await this.service.getBotsRepository().createQueryBuilder().select("robots").from(RobotsEntity, "robots").leftJoinAndSelect("robots.player", "player").leftJoinAndSelect("player.user", "user").where("user.id = :id", {
-            id: userId
-        }).getMany();
-   
-        return (bots);
+        return Promise.resolve(new SendResource<HttpResponseModel<Array<IBotsResource>>>("BotController", response.httpCode, response));
     }
 
     public async findByUser(userId: number) {
         try {
-            const bots = await this.__findByUser(userId);
+            const bots = await this.service.getBotsRepository().findByUser(userId);
             const response: HttpResponseModel<Array<IBotsResource>> = {};
             const botResourceAsm = Container.get(BotResourceAsm);
 
@@ -240,7 +165,7 @@ export class BotsServiceImpl implements BotsService {
         try {
             const botResourceAsm = Container.get(BotResourceAsm);
             const response: HttpResponseModel<IBotsResource> = {};
-            const entity : RobotsEntity = await this.__linkBotToPlayer(botId, playerId);
+            const entity : RobotsEntity = await this.service.getBotsRepository().linkBotToPlayer(botId, playerId);
             const resource = await botResourceAsm.toResource(entity);
 
             response.httpCode = 200;
@@ -263,41 +188,9 @@ export class BotsServiceImpl implements BotsService {
         }
     }
 
-    public async __linkBotToStream(botId: number, streamId: number) {
-        const bot = await this.service.getBotsRepository().createQueryBuilder("robots").leftJoinAndSelect("robots.streams", "streams").where("robots.id = :id", {
-            id: botId
-        }).getOne();
-
-        if (!bot){
-            throw new EntityError(EEntityStatus.NOT_FOUND, "bot not found");
-        }
-        const stream = await this.service.getStreamsRepository().findOne(streamId);
-
-        if (!stream){
-            throw new EntityError(EEntityStatus.NOT_FOUND, "stream not found");
-        }
-        stream.robot = bot;
-        const streams = await bot.streams;
-        if (streams){
-            for (let s of streams){
-                if (s.id === stream.id){
-                    throw new EntityError(EEntityStatus.INTERNAL_ERROR, "already join");
-                }
-            }
-            streams.push(stream);
-            bot.streams = streams;
-        }
-        bot.streams = [
-            stream
-        ];
-        await this.service.getStreamsRepository().update(stream.id, stream);
-        return (bot);
-    }
-
-
     public async linkBotToStream(botId: number, streamId: number) {
         try {
-            const bot = await this.__linkBotToStream(botId, streamId);
+            const bot = await this.service.getBotsRepository().linkBotToStream(botId, streamId);
             const botResourceAsm = Container.get(BotResourceAsm);
             const resource = await botResourceAsm.toResource(bot);
             const response = {

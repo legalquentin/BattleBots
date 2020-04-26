@@ -1,11 +1,12 @@
 import { PlayerEntity } from "../database/entities/PlayerEntity";
+import IGameProfileResource from "../resources/IGameProfileResource";
 
 export abstract class PlayerService {
-    public abstract saveOrUpdate(player: PlayerEntity) : Promise<PlayerEntity>;
-    public abstract deleteOne(id: number) : Promise<Boolean>;
-    public abstract findOne(id: number) : Promise<PlayerEntity>;
-    public abstract search(options: any): Promise<PlayerEntity[]>;
-    public abstract findAll(): Promise<Array<PlayerEntity>>;
+    public abstract deleteOne(id: number);
+    public abstract findOne(id: number);
+    public abstract search(options: any);
+    public abstract findAll();
 
     public abstract playerExist(id: number);
+    public abstract register(player: IGameProfileResource, id: number);
 }

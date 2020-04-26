@@ -19,7 +19,6 @@ export class BotArenaServiceImpl implements BotArenaService {
         }
     }    
 
-
     public async delete(robotId: number, arenaId: number): Promise<Boolean> {
         try {
             const finded = await this.findOne(robotId, arenaId);

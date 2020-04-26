@@ -66,7 +66,7 @@ const config =  {
                     to: FakeRepository
                 }
             ],
-            "app": [
+            "production": [
                 {
                     bind: UserService,
                     to: UserServiceImpl
