@@ -23,7 +23,7 @@ export class BotsController {
     @Response<HttpResponseModel<IBotsResource>>(200, "bot list")
     @Security("ROLE_USER", "Bearer")
     public async list(){
-        return await this.botsService.findAll();
+        return this.botsService.findAll();
     }
 
     @Path("/")
@@ -45,7 +45,7 @@ export class BotsController {
     @Response<HttpResponseModel<IBotsResource>>(404, "bot not found")
     @Response<HttpResponseModel<IBotsResource>>(400)
     public async delete(@PathParam("id")id: number){
-        await this.botsService.deleteOne(id);
+        return this.botsService.deleteOne(id);
     }
 
     @Path("/")
@@ -56,7 +56,7 @@ export class BotsController {
     @Response<HttpResponseModel<IBotsResource>>(200, "bot updated")
     @Response<HttpResponseModel<IBotsResource>>(400)
     public async update(bot : IBotsResource){
-        await this.botsService.update(bot);
+        return  this.botsService.update(bot);
     }
 
     @Path("/:id")
@@ -68,7 +68,7 @@ export class BotsController {
     @Response<HttpResponseModel<IBotsResource>>(404, "bot not found")
     @Response<HttpResponseModel<IBotsResource>>(400)
     public async details(@PathParam("id") id: number){
-        return (await this.botsService.findOne(id));
+        return ( this.botsService.findOne(id));
     }
 
     @Path("/:botId/player/:playerId")
@@ -79,7 +79,7 @@ export class BotsController {
     @Response<HttpResponseModel<IBotsResource>>(404)
     @Response<HttpResponseModel<IBotsResource>>(400)
     public async linkBotToPlayer(@PathParam("botId") botId: number,@PathParam("playerId") playerId: number){
-        return (await this.botsService.linkBotToPlayer(botId, playerId));
+        return ( this.botsService.linkBotToPlayer(botId, playerId));
     }
 
     @Path("/:botId/stream/:streamId")
@@ -89,7 +89,7 @@ export class BotsController {
     @Response<HttpResponseModel<IBotsResource>>(200)
     @Response<HttpResponseModel<IBotsResource>>(400)
     public async linkBotToStream(@PathParam("streamId") streamId: number, @PathParam("botId") botId: number){
-        return (await this.botsService.linkBotToStream(botId, streamId));
+        return ( this.botsService.linkBotToStream(botId, streamId));
     }
 
     @Path("/user/:userId")
@@ -100,6 +100,6 @@ export class BotsController {
     @Response<HttpResponseModel<Array<IBotsResource>>>(404)
     @Response<HttpResponseModel<Array<IBotsResource>>>(400)
     public async findByUser(@PathParam("userId") userId: number) {
-        return (await this.botsService.findByUser(userId));
+        return ( this.botsService.findByUser(userId));
     }
 }

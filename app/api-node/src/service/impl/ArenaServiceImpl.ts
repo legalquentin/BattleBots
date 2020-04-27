@@ -35,7 +35,7 @@ export class ArenaServiceImpl implements ArenaService {
             };
 
             return Promise.resolve(new SendResource<HttpResponseModel<IArenaResource>>("ArenaController", response.httpCode, response));        
-        }    
+        }
     }
 
     public async findOne(id: number) {

@@ -101,6 +101,6 @@ export class GameController {
     @Response<HttpResponseModel<IGameResource>>(200)
     @Response<HttpResponseModel<IGameResource>>(400)
     public async linkArenaToGame(@PathParam("arenaId") arenaId: number, @PathParam("gameId") gameId: number){
-        return (await this.gameService.linkArenaToGame(arenaId, gameId));
+        return ( this.gameService.linkArenaToGame(arenaId, gameId));
     }
 }
