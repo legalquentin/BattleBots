@@ -1,5 +1,4 @@
 import { ArenaService } from "../ArenaService";
-import { ArenaEntity } from "../../database/entities/ArenaEntity";
 import IServiceFactory from "../IServiceFactory";
 import { Inject, Singleton, Container } from "typescript-ioc";
 import { EEntityStatus } from "../../../lib/EEntityStatus";
@@ -7,7 +6,6 @@ import { ArenaResourceAsm } from "../../resources/asm/ArenaResourceAsm";
 import HttpResponseModel from "../../resources/HttpResponseModel";
 import { SendResource } from "../../../lib/ReturnExtended";
 import { IArenaResource } from "../../resources/IArenaResource";
-import { Transaction } from "typeorm";
 
 @Singleton
 export class ArenaServiceImpl implements ArenaService {

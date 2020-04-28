@@ -1,4 +1,3 @@
-import { PlayerEntity } from "../database/entities/PlayerEntity";
 import IGameProfileResource from "../resources/IGameProfileResource";
 
 export abstract class PlayerService {

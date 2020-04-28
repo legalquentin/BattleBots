@@ -1,4 +1,3 @@
-import UserEntity from "../database/entities/UserEntity";
 import IUserResource from "../resources/IUserResource";
 
 export abstract class UserService {

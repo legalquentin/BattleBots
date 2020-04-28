@@ -241,106 +241,6 @@
 				]
 			}
 		},
-		"/api/arena/{id}/disable": {
-			"put": {
-				"operationId": "ArenaDisable",
-				"responses": {
-					"200": {
-						"description": "Arena disable",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIArenaResource"
-								}
-							}
-						}
-					},
-					"204": {
-						"description": "No content"
-					},
-					"400": {
-						"description": "",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIArenaResource"
-								}
-							}
-						}
-					}
-				},
-				"description": "",
-				"security": [
-					{
-						"Bearer": [
-							"ROLE_USER"
-						]
-					}
-				],
-				"parameters": [
-					{
-						"description": "",
-						"in": "path",
-						"name": "id",
-						"required": true,
-						"schema": {
-							"type": "number",
-							"format": "double"
-						}
-					}
-				]
-			}
-		},
-		"/api/arena/{id}/enable": {
-			"put": {
-				"operationId": "ArenaEnable",
-				"responses": {
-					"200": {
-						"description": "Arena enable",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIArenaResource"
-								}
-							}
-						}
-					},
-					"204": {
-						"description": "No content"
-					},
-					"400": {
-						"description": "",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIArenaResource"
-								}
-							}
-						}
-					}
-				},
-				"description": "",
-				"security": [
-					{
-						"Bearer": [
-							"ROLE_USER"
-						]
-					}
-				],
-				"parameters": [
-					{
-						"description": "",
-						"in": "path",
-						"name": "id",
-						"required": true,
-						"schema": {
-							"type": "number",
-							"format": "double"
-						}
-					}
-				]
-			}
-		},
 		"/api/arena/{arenaId}/bot/{botId}": {
 			"put": {
 				"operationId": "ArenaLinkBot",
@@ -847,132 +747,12 @@
 				]
 			}
 		},
-		"/api/games/start/{id}": {
-			"put": {
-				"operationId": "GameStart",
-				"responses": {
-					"200": {
-						"description": "game started",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIGameResource"
-								}
-							}
-						}
-					},
-					"204": {
-						"description": "No content"
-					},
-					"400": {
-						"description": "",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIGameResource"
-								}
-							}
-						}
-					},
-					"404": {
-						"description": "game not found",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIGameResource"
-								}
-							}
-						}
-					}
-				},
-				"description": "",
-				"security": [
-					{
-						"Bearer": [
-							"ROLE_USER"
-						]
-					}
-				],
-				"parameters": [
-					{
-						"description": "",
-						"in": "path",
-						"name": "id",
-						"required": true,
-						"schema": {
-							"type": "number",
-							"format": "double"
-						}
-					}
-				]
-			}
-		},
-		"/api/games/stop/{id}": {
-			"put": {
-				"operationId": "GameStop",
-				"responses": {
-					"200": {
-						"description": "game stopped",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIGameResource"
-								}
-							}
-						}
-					},
-					"204": {
-						"description": "No content"
-					},
-					"400": {
-						"description": "",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIGameResource"
-								}
-							}
-						}
-					},
-					"404": {
-						"description": "game not found",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIGameResource"
-								}
-							}
-						}
-					}
-				},
-				"description": "",
-				"security": [
-					{
-						"Bearer": [
-							"ROLE_USER"
-						]
-					}
-				],
-				"parameters": [
-					{
-						"description": "",
-						"in": "path",
-						"name": "id",
-						"required": true,
-						"schema": {
-							"type": "number",
-							"format": "double"
-						}
-					}
-				]
-			}
-		},
-		"/api/games/create": {
+		"/api/games/": {
 			"post": {
-				"operationId": "GameCreate",
+				"operationId": "GameInsert",
 				"responses": {
-					"201": {
-						"description": "game created",
+					"200": {
+						"description": "create game",
 						"content": {
 							"application/json;charset=UTF-8": {
 								"schema": {
@@ -1005,7 +785,7 @@
 				],
 				"requestBody": {
 					"content": {
-						"appplication/json;charset=UTF-8": {
+						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/IGameResource"
 							}
@@ -1013,69 +793,7 @@
 					},
 					"required": true
 				}
-			}
-		},
-		"/api/games/end/{id}": {
-			"put": {
-				"operationId": "GameEnd",
-				"responses": {
-					"200": {
-						"description": "game ended",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIGameResource"
-								}
-							}
-						}
-					},
-					"204": {
-						"description": "No content"
-					},
-					"400": {
-						"description": "",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIGameResource"
-								}
-							}
-						}
-					},
-					"404": {
-						"description": "game not found",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIGameResource"
-								}
-							}
-						}
-					}
-				},
-				"description": "",
-				"security": [
-					{
-						"Bearer": [
-							"ROLE_USER"
-						]
-					}
-				],
-				"parameters": [
-					{
-						"description": "",
-						"in": "path",
-						"name": "id",
-						"required": true,
-						"schema": {
-							"type": "number",
-							"format": "double"
-						}
-					}
-				]
-			}
-		},
-		"/api/games/": {
+			},
 			"get": {
 				"operationId": "GameList",
 				"responses": {

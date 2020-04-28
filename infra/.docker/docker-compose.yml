@@ -17,6 +17,7 @@ services:
     working_dir: /app
     environment: 
       NODE_ENV: production
+      ENV: prod
     ports: 
       - "8080:8080"
     container_name: battlebots-node

@@ -48,16 +48,14 @@ export class AuthenticationServiceImpl implements AuthenticationService {
 
                     return Promise.resolve(new SendResource<HttpResponseModel<ITokenHttp>>("UserController", response.httpCode, response));
                 }
-                else {
-                    const response : HttpResponseModel<ITokenHttp> = {
-                        httpCode: 404,
-                        data: null,
-                        message: "User not found"
-                    };
-
-                    return Promise.resolve(new SendResource<HttpResponseModel<ITokenHttp>>("UserController", response.httpCode, response));
-                }
             }
+            const response : HttpResponseModel<ITokenHttp> = {
+                httpCode: 404,
+                data: null,
+                message: "User not found"
+            };
+
+            return Promise.resolve(new SendResource<HttpResponseModel<ITokenHttp>>("UserController", response.httpCode, response));
         }
         catch (e){
             const response : HttpResponseModel<ITokenHttp> = {

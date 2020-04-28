@@ -1,4 +1,3 @@
-import { RobotsEntity } from "../database/entities/RobotsEntity";
 import { IBotsResource } from "../resources/IBotsResource";
 import { SendResource } from "../../lib/ReturnExtended";
 import HttpResponseModel from "../resources/HttpResponseModel"; 
