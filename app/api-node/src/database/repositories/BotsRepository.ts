@@ -83,9 +83,11 @@ export class BotsRepository extends Repository<RobotsEntity> {
             streams.push(stream);
             bot.streams = streams;
         }
-        bot.streams = [
-            stream
-        ];
+        else {
+            bot.streams = [
+                stream
+            ];
+        }
         await streamRepository.update(stream.id, stream);
         return (bot);
     }
