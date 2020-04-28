@@ -7,6 +7,7 @@ import { ArenaResourceAsm } from "../../resources/asm/ArenaResourceAsm";
 import HttpResponseModel from "../../resources/HttpResponseModel";
 import { SendResource } from "../../../lib/ReturnExtended";
 import { IArenaResource } from "../../resources/IArenaResource";
+import { Transaction } from "typeorm";
 
 @Singleton
 export class ArenaServiceImpl implements ArenaService {

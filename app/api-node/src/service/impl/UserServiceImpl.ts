@@ -25,6 +25,7 @@ export class UserServiceImpl implements UserService {
         const userResourceAsm = Container.get(UserResourceAsm);
         const entity = userResourceAsm.toEntity(user);
 
+        entity.hash = hashSync(entity.hash, this.config.genSalt());
         try {
             const savedUser = await this.factory.getUserRepository().saveOrUpdate(entity);
             const resourceId: IResourceId = {
