@@ -18,7 +18,7 @@ export class GameRepository extends Repository<GameEntity> {
         this.metadata = getConnection(process.env.NODE_ENV).getMetadata(GameEntity);
     }
 
-    getOne(id: number){
+    public getOne(id: number){
         return (this.
         createQueryBuilder("game").
         leftJoinAndSelect("game.robots", "robots").
@@ -36,7 +36,7 @@ export class GameRepository extends Repository<GameEntity> {
         getOne());
     }
 
-    async linkStreamToGame(streamId: number, gameId: number){
+    public async linkStreamToGame(streamId: number, gameId: number){
         const streamRepository = Container.get(StreamsRepository);
         const gameRepository = Container.get(GameRepository);
         const stream = await streamRepository.findOne(streamId);

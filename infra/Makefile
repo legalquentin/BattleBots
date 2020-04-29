@@ -7,7 +7,10 @@ prepare:
 	cd ../app/vuejs && yarn
 
 run\:battlebots:
-	cd .docker && docker-compose up -d
+	cd .docker && docker-compose up --build --remove-orphans
+
+test\:battlebots:
+	cd ../app/api-node && npm test
 
 logs\:postgres:
 	cd .docker && docker logs db && make _back

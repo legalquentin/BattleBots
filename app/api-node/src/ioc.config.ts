@@ -29,10 +29,55 @@ import { StreamsServiceImpl } from './service/impl/StreamsServiceImpl';
 import { BotArenaRepository } from './database/repositories/BotArenaRepository';
 import { BotArenaService } from './service/BotArenaService';
 import { BotArenaServiceImpl } from './service/impl/BotArenaServiceImpl';
+import { BotGameRepository } from './database/repositories/BotGameRepository';
 
 const config =  {
         env: {
             "test": [
+                {
+                    bind: UserService,
+                    to: UserServiceImpl
+                },
+                {
+                    bind: GameService,
+                    to: GameServiceImpl
+                },
+                {
+                    bind: ArenaService,
+                    to: ArenaServiceImpl
+                },
+                {
+                    bind: AuthenticationService,
+                    to: AuthenticationServiceImpl
+                },
+                {
+                    bind: PlayerService,
+                    to: PlayerServiceImpl
+                },
+                {
+                    bind: BotsService,
+                    to: BotsServiceImpl
+                },
+                {
+                    bind: LogService,
+                    to: LogServiceImpl
+                },
+                {
+                    bind: StreamsService,
+                    to: StreamsServiceImpl
+                },
+                {
+                    bind: BotArenaService,
+                    to: BotArenaServiceImpl
+                },
+                {
+                    bind: IServiceFactory,
+                    to: ServiceFactory
+                },
+                {
+                    bind: IConfig,
+                    to: Config
+                },
                 {
                     bind: PlayerRepository,
                     to: FakeRepository 
@@ -64,7 +109,11 @@ const config =  {
                 {
                     bind: BotArenaRepository,
                     to: FakeRepository
-                }
+                },
+                {
+                    bind: BotGameRepository,
+                    to: FakeRepository
+                },
             ],
             "production": [
                 {
@@ -142,6 +191,10 @@ const config =  {
                 {
                     bind: BotArenaRepository,
                     to: BotArenaRepository
+                },
+                {
+                    bind: BotGameRepository,
+                    to: BotGameRepository
                 }
         ]
     }

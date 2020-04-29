@@ -9,7 +9,6 @@ import HttpResponseModel from "../resources/HttpResponseModel";
 import { SendResource } from "../../lib/ReturnExtended";
 import * as _ from "lodash";
 import { Container } from "typescript-ioc";
-import { Request } from "express-serve-static-core";
 import { Consumes, Produces, Response } from "typescript-rest-swagger";
 import { UserService } from "../service/UserService";
 import { AuthenticationService } from "../service/AuthenticationService";
@@ -84,7 +83,7 @@ export class UserController {
     @Response<HttpResponseModel<IUserResource>>(200, "User find")
     @Response<HttpResponseModel<IUserResource>>(404, "User not found")
     @GET
-    public async profile(@ContextRequest req: Request): Promise<SendResource<HttpResponseModel<IUserResource>>> {
+    public async profile(@ContextRequest req): Promise<SendResource<HttpResponseModel<IUserResource>>> {
         return (this.read(req.user.id));
     }
 

@@ -14,7 +14,7 @@ export class UserRepository extends Repository<UserEntity> {
         this.metadata = getConnection(process.env.NODE_ENV).getMetadata(UserEntity);
     }
 
-    async saveOrUpdate(user: UserEntity){
+    public async saveOrUpdate(user: UserEntity){
         try {
             if (user.id)
             {
@@ -23,8 +23,8 @@ export class UserRepository extends Repository<UserEntity> {
             }
             else {
     
-                const saved : UserEntity = await this.save(user);
-                return (saved);
+                await this.insert(user);
+                return (user);
             }
         }
         catch (e){

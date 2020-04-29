@@ -7,9 +7,9 @@ import { PassportAuthenticator, Server } from 'typescript-rest';
 import { Container } from 'typescript-ioc';
 import config from "./ioc.config";
 import IConfig from './service/IConfig';
-import { UserService } from './service/UserService';
 import UserEntity from "../src/database/entities/UserEntity";
 import { NamespaceConfiguration } from 'typescript-ioc/dist/model';
+import { UserRepository } from './database/repositories/UserRepository';
 
 export class ApiServer {
     public PORT: number = 8080; // +process.env.PORT || 8080;
@@ -115,14 +115,14 @@ export class ApiServer {
 
     private configureAuthenticator() {
         this.serviceConfig = Container.get(IConfig);
-        const userService = Container.get(UserService);
+        const userRepository = Container.get(UserRepository);
         const JWT_SECRET: string = this.serviceConfig.getSecret();
         const jwtConfig: StrategyOptions = {
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             secretOrKey: Buffer.from(JWT_SECRET)
         };
         const strategy = new Strategy(jwtConfig, async (payload: any, done: (err: any, user: any) => void) => {
-            const user : UserEntity = await userService.findOne(payload.sub);
+            const user = await userRepository.findOne(payload.sub);
 
             if (!user){
                 done("User not exist", null);
@@ -142,7 +142,6 @@ export class ApiServer {
                 failWithError: true,
             }
         });
-
         Server.registerAuthenticator(authenticator, "Bearer");
     }
 }
