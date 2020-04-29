@@ -16,8 +16,6 @@ services:
     networks: 
       - production
     restart: always
-    ports: 
-      - "3000:8080"
   production:
     build: ../../app/api-node
     working_dir: /app
@@ -30,7 +28,7 @@ services:
     networks: 
       - production
     restart: always
-    command: wait-for-it/wait-for-it.sh db:5432 -- npm run start:docker-production
+    command: wait-for-it/wait-for-it.sh db_production:5432 -- npm run start:docker-production
   jenkins_production:
     image: jenkinsci/blueocean
     container_name: jenkins-production
@@ -39,8 +37,6 @@ services:
     volumes: 
       - "jenkins-data:/var/jenkins_home"
       - "jenkins-docker-certs:/certs/client:ro"
-    ports: 
-      - "5000:8080"
   db_staging:
     image: postgres:11.5
     restart: always
@@ -57,8 +53,6 @@ services:
     networks: 
       - staging
     restart: always
-    ports: 
-      - "3001:8080"
   staging:
     build: ../../app/api-node
     working_dir: /app
@@ -71,7 +65,7 @@ services:
     networks: 
       - staging
     restart: always
-    command: wait-for-it/wait-for-it.sh db:5432 -- npm run start:docker-staging
+    command: wait-for-it/wait-for-it.sh db_staging:5432 -- npm run start:docker-staging
   jenkins_staging:
     image: jenkinsci/blueocean
     container_name: jenkins-staging
@@ -81,8 +75,6 @@ services:
     volumes: 
       - "jenkins-data:/var/jenkins_home"
       - "jenkins-docker-certs:/certs/client:ro"
-    ports: 
-      - "5001:8080"
   gateway: 
     image: nginx
     volumes:
@@ -97,15 +89,7 @@ services:
 
 networks: 
   production:
- #   ipam:
-   #   driver: default
-    #  config:
-    #    - subnet: "172.16.28.0/24"
   staging:
- #   ipam:
-  #    driver: default
-  #    config:
-    #    - subnet: "172.16.27.0/24"
 
 volumes: 
   jenkins-data:
