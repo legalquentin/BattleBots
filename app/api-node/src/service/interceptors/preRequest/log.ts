@@ -1,11 +1,12 @@
 import { Container } from "typescript-ioc";
-import { LogService } from "../../LogService";
-import { UserService } from "../../UserService";
 import { LogEntity } from "../../../database/entities/LogEntity";
+import { LogRepository } from "../../../database/repositories/LogRepository";
+import * as fs from "fs";
+import { UserRepository } from "../../../database/repositories/UserRepository";
 
 export async function preRequestLog(req: any){
-    const logService = Container.get(LogService);
-    const userService  = Container.get(UserService);
+    const logRepository = Container.get(LogRepository);
+    const userRepository  = Container.get(UserRepository);
     const log = new LogEntity();
 
     log.complete = 0;
@@ -17,22 +18,22 @@ export async function preRequestLog(req: any){
     }
     if (req.user){
         try {
-            const user = await userService.findOne(req.user.sub);
+            const user = await userRepository.findOne(req.user.sub);
 
             log.user = user;
         }
         catch (e)
         {
-            console.log(`log - error - ${e.message}`);
+            fs.appendFileSync(`./log.txt`, `log - preRequest - error - ${e.message}\n`);
         }
     }
     try {
-        const saved = await logService.save(log);
+        const saved = await logRepository.save(log);
         req.log = {
             id: saved.id
         };
     }
     catch (e){
-        console.log(`log - error - ${e.message}`);
+         fs.appendFileSync(`./log.txt`, `log - preRequest - error - ${e.message}\n`);
     }
 }

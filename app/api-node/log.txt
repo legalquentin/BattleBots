@@ -32,3 +32,15 @@ Error {"diagnosticText":"src/resources/asm/ArenaResourceAsm.ts(4,1): error TS613
 Error {"diagnosticText":"src/controller/BotsController.ts(11,1): error TS6133: 'IStreamResource' is declared but its value is never read.\n","diagnosticCodes":[6133]}
 Error {"diagnosticText":"src/controller/ArenaController.ts(11,1): error TS6133: 'EEntityStatus' is declared but its value is never read.\n","diagnosticCodes":[6133]}
 Error {"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":5432}
+log - error - Cannot read property 'save' of undefinedlog - error - Cannot read property 'save' of undefinedlog - error - Cannot read property 'save' of undefinedlog - error - Cannot read property 'save' of undefinedlog - error - Cannot read property 'save' of undefinedlog - error - Cannot read property 'save' of undefinedlog - error - Cannot read property 'save' of undefined
+log - error - Cannot read property 'save' of undefined
+log - error - Cannot read property 'save' of undefined
+log - error - Cannot read property 'save' of undefined
+log - error - Cannot read property 'save' of undefined
+log - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
