@@ -9,8 +9,8 @@
     "dev": "cross-env ENV=prod && cross-env NODE_ENV=production nodemon",
     "start": "npm run swagger && cross-env ENV=prod && cross-env NODE_ENV=production ts-node src/index.ts",
     "start:production": "npm run build && cp -r config dist && cp swagger.yaml dist && cd dist && node src/index.js",
-    "start:docker-production": "npm test && cross-env NODE_ENV=production ENV=prod && concurrently 'npm:typeorm:migration:run' 'npm:start:production'",
-    "start:docker-staging": "npm test && cross-env NODE_ENV=staging ENV=dev && concurrently 'npm:typeorm:migration:run' 'npm:start:production'",
+    "start:docker-production": "npm test && cross-env NODE_ENV=production ENV=prod && concurrently 'npm:typeorm:migration:run:production' 'npm:start:production'",
+    "start:docker-staging": "npm test && cross-env NODE_ENV=staging ENV=dev && concurrently 'npm:typeorm:migration:run:staging' 'npm:start:production'",
     "start:cluster": "cross-env ENV=prod && npm i && npm run swagger && cross-env NODE_ENV=production ts-node src/cluster.ts",
     "build": "npm run clean && npm run tsc && npm run swagger",
     "clean": "rm -rf dist",
@@ -23,8 +23,10 @@
     "tsc": "rm -rf dist && tsc && cp -r src/public dist/src",
     "typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ./src/ormconfig.ts",
     "typeorm:migration:create": "npm run typeorm:cli -- migration:create -n ",
-    "typeorm:migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run -c production",
-    "typeorm:migration:revert": "ts-node ./node_modules/typeorm/cli.js migration:revert -c production"
+    "typeorm:migration:run:production": "ts-node ./node_modules/typeorm/cli.js migration:run -c production",
+    "typeorm:migration:revert:production": "ts-node ./node_modules/typeorm/cli.js migration:revert -c production",
+    "typeorm:migration:run:staging": "ts-node ./node_modules/typeorm/cli.js migration:run -c staging",
+    "typeorm:migration:revert:staging": "ts-node ./node_modules/typeorm/cli.js migration:revert -c staging"
   },
   "dependencies": {
     "@mojotech/json-type-validation": "^3.1.0",

@@ -7,7 +7,6 @@ import { PassportAuthenticator, Server } from 'typescript-rest';
 import { Container } from 'typescript-ioc';
 import config from "./ioc.config";
 import IConfig from './service/IConfig';
-import UserEntity from "../src/database/entities/UserEntity";
 import { NamespaceConfiguration } from 'typescript-ioc/dist/model';
 import { UserRepository } from './database/repositories/UserRepository';
 

@@ -16,6 +16,8 @@ services:
     networks: 
       - production
     restart: always
+    ports: 
+      - "3000:8080"
   production:
     build: ../../app/api-node
     working_dir: /app
@@ -24,74 +26,14 @@ services:
       ENV: prod
     ports: 
       - "8080:8080"
-    container_name: battlebots-node
+    container_name: production
     networks: 
       - production
     restart: always
     command: wait-for-it/wait-for-it.sh db_production:5432 -- npm run start:docker-production
-  jenkins_production:
-    image: jenkinsci/blueocean
-    container_name: jenkins-production
-    networks: 
-      - production
-    volumes: 
-      - "jenkins-data:/var/jenkins_home"
-      - "jenkins-docker-certs:/certs/client:ro"
-  db_staging:
-    image: postgres:11.5
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: p@ssw0rd
-      POSTGRES_USER: root
-      POSTGRES_DB: db
-    container_name: db_staging
-    networks: 
-      - staging
-  admin_staging:
-    image: adminer
-    container_name: admin-staging
-    networks: 
-      - staging
-    restart: always
-  staging:
-    build: ../../app/api-node
-    working_dir: /app
-    environment: 
-      NODE_ENV: dev
-      ENV: dev
-    ports: 
-      - "8081:8080"
-    container_name: battlebots-node-staging
-    networks: 
-      - staging
-    restart: always
-    command: wait-for-it/wait-for-it.sh db_staging:5432 -- npm run start:docker-staging
-  jenkins_staging:
-    image: jenkinsci/blueocean
-    container_name: jenkins-staging
-    networks: 
-      - staging
-    restart: always
-    volumes: 
-      - "jenkins-data:/var/jenkins_home"
-      - "jenkins-docker-certs:/certs/client:ro"
-  gateway: 
-    image: nginx
-    volumes:
-      - ./proxy/production:/etc/nginx/conf.d/
-      - ./proxy/staging:/etc/nginx/conf.d/
-    ports:
-      - "80:80"
-    environment:
-      - NGINX_HOST=hardwar.ddns.net
-      - NGINX_PORT=80
-    command: /bin/bash -c nginx -g 'daemon off;'"
+
 
 networks: 
   production:
-  staging:
 
-volumes: 
-  jenkins-data:
-  jenkins-docker-certs:
 
