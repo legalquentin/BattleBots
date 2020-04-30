@@ -123,7 +123,6 @@ export class ApiServer {
         const strategy = new Strategy(jwtConfig, async (payload: any, done: (err: any, user: any) => void) => {
             const user = await userRepository.findOne(payload.sub);
 
-            console.log(user);
             if (!user){
                 done("User not exist", null);
             }
