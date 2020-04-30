@@ -1,0 +1,34 @@
+Error {"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":5432}
+Error {"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":5432}
+Error {"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":5432}
+Error {"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":5432}
+Error {"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":5432}
+Error {"diagnosticText":"src/controller/BotsController.ts(11,13): error TS6133: 'botsService' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/controller/GameController.ts(11,13): error TS6133: 'gameService' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/controller/GameController.ts(11,13): error TS6133: 'gameService' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/controller/StreamsController.ts(11,13): error TS6133: 'streamsService' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"name":"error","length":106,"severity":"FATAL","code":"57P03","file":"postmaster.c","line":"2211","routine":"ProcessStartupPacket"}
+Error {"diagnosticText":"src/resources/asm/ArenaResourceAsm.ts(3,1): error TS6133: 'RobotsArenaEntity' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"name":"MissingPrimaryColumnError","message":"Entity \"RobotsArenaEntity\" does not have a primary column. Primary column is required to have in all your entities. Use @PrimaryColumn decorator to add a primary column to your entity."}
+Error {"name":"MissingPrimaryColumnError","message":"Entity \"RobotsArenaEntity\" does not have a primary column. Primary column is required to have in all your entities. Use @PrimaryColumn decorator to add a primary column to your entity."}
+Error {"diagnosticText":"src/resources/asm/GameProfileResourceAsm.ts(4,10): error TS6133: 'Inject' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/resources/asm/GameProfileResourceAsm.ts(4,22): error TS6133: 'Container' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/resources/asm/UserResourceAsm.ts(5,21): error TS6133: 'Container' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/resources/asm/ArenaResourceAsm.ts(11,13): error TS6133: 'botArenaService' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/resources/asm/ArenaResourceAsm.ts(5,1): error TS6133: 'BotArenaService' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/resources/asm/ArenaResourceAsm.ts(43,28): error TS1005: ';' expected.\n","diagnosticCodes":[1005]}
+Error {}
+Error {}
+Error {}
+Error {}
+Error {}
+Error {"diagnosticText":"src/controller/ArenaController.ts(19,13): error TS6133: 'botService' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/controller/BotsController.ts(7,1): error TS6133: 'RobotsEntity' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/controller/GameController.ts(12,1): error TS6133: 'IArenaResource' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/resources/asm/GameResourceAsm.ts(3,10): error TS6133: 'Inject' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/controller/BotsController.ts(53,63): error TS2345: Argument of type 'RobotsEntity' is not assignable to parameter of type 'IBotsResource'.\n  Property 'id' is optional in type 'RobotsEntity' but required in type 'IBotsResource'.\nsrc/controller/BotsController.ts(121,65): error TS2345: Argument of type 'RobotsEntity' is not assignable to parameter of type 'IBotsResource'.\n","diagnosticCodes":[2345,2345]}
+Error {"diagnosticText":"src/resources/asm/ArenaResourceAsm.ts(78,13): error TS6133: 'botsArenaIsInitialized' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/resources/asm/ArenaResourceAsm.ts(4,1): error TS6133: 'RobotsArenaEntity' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/controller/BotsController.ts(11,1): error TS6133: 'IStreamResource' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/controller/ArenaController.ts(11,1): error TS6133: 'EEntityStatus' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":5432}

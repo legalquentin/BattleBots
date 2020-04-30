@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, JoinColumn, ManyToOne } from "typeorm";
+import { Entity, JoinColumn, ManyToOne } from "typeorm";
 import { GameEntity } from "./GameEntity";
 import { RobotsEntity } from "./RobotsEntity";
 
@@ -6,14 +6,19 @@ import { RobotsEntity } from "./RobotsEntity";
     name: "robots_game"
 })
 export class RobotGameEntity {
-    @PrimaryGeneratedColumn({name: "id"})
-    public id: number;
-
     @JoinColumn({name: "bot_id"})
-    @ManyToOne(type => RobotsEntity, robot => robot.robotGame)
-    public bot: RobotsEntity;
+    @ManyToOne(type => RobotsEntity, robot => robot.robotGame, {
+        eager: true,
+        cascade: ["insert", "update"],
+        primary: true
+    })
+    public bot?: RobotsEntity;
 
     @JoinColumn({name: "game_id"})
-    @ManyToOne(type => GameEntity, game => game.robots)
-    public game: GameEntity;
+    @ManyToOne(type => GameEntity, game => game.robots, {
+        eager: true,
+        cascade: ["insert", "update"],
+        primary: true
+    })
+    public game?: GameEntity;
 }

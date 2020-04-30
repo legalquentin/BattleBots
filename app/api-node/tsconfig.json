@@ -1,7 +1,7 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "declaration": true,
+    "target": "ES6",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "module": "commonjs",
@@ -13,14 +13,14 @@
     "noUnusedParameters": false,
     "noUnusedLocals": true,
     "outDir": "dist",
-    "skipLibCheck": true,
+    "skipLibCheck": false,
     "sourceMap": true,
     "strictNullChecks": false,
-    "target": "es2016"
   },
   "include": [
     "src/**/*.ts",
-    "test/**/*.ts"
+    "test/**/*.ts",
+    "lib/**/*.ts"
   ],
   "exclude": [
     "node_modules"

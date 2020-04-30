@@ -13,4 +13,22 @@ export class UserRepository extends Repository<UserEntity> {
         this.manager = getManager(process.env.NODE_ENV);
         this.metadata = getConnection(process.env.NODE_ENV).getMetadata(UserEntity);
     }
+
+    public async saveOrUpdate(user: UserEntity){
+        try {
+            if (user.id)
+            {
+                await this.update(user.id, user);
+                return (user);
+            }
+            else {
+    
+                await this.insert(user);
+                return (user);
+            }
+        }
+        catch (e){
+            throw e;
+        } 
+    }
 }

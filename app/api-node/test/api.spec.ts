@@ -5,19 +5,15 @@ import * as sinon from "sinon";
 import { hashSync } from "bcrypt";
 import IConfig from '../src/service/IConfig';
 import { Container } from "typescript-ioc";
-import ServiceFactory from '../src/service/impl/ServiceFactory';
 import { ApiServer } from '../src/api-server';
-import { AuthenticationService } from '../src/service/AuthenticationService';
-//import { UserService } from '../src/service/UserService';
+import IServiceFactory from '../src/service/IServiceFactory';
 
 const client: request.RequestAPI<request.Request, request.CoreOptions, request.RequiredUriUrl>
     = request.defaults({ baseUrl: `http://localhost:${8080}` });
 
 let apiServer = null;
 let config = null;
-let serviceFactory = null;
-let authService = null;
-//let userService = null;
+let serviceFactory : IServiceFactory = null;
 
 describe('API Testing', async () => {
 
@@ -26,9 +22,7 @@ describe('API Testing', async () => {
 
         await apiServer.start();
         config = Container.get(IConfig);
-        serviceFactory = Container.get(ServiceFactory);
-        authService = Container.get(AuthenticationService);
-    //     userService = Container.get(UserService);
+        serviceFactory = Container.get(IServiceFactory);
     });
 
     after(async () => {
@@ -39,7 +33,7 @@ describe('API Testing', async () => {
         let callbackFind = null;
 
         before(() => {
-            callbackFind = sinon.stub(authService, "authenticate");
+            callbackFind = sinon.stub(serviceFactory.getUserRepository(), "findOne");
             callbackFind.returns(Promise.resolve(null));
         });
 
@@ -48,7 +42,7 @@ describe('API Testing', async () => {
         });
 
         it("should not found user", (done) => {
-            client.post('/users/login', {
+            client.post('/api/users/login', {
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -82,8 +76,7 @@ describe('API Testing', async () => {
                 hash: hashSync("azerty123", config.genSalt()),
                 address: "7 rue des ulysses"
             };
-
-            callbackInsert = sinon.stub(serviceFactory.getUserRepository(), "save");
+            callbackInsert = sinon.stub(serviceFactory.getUserRepository(), "saveOrUpdate");
             callbackInsert.resolves(o);
         });
 
@@ -92,7 +85,7 @@ describe('API Testing', async () => {
         });
 
         it('should insert and retrieve user', (done) => {
-            client.post('/users', {
+            client.post('/api/users', {
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -117,7 +110,7 @@ describe('API Testing', async () => {
                         address: "7 rue des ulysses"
                 });
                 expect(response.statusCode).to.equal(201);
-                client.post('/users/login', {
+                client.post('/api/users/login', {
                     headers: {
                         "Content-Type": "application/json"
                     },
@@ -142,10 +135,10 @@ describe('API Testing', async () => {
     describe("User#3", () => {
         let token = null;
         let callbackInsert = null;
-      //  let callbackFind = null;
         let callbackFind2 = null;
         let callbackPlayerInsert = null;
         let callbackFind3 = null;
+        let callFindOne = null;
 
         before(() => {
             const o = {
@@ -157,17 +150,14 @@ describe('API Testing', async () => {
                 hash: hashSync("azerty123", config.genSalt()),
                 address: "7 rue des ulysses"
             };
-
-           // callbackFind = sinon.stub(serviceFactory.getUserRepository(), "find");
-            callbackInsert = sinon.stub(serviceFactory.getUserRepository(), "save");
-            callbackPlayerInsert = sinon.stub(serviceFactory.getPlayerRepository(), "save");
+            callbackInsert = sinon.stub(serviceFactory.getUserRepository(), "saveOrUpdate");
+            callbackPlayerInsert = sinon.stub(serviceFactory.getPlayerRepository(), "saveOrUpdate");
             callbackInsert.resolves(o);
             callbackPlayerInsert.resolves({
                 id: 1,
                 total_points: 0,
                 user: o
             });
-            //callbackFind.resolves([]);
         });
 
         after(() => {
@@ -177,7 +167,7 @@ describe('API Testing', async () => {
         });
 
         it('should list user.', (done) => {
-            client.post('/users', {
+            client.post('/api/users', {
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -192,7 +182,6 @@ describe('API Testing', async () => {
                 })
             }, (err, response, body) => {
                 expect(response.statusCode).to.equal(201);
-               // callbackFind.restore();
                 callbackFind2 = sinon.stub(serviceFactory.getUserRepository(), "findOne");
                 callbackFind2.resolves({
                         id: 1,
@@ -203,7 +192,7 @@ describe('API Testing', async () => {
                         hash: hashSync("azerty123", config.genSalt()),
                         address: "7 rue des ulysses"
                 });
-                client.post('/users/login', {
+                client.post('/api/users/login', {
                     headers: {
                         "Content-Type": "application/json"
                     },
@@ -216,6 +205,7 @@ describe('API Testing', async () => {
                     const data = JSON.parse(body).data.data;
                     token = data;
                     callbackFind2.restore();
+                    callFindOne = sinon.stub(serviceFactory.getUserRepository(), "findOne");
                     callbackFind3 = sinon.stub(serviceFactory.getUserRepository(), "find");
                     callbackFind3.resolves([
                         {
@@ -224,12 +214,24 @@ describe('API Testing', async () => {
                             lastname: "SIMOES",
                             pseudo: "simoes_t",
                             email: "simoes_t@etna-alternance.net",
+                            roles: "ROLE_USER",
                             address: "7 rue des ulysses",
                             createdAt: new Date(),
                             updatedAt: new Date()
                         }
                     ]);
-                    client.get('/users', {
+                    callFindOne.resolves({
+                            id: 1,
+                            firstname: "Thomas",
+                            lastname: "SIMOES",
+                            pseudo: "simoes_t",
+                            email: "simoes_t@etna-alternance.net",
+                            roles: "ROLE_USER",
+                            address: "7 rue des ulysses",
+                            createdAt: new Date(),
+                            updatedAt: new Date()
+                    })
+                    client.get('/api/users', {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }
@@ -241,6 +243,7 @@ describe('API Testing', async () => {
                             expect(response.statusCode).to.equal(200);
                             const data = JSON.parse(body);
                             expect(data.data.length).to.equal(1);
+                            callFindOne.restore();
                         }
                         done();
                     });

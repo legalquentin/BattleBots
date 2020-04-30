@@ -1,7 +1,11 @@
 import { ArenaService } from "../ArenaService";
-import { ArenaEntity } from "../../database/entities/ArenaEntity";
 import IServiceFactory from "../IServiceFactory";
-import { Inject, Singleton } from "typescript-ioc";
+import { Inject, Singleton, Container } from "typescript-ioc";
+import { EEntityStatus } from "../../../lib/EEntityStatus";
+import { ArenaResourceAsm } from "../../resources/asm/ArenaResourceAsm";
+import HttpResponseModel from "../../resources/HttpResponseModel";
+import { SendResource } from "../../../lib/ReturnExtended";
+import { IArenaResource } from "../../resources/IArenaResource";
 
 @Singleton
 export class ArenaServiceImpl implements ArenaService {
@@ -9,63 +13,135 @@ export class ArenaServiceImpl implements ArenaService {
     @Inject
     private factory: IServiceFactory;
 
-    public async saveOrUpdate(arena: ArenaEntity): Promise<ArenaEntity>
-    {
-        if (arena.id) {
-            try {
-                const toFind = await this.factory.getArenaRepository().findOne(arena.id);
-
-                toFind.arena_name = arena.arena_name;
-                toFind.available = arena.available;
-                await this.factory.getArenaRepository().update(toFind.id, toFind);
-                return toFind;
-            }
-            catch (e){
-                return Promise.reject(e.message);
-            }
-        }
-        else {
-            try {
-                await this.factory.getArenaRepository().save(arena);
-                return Promise.resolve(arena);
-            }
-            catch (e){
-                return Promise.reject(null);
-            }
-        }
-    }
-
-    public async findOne(id: number): Promise<ArenaEntity>
-    {
+    public async saveOrUpdate(arena: IArenaResource){
+        const arenaResourceAsm = Container.get(ArenaResourceAsm);
+        const toSave = await arenaResourceAsm.toEntity(arena);
         try {
-            const arena = await this.factory.getArenaRepository().findOne(id);
+            const saved = await this.factory.getArenaRepository().saveOrUpdate(toSave);
+            const resource = await arenaResourceAsm.toResource(saved);
+            const response : HttpResponseModel<IArenaResource> = {
+                httpCode: 201,
+                message: "Arena inserted",
+                data: resource
+            };
 
-            return (Promise.resolve(arena));
+            return Promise.resolve(new SendResource<HttpResponseModel<IArenaResource>>("ArenaController", response.httpCode, response));       
         }
         catch (e){
-            return (Promise.reject(e.message));
+            const response : HttpResponseModel<IArenaResource> = {
+                httpCode: 400,
+                message: e.message
+            };
+
+            return Promise.resolve(new SendResource<HttpResponseModel<IArenaResource>>("ArenaController", response.httpCode, response));        
         }
     }
 
-    public findAll(): Promise<Array<ArenaEntity>>
-    {
-        return this.factory.getArenaRepository().find();
-    }
-
-    public async deleteOne(id: number) : Promise<Boolean>
-    {
+    public async findOne(id: number) {
+        const arenaResourceAsm = Container.get(ArenaResourceAsm);
         try {
             const arena = await this.factory.getArenaRepository().findOne(id);
-
-            if (arena){
-                await this.factory.getArenaRepository().delete(arena);
-
-                return (true);
+            if (!arena){
+                const response: HttpResponseModel<IArenaResource> = {
+                    httpCode: 404,
+                    message: "Arena not found",
+                };
+    
+                return (Promise.resolve(new SendResource<HttpResponseModel<IArenaResource>>("ArenaController", response.httpCode, response)));
             }
-            return (false);
+            const resource = await arenaResourceAsm.toResource(arena);
+            const response: HttpResponseModel<IArenaResource> = {
+                httpCode: 200,
+                message: "Arena details",
+                data: resource
+            };
+
+            return (Promise.resolve(new SendResource<HttpResponseModel<IArenaResource>>("ArenaController", response.httpCode, response)));
+        }
+        catch (e) {
+            const response : HttpResponseModel<IArenaResource> = {
+                httpCode: 400,
+                message: e.message
+            };
+
+            return Promise.resolve(new SendResource<HttpResponseModel<IArenaResource>>("ArenaController", response.httpCode, response));        
+        }
+    }
+
+    public async findAll(){
+        const arenaResourceAsm = Container.get(ArenaResourceAsm);
+        try {
+            const list = await this.factory.getArenaRepository().findAll();
+            const resources = await arenaResourceAsm.toResources(list);
+            const response : HttpResponseModel<IArenaResource[]> = {
+                httpCode: 200,
+                message: "Arena list",
+                data: resources
+            };
+
+            return Promise.resolve(new SendResource<HttpResponseModel<IArenaResource[]>>("ArenaController", response.httpCode, response));       
         }
         catch (e){
-            return (false);
+            const response : HttpResponseModel<IArenaResource[]> = {
+                httpCode: 400,
+                message: e.message
+            };
+
+            return Promise.resolve(new SendResource<HttpResponseModel<IArenaResource[]>>("ArenaController", response.httpCode, response));        
+        }
+    }
+
+    public async deleteOne(id: number) {
+        try {
+            const arena = await this.factory.getArenaRepository().findOne(id);
+            const response : HttpResponseModel<IArenaResource> = {};
+
+            if (arena != null)
+            {
+                await this.factory.getArenaRepository().delete(arena.id);
+                response.httpCode = 200;
+                response.message = "Arena deleted";
+            }
+            else
+            {
+                response.message = "Arena not found";
+                response.httpCode = 404;
+            }
+            return Promise.resolve(new SendResource<HttpResponseModel<IArenaResource>>("ArenaController", response.httpCode, response));       
+        }
+        catch (e){
+            const response : HttpResponseModel<IArenaResource> = {
+                httpCode: 400,
+                message: e.message
+            };
+
+            return Promise.resolve(new SendResource<HttpResponseModel<IArenaResource>>("ArenaController", response.httpCode, response));        
+        }
+    }
+
+    public async linkBot(arenaId: number, botId: number) {
+        const arenaResourceAsm = Container.get(ArenaResourceAsm);
+        try {
+            const arena = await this.factory.getBotsArenaRepository().linkBot(arenaId, botId);
+            const resource = await arenaResourceAsm.toResource(arena);
+            const response: HttpResponseModel<IArenaResource> = {
+                httpCode: 200,
+                data: resource,
+                message: `link bot ${botId} to arena ${arenaId}`
+            };
+            
+            return (Promise.resolve(new SendResource<HttpResponseModel<IArenaResource>>("ArenaController", response.httpCode, response)));
+        }   
+        catch (e){
+            const response: HttpResponseModel<IArenaResource> = {
+                httpCode: 400,
+                message: e.message
+            };
+            
+            if (e.code == EEntityStatus.NOT_FOUND){
+                response.httpCode = 404;
+            }
+            return (Promise.resolve(new SendResource<HttpResponseModel<IArenaResource>>("ArenaController", response.httpCode, response)));
         }
     }
 }

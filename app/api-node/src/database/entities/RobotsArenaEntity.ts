@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, JoinColumn, ManyToOne } from "typeorm";
+import { Entity, JoinColumn, ManyToOne } from "typeorm";
 import { RobotsEntity } from "./RobotsEntity";
 import { ArenaEntity } from "./ArenaEntity";
 
@@ -6,14 +6,19 @@ import { ArenaEntity } from "./ArenaEntity";
     name: "robots_arena"
 })
 export class RobotsArenaEntity  {
-    @PrimaryGeneratedColumn({name: "id"})
-    public id: number;
+    @JoinColumn({name: "bot_id", referencedColumnName: "id"})
+    @ManyToOne(type => RobotsEntity, robot => robot.robotsArena, {
+        eager: true,
+        primary: true,
+        nullable: false
+    })
+    public robot?: RobotsEntity;
 
-    @JoinColumn({name: "robot_id"})
-    @ManyToOne(type => RobotsEntity, robot => robot.robotArena)
-    public robot: RobotsEntity;
-
-    @JoinColumn({name: "arena_id"})
-    @ManyToOne(type => ArenaEntity, arena => arena.robotArena)
-    public arena: ArenaEntity;
+    @JoinColumn({name: "arena_id", referencedColumnName: "id"})
+    @ManyToOne(type => ArenaEntity, arena => arena.robotArena, {
+        eager: true,
+        primary: true,
+        nullable: false
+    })
+    public arena?: ArenaEntity;
 }

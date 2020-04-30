@@ -4,28 +4,11 @@ import * as http from 'http';
 import * as morgan from 'morgan';
 import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt';
 import { PassportAuthenticator, Server } from 'typescript-rest';
-import { PlayerRepository } from './database/repositories/PlayerRepository';
-import { UserRepository } from './database/repositories/UserRepository';
-import { GameRepository } from './database/repositories/GameRepository';
-import { FakeRepository } from './database/repositories/FakeRepository';
 import { Container } from 'typescript-ioc';
-import { UserService } from './service/UserService';
-import { UserServiceImpl } from './service/impl/UserServiceImpl';
-import { BattleService } from './service/BattleService';
-import { BattleServiceImpl } from './service/impl/BattleServiceImpl';
-import IServiceFactory from './service/IServiceFactory';
-import ServiceFactory from './service/impl/ServiceFactory';
+import config from "./ioc.config";
 import IConfig from './service/IConfig';
-import Config from './service/impl/Config';
-import { GameService } from './service/GameService';
-import { GameServiceImpl } from './service/impl/GameServiceImpl';
-import { ArenaService } from './service/ArenaService';
-import { ArenaServiceImpl } from './service/impl/ArenaServiceImpl';
-import { AuthenticationService } from './service/AuthenticationService';
-import { AuthenticationServiceImpl } from './service/impl/AuthenticationServiceImpl';
-import { PlayerService } from './service/PlayerService';
-import { PlayerServiceImpl } from './service/impl/PlayerServiceImpl';
-import { ArenaRepository } from './database/repositories/ArenaRepository';
+import { NamespaceConfiguration } from 'typescript-ioc/dist/model';
+import { UserRepository } from './database/repositories/UserRepository';
 
 export class ApiServer {
     public PORT: number = 80; // +process.env.PORT || 8080;
@@ -39,14 +22,19 @@ export class ApiServer {
         this.config();
 
         Server.useIoC();
+        const bodyParser = require('body-parser');
+        this.app.use(bodyParser.json({ verify: function(req, res, buf, encoding){
+            req.rawBody = buf.toString();
+        }}));
+        this.app.use(bodyParser.raw({ type: "*/*", verify: function(req, res, buf, encoding){
+            req.rawBody = buf.toString();
+        }}));
         Server.loadServices(this.app, 'controller/**/*.ts', __dirname);
         // Note : This disable auto-nexting
         // If we need it in a controller, we will use :
         // Context.next()
         //   Server.ignoreNextMiddlewares(true);
-        const bodyParser = require('body-parser');
-        this.app.use(bodyParser.urlencoded({ extended: true }));
-        this.app.use(bodyParser.json());
+
         Server.swagger(this.app, { 
             swaggerUiOptions: {
                 customSiteTitle: 'BattleBots'
@@ -101,30 +89,6 @@ export class ApiServer {
         });
     }
 
-    private initIoc(){
-        Container.bind(UserService).to(UserServiceImpl);
-        Container.bind(BattleService).to(BattleServiceImpl);
-        Container.bind(GameService).to(GameServiceImpl);
-        Container.bind(ArenaService).to(ArenaServiceImpl);
-        Container.bind(AuthenticationService).to(AuthenticationServiceImpl);
-        Container.bind(PlayerService).to(PlayerServiceImpl);
-    
-        Container.bind(IServiceFactory).to(ServiceFactory);
-        Container.bind(IConfig).to(Config);
-        if (process.env.NODE_ENV !== "test"){
-            Container.bind(PlayerRepository).to(PlayerRepository);
-            Container.bind(UserRepository).to(UserRepository);
-            Container.bind(GameRepository).to(GameRepository);
-            Container.bind(ArenaRepository).to(ArenaRepository);
-        }
-        else {
-            Container.bind(PlayerRepository).to(FakeRepository);
-            Container.bind(UserRepository).to(FakeRepository);
-            Container.bind(GameRepository).to(FakeRepository);
-            Container.bind(ArenaRepository).to(FakeRepository);
-        }
-    }
-
     /**
      * Configure the express app.
      */
@@ -143,31 +107,40 @@ export class ApiServer {
         if (process.env.NODE_ENV !== "test") {
             this.app.use(morgan('combined'));
         }
-        this.initIoc();
+        Container.configure(config as NamespaceConfiguration);
+        Container.environment(process.env.NODE_ENV);
         this.configureAuthenticator();
     }
 
     private configureAuthenticator() {
         this.serviceConfig = Container.get(IConfig);
+        const userRepository = Container.get(UserRepository);
         const JWT_SECRET: string = this.serviceConfig.getSecret();
         const jwtConfig: StrategyOptions = {
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             secretOrKey: Buffer.from(JWT_SECRET)
         };
-        const strategy = new Strategy(jwtConfig, (payload: any, done: (err: any, user: any) => void) => {
-            const o = {
-                sub: payload.sub,
-                roles: [payload.role]
-            };
+        const strategy = new Strategy(jwtConfig, async (payload: any, done: (err: any, user: any) => void) => {
+            const user = await userRepository.findOne(payload.sub);
 
-            done(null, o);
-        });
-        const authenticator = new PassportAuthenticator(strategy, {
-            authOptions: {
-                session: false,
+            if (!user){
+                done("User not exist", null);
+            }
+            else {
+                const o = {
+                    sub: user.id,
+                    roles: user.roles
+                };
+
+                done(null, o);
             }
         });
-
+        const authenticator = new PassportAuthenticator(strategy, {
+             authOptions: {
+                session: false,
+                failWithError: true,
+            }
+        });
         Server.registerAuthenticator(authenticator, "Bearer");
     }
 }

@@ -3,3 +3,4 @@ infra/.docker/postgres-volume
 dist
 cert.pem
 key.pem
+*node_modules*

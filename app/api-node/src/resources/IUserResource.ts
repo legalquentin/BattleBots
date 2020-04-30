@@ -6,6 +6,7 @@ export default interface IUserResource {
     lastname?: string;
     pseudo: string;
     email: string;
+    roles: string;
     address?: string;
     createdAt?: string;
     updatedAt?: string;

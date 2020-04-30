@@ -8,8 +8,50 @@ export class ArenaRepository extends Repository<ArenaEntity> {
     public manager: EntityManager;
     public metadata: EntityMetadata;
 
-    public ArenaRepository(){
+    constructor(){
+        super();
         this.metadata = getConnection(process.env.NODE_ENV).getMetadata(ArenaEntity);
         this.manager = getManager(process.env.NODE_ENV);
+    }
+
+    public async hasArena(game_id: number){
+        const entities = await this.createQueryBuilder("arena").leftJoinAndSelect("arena.games", "games").where("games.id = :id", {
+            "id": game_id
+        }).getMany();
+
+        return (entities && entities.length > 0);
+    }
+
+    public async saveOrUpdate(arena: ArenaEntity): Promise<ArenaEntity>
+    {
+        try {
+            if (arena.id) {
+                await this.update(arena.id, arena);
+                return (arena);
+            }
+            else {
+                const saved = await this.save(arena);
+                    
+                return (saved);
+            }
+        }
+        catch (e){
+            throw e;
+        }
+    }
+
+    public async getOne(id: number): Promise<ArenaEntity>
+    {
+        return this.createQueryBuilder("arena").
+        leftJoinAndSelect("arena.robotArena", "robotArena").
+        leftJoinAndSelect("robotArena.robot", "robot").
+        where("arena.id = :id", {
+            "id": id
+        }).getOne();
+    }
+
+    public findAll(): Promise<Array<ArenaEntity>>
+    {
+        return this.find();
     }
 }

@@ -1,27 +1,22 @@
 import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm";
 
-export class RobotsArena1580916156507 implements MigrationInterface {
+export class RobotsArena1610916156507 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<any> {
         await queryRunner.createTable(new Table({
             "name": "robots_arena",
             "columns": [
                 {
-                    "name": "id",
-                    "type": "int",
-                    'isGenerated': true,
-                    "isPrimary": true,
-                    "generationStrategy": "increment"
-                },
-                {
                     "name": "bot_id",
                     "type": "int",
-                    "isNullable": false
+                    "isNullable": false,
+                    "isPrimary": true
                 },
                 {
                     "type": "int",
                     "name": "arena_id",
-                    "isNullable": false
+                    "isNullable": false,
+                    "isPrimary": true
                 }
             ]
         }));

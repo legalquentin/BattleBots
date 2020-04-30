@@ -4,6 +4,11 @@ import { UserRepository } from "../../database/repositories/UserRepository";
 import { PlayerRepository } from "../../database/repositories/PlayerRepository";
 import { GameRepository } from "../../database/repositories/GameRepository";
 import { ArenaRepository } from "../../database/repositories/ArenaRepository";
+import { BotsRepository } from "../../database/repositories/BotsRepository";
+import { StreamsRepository } from "../../database/repositories/StreamsRepository";
+import { LogRepository } from "../../database/repositories/LogRepository";
+import { BotArenaRepository } from "../../database/repositories/BotArenaRepository";
+import { BotGameRepository } from "../../database/repositories/BotGameRepository";
 
 @Singleton
 export default class ServiceFactory implements IServiceFactory {
@@ -19,6 +24,21 @@ export default class ServiceFactory implements IServiceFactory {
     @Inject
     private arenaRepository: ArenaRepository;
 
+    @Inject
+    private botsRepository: BotsRepository;
+
+    @Inject
+    private streamsRepository: StreamsRepository;
+
+    @Inject
+    private logRepository: LogRepository;
+
+    @Inject
+    private botsArenaRepository: BotArenaRepository;
+
+    @Inject
+    private botGameRepository: BotGameRepository;
+
     public getUserRepository() : UserRepository {
         return (this.userRepository);
     }
@@ -33,5 +53,25 @@ export default class ServiceFactory implements IServiceFactory {
 
     public getArenaRepository(): ArenaRepository {
         return (this.arenaRepository);
+    }
+
+    public getBotsRepository(): BotsRepository {
+        return (this.botsRepository);
+    }
+
+    public getStreamsRepository(): StreamsRepository {
+        return (this.streamsRepository);
+    }
+
+    public getLogRepository(): LogRepository {
+        return (this.logRepository);
+    }
+
+    public getBotsArenaRepository(): BotArenaRepository {
+        return (this.botsArenaRepository);
+    }
+
+    public getBotGameRepository(): BotGameRepository {
+        return (this.botGameRepository);
     }
 }

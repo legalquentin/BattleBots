@@ -1,24 +1,50 @@
-[{
-   "name": "app",
-   "type": "postgres",
-   "host": "localhost",
-   "port": 5432,
-   "username": "root",
-   "password": "p@ssw0rd",
-   "database": "db",
-   "logging": true,
-   "entities": [
-      "src/database/entities/**/*.ts"
-   ],
-   "migrations": [
-      "src/migration/**/*.ts"
-   ],
-   "subscribers": [
-      "src/subscriber/**/*.ts"
-   ],
-   "cli": {
-      "entitiesDir": "src/database/entities",
-      "migrationsDir": "src/migration",
-      "subscribersDir": "src/subscriber"
+[
+   {
+      "name": "production",
+      "type": "postgres",
+      "host": "db_production",
+      "port": 5432,
+      "username": "root",
+      "password": "p@ssw0rd",
+      "database": "db",
+      "logging": true,
+      "entities": [
+         "src/database/entities/**/*.ts"
+      ],
+      "migrations": [
+         "src/migration/**/*.ts"
+      ],
+      "subscribers": [
+         "src/subscriber/**/*.ts"
+      ],
+      "cli": {
+         "entitiesDir": "src/database/entities",
+         "migrationsDir": "src/migration",
+         "subscribersDir": "src/subscriber"
+      }
+   },
+   {
+      "name": "staging",
+      "type": "postgres",
+      "host": "db_staging",
+      "port": 5432,
+      "username": "root",
+      "password": "p@ssw0rd",
+      "database": "db",
+      "logging": true,
+      "entities": [
+         "src/database/entities/**/*.ts"
+      ],
+      "migrations": [
+         "src/migration/**/*.ts"
+      ],
+      "subscribers": [
+         "src/subscriber/**/*.ts"
+      ],
+      "cli": {
+         "entitiesDir": "src/database/entities",
+         "migrationsDir": "src/migration",
+         "subscribersDir": "src/subscriber"
+      }
    }
-}]
+]
