@@ -9,7 +9,7 @@ import { ApiServer } from '../src/api-server';
 import IServiceFactory from '../src/service/IServiceFactory';
 
 const client: request.RequestAPI<request.Request, request.CoreOptions, request.RequiredUriUrl>
-    = request.defaults({ baseUrl: `http://localhost:${8080}` });
+    = request.defaults({ baseUrl: `http://localhost:${80}` });
 
 let apiServer = null;
 let config = null;
