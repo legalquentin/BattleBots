@@ -30,6 +30,7 @@ export class GameRepository extends Repository<GameEntity> {
         leftJoinAndSelect("robot.streams", "stream_2").
         leftJoinAndSelect("game.streams", "streams").
         leftJoinAndSelect("bot.player", "player").
+        leftJoinAndSelect("player.user", "user").
         where("game.id = :game_id", {
             "game_id": id
         }).
@@ -78,7 +79,7 @@ export class GameRepository extends Repository<GameEntity> {
             throw new EntityError(EEntityStatus.NOT_FOUND, "arena not found");
         }
         const game = await this.findOne(gameId);
-
+        console.log(game);
         if (!game){
             throw new EntityError(EEntityStatus.NOT_FOUND, "game not found");
         }

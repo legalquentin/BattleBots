@@ -73,7 +73,7 @@ export class ArenaController {
     @Path("/:id")
     @GET
     public async details(@PathParam("id") id: number){
-        return (this.arenaService.findOne);
+        return (this.arenaService.findOne(id));
     }
 
     @Produces("application/json;charset=UTF-8")

@@ -10,11 +10,34 @@ const defaultEnv = "staging";
 const connectionName = config.util.getEnv(ENV) ? config.util.getEnv(ENV) : defaultEnv;
 
 export async function start(): Promise<ApiServer> {
-
+    console.log(process.cwd());
     // const mongoConnector = new MongoConnector();
     // TODO : Create config files (db settings and entities declarations)
     return new Promise((resolve, reject) => {
-        createConnection(connectionName).then(async (connection: Connection) => {        
+        createConnection({
+            "name": connectionName,
+            "type": "postgres",
+            "host": "localhost",
+            "port": 5432,
+            "username": "root",
+            "password": "p@ssw0rd",
+            "database": "db",
+            "logging": true,
+            "entities": [
+                `src/database/entities/**/*.ts`
+            ],
+            "subscribers": [
+                "src/migration/**/*.ts"
+            ],
+            "migrations": [
+                "src/subscriber/**/*.ts"
+            ],
+            "cli": {
+                "entitiesDir": "src/database/entities/**/*.ts",
+                "migrationsDir": "src/migration/**/*.ts",
+                "subscribersDir": "src/subscriber/**/*.ts"
+            }
+        }).then(async (connection: Connection) => {        
             const apiServer = new ApiServer();
 
             await apiServer.start();

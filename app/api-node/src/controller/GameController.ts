@@ -78,7 +78,7 @@ export class GameController {
     @Produces("application/json; charset=UTF-8")
     @Response<HttpResponseModel<IGameResource>>(200)
     @Response<HttpResponseModel<IGameResource>>(400)
-    public async linkBotToGame(@PathParam("botId") botId: number, @PathParam("gameId")gameId: number){
+    public async linkBotToGame(@PathParam("botId") botId: number, @PathParam("gameId") gameId: number){
         return (this.gameService.linkBotToGame(botId, gameId));
     }
 

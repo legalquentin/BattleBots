@@ -1,13 +1,12 @@
 import { Repository } from "typeorm";
-import { FakeEntity } from "../entities/FakeEntity";
 
-export class FakeRepository extends Repository<FakeEntity> {
+export class FakeRepository extends Repository<any> {
 
     constructor(){
         super();
     }
 
-    saveOrUpdate(fake: FakeEntity){
+    saveOrUpdate(fake: any){
         return (fake);
     }
 }

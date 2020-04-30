@@ -16,7 +16,9 @@ export class GameServiceImpl implements GameService {
     private serviceFactory: IServiceFactory;
 
     public async saveOrUpdate(game: IGameResource) {
-        game.status = EGameStatus.CREATED;
+        if (!game.status){
+            game.status = EGameStatus.CREATED;
+        }
         const gameResourceAsm = Container.get(GameResourceAsm);
         try {
             const entity = await gameResourceAsm.toEntity(game);
@@ -150,6 +152,7 @@ export class GameServiceImpl implements GameService {
             const game = await this.serviceFactory.getGameRepository().getOne(id);
             const gameResourceAsm = Container.get(GameResourceAsm);
 
+            console.log(game);
             if (!game){
                 const response : HttpResponseModel<IGameResource> = {
                     httpCode: 404,
@@ -161,6 +164,9 @@ export class GameServiceImpl implements GameService {
             const resource = await gameResourceAsm.toResource(game);
             if (await this.serviceFactory.getStreamsRepository().hasStream(id)){
                 await gameResourceAsm.AddStreamResouce(game, resource);
+            }
+            if (!await this.serviceFactory.getBotsRepository().hasBotsByArena((await game.arena).id)){
+                game.arena.robotArena = [];
             }
             if (await this.serviceFactory.getArenaRepository().hasArena(id)){
                 await gameResourceAsm.AddArenaResource(game, resource);
@@ -186,10 +192,14 @@ export class GameServiceImpl implements GameService {
     }
 
     public async linkBotToGame(botId: number, gameId: number){
+        console.log(botId);
+        console.log(gameId);
         try {
             const game = await this.serviceFactory.getBotGameRepository().linkBotToGame(botId, gameId);
+            console.log(game);
             const gameResourceAsm = Container.get(GameResourceAsm);
             const resource = await gameResourceAsm.toResource(game);
+            console.log(resource);
             const response: HttpResponseModel<IGameResource> = {
                 httpCode: 200,
                 message: `link bot ${botId} to game ${gameId}`,

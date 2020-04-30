@@ -40,7 +40,7 @@ export class ArenaServiceImpl implements ArenaService {
     public async findOne(id: number) {
         const arenaResourceAsm = Container.get(ArenaResourceAsm);
         try {
-            const arena = await this.factory.getArenaRepository().findOne(id);
+            const arena = await this.factory.getArenaRepository().getOne(id);
             if (!arena){
                 const response: HttpResponseModel<IArenaResource> = {
                     httpCode: 404,
@@ -50,6 +50,9 @@ export class ArenaServiceImpl implements ArenaService {
                 return (Promise.resolve(new SendResource<HttpResponseModel<IArenaResource>>("ArenaController", response.httpCode, response)));
             }
             const resource = await arenaResourceAsm.toResource(arena);
+            if (await this.factory.getBotsRepository().hasBotsByArena(arena.id)){
+                await arenaResourceAsm.addBotResource(arena, resource);
+            }
             const response: HttpResponseModel<IArenaResource> = {
                 httpCode: 200,
                 message: "Arena details",

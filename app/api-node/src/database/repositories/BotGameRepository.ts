@@ -23,10 +23,10 @@ export class BotGameRepository extends Repository<RobotGameEntity> {
         const botRepository = Container.get(BotsRepository);
         const gameRepository = Container.get(GameRepository);
 
+        console.log("enter");
         const bot = await botRepository.createQueryBuilder("robots").where("robots.id = :id", {
             id: botId
         }).getOne();
-
         if (!bot){
             throw new EntityError(EEntityStatus.NOT_FOUND, "bot not found");
         }
@@ -36,18 +36,25 @@ export class BotGameRepository extends Repository<RobotGameEntity> {
         if (!game){
             throw new EntityError(EEntityStatus.NOT_FOUND, "game not found");
         }
-        const robotGames = await game.robots;
-        if (robotGames){
-            for (let robotGame of robotGames){
-                if (robotGame.bot.id === bot.id){
-                    throw new EntityError(EEntityStatus.INTERNAL_ERROR, "already join")
-                }
-            }
-        }
         const robotGame: RobotGameEntity = {
             bot: bot,
             game: game
         };
+        if (await botRepository.hasBots(gameId)){
+            const robotGames = await game.robots;
+            if (robotGames){
+                for (let robotGame of robotGames){
+                    if (robotGame.bot.id === bot.id){
+                        throw new EntityError(EEntityStatus.INTERNAL_ERROR, "already join")
+                    }
+                }
+            }
+            game.robots.push(robotGame);
+        }
+        else {
+            game.robots = [ robotGame ];
+        }
+        console.log(robotGame);
         await this.save(robotGame);
         return (game);
     }

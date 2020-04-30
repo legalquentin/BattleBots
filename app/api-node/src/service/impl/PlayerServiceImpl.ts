@@ -28,7 +28,8 @@ export class PlayerServiceImpl implements PlayerService {
                     }
                 ]
             });
-            if (!finded){
+            console.log(finded);
+            if (finded){
                 const response: HttpResponseModel<IResourceId> = {
                     data: null,
                     message: "Player already exist",

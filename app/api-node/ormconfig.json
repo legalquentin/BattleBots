@@ -2,7 +2,7 @@
    {
       "name": "production",
       "type": "postgres",
-      "host": "db_production",
+      "host": "localhost",
       "port": 5432,
       "username": "root",
       "password": "p@ssw0rd",
@@ -26,7 +26,7 @@
    {
       "name": "staging",
       "type": "postgres",
-      "host": "db_staging",
+      "host": "localhost",
       "port": 5432,
       "username": "root",
       "password": "p@ssw0rd",

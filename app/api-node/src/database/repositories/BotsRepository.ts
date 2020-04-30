@@ -26,6 +26,14 @@ export class BotsRepository extends Repository<RobotsEntity> {
         return (entities && entities.length > 0);
     }
 
+    public async hasBotsByArena(arena_id: number){
+        const entities = await this.createQueryBuilder("bots").leftJoinAndSelect("bots.robotsArena", "robotsArena").leftJoinAndSelect("robotsArena.arena", "arena").where("arena.id = :id", {
+            "id": arena_id
+        }).getMany();
+  
+        return (entities && entities.length > 0);
+    }
+
     public getOne(id: number): Promise<RobotsEntity>
     {
         return (this.

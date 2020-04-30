@@ -1,15 +1,17 @@
 version: '3'
 services:
-  db_production:
+  db:
     image: postgres:11.5
     restart: always
     environment:
       POSTGRES_PASSWORD: p@ssw0rd
       POSTGRES_USER: root
       POSTGRES_DB: db
-    container_name: db_production
+    container_name: db
     networks: 
       - production
+    ports: 
+      - "5432:5432"
   admin_production:
     image: adminer
     container_name: admin-production
@@ -18,19 +20,6 @@ services:
     restart: always
     ports: 
       - "8080:8080"
-  production:
-    build: ../../app/api-node
-    working_dir: /app
-    environment: 
-      NODE_ENV: production
-      ENV: prod
-    ports: 
-      - "80:80"
-    container_name: production
-    networks: 
-      - production
-    restart: always
-    command: wait-for-it/wait-for-it.sh db_production:5432 -- npm run start:docker-production
 
 
 networks: 

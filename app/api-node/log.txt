@@ -44,3 +44,11 @@ log - preRequest - error - Cannot read property 'save' of undefined
 log - preRequest - error - Cannot read property 'save' of undefined
 log - preRequest - error - Cannot read property 'save' of undefined
 log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+Error {"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":5432}
+log - preRequest - error - relation "log" does not exist
