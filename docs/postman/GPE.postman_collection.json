@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "Register",
+			"name": "Node/UserController - Register",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -19,23 +19,23 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{}"
+					"raw": "{\n\t\"firstname\": \"\",\n\t\"lastname\": \"\",\n\t\"pseudo\": \"quentin\",\n\t\"email\": \"\",\n\t\"password\": \"test\",\n\t\"address\":\"\"\n}"
 				},
 				"url": {
-					"raw": "{{API_ADDRESS}}/users/login",
+					"raw": "{{API_ADDRESS}}/api/users",
 					"host": [
 						"{{API_ADDRESS}}"
 					],
 					"path": [
-						"users",
-						"login"
+						"api",
+						"users"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Login",
+			"name": "Node/UserController - Login",
 			"event": [
 				{
 					"listen": "test",
@@ -65,14 +65,15 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"username\":\"qlegal\",\n\t\"password\": \"test123\"\n}"
+					"raw": "{\n\t\"username\":\"quentin\",\n\t\"password\": \"test\"\n}"
 				},
 				"url": {
-					"raw": "{{API_ADDRESS}}/users/login",
+					"raw": "{{API_ADDRESS}}/api/users/login",
 					"host": [
 						"{{API_ADDRESS}}"
 					],
 					"path": [
+						"api",
 						"users",
 						"login"
 					]
@@ -81,7 +82,7 @@
 			"response": []
 		},
 		{
-			"name": "Battle_List",
+			"name": "Node/UserController - Profile",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -91,10 +92,112 @@
 						"type": "text"
 					}
 				],
+				"url": {
+					"raw": "{{API_ADDRESS}}/api/users/profile",
+					"host": [
+						"{{API_ADDRESS}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Node/UserController - List",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{AUTH}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ADDRESS}}/api/users/",
+					"host": [
+						"{{API_ADDRESS}}"
+					],
+					"path": [
+						"api",
+						"users",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Node/UserController - List Players",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{AUTH}}"
+					}
+				],
+				"url": {
+					"raw": "{{API_ADDRESS}}/api/users/{{USER_ID}}/players",
+					"host": [
+						"{{API_ADDRESS}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"{{USER_ID}}",
+						"players"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Node/UserController - Create Player",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "{{AUTH}}"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": ""
+					"raw": "{}"
 				},
+				"url": {
+					"raw": "{{API_ADDRESS}}/api/users/{{USER_ID}}/players",
+					"host": [
+						"{{API_ADDRESS}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"{{USER_ID}}",
+						"players"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Node/BattleController - Battle_List",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{AUTH}}",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "{{API_ADDRESS}}/battle",
 					"host": [
@@ -108,7 +211,7 @@
 			"response": []
 		},
 		{
-			"name": "Battle_Create",
+			"name": "Node/BattleController - Battle_Create",
 			"event": [
 				{
 					"listen": "test",
@@ -145,19 +248,51 @@
 					"raw": "{\n\t\"name\": \"first blood\"\n}"
 				},
 				"url": {
-					"raw": "{{API_ADDRESS}}/battle",
+					"raw": "{{API_ADDRESS}}/api/game/create",
 					"host": [
 						"{{API_ADDRESS}}"
 					],
 					"path": [
-						"battle"
+						"api",
+						"game",
+						"create"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Battle_Join",
+			"name": "Node/BattleController - Battle_Delete",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{AUTH}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{API_ADDRESS}}/battle/{{GAMEID}}",
+					"host": [
+						"{{API_ADDRESS}}"
+					],
+					"path": [
+						"battle",
+						"{{GAMEID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Node/BattleController - Battle_Join",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -178,11 +313,12 @@
 					"raw": "{\n\t\"battleId\": {{GAMEID}},\n\t\"userId\": 5\n}"
 				},
 				"url": {
-					"raw": "{{API_ADDRESS}}/battle/join",
+					"raw": "{{API_ADDRESS}}/api/battle/join",
 					"host": [
 						"{{API_ADDRESS}}"
 					],
 					"path": [
+						"api",
 						"battle",
 						"join"
 					]
@@ -191,48 +327,10 @@
 			"response": []
 		},
 		{
-			"name": "Battle_Delete",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Authorization",
-						"value": "{{AUTH}}",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"url": {
-					"raw": "{{API_ADDRESS}}/battle/{{GAMEID}}",
-					"host": [
-						"{{API_ADDRESS}}"
-					],
-					"path": [
-						"battle",
-						"{{GAMEID}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Worker_Health_Check ",
+			"name": "Go/Health",
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
 					"raw": "{{API_ADDRESS}}:443/api/health",
 					"host": [
@@ -248,7 +346,7 @@
 			"response": []
 		},
 		{
-			"name": "WORKER-CREATE",
+			"name": "Go/Create",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -288,7 +386,7 @@
 			"response": []
 		},
 		{
-			"name": "WORKER-JOIN",
+			"name": "Go/Join",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -326,27 +424,26 @@
 			"response": []
 		},
 		{
-			"name": "WORKER-INFO",
+			"name": "Go/Info",
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
-					"raw": "{{API_ADDRESS}}:443/api/health",
+					"raw": "https://{{API_ADDRESS}}:443/api/game/info",
+					"protocol": "https",
 					"host": [
 						"{{API_ADDRESS}}"
 					],
 					"port": "443",
 					"path": [
 						"api",
-						"health"
+						"game",
+						"info"
 					]
 				}
 			},
 			"response": []
 		}
-	]
+	],
+	"protocolProfileBehavior": {}
 }
