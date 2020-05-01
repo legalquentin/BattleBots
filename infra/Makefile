@@ -15,6 +15,9 @@ test\:battlebots:
 logs\:postgres:
 	cd .docker && docker logs db && make _back
 
+migrate\:api:
+	cd ../app/api-node && npm run-script typeorm:migration:run:production
+
 serve\:api:
 	cd ../app/api-node && yarn run dev
 
