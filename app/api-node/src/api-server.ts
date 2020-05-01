@@ -7,7 +7,6 @@ import { PassportAuthenticator, Server } from 'typescript-rest';
 import { Container } from 'typescript-ioc';
 import config from "./ioc.config";
 import IConfig from './service/IConfig';
-import { NamespaceConfiguration } from 'typescript-ioc/dist/model';
 import { UserRepository } from './database/repositories/UserRepository';
 
 export class ApiServer {
@@ -107,7 +106,7 @@ export class ApiServer {
         if (process.env.NODE_ENV !== "test") {
             this.app.use(morgan('combined'));
         }
-        Container.configure(config as NamespaceConfiguration);
+        Container.configure(config);
         Container.environment(process.env.NODE_ENV);
         this.configureAuthenticator();
     }

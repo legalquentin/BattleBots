@@ -30,171 +30,212 @@ import { BotArenaRepository } from './database/repositories/BotArenaRepository';
 import { BotArenaService } from './service/BotArenaService';
 import { BotArenaServiceImpl } from './service/impl/BotArenaServiceImpl';
 import { BotGameRepository } from './database/repositories/BotGameRepository';
+import { Scope } from 'typescript-ioc';
 
 const config =  {
         env: {
             "test": [
                 {
                     bind: UserService,
-                    to: UserServiceImpl
+                    to: UserServiceImpl,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: GameService,
-                    to: GameServiceImpl
+                    to: GameServiceImpl,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: ArenaService,
-                    to: ArenaServiceImpl
+                    to: ArenaServiceImpl,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: AuthenticationService,
-                    to: AuthenticationServiceImpl
+                    to: AuthenticationServiceImpl,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: PlayerService,
-                    to: PlayerServiceImpl
+                    to: PlayerServiceImpl,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: BotsService,
-                    to: BotsServiceImpl
+                    to: BotsServiceImpl,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: LogService,
-                    to: LogServiceImpl
+                    to: LogServiceImpl,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: StreamsService,
-                    to: StreamsServiceImpl
+                    to: StreamsServiceImpl,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: BotArenaService,
-                    to: BotArenaServiceImpl
+                    to: BotArenaServiceImpl,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: IServiceFactory,
-                    to: ServiceFactory
+                    to: ServiceFactory,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: IConfig,
-                    to: Config
+                    to: Config,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: PlayerRepository,
-                    to: FakeRepository 
+                    to: FakeRepository,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: UserRepository,
-                    to: FakeRepository
+                    to: FakeRepository,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: GameRepository,
-                    to: FakeRepository
+                    to: FakeRepository,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: ArenaRepository,
-                    to: FakeRepository
+                    to: FakeRepository,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: BotsRepository,
-                    to: FakeRepository
+                    to: FakeRepository,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: StreamsRepository,
-                    to: FakeRepository
+                    to: FakeRepository,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: LogRepository,
-                    to: FakeRepository
+                    to: FakeRepository,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: BotArenaRepository,
-                    to: FakeRepository
+                    to: FakeRepository,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: BotGameRepository,
-                    to: FakeRepository
+                    to: FakeRepository,
+                    scope: Scope.Singleton
                 },
             ],
             "production": [
                 {
                     bind: UserService,
-                    to: UserServiceImpl
+                    to: UserServiceImpl,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: GameService,
-                    to: GameServiceImpl
+                    to: GameServiceImpl,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: ArenaService,
-                    to: ArenaServiceImpl
+                    to: ArenaServiceImpl,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: AuthenticationService,
-                    to: AuthenticationServiceImpl
+                    to: AuthenticationServiceImpl,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: PlayerService,
-                    to: PlayerServiceImpl
+                    to: PlayerServiceImpl,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: BotsService,
-                    to: BotsServiceImpl
+                    to: BotsServiceImpl,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: LogService,
-                    to: LogServiceImpl
+                    to: LogServiceImpl,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: StreamsService,
-                    to: StreamsServiceImpl
+                    to: StreamsServiceImpl,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: BotArenaService,
-                    to: BotArenaServiceImpl
+                    to: BotArenaServiceImpl,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: IServiceFactory,
-                    to: ServiceFactory
+                    to: ServiceFactory,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: IConfig,
-                    to: Config
+                    to: Config,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: PlayerRepository,
-                    to: PlayerRepository
+                    to: PlayerRepository,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: UserRepository,
-                    to: UserRepository
+                    to: UserRepository,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: GameRepository,
-                    to: GameRepository
+                    to: GameRepository,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: ArenaRepository,
-                    to: ArenaRepository
+                    to: ArenaRepository,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: BotsRepository,
-                    to: BotsRepository
+                    to: BotsRepository,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: StreamsRepository,
-                    to: StreamsRepository
+                    to: StreamsRepository,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: LogRepository,
-                    to: LogRepository
+                    to: LogRepository,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: BotArenaRepository,
-                    to: BotArenaRepository
+                    to: BotArenaRepository,
+                    scope: Scope.Singleton
                 },
                 {
                     bind: BotGameRepository,
-                    to: BotGameRepository
+                    to: BotGameRepository,
+                    scope: Scope.Singleton
                 }
         ]
     }
