@@ -2,5 +2,8 @@
     "secrets": {
         "secret": "azerty123",
         "salt": 10
-    }
+    },
+    "worker_address": "127.0.0.1",
+    "worker_port": "8888",
+    "worker_directory": "/home/pi/BattleBots/app/api-go"
 }

@@ -1,6 +1,6 @@
 {
 	"Local":   "127.0.0.1",
-	"Port":    "8888",
+	"Port":    "443",
 	"Env":     "prod",
 	"KeyPath": "/home/pi/BattleBots/app/api-go/",
 	"Bots": [{
