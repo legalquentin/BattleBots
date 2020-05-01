@@ -24,11 +24,12 @@ export class UserServiceImpl implements UserService {
 
     public async saveOrUpdate(user: IUserResource){
         const userResourceAsm = Container.get(UserResourceAsm);
-        const entity = userResourceAsm.toEntity(user);
 
-        entity.roles = ERolesStatus.ROLE_USER;
-        entity.hash = hashSync(entity.hash, this.config.genSalt());
         try {
+            const entity = userResourceAsm.toEntity(user);
+
+            entity.roles = ERolesStatus.ROLE_USER;
+            entity.hash = hashSync(entity.hash, this.config.genSalt());
             const savedUser = await this.factory.getUserRepository().saveOrUpdate(entity);
             const resourceId: IResourceId = {
                 id: savedUser.id

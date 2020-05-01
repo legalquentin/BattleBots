@@ -13,11 +13,11 @@ export class BotsServiceImpl implements BotsService {
     @Inject
     private service: IServiceFactory;
 
-    public async update(resource: IBotsResource) {
+    public async update(bot: IBotsResource) {
         const botResourceAsm = Container.get(BotResourceAsm);
-        const entity = await botResourceAsm.toEntity(resource);
 
         try {
+            const entity = await botResourceAsm.toEntity(bot);
             const updated = await this.service.getBotsRepository().saveOrUpdate(entity);
             const resource = await botResourceAsm.toResource(updated);
             const response : HttpResponseModel<IBotsResource> = {
@@ -29,7 +29,6 @@ export class BotsServiceImpl implements BotsService {
             return Promise.resolve(new SendResource<HttpResponseModel<IBotsResource>>("BotController", response.httpCode, response));
         }
         catch (e){
-            console.log(e.message);
             const response: HttpResponseModel<IBotsResource> = {
                 httpCode: 400,
                 message: "error"
@@ -72,9 +71,8 @@ export class BotsServiceImpl implements BotsService {
     public async saveOrUpdate(bots: IBotsResource): Promise<SendResource<HttpResponseModel<IBotsResource>>>
     {
         const botResourceAsm = Container.get(BotResourceAsm);
-        const entity = await botResourceAsm.toEntity(bots);
-
         try {
+            const entity = await botResourceAsm.toEntity(bots);
             const saved = await this.service.getBotsRepository().saveOrUpdate(entity);
             const resource = await botResourceAsm.toResource(saved);
             const response = {
@@ -88,7 +86,7 @@ export class BotsServiceImpl implements BotsService {
         catch (e){
             const response = {
                 httpCode: 400,
-                message: e.message
+                message: "Bad Request"
             };
 
             return Promise.resolve(new SendResource<HttpResponseModel<IBotsResource>>("BotController", response.httpCode, response));

@@ -8,7 +8,7 @@ import ITokenHttp from "../resources/ITokenHttp";
 import HttpResponseModel from "../resources/HttpResponseModel";
 import { SendResource } from "../../lib/ReturnExtended";
 import * as _ from "lodash";
-import { Container } from "typescript-ioc";
+import { Inject } from "typescript-ioc";
 import { Consumes, Produces, Response } from "typescript-rest-swagger";
 import { UserService } from "../service/UserService";
 import { AuthenticationService } from "../service/AuthenticationService";
@@ -21,15 +21,15 @@ import { postRequest } from "../service/interceptors/postRequest/postRequest";
 @PreProcessor(preRequest)
 @PostProcessor(postRequest)
 export class UserController {
-    private userService: UserService;
-    private playerService: PlayerService;
-    private authService: AuthenticationService;
 
-    constructor() {
-        this.userService = Container.get(UserService);
-        this.authService = Container.get(AuthenticationService);
-        this.playerService = Container.get(PlayerService);
-    }
+    @Inject
+    private userService: UserService;
+
+    @Inject
+    private playerService: PlayerService;
+
+    @Inject
+    private authService: AuthenticationService;
 
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
