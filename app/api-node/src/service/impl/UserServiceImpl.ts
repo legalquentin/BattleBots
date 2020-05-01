@@ -11,6 +11,7 @@ import IResourceId from "../../resources/IResourceId";
 import HttpResponseModel from "../../resources/HttpResponseModel";
 import { SendResource } from "../../../lib/ReturnExtended";
 import IGameProfileResource from "../../resources/IGameProfileResource";
+import { ERolesStatus } from "../../resources/ERolesStatus";
 
 @Singleton
 export class UserServiceImpl implements UserService {
@@ -25,6 +26,7 @@ export class UserServiceImpl implements UserService {
         const userResourceAsm = Container.get(UserResourceAsm);
         const entity = userResourceAsm.toEntity(user);
 
+        entity.roles = ERolesStatus.ROLE_USER;
         entity.hash = hashSync(entity.hash, this.config.genSalt());
         try {
             const savedUser = await this.factory.getUserRepository().saveOrUpdate(entity);
