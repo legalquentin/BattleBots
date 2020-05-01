@@ -45,12 +45,16 @@ export default class BattleWorkerService implements IBattleWorkerService{
                 const child = cp.spawn('go', ['run', WORKER_PATH, secret], { stdio: [process.stdin, process.stdout, process.stderr] });
                 Workers = { process: child, url: addr + ":" + port, key: secret };
                 // give 3 sec to start the worker
-                await new Promise(resolve => setTimeout(resolve, 3000));
+                await new Promise(resolve => setTimeout(resolve, 5000));
             }
             game.token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
             request({
                 agentOptions: { rejectUnauthorized: false },
-                body: game,
+                body: {
+                    id: game.id,
+                    name: game.name,
+                    token: game.token
+                },
                 headers: {
                     'x-api-key': secret
                 },
@@ -58,9 +62,9 @@ export default class BattleWorkerService implements IBattleWorkerService{
                 method: "POST",
                 strictSSL: false,
                 url: `https://${addr}:${port}/api/game/create`
-            }, (error, response, body) => {
+            }, (err, res) => {
                 console.log("#################################");
-                console.log(response, body);
+                console.log(res.body);
                 rslv({ token: game.token, secret: secret });
             });
         });

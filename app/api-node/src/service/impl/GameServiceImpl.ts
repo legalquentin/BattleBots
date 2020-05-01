@@ -25,18 +25,21 @@ export class GameServiceImpl implements GameService {
         }
         const gameResourceAsm = Container.get(GameResourceAsm);
         try {
-            const r = this.battleWorkerService.startGoWorker(game);
+            const entity = await gameResourceAsm.toEntity(game);
+            const saved = await this.serviceFactory.getGameRepository().saveOrUpdate(entity);
+            const resource = await gameResourceAsm.toResource(saved);
+            game.id = saved.id;
+            const r = await this.battleWorkerService.startGoWorker(game);
+            console.log(r);
             if (!r || !r.token || !r.secret) {
                 const response: HttpResponseModel<IGameResource> = {
                     httpCode: 500,
                     message: JSON.stringify(r)
                 };
+                console.log("ERROR, DELETING THE GAME")
+                await this.deleteOne(game.id);
                 return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));
-    
             }
-            const entity = await gameResourceAsm.toEntity(game);
-            const saved = await this.serviceFactory.getGameRepository().saveOrUpdate(entity);
-            const resource = await gameResourceAsm.toResource(saved);
             resource.token = r.token;
             resource.secret = r.secret;
             const response : HttpResponseModel<IGameResource> = {

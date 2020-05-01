@@ -55,3 +55,8 @@ log - preRequest - error - relation "log" does not exist
 Error {"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":5432}
 Error {"name":"error","length":104,"severity":"FATAL","code":"57P03","file":"postmaster.c","line":"2206","routine":"ProcessStartupPacket"}
 Error {}
+Error {}
+Error {"name":"ConnectionNotFoundError","message":"Connection \"default\" was not found."}
+Error {}
+Error {"name":"ConnectionNotFoundError","message":"Connection \"default\" was not found."}
+Error {}

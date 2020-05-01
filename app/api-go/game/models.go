@@ -7,27 +7,27 @@ type Worker struct {
 
 // Game is the struct holding all data of each instance
 type Game struct {
-	Name    string
-	Token   string
-	Started bool
-	Env     *Environment
-	Players []Player
+	Name    string       `json:"name,omitempty"`
+	Token   string       `json:"token,omitempty"`
+	Started bool         `json:"started,omitempty"`
+	Env     *Environment `json:"environment,omitempty"`
+	Players []Player     `json:"players,omitempty"`
 }
 
 // Player is one of the entity playing in a game, it hold bot data
 type Player struct {
-	ID    string
-	Token string
+	ID    string `json:"id,omitempty"`
+	Token string `json:"token,omitempty"`
 	// botAttr  BotAttr
-	BotSpecs   *Bot
-	BotContext Context
+	BotSpecs   *Bot    `json:"botSpecs,omitempty"`
+	BotContext Context `json:"botContext,omitempty"`
 }
 
 // Context hold game data on a specific bot while running
 type Context struct {
-	Moving bool
-	Energy int16
-	Heat   int16
+	Moving bool  `json:"moving,omitempty"`
+	Energy int16 `json:"energy,omitempty"`
+	Heat   int16 `json:"heat,omitempty"`
 }
 
 // BotAttr hold game data on a specific bot (default multiplicators & values)
@@ -50,25 +50,25 @@ type BotAttr struct {
 // think about the attributes that shouldn't be changed (ip, id, basestats)
 type Bot struct {
 	// technical stuff
-	ID      int16
-	Address string
-	Running bool
-	Taken   bool
+	ID      int16  `json:"id,omitempty"`
+	Address string `json:"address,omitempty"`
+	Running bool   `json:"running,omitempty"`
+	Taken   bool   `json:"taken,omitempty"`
 
 	// game relative stuff
-	Name         string
-	BaseSpeed    int8
-	BaseDamage   int8
-	BaseHull     int8
-	BaseFireRate int8
+	Name         string `json:"name,omitempty"`
+	BaseSpeed    int8   `json:"baseSpeed,omitempty"`
+	BaseDamage   int8   `json:"baseDamage,omitempty"`
+	BaseHull     int8   `json:"baseHull,omitempty"`
+	BaseFireRate int8   `json:"basFireRate,omitempty"`
 }
 
 // Environment is the physical place where battlebots are: (room 1, room2, room3)
 type Environment struct {
-	ID        int16
-	Name      string
-	Bots      []Bot
-	Available bool
+	ID        int16  `json:"id,omitempty"`
+	Name      string `json:"name,omitempty"`
+	Bots      []Bot  `json:"bots,omitempty"`
+	Available bool   `json:"available,omitempty"`
 }
 
 // Rules hold the rules of the game instance (deathmatch, capture the flag, free for all,

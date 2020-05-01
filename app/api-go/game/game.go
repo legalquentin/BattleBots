@@ -24,19 +24,20 @@ func CreateGame(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	id := strconv.Itoa(t.ID)
 	log.Println(prefixLog, t.ID)
-	if _, ok := baseGameInstances[strconv.Itoa(t.ID)]; ok {
-		log.Println(prefixWarn, "Game '"+t.Name+"' with id '"+strconv.Itoa(t.ID)+"' already exist")
+	if _, ok := baseGameInstances[id]; ok {
+		log.Println(prefixWarn, "Game '"+t.Name+"' with id '"+id+"' already exist")
 		http.Error(res, "Game already exist", 400)
 		return
 	}
 	var ref = &appartement
-	baseGameInstances[strconv.Itoa(t.ID)] = Game{t.Name, t.Token, false, ref, nil}
+	baseGameInstances[id] = Game{t.Name, t.Token, false, ref, nil}
 
 	// baseGameInstances
-	log.Println(prefixLog, "creating game...")
+	log.Println(prefixLog, "creating game...", baseGameInstances[id].Name)
 	res.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(res).Encode(baseGameInstances[strconv.Itoa(t.ID)])
+	json.NewEncoder(res).Encode(baseGameInstances[id])
 	return
 }
 
