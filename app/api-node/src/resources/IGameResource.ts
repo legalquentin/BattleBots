@@ -13,4 +13,5 @@ export class IGameResource {
     createdAt?: string;
     updatedAt?: string;
     token?: string;
+    secret?: string;
 }
