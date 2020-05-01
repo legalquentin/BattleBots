@@ -36,12 +36,14 @@ export default class BattleWorkerService implements IBattleWorkerService{
      * startGoWorker will start a go process on the server add it to the listof  "WorkerProcesses"
      */
     public async startGoWorker(game: IGameResource) {
+        const addr = this.config.getWorkerAddress();
+        const port = this.config.getWorkerPort();
         const p = await new Promise(async rslv => {
             const WORKER_PATH = `${this.config.getWorkerDir()}/main.go`; // '/home/quentin/go/src/TIC-GPE5/Worker';
             const secret = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
             if (Workers == null) {
                 const child = cp.spawn('go', ['run', WORKER_PATH, secret], { stdio: [process.stdin, process.stdout, process.stderr] });
-                Workers = { process: child, url: this.config.getWorkerAddress() + ":" + this.config.getWorkerPort(), key: secret };
+                Workers = { process: child, url: addr + ":" + port, key: secret };
                 // give 3 sec to start the worker
                 await new Promise(resolve => setTimeout(resolve, 3000));
             }
@@ -55,7 +57,7 @@ export default class BattleWorkerService implements IBattleWorkerService{
                 json: true,
                 method: "POST",
                 strictSSL: false,
-                url: "https://127.0.0.1:443/api/game/create"
+                url: `https://${addr}:${port}/api/game/create`
             }, (error, response, body) => {
                 console.log("#################################");
                 console.log(response, body);
