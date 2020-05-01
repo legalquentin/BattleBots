@@ -152,7 +152,6 @@ export class GameServiceImpl implements GameService {
             const game = await this.serviceFactory.getGameRepository().getOne(id);
             const gameResourceAsm = Container.get(GameResourceAsm);
 
-            console.log(game);
             if (!game){
                 const response : HttpResponseModel<IGameResource> = {
                     httpCode: 404,
@@ -165,7 +164,7 @@ export class GameServiceImpl implements GameService {
             if (await this.serviceFactory.getStreamsRepository().hasStream(id)){
                 await gameResourceAsm.AddStreamResouce(game, resource);
             }
-            if (!await this.serviceFactory.getBotsRepository().hasBotsByArena((await game.arena).id)){
+            if ((await game.arena)! && !(await this.serviceFactory.getBotsRepository().hasBotsByArena((await game.arena).id))){
                 game.arena.robotArena = [];
             }
             if (await this.serviceFactory.getArenaRepository().hasArena(id)){
