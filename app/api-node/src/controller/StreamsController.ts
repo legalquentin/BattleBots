@@ -1,5 +1,5 @@
 import { StreamsService } from "../service/StreamsService";
-import { Container } from "typescript-ioc";
+import { Inject } from "typescript-ioc";
 import { Path, PreProcessor, PostProcessor, PathParam, GET, DELETE, POST, PUT, Security  } from "typescript-rest";
 import { preRequest } from "../service/interceptors/preRequest/preRequest";
 import { postRequest } from "../service/interceptors/postRequest/postRequest";
@@ -11,11 +11,9 @@ import { Produces, Consumes, Response } from "typescript-rest-swagger";
 @PreProcessor(preRequest)
 @PostProcessor(postRequest)
 export class StreamsContoller {
+    
+    @Inject
     private streamsService: StreamsService;
-
-    constructor(){
-        this.streamsService = Container.get(StreamsService);
-    }
 
     @Produces("application/json;charset=UTF-8")
     @Response<HttpResponseModel<IStreamResource>>(200, "Stream list")

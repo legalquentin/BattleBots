@@ -31,6 +31,8 @@ import { BotArenaService } from './service/BotArenaService';
 import { BotArenaServiceImpl } from './service/impl/BotArenaServiceImpl';
 import { BotGameRepository } from './database/repositories/BotGameRepository';
 import { Scope } from 'typescript-ioc';
+import IBattleWorkerService from './service/IBattleWorkerService';
+import BattleWorkerService from './service/impl/BattleWorkerService';
 
 const config =  {
         env: {
@@ -135,6 +137,11 @@ const config =  {
                     to: FakeRepository,
                     scope: Scope.Singleton
                 },
+                {
+                    bind: IBattleWorkerService,
+                    to: BattleWorkerService,
+                    scope: Scope.Singleton
+                }
             ],
             "production": [
                 {
@@ -235,6 +242,11 @@ const config =  {
                 {
                     bind: BotGameRepository,
                     to: BotGameRepository,
+                    scope: Scope.Singleton
+                },
+                {
+                    bind: IBattleWorkerService,
+                    to: BattleWorkerService,
                     scope: Scope.Singleton
                 }
         ]

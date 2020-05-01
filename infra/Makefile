@@ -7,7 +7,7 @@ prepare:
 	cd ../app/vuejs && yarn
 
 run\:battlebots:
-	cd .docker && docker-compose up --build --remove-orphans
+	cd .docker && docker-compose up --build -d && cd ../../app/api-node/ && npm run typeorm:migration:run:production && npm start
 
 test\:battlebots:
 	cd ../app/api-node && npm test

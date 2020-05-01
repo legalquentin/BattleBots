@@ -28,7 +28,6 @@ export class PlayerServiceImpl implements PlayerService {
                     }
                 ]
             });
-            console.log(finded);
             if (finded){
                 const response: HttpResponseModel<IResourceId> = {
                     data: null,

@@ -1,5 +1,5 @@
 import { GameService } from "../service/GameService";
-import { Container } from "typescript-ioc";
+import { Inject } from "typescript-ioc";
 import { Path, PreProcessor, PostProcessor, POST, PUT, PathParam, GET, DELETE, Security  } from "typescript-rest";
 import { preRequest } from "../service/interceptors/preRequest/preRequest";
 import { postRequest } from "../service/interceptors/postRequest/postRequest";
@@ -11,11 +11,9 @@ import { Produces, Response, Consumes } from "typescript-rest-swagger";
 @PreProcessor(preRequest)
 @PostProcessor(postRequest)
 export class GameController {
-    private gameService: GameService;
 
-    constructor(){
-        this.gameService = Container.get(GameService);
-    }
+    @Inject
+    private gameService: GameService;
 
     @POST
     @Path("/")

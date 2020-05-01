@@ -45,9 +45,9 @@ export class StreamsServiceImpl implements StreamsService {
 
     public async saveOrUpdate(stream: IStreamResource){
         const streamResourceAsm = Container.get(StreamsResourceAsm);
-        const entity = await streamResourceAsm.toEntity(stream);
 
         try {
+            const entity = await streamResourceAsm.toEntity(stream);
             const finded = await this.service.getStreamsRepository().saveOrUpdate(entity);
             const resource = await streamResourceAsm.toResource(finded);
             const response: HttpResponseModel<IStreamResource> = {
@@ -61,7 +61,7 @@ export class StreamsServiceImpl implements StreamsService {
         catch (e){
             const response: HttpResponseModel<IStreamResource> = {
                 httpCode: 400,
-                message: e.message
+                message: "Bad Request"
             };
 
             return Promise.resolve(new SendResource<HttpResponseModel<IStreamResource>>("StreamController", response.httpCode, response));

@@ -1,6 +1,6 @@
 import { Path, PreProcessor, PostProcessor, GET, POST, PathParam, DELETE, PUT, Security  } from "typescript-rest";
 import { BotsService } from "../service/BotsService";
-import { Container } from "typescript-ioc";
+import { Inject } from "typescript-ioc";
 import { preRequest } from "../service/interceptors/preRequest/preRequest";
 import { postRequest } from "../service/interceptors/postRequest/postRequest";
 import HttpResponseModel from "../resources/HttpResponseModel";
@@ -11,11 +11,9 @@ import { Produces, Response, Consumes } from "typescript-rest-swagger";
 @PreProcessor(preRequest)
 @PostProcessor(postRequest)
 export class BotsController {
-    private botsService: BotsService;
 
-    constructor(){
-        this.botsService = Container.get(BotsService);
-    }
+    @Inject
+    private botsService: BotsService;
 
     @Path("/")
     @GET

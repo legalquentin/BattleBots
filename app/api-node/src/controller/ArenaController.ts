@@ -1,7 +1,7 @@
 import { Path, POST, DELETE, PathParam, PUT, GET, PreProcessor, PostProcessor, Security } from "typescript-rest";
 import { ArenaService } from "../service/ArenaService";
 import { IArenaResource } from "../resources/IArenaResource";
-import { Container } from "typescript-ioc";
+import { Inject } from "typescript-ioc";
 import HttpResponseModel from "../resources/HttpResponseModel";
 import { SendResource } from "../../lib/ReturnExtended";
 import { preRequest } from "../service/interceptors/preRequest/preRequest";
@@ -12,11 +12,9 @@ import { Produces, Consumes, Response } from "typescript-rest-swagger";
 @PreProcessor(preRequest)
 @PostProcessor(postRequest)
 export class ArenaController {
-    private arenaService: ArenaService;
 
-    constructor(){
-        this.arenaService = Container.get(ArenaService);
-    }
+    @Inject
+    private arenaService: ArenaService;
 
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")

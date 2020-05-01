@@ -137,7 +137,6 @@ export class ApiServer {
         const authenticator = new PassportAuthenticator(strategy, {
              authOptions: {
                 session: false,
-                failWithError: true,
             }
         });
         Server.registerAuthenticator(authenticator, "Bearer");

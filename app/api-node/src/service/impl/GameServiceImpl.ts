@@ -8,12 +8,16 @@ import HttpResponseModel from "../../resources/HttpResponseModel";
 import { IGameResource } from "../../resources/IGameResource";
 import { SendResource } from "../../../lib/ReturnExtended";
 import { GameResourceAsm } from "../../resources/asm/GameResourceAsm";
+import IBattleWorkerService from "../IBattleWorkerService";
 
 @Singleton
 export class GameServiceImpl implements GameService {
 
     @Inject
     private serviceFactory: IServiceFactory;
+
+    @Inject
+    private battleWorkerService: IBattleWorkerService;
 
     public async saveOrUpdate(game: IGameResource) {
         if (!game.status){
@@ -35,7 +39,7 @@ export class GameServiceImpl implements GameService {
         catch (e){
             const response: HttpResponseModel<IGameResource> = {
                 httpCode: 400,
-                message: e.message
+                message: "Bad Request"
             };
 
             return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));
@@ -191,14 +195,10 @@ export class GameServiceImpl implements GameService {
     }
 
     public async linkBotToGame(botId: number, gameId: number){
-        console.log(botId);
-        console.log(gameId);
         try {
             const game = await this.serviceFactory.getBotGameRepository().linkBotToGame(botId, gameId);
-            console.log(game);
             const gameResourceAsm = Container.get(GameResourceAsm);
             const resource = await gameResourceAsm.toResource(game);
-            console.log(resource);
             const response: HttpResponseModel<IGameResource> = {
                 httpCode: 200,
                 message: `link bot ${botId} to game ${gameId}`,

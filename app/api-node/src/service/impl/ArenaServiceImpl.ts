@@ -15,8 +15,8 @@ export class ArenaServiceImpl implements ArenaService {
 
     public async saveOrUpdate(arena: IArenaResource){
         const arenaResourceAsm = Container.get(ArenaResourceAsm);
-        const toSave = await arenaResourceAsm.toEntity(arena);
         try {
+            const toSave = await arenaResourceAsm.toEntity(arena);
             const saved = await this.factory.getArenaRepository().saveOrUpdate(toSave);
             const resource = await arenaResourceAsm.toResource(saved);
             const response : HttpResponseModel<IArenaResource> = {
@@ -30,7 +30,7 @@ export class ArenaServiceImpl implements ArenaService {
         catch (e){
             const response : HttpResponseModel<IArenaResource> = {
                 httpCode: 400,
-                message: e.message
+                message: "Bad Request"
             };
 
             return Promise.resolve(new SendResource<HttpResponseModel<IArenaResource>>("ArenaController", response.httpCode, response));        
