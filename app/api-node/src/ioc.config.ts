@@ -34,7 +34,7 @@ import { Scope } from 'typescript-ioc';
 import IBattleWorkerService from './service/IBattleWorkerService';
 import BattleWorkerService from './service/impl/BattleWorkerService';
 
-const config =  {
+const iocConfig =  {
         env: {
             "test": [
                 {
@@ -253,4 +253,4 @@ const config =  {
     }
 };
 
-export default config;
+export default iocConfig;

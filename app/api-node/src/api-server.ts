@@ -2,12 +2,12 @@ import * as cors from 'cors';
 import * as express from 'express';
 import * as http from 'http';
 import * as morgan from 'morgan';
-import { ExtractJwt, Strategy, StrategyOptions } from 'passport-jwt';
-import { PassportAuthenticator, Server } from 'typescript-rest';
+import { Server, PassportAuthenticator } from 'typescript-rest';
 import { Container } from 'typescript-ioc';
-import config from "./ioc.config";
+import iocConfig from "./ioc.config";
 import IConfig from './service/IConfig';
 import { UserRepository } from './database/repositories/UserRepository';
+import { Strategy, StrategyOptions, ExtractJwt } from 'passport-jwt';
 
 export class ApiServer {
     public PORT: number = 80; // +process.env.PORT || 8080;
@@ -106,7 +106,7 @@ export class ApiServer {
         if (process.env.NODE_ENV !== "test") {
             this.app.use(morgan('combined'));
         }
-        Container.configure(config);
+        Container.configure(iocConfig);
         Container.environment(process.env.NODE_ENV);
         this.configureAuthenticator();
     }
@@ -119,24 +119,23 @@ export class ApiServer {
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             secretOrKey: Buffer.from(JWT_SECRET)
         };
-        const strategy = new Strategy(jwtConfig, async (payload: any, done: (err: any, user: any) => void) => {
+        const strategy = new Strategy(jwtConfig, async (payload: any, done: (err: any, user: any, info: any) => void) => {
             const user = await userRepository.findOne(payload.sub);
-
             if (!user){
-                done("User not exist", null);
+                done(null, null, 403);
             }
             else {
                 const o = {
-                    sub: user.id,
+                    id: user.id,
                     roles: user.roles
                 };
 
-                done(null, o);
+                done(null, o, null);
             }
         });
         const authenticator = new PassportAuthenticator(strategy, {
-             authOptions: {
-                session: false,
+            authOptions: {
+                session: false
             }
         });
         Server.registerAuthenticator(authenticator, "Bearer");

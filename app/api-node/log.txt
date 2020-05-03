@@ -60,3 +60,10 @@ Error {"name":"ConnectionNotFoundError","message":"Connection \"default\" was no
 Error {}
 Error {"name":"ConnectionNotFoundError","message":"Connection \"default\" was not found."}
 Error {}
+Error {}
+Error {}
+Error {}
+Error {}
+Error {}
+Error {}
+Error {}

@@ -2111,6 +2111,10 @@
 					"token": {
 						"type": "string",
 						"description": ""
+					},
+					"secret": {
+						"type": "string",
+						"description": ""
 					}
 				},
 				"type": "object",
