@@ -249,6 +249,113 @@ const iocConfig =  {
                     to: BattleWorkerService,
                     scope: Scope.Singleton
                 }
+        ],
+        "development": [
+            {
+                bind: UserService,
+                to: UserServiceImpl,
+                scope: Scope.Singleton
+            },
+            {
+                bind: GameService,
+                to: GameServiceImpl,
+                scope: Scope.Singleton
+            },
+            {
+                bind: ArenaService,
+                to: ArenaServiceImpl,
+                scope: Scope.Singleton
+            },
+            {
+                bind: AuthenticationService,
+                to: AuthenticationServiceImpl,
+                scope: Scope.Singleton
+            },
+            {
+                bind: PlayerService,
+                to: PlayerServiceImpl,
+                scope: Scope.Singleton
+            },
+            {
+                bind: BotsService,
+                to: BotsServiceImpl,
+                scope: Scope.Singleton
+            },
+            {
+                bind: LogService,
+                to: LogServiceImpl,
+                scope: Scope.Singleton
+            },
+            {
+                bind: StreamsService,
+                to: StreamsServiceImpl,
+                scope: Scope.Singleton
+            },
+            {
+                bind: BotArenaService,
+                to: BotArenaServiceImpl,
+                scope: Scope.Singleton
+            },
+            {
+                bind: IServiceFactory,
+                to: ServiceFactory,
+                scope: Scope.Singleton
+            },
+            {
+                bind: IConfig,
+                to: Config,
+                scope: Scope.Singleton
+            },
+            {
+                bind: PlayerRepository,
+                to: PlayerRepository,
+                scope: Scope.Singleton
+            },
+            {
+                bind: UserRepository,
+                to: UserRepository,
+                scope: Scope.Singleton
+            },
+            {
+                bind: GameRepository,
+                to: GameRepository,
+                scope: Scope.Singleton
+            },
+            {
+                bind: ArenaRepository,
+                to: ArenaRepository,
+                scope: Scope.Singleton
+            },
+            {
+                bind: BotsRepository,
+                to: BotsRepository,
+                scope: Scope.Singleton
+            },
+            {
+                bind: StreamsRepository,
+                to: StreamsRepository,
+                scope: Scope.Singleton
+            },
+            {
+                bind: LogRepository,
+                to: LogRepository,
+                scope: Scope.Singleton
+            },
+            {
+                bind: BotArenaRepository,
+                to: BotArenaRepository,
+                scope: Scope.Singleton
+            },
+            {
+                bind: BotGameRepository,
+                to: BotGameRepository,
+                scope: Scope.Singleton
+            },
+            {
+                bind: IBattleWorkerService,
+                to: BattleWorkerService,
+                scope: Scope.Singleton
+            }
         ]
     }
 };

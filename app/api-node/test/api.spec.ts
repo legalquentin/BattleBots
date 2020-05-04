@@ -5,8 +5,8 @@ import * as sinon from "sinon";
 import { hashSync } from "bcrypt";
 import IConfig from '../src/service/IConfig';
 import { Container } from "typescript-ioc";
-import { ApiServer } from '../src/api-server';
 import IServiceFactory from '../src/service/IServiceFactory';
+import { HttpApiServer } from '../src/http-api-server';
 
 const client: request.RequestAPI<request.Request, request.CoreOptions, request.RequiredUriUrl>
     = request.defaults({ baseUrl: `http://localhost:${80}` });
@@ -18,7 +18,7 @@ let serviceFactory : IServiceFactory = null;
 describe('API Testing', async () => {
 
     before(async () => {
-        apiServer = new ApiServer();
+        apiServer = new HttpApiServer();
 
         await apiServer.start();
         config = Container.get(IConfig);

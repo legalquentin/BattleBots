@@ -5,6 +5,7 @@ import { StreamsRepository } from "./StreamsRepository";
 import { EntityError } from "../../../lib/EntityError";
 import { EEntityStatus } from "../../../lib/EEntityStatus";
 import { ArenaRepository } from "./ArenaRepository";
+import { connectionName } from "../../service/util/connectionName";
 
 @EntityRepository(GameEntity)
 @Singleton
@@ -14,8 +15,8 @@ export class GameRepository extends Repository<GameEntity> {
 
     constructor(){
         super();
-        this.manager = getManager(process.env.NODE_ENV);
-        this.metadata = getConnection(process.env.NODE_ENV).getMetadata(GameEntity);
+        this.manager = getManager(connectionName());
+        this.metadata = getConnection(connectionName()).getMetadata(GameEntity);
     }
 
     public getOne(id: number){

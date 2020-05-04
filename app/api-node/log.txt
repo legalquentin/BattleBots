@@ -67,3 +67,25 @@ Error {}
 Error {}
 Error {}
 Error {}
+Error {"name":"ConnectionNotFoundError","message":"Connection \"default\" was not found."}
+Error {"name":"ConnectionNotFoundError","message":"Connection \"default\" was not found."}
+Error {}
+Error {}
+Error {}
+Error {}
+Error {}
+Error {}
+Error {}
+Error {"opensslErrorStack":["error:0907B00D:PEM routines:PEM_read_bio_PrivateKey:ASN1 lib","error:2306A075:PKCS12 routines:PKCS12_item_decrypt_d2i:pkcs12 pbe crypt error","error:23077074:PKCS12 routines:PKCS12_pbe_crypt:pkcs12 cipherfinal error"],"library":"digital envelope routines","function":"EVP_DecryptFinal_ex","reason":"bad decrypt","code":"ERR_OSSL_EVP_BAD_DECRYPT"}
+Error {"opensslErrorStack":["error:0907B00D:PEM routines:PEM_read_bio_PrivateKey:ASN1 lib","error:2306A075:PKCS12 routines:PKCS12_item_decrypt_d2i:pkcs12 pbe crypt error","error:23077074:PKCS12 routines:PKCS12_pbe_crypt:pkcs12 cipherfinal error"],"library":"digital envelope routines","function":"EVP_DecryptFinal_ex","reason":"bad decrypt","code":"ERR_OSSL_EVP_BAD_DECRYPT"}
+Error {"opensslErrorStack":["error:0907B00D:PEM routines:PEM_read_bio_PrivateKey:ASN1 lib","error:2306A075:PKCS12 routines:PKCS12_item_decrypt_d2i:pkcs12 pbe crypt error","error:23077074:PKCS12 routines:PKCS12_pbe_crypt:pkcs12 cipherfinal error"],"library":"digital envelope routines","function":"EVP_DecryptFinal_ex","reason":"bad decrypt","code":"ERR_OSSL_EVP_BAD_DECRYPT"}
+Error {"opensslErrorStack":["error:0907B00D:PEM routines:PEM_read_bio_PrivateKey:ASN1 lib","error:2306A075:PKCS12 routines:PKCS12_item_decrypt_d2i:pkcs12 pbe crypt error","error:23077074:PKCS12 routines:PKCS12_pbe_crypt:pkcs12 cipherfinal error"],"library":"digital envelope routines","function":"EVP_DecryptFinal_ex","reason":"bad decrypt","code":"ERR_OSSL_EVP_BAD_DECRYPT"}
+Error {"opensslErrorStack":["error:0907B00D:PEM routines:PEM_read_bio_PrivateKey:ASN1 lib","error:2306A075:PKCS12 routines:PKCS12_item_decrypt_d2i:pkcs12 pbe crypt error","error:23077074:PKCS12 routines:PKCS12_pbe_crypt:pkcs12 cipherfinal error"],"library":"digital envelope routines","function":"EVP_DecryptFinal_ex","reason":"bad decrypt","code":"ERR_OSSL_EVP_BAD_DECRYPT"}
+Error {"opensslErrorStack":["error:0907B00D:PEM routines:PEM_read_bio_PrivateKey:ASN1 lib","error:2306A075:PKCS12 routines:PKCS12_item_decrypt_d2i:pkcs12 pbe crypt error","error:23077074:PKCS12 routines:PKCS12_pbe_crypt:pkcs12 cipherfinal error"],"library":"digital envelope routines","function":"EVP_DecryptFinal_ex","reason":"bad decrypt","code":"ERR_OSSL_EVP_BAD_DECRYPT"}
+Error {}
+Error {}
+Error {}
+Error {}
+Error {}
+Error {}
+Error {}

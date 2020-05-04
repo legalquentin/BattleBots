@@ -5,6 +5,7 @@ import { EntityError } from "../../../lib/EntityError";
 import { EEntityStatus } from "../../../lib/EEntityStatus";
 import { PlayerRepository } from "./PlayerRepository";
 import { StreamsRepository } from "./StreamsRepository";
+import { connectionName } from "../../service/util/connectionName"; 
 
 @Singleton
 @EntityRepository(RobotsEntity)
@@ -14,8 +15,8 @@ export class BotsRepository extends Repository<RobotsEntity> {
 
     constructor(){
         super();
-        this.metadata = getConnection(process.env.NODE_ENV).getMetadata(RobotsEntity);
-        this.manager = getManager(process.env.NODE_ENV);
+        this.metadata = getConnection(connectionName()).getMetadata(RobotsEntity);
+        this.manager = getManager(connectionName());
     }
 
     public async hasBots(game_id: number){

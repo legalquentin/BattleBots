@@ -6,6 +6,7 @@ import { EntityError } from "../../../lib/EntityError";
 import { EEntityStatus } from "../../../lib/EEntityStatus";
 import { BotsRepository } from "./BotsRepository";
 import { ArenaRepository } from "./ArenaRepository";
+import { connectionName } from "../../service/util/connectionName"; 
 
 @Singleton
 @EntityRepository(RobotsArenaEntity)
@@ -15,8 +16,8 @@ export class BotArenaRepository extends Repository<RobotsArenaEntity> {
 
     constructor(){
         super();
-        this.manager = getManager(process.env.NODE_ENV);
-        this.metadata = getConnection(process.env.NODE_ENV).getMetadata(RobotsArenaEntity);
+        this.manager = getManager(connectionName());
+        this.metadata = getConnection(connectionName()).getMetadata(RobotsArenaEntity);
     }
 
     public async linkBot(arenaId: number, botId: number): Promise<ArenaEntity> {

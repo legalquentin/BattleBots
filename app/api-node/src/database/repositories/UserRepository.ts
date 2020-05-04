@@ -1,6 +1,7 @@
 import { Repository, EntityRepository, EntityMetadata, EntityManager, getManager, getConnection } from "typeorm";
 import UserEntity from "../entities/UserEntity";
 import { Singleton } from "typescript-ioc";
+import { connectionName } from "../../service/util/connectionName";
 
 @EntityRepository(UserEntity)
 @Singleton
@@ -10,8 +11,8 @@ export class UserRepository extends Repository<UserEntity> {
 
     constructor() {
         super();
-        this.manager = getManager(process.env.NODE_ENV);
-        this.metadata = getConnection(process.env.NODE_ENV).getMetadata(UserEntity);
+        this.manager = getManager(connectionName());
+        this.metadata = getConnection(connectionName()).getMetadata(UserEntity);
     }
 
     public async saveOrUpdate(user: UserEntity){

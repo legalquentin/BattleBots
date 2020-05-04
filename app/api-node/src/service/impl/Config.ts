@@ -12,6 +12,26 @@ export default class Config extends IConfig{
         this.workerAddress = config.get('worker_address');
         this.workerPort = config.get('worker_port');
         this.workerDirectory = config.get('worker_directory');
+        this.apiAddress = config.get('api_address');
+        this.apiPort = config.get('api_port');
+        this.apiScheme = config.get('api_scheme');
+        this.apiUseSSL = config.get('api_useSSL') 
+    }
+
+    getApiAddress(): string {
+        return (this.apiAddress);
+    }
+
+    getApiPort(): string {
+        return (this.apiPort);
+    }
+
+    getApiUseSSL(): boolean {
+       return (this.apiUseSSL);
+    }
+
+    getApiScheme(): string {
+        return (this.apiScheme);
     }
 
     genSalt(): string{
