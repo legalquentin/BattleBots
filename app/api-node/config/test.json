@@ -9,5 +9,6 @@
     "api_address": "127.0.0.1",
     "api_port": "443",
     "api_useSSL": false,
-    "api_scheme": "http"
+    "api_scheme": "http",
+    "home_api_node": ""
 }

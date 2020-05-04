@@ -1,18 +1,19 @@
 import { ApiServer } from "./api-server";
 import * as https from "https";
 import * as fs from "fs";
+import IConfig from "../src/service/IConfig";
 
 export class HttpsApiServer extends ApiServer{
 
     private httpsServer: https.Server = null;
 
     public runServer() {
-    	   return new Promise<any>((resolve, reject) => {
+    	return new Promise<any>((resolve, reject) => {
             this.options = {
-                key: fs.readFileSync(`${__dirname}/../../../infra/api-ssl/key.pem`, {
+                key: fs.readFileSync(`${this.serviceConfig.getHomeApiNode()}/api-ssl/key.pem`, {
                     encoding: "utf8"
                 }),
-                cert: fs.readFileSync(`${__dirname}/../../../infra/api-ssl/cert.pem`, {
+                cert: fs.readFileSync(`${this.serviceConfig.getHomeApiNode()}/api-ssl/cert.pem`, {
                     encoding: "utf8"
                 })
             };

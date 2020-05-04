@@ -8,6 +8,7 @@ export default abstract class IConfig {
     protected apiPort: string;
     protected apiUseSSL: boolean;
     protected apiScheme: string;
+    protected homeApiNode: string;
 
     abstract genSalt(): string;
     abstract getSecret(): string;
@@ -20,4 +21,5 @@ export default abstract class IConfig {
     abstract getApiPort(): string;
     abstract getApiUseSSL(): boolean;
     abstract getApiScheme(): string;    
+    abstract getHomeApiNode(): string;
 };

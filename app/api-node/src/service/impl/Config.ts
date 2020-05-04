@@ -53,4 +53,8 @@ export default class Config extends IConfig{
     getWorkerDir(): string {
         return this.workerDirectory;
     }
+    
+    getHomeApiNode(): string {
+        return this.homeApiNode;
+    }
 };
