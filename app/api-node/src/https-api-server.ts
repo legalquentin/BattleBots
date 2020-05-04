@@ -7,12 +7,12 @@ export class HttpsApiServer extends ApiServer{
     private httpsServer: https.Server = null;
 
     public runServer() {
-        return new Promise<any>((resolve, reject) => {
+    	   return new Promise<any>((resolve, reject) => {
             this.options = {
-                key: fs.readFileSync(`../../../infra/api-ssl/key.pem`, {
+                key: fs.readFileSync(`${__dirname}/../../../infra/api-ssl/key.pem`, {
                     encoding: "utf8"
                 }),
-                cert: fs.readFileSync(`../../../infra/api-ssl/cert.pem`, {
+                cert: fs.readFileSync(`${__dirname}/../../../infra/api-ssl/cert.pem`, {
                     encoding: "utf8"
                 })
             };
