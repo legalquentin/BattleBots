@@ -38,7 +38,7 @@ export abstract class ApiServer {
             filePath: 'swagger.yaml',
             endpoint: "api-docs",
             host: "hardwar.ddns.net",
-            schemes: ["http"]
+            schemes: [this.serviceConfig.getApiScheme()]
         });
         this.app.use(bodyParser.json({ verify: function(req, res, buf, encoding){
             req.rawBody = buf.toString();
