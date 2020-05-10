@@ -65,19 +65,15 @@ export abstract class ApiServer {
     public async start() {
         this.PORT = parseInt(this.serviceConfig.getApiPort(), 10);
         this.scheme = this.serviceConfig.getApiScheme();
-         return new Promise<any>((resolve, reject) => {
-            this.runServer();
-        });
+        await this.runServer(); 
     }
 
     /**
      * Stop the server (if running).
      * @returns {Promise<boolean>}
      */
-    public async stop(): Promise<boolean> {
-        return new Promise<boolean>((resolve) => {
-            this.closeServer();
-        });
+    public async stop() {
+        await this.closeServer();
     }
 
     /**

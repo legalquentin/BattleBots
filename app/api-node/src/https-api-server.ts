@@ -1,7 +1,6 @@
 import { ApiServer } from "./api-server";
 import * as https from "https";
 import * as fs from "fs";
-import IConfig from "../src/service/IConfig";
 
 export class HttpsApiServer extends ApiServer{
 
