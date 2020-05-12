@@ -3,25 +3,22 @@ import { ApiServer } from './api-server';
 import "reflect-metadata";
 import { Connection, createConnection } from 'typeorm';
 import * as fs from "fs";
-import * as config from "config";
-
-const ENV = "NODE_ENV";
-const defaultEnv = "staging";
-const connectionName = config.util.getEnv(ENV) ? config.util.getEnv(ENV) : defaultEnv;
+import { connectionName } from "../src/service/util/connectionName"; 
+import { ApiServerFactory } from './api-server-factory';
 
 export async function start(): Promise<ApiServer> {
     // const mongoConnector = new MongoConnector();
     // TODO : Create config files (db settings and entities declarations)
     return new Promise((resolve, reject) => {
-        createConnection(connectionName).then(async (connection: Connection) => {        
-            const apiServer = new ApiServer();
+        createConnection(connectionName()).then(async (connection: Connection) => {
+            const factory = new ApiServerFactory();
+            const apiServer = factory.getServer();
 
             await apiServer.start();
             const graceful = async () => {
                 await apiServer.stop();
                 process.exit(0);
             };
-
             process.on('SIGTERM', graceful);
             process.on('SIGINT', graceful);
             resolve(apiServer);

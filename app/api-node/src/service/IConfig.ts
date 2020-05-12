@@ -4,6 +4,11 @@ export default abstract class IConfig {
     protected workerAddress: string;
     protected workerPort: string;
     protected workerDirectory: string;
+    protected apiAddress: string;
+    protected apiPort: string;
+    protected apiUseSSL: boolean;
+    protected apiScheme: string;
+    protected homeApiNode: string;
 
     abstract genSalt(): string;
     abstract getSecret(): string;
@@ -11,4 +16,10 @@ export default abstract class IConfig {
     abstract getWorkerAddress(): string;
     abstract getWorkerPort(): string;
     abstract getWorkerDir(): string;
+
+    abstract getApiAddress(): string;
+    abstract getApiPort(): string;
+    abstract getApiUseSSL(): boolean;
+    abstract getApiScheme(): string;    
+    abstract getHomeApiNode(): string;
 };

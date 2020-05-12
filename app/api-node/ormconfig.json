@@ -7,7 +7,7 @@
       "username": "root",
       "password": "p@ssw0rd",
       "database": "db",
-      "logging": true,
+      "logging": false,
       "entities": [
          "src/database/entities/**/*.ts"
       ],
@@ -31,7 +31,7 @@
       "username": "root",
       "password": "p@ssw0rd",
       "database": "db",
-      "logging": true,
+      "logging": false,
       "entities": [
          "src/database/entities/**/*.ts"
       ],
@@ -55,7 +55,7 @@
       "username": "root",
       "password": "p@ssw0rd",
       "database": "db",
-      "logging": true,
+      "logging": false,
       "entities": [
          "src/database/entities/**/*.ts"
       ],
@@ -79,7 +79,7 @@
       "username": "root",
       "password": "p@ssw0rd",
       "database": "db",
-      "logging": true,
+      "logging": false,
       "entities": [
          "src/database/entities/**/*.ts"
       ],

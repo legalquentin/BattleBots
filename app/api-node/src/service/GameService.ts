@@ -10,4 +10,6 @@ export abstract class GameService {
     public abstract linkBotToGame(botId: number, gameId: number);
     public abstract linkStreamToGame(streamId: number, gameId: number);
     public abstract linkArenaToGame(arenaId: number, gameId: number);
+
+    public abstract joinGame(gameId: string);
 }

@@ -1,6 +1,7 @@
 import { Repository, EntityRepository, EntityManager, EntityMetadata, getConnection, getManager } from "typeorm";
 import { ArenaEntity } from "../entities/ArenaEntity";
 import { Singleton } from "typescript-ioc";
+import { connectionName } from "../../service/util/connectionName"; 
 
 @Singleton
 @EntityRepository(ArenaEntity)
@@ -10,8 +11,8 @@ export class ArenaRepository extends Repository<ArenaEntity> {
 
     constructor(){
         super();
-        this.metadata = getConnection(process.env.NODE_ENV).getMetadata(ArenaEntity);
-        this.manager = getManager(process.env.NODE_ENV);
+        this.metadata = getConnection(connectionName()).getMetadata(ArenaEntity);
+        this.manager = getManager(connectionName());
     }
 
     public async hasArena(game_id: number){

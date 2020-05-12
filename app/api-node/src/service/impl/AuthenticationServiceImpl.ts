@@ -2,7 +2,7 @@ import { AuthenticationService } from "../AuthenticationService";
 import IServiceFactory from "../IServiceFactory";
 import { Inject, Singleton } from "typescript-ioc";
 import { compare } from "bcrypt";
-import { encode } from "jwt-simple";
+import { sign } from "jsonwebtoken";
 import IConfig from "../IConfig";
 import ITokenHttp from "../../resources/ITokenHttp";
 import HttpResponseModel from "../../resources/HttpResponseModel";
@@ -35,7 +35,9 @@ export class AuthenticationServiceImpl implements AuthenticationService {
                 payload.sub = user.id;
                 payload.role = user.roles;
                 payload.creationTime = Date.now();
-                const data = encode(payload, this.config.getSecret());
+                const data = sign(payload, this.config.getSecret(), {
+                    algorithm: "HS512"
+                });
                 if (data){
                     const tokenHttp : ITokenHttp = {
                         data: data
@@ -50,7 +52,7 @@ export class AuthenticationServiceImpl implements AuthenticationService {
                 }
             }
             const response : HttpResponseModel<ITokenHttp> = {
-                httpCode: 404,
+                httpCode: 403,
                 data: null,
                 message: "User not found"
             };

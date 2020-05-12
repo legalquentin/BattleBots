@@ -101,4 +101,16 @@ export class GameController {
     public async linkArenaToGame(@PathParam("arenaId") arenaId: number, @PathParam("gameId") gameId: number){
         return ( this.gameService.linkArenaToGame(arenaId, gameId));
     }
+
+
+    @PUT
+    @Path("/join/:gameId")
+    @Security("ROLE_USER", "Bearer")
+    @Consumes("application/json; charset=UTF-8")
+    @Produces("application/json; charset=UTF-8")
+    @Response<HttpResponseModel<IGameResource>>(200)
+    @Response<HttpResponseModel<IGameResource>>(400)
+    public async joinGame(@PathParam("gameId") gameId: string){
+        return (this.gameService.joinGame(gameId));
+    }
 }
