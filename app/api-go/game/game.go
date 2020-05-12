@@ -45,7 +45,7 @@ func CreateGame(res http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(res).Encode(baseGameInstances[id])
 
 	for _, b := range baseGameInstances[id].Env.Bots {
-		RunningBots = append(RunningBots, &b)
+		RunningBots = append(RunningBots, b)
 	}
 	return
 }
