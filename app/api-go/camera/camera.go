@@ -21,6 +21,7 @@ var upgrader = websocket.Upgrader{
 
 // WsHandlerCam pipe camera output from bot to frontend via sockets
 func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
+
 	player, conn := socket.WsAuth(res, req)
 	if player == nil || conn == nil {
 		return
