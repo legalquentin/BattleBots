@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"net/http"
 	"net/url"
@@ -48,6 +49,7 @@ func CreateGame(res http.ResponseWriter, req *http.Request) {
 			go Daemon(b)
 		}
 	}
+	time.Sleep(time.Second * 60)
 	return
 }
 
