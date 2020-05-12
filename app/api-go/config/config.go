@@ -17,6 +17,7 @@ const prefixWarn = "[WARN](CONFIG)"
 func ReadConfig() *error {
 	var env = os.Getenv("ENV")
 
+	game.Appartement.Bots = Config.Bots
 	file, err := os.Open("/env/config." + env + ".json")
 	if err != nil {
 		log.Println(prefixWarn, "ENV must be of: 'localhost', 'dev' or 'prod'. starting with default configuration")
@@ -29,6 +30,5 @@ func ReadConfig() *error {
 		return &err
 	}
 
-	game.Appartement.Bots = Config.Bots
 	return nil
 }
