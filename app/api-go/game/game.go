@@ -4,10 +4,12 @@ package game
 // not as an api (it should go in the api package)
 
 import (
+	"bufio"
 	"crypto/rand"
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 
 	"net/http"
 	"net/url"
@@ -57,22 +59,20 @@ func Daemon(bot *Bot) {
 		log.Println(prefixErr, err)
 	}
 	// defer file.Close()
+	f, err := os.Create("/home/pi/stream_" + bot.Name)
+	w := bufio.NewWriter(f)
+	defer f.Close()
 	bot.Socket = c
 	for {
-		messagetype, p, err := c.ReadMessage()
+		_, p, err := c.ReadMessage()
 		if err != nil {
 			log.Println(prefixErr, err)
 			return
 		}
-		if bot.Client != nil {
-			print("client exist")
-			bot.Client.WriteMessage(messagetype, p)
+		_, e := w.Write(p)
+		if e != nil {
+			log.Fatal(err)
 		}
-
-		// _, e := bufferedWriter.Write(p)
-		// if e != nil {
-		// 	log.Fatal(err)
-		// }
 	}
 }
 
