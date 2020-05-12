@@ -45,7 +45,7 @@ func CreateGame(res http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(res).Encode(baseGameInstances[id])
 
 	for _, b := range baseGameInstances[id].Env.Bots {
-		RunningBots = append(RunningBots, b)
+		RunningBots = append(RunningBots, &b)
 	}
 	return
 }
@@ -113,7 +113,7 @@ func JoinGame(res http.ResponseWriter, req *http.Request) {
 			if b.Taken == false {
 				log.Println(prefixLog, "reserving a bot")
 				// TODO: add a real token generation
-				p = Player{t.PlayerID, tokenGenerator(), b, Context{false, 100, 0}}
+				p = Player{t.PlayerID, tokenGenerator(), &b, Context{false, 100, 0}}
 				b.Taken = true
 				var g = baseGameInstances[t.GameID]
 				g.Players = append(g.Players, p)
