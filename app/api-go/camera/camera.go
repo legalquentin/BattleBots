@@ -3,7 +3,6 @@ package camera
 import (
 	"log"
 	"net/http"
-	"net/url"
 
 	"../socket"
 	"github.com/gorilla/websocket"
@@ -27,18 +26,9 @@ func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	u := url.URL{Scheme: "ws", Host: player.BotSpecs.Address + ":8084", Path: "/"}
-
-	log.Println(prefixLog, req.Host+"=>"+u.String())
-	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
-	if err != nil {
-		log.Println(prefixErr, err)
-	}
-
-	// Read c(robot) video stream and write to conn(client)
-	defer c.Close()
+	defer conn.Close()
 	for {
-		messageType, p, err := c.ReadMessage()
+		messageType, p, err := player.BotSpecs.Socket.ReadMessage()
 		if err != nil {
 			log.Println(prefixWarn, err)
 			return

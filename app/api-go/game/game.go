@@ -45,17 +45,17 @@ func CreateGame(res http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(res).Encode(baseGameInstances[id])
 
 	for _, b := range baseGameInstances[id].Env.Bots {
-		RunningBots = append(RunningBots, b)
+		RunningBots = append(RunningBots, &b)
 	}
 	return
 }
 
 // Daemon long running process to recover video feed even when no player is connected, is linked to a bot instance
-func Daemon(bot Bot) {
+func Daemon(bot *Bot) {
 	log.Println(prefixLog, "opening conn with robot: "+bot.Name)
 
 	u := url.URL{Scheme: "ws", Host: bot.Address + ":8084", Path: "/wsvideo"}
-	file, err := os.OpenFile("/home/pi/stream_"+bot.Name, os.O_WRONLY, 0666)
+	file, err := os.Create("/home/pi/stream_" + bot.Name)
 	if err != nil {
 		log.Fatal(err)
 	}

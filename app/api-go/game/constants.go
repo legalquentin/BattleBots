@@ -25,4 +25,4 @@ var Appartement = Environment{
 }
 
 // RunningBots map existing Bots
-var RunningBots = []Bot{}
+var RunningBots = []*Bot{}
