@@ -66,7 +66,8 @@ func main() {
 		for {
 			for _, b := range game.RunningBots {
 				if b.Socket == nil {
-					// go game.Daemon(b)
+					log.Println(prefixLog, "starting video feed daemon")
+					go game.Daemon(b)
 				}
 			}
 			time.Sleep(time.Second)

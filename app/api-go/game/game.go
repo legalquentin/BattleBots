@@ -8,7 +8,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 
 	"net/http"
 	"net/url"
@@ -52,33 +51,21 @@ func CreateGame(res http.ResponseWriter, req *http.Request) {
 // Daemon long running process to recover video feed even when no player is connected, is linked to a bot instance
 func Daemon(bot *Bot) {
 	log.Println(prefixLog, "opening conn with robot: "+bot.Name)
-
 	u := url.URL{Scheme: "ws", Host: bot.Address + ":8084", Path: "/wsvideo"}
-	file, err := os.Create("/home/pi/stream_" + bot.Name)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-
-	// Create a buffered writer from the file
-	// _ := bufio.NewWriter(file)
-
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
-	bot.Socket = c
 	if err != nil {
 		log.Println(prefixErr, err)
-		bot.Socket = nil
 	}
-	defer c.Close()
-
+	// defer file.Close()
+	bot.Socket = c
 	for {
-		messagetype, p, err := bot.Socket.ReadMessage()
+		messagetype, p, err := c.ReadMessage()
 		if err != nil {
 			log.Println(prefixWarn, err)
 			return
 		}
 		if bot.Client != nil {
-			print("packets")
+			print("client exist")
 			bot.Client.WriteMessage(messagetype, p)
 		}
 
