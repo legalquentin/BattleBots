@@ -37,7 +37,7 @@ func CreateGame(res http.ResponseWriter, req *http.Request) {
 		http.Error(res, "Game already exist", 400)
 		return
 	}
-	var ref = &appartement
+	var ref = &Appartement
 	baseGameInstances[id] = Game{t.Name, t.Token, false, ref, nil}
 
 	// baseGameInstances

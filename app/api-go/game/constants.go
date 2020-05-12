@@ -19,7 +19,7 @@ var baseGameInstances = make(map[string]Game)
 // AvailableBots in the arena
 var AvailableBots = []Bot{}
 
-// Todo: put this in a config file too ?
-var appartement = Environment{
+// Appartement Todo: put this in a config file too ?
+var Appartement = Environment{
 	1, "martin's appartement", AvailableBots, true,
 }
