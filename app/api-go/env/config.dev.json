@@ -1,6 +1,6 @@
 {
 	"Local":   "127.0.0.1",
-	"Port":    "8888",
+	"Port":    "443",
 	"Env":     "dev",
 	"KeyPath": "/Users/quentin/D.PERS/BattleBots/app/api-go/",
 	"Bots": [{

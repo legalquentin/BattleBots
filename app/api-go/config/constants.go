@@ -7,7 +7,7 @@ import (
 // Config variable
 var Config = Configuration{
 	Local:   "127.0.0.1",
-	Port:    "8888",
+	Port:    "443",
 	Env:     "default",
 	KeyPath: "/Users/quentin/D.PERS/BattleBots/app/api-go/",
 	Bots: []game.Bot{{
