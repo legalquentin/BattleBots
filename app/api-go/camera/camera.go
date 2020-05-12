@@ -1,6 +1,7 @@
 package camera
 
 import (
+	"log"
 	"net/http"
 
 	"../socket"
@@ -23,6 +24,7 @@ func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
 
 	player, conn := socket.WsAuth(res, req)
 	if player == nil || conn == nil {
+		log.Println(prefixWarn, "player or conn is nil")
 		return
 	}
 

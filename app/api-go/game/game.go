@@ -79,13 +79,14 @@ func Daemon(bot *Bot) {
 			return
 		}
 		if bot.Client != nil {
+			print("packets")
 			bot.Client.WriteMessage(messagetype, p)
 		}
 
-		_, e := bufferedWriter.Write(p)
-		if e != nil {
-			log.Fatal(err)
-		}
+		// _, e := bufferedWriter.Write(p)
+		// if e != nil {
+		// 	log.Fatal(err)
+		// }
 	}
 }
 
