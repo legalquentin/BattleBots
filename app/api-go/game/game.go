@@ -10,7 +10,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"time"
 
 	"net/http"
 	"net/url"
@@ -44,12 +43,10 @@ func CreateGame(res http.ResponseWriter, req *http.Request) {
 	log.Println(prefixLog, "creating game...", baseGameInstances[id].Name)
 	res.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(res).Encode(baseGameInstances[id])
+
 	for _, b := range baseGameInstances[id].Env.Bots {
-		if b.Socket != nil {
-			go Daemon(b)
-		}
+		RunningBots = append(RunningBots, b)
 	}
-	time.Sleep(time.Second * 60)
 	return
 }
 
@@ -57,7 +54,7 @@ func CreateGame(res http.ResponseWriter, req *http.Request) {
 func Daemon(bot Bot) {
 	log.Println(prefixLog, "opening conn with robot: "+bot.Name)
 
-	u := url.URL{Scheme: "ws", Host: bot.Address + ":8088", Path: "/wsvideo"}
+	u := url.URL{Scheme: "ws", Host: bot.Address + ":8084", Path: "/wsvideo"}
 	file, err := os.OpenFile("/home/pi/stream_"+bot.Name, os.O_WRONLY, 0666)
 	if err != nil {
 		log.Fatal(err)

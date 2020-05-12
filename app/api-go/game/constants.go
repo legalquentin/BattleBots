@@ -23,3 +23,6 @@ var AvailableBots = []Bot{}
 var Appartement = Environment{
 	1, "martin's appartement", AvailableBots, true,
 }
+
+// RunningBots map existing Bots
+var RunningBots = []Bot{}

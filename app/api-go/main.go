@@ -61,6 +61,15 @@ func main() {
 	}
 	game.WorkerCtx.Secret = r
 
+	go func() {
+		for _, b := range game.RunningBots {
+			if b.Socket == nil {
+				go game.Daemon(b)
+			}
+		}
+		time.Sleep(time.Second)
+	}()
+
 	log.Println(prefixLog, "Starting HTTP server on port:", config.Config.Port)
 	log.Println(prefixLog, "secret is :", game.WorkerCtx.Secret)
 	srv := startHTTPServer()
