@@ -13,16 +13,5 @@
 		"BaseDamage":   100,
 		"BaseHull":     100,
 		"BaseFireRate": 100
-	},
-	{
-		"ID":           1,
-		"Address":      "192.168.1.88",
-		"Running":      false,
-		"Taken":        false,
-		"Name":         "Razorback",
-		"BaseSpeed":    100,
-		"BaseDamage":   100,
-		"BaseHull":     100,
-		"BaseFireRate": 100
 	}]
 }
