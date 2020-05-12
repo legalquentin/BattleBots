@@ -5,7 +5,7 @@
     },
     "worker_address": "127.0.0.1",
     "worker_port": "443",
-    "worker_directory": "/Users/quentin/D.PERS/BattleBots/app/api-go",
+    "worker_directory": "/home/pi/BattleBots/app/api-go",
     "api_address": "127.0.0.1",
     "api_port": "80",
     "api_useSSL": false,
