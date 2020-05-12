@@ -193,7 +193,7 @@ export default class Home extends Vue
 
       console.log('JOIN RESP', resp);
       
-      const token = resp.data.Token;
+      const token = resp.data.token;
 
       const addr_cam = 'wss://hardwar.ddns.net/api/bots/wscam?gameid='+this.ref.gameid+'&playerid='+this.userId+'&token='+token;
       const addr_ctrl = 'wss://hardwar.ddns.net/api/bots/ws?gameid='+this.ref.gameid+'&playerid='+this.userId+'&token='+token;

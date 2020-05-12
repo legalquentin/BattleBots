@@ -64,8 +64,7 @@ export default class BattleWorkerService implements IBattleWorkerService {
                     strictSSL: false,
                     url: `https://${addr}:${port}/api/game/create`
                 }, (err, res) => {
-                    console.log("#################################");
-                    console.log(err, res);
+                    console.log("###### Game Created #######");
                     rslv({ token: game.token, secret: secret });
                 });
             });
