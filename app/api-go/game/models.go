@@ -70,7 +70,7 @@ type Bot struct {
 type Environment struct {
 	ID        int16  `json:"id,omitempty"`
 	Name      string `json:"name,omitempty"`
-	Bots      []*Bot `json:"bots,omitempty"`
+	Bots      []Bot  `json:"bots,omitempty"`
 	Available bool   `json:"available,omitempty"`
 }
 
