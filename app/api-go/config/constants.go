@@ -9,7 +9,7 @@ var Config = Configuration{
 	Local:   "127.0.0.1",
 	Port:    "443",
 	Env:     "default",
-	KeyPath: "/home/pi/BattleBots/api-go/",
+	KeyPath: "/home/pi/Battlebots/app/api-go/",
 	Bots: []game.Bot{{
 		ID:           1,
 		Address:      "127.0.0.1",
