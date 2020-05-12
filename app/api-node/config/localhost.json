@@ -10,5 +10,5 @@
     "api_port": "80",
     "api_useSSL": false,
     "api_scheme": "http",
-    "home_api_node": ""
+    "home_api_node": "/Users/quentin/D.PERS/BattleBots/app/api-node"
 }

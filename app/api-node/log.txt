@@ -90,3 +90,6 @@ Error {}
 Error {}
 Error {}
 Error {"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":5432}
+Error {"errno":-2,"syscall":"open","code":"ENOENT","path":"undefined/api-ssl/key.pem"}
+Error {"errno":-2,"syscall":"open","code":"ENOENT","path":"undefined/api-ssl/key.pem"}
+Error {"errno":-2,"syscall":"open","code":"ENOENT","path":"/home/pi/BattleBots/app/api-node/api-ssl/key.pem"}

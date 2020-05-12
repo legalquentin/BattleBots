@@ -10,5 +10,5 @@
     "api_port": "443",
     "api_useSSL": false,
     "api_scheme": "http",
-    "home_api_node": ""
+    "home_api_node": "/home/pi/BattleBots/app/api-node"
 }
