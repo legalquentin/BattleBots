@@ -61,7 +61,7 @@ func Daemon(bot *Bot) {
 	for {
 		messagetype, p, err := c.ReadMessage()
 		if err != nil {
-			log.Println(prefixWarn, err)
+			log.Println(prefixErr, err)
 			return
 		}
 		if bot.Client != nil {
