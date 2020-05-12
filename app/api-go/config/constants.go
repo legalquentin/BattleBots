@@ -15,6 +15,7 @@ var Config = Configuration{
 		Address:      "127.0.0.1",
 		Running:      true,
 		Taken:        false,
+		Socket:       nil,
 		Name:         "Stub-Robot",
 		BaseSpeed:    100,
 		BaseDamage:   100,

@@ -1,5 +1,7 @@
 package game
 
+import "github.com/gorilla/websocket"
+
 // Worker is the main data struct holding all games
 type Worker struct {
 	Secret string
@@ -54,6 +56,7 @@ type Bot struct {
 	Address string `json:"address,omitempty"`
 	Running bool   `json:"running,omitempty"`
 	Taken   bool   `json:"taken,omitempty"`
+	Socket  *websocket.Conn
 
 	// game relative stuff
 	Name         string `json:"name,omitempty"`

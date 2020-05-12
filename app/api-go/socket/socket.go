@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"../game"
-
 	"github.com/gorilla/websocket"
 )
 
