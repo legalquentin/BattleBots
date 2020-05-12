@@ -227,7 +227,7 @@ export default class Home extends Vue
     if (this.ref.gameid == '') {
       return
     }
-      const terminate = 'http://hardwar.ddns.net/battle/' + this.ref.gameid;
+      const terminate = 'http://hardwar.ddns.net/api/games/' + this.ref.gameid;
       const axios = Axios.create({ headers: { 'Content-Type': 'application/json'} ,
         httpsAgent: new https.Agent({ rejectUnauthorized: false })
       })
