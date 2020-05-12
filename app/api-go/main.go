@@ -61,13 +61,16 @@ func main() {
 	}
 	game.WorkerCtx.Secret = r
 
+	// Infinite running fun to write files for the S3 storage
 	go func() {
-		for _, b := range game.RunningBots {
-			if b.Socket == nil {
-				go game.Daemon(b)
+		for {
+			for _, b := range game.RunningBots {
+				if b.Socket == nil {
+					go game.Daemon(b)
+				}
 			}
+			time.Sleep(time.Second)
 		}
-		time.Sleep(time.Second)
 	}()
 
 	log.Println(prefixLog, "Starting HTTP server on port:", config.Config.Port)
