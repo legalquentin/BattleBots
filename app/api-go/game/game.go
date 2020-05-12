@@ -62,7 +62,7 @@ func Daemon(bot *Bot) {
 	defer file.Close()
 
 	// Create a buffered writer from the file
-	bufferedWriter := bufio.NewWriter(file)
+	_ := bufio.NewWriter(file)
 
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
 	bot.Socket = c
