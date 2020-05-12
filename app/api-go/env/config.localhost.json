@@ -2,7 +2,7 @@
 	"Local":   "127.0.0.1",
 	"Port":    "443",
 	"Env":     "localhost",
-	"KeyPath": "/Users/quentin/D.PERS/BattleBots/app/api-go/",
+	"KeyPath": "/home/pi/BattleBots/app/api-go/",
 	"Bots": [{
 		"ID":           1,
 		"Address":      "127.0.0.1",
