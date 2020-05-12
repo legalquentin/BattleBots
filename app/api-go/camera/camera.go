@@ -3,6 +3,7 @@ package camera
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"../socket"
 	"github.com/gorilla/websocket"
@@ -27,6 +28,7 @@ func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
 	}
 
 	player.BotSpecs.Client = conn
+	time.Sleep(time.Second * 3)
 	log.Println(prefixLog, "client conn set")
 	// Read c(robot) video stream and write to conn(client)
 	defer conn.Close()
