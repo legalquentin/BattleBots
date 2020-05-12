@@ -57,6 +57,7 @@ type Bot struct {
 	Running bool   `json:"running,omitempty"`
 	Taken   bool   `json:"taken,omitempty"`
 	Socket  *websocket.Conn
+	Client  *websocket.Conn
 
 	// game relative stuff
 	Name         string `json:"name,omitempty"`

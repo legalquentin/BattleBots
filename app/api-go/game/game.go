@@ -73,11 +73,15 @@ func Daemon(bot *Bot) {
 	defer c.Close()
 
 	for {
-		_, p, err := bot.Socket.ReadMessage()
+		messagetype, p, err := bot.Socket.ReadMessage()
 		if err != nil {
 			log.Println(prefixWarn, err)
 			return
 		}
+		if bot.Client != nil {
+			bot.Client.WriteMessage(messagetype, p)
+		}
+
 		_, e := bufferedWriter.Write(p)
 		if e != nil {
 			log.Fatal(err)

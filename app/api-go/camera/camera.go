@@ -1,7 +1,6 @@
 package camera
 
 import (
-	"log"
 	"net/http"
 
 	"../socket"
@@ -27,17 +26,13 @@ func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	defer conn.Close()
+	// we attach the client conn to the robot
+	player.BotSpecs.Client = conn
 	for {
-		messageType, p, err := player.BotSpecs.Socket.ReadMessage()
-		if err != nil {
-			log.Println(prefixWarn, err)
-			return
-		}
-
-		if err := conn.WriteMessage(messageType, p); err != nil {
-			log.Println(prefixWarn, err)
-			return
+		if player.BotSpecs != nil {
+			if player.BotSpecs.Socket == nil {
+				return
+			}
 		}
 	}
 }
