@@ -12,11 +12,11 @@ var Config = Configuration{
 	KeyPath: "/home/pi/BattleBots/app/api-go/",
 	Bots: []game.Bot{{
 		ID:           1,
-		Address:      "127.0.0.1",
+		Address:      "192.168.1.66",
 		Running:      true,
 		Taken:        false,
 		Socket:       nil,
-		Name:         "Stub-Robot",
+		Name:         "Rocinante",
 		BaseSpeed:    100,
 		BaseDamage:   100,
 		BaseHull:     100,
