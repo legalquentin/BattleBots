@@ -55,6 +55,7 @@ func Daemon(bot *Bot) {
 	log.Println(prefixLog, "opening conn with robot: "+bot.Name)
 	u := url.URL{Scheme: "ws", Host: bot.Address + ":8084", Path: "/wsvideo"}
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
+	defer c.Close()
 	if err != nil {
 		log.Println(prefixErr, err)
 	}
@@ -62,6 +63,7 @@ func Daemon(bot *Bot) {
 	f, err := os.Create("/home/pi/stream_" + bot.Name)
 	w := bufio.NewWriter(f)
 	defer f.Close()
+
 	bot.Socket = c
 	for {
 		_, p, err := c.ReadMessage()
