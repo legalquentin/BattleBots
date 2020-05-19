@@ -29,6 +29,26 @@ export default class SplashScreenView extends Vue {
             durationMS: 10000,
             isActive: false,
         },
+        {
+            imgName: 'splash1.png',
+            durationMS: 10000,
+            isActive: false,
+        },
+        {
+            imgName: 'splash2.png',
+            durationMS: 10000,
+            isActive: false,
+        },
+        {
+            imgName: 'splash1.png',
+            durationMS: 10000,
+            isActive: false,
+        },
+        {
+            imgName: 'splash2.png',
+            durationMS: 10000,
+            isActive: false,
+        },
     ];
 
     currentSplashDatas = {
@@ -36,6 +56,17 @@ export default class SplashScreenView extends Vue {
         durationMS: -1,
         isActive: false,
     };
+
+    private changeSplashTimeout: any;
+
+    skip() {
+        console.log("-------")
+        this.currentSplashDatas = this.splashes[this.splashIndex];
+        if (this.changeSplashTimeout) {
+            clearTimeout(this.changeSplashTimeout);
+        }
+        this.recMounted();
+    }
 
     mounted() {
         if (isElectron()) {
@@ -60,7 +91,7 @@ export default class SplashScreenView extends Vue {
             true,
         );
         
-        setTimeout(() => {
+        this.changeSplashTimeout = setTimeout(() => {
             this.recMounted();
         }, this.currentSplashDatas.durationMS)
         this.splashIndex += 1;

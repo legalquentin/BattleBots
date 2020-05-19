@@ -1,5 +1,56 @@
 <div>
 
-    <h1>Gamemode selection here</h1>
+    <SuiGrid style="padding: 10px; height: 100vh">
+        <SuiGridRow style="height: 10px">
+
+
+            <SuiGridColumn style="height: 10px">
+                <h1 is="SuiHeader">
+                    <SuiHeaderContent>
+                        <span style="color: white; text-shadow: 0.8px 0.8px 0 #10AC84, 0.8px -0.8px 0 #10AC84, -0.8px 0.8px 0 #10AC84, -0.8px -0.8px 0 #10AC84, 0.8px 0px 0 #10AC84, 0px 0.8px 0 #10AC84, -0.8px 0px 0 #10AC84, 0px -0.8px 0 #10AC84;">Battlebot</span>
+                        <SuiHeaderSubheader>Hardwar technology powered</SuiHeaderSubheader>
+                    </SuiHeaderContent>
+                </h1>
+            </SuiGridColumn>
+        </SuiGridRow>
+        <SuiGridRow :columns="2" textAlign="center" verticalAlign="middle">
+            <SuiGridColumn>
+
+
+                <SuiGrid>
+                    <SuiGridRow>
+                        <SuiGridColumn>
+                            <SuiButton @click="$router.push({ name: 'GameFrame' })" basic style="border-bottom: 4px solid #10AC84; box-shadow: 0 0 0 1px #10AC84 inset, 0 0 0 0 #10AC84 inset !important;">
+                                Commencer à jouer
+                            </SuiButton>
+                        </SuiGridColumn>
+                    </SuiGridRow>
+
+                    <SuiGridRow>
+                        <SuiGridColumn>
+                            <SuiButton basic class="secondary-game-button">
+                                Parties en cours
+                            </SuiButton>
+                        </SuiGridColumn>
+                    </SuiGridRow>
+
+                    <SuiGridRow>
+                        <SuiGridColumn>
+                            <SuiButton basic class="secondary-game-button">
+                                Paramètres
+                            </SuiButton>
+                        </SuiGridColumn>
+                    </SuiGridRow>
+                </SuiGrid>
+
+
+            </SuiGridColumn>
+
+            <SuiGridColumn>
+                Je suis la 2eme colone (actualité etc.)
+            </SuiGridColumn>
+        </SuiGridRow>
+
+    </SuiGrid>
 
 </div>
