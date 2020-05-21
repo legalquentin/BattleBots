@@ -1,0 +1,17 @@
+<div>
+
+    <RouterLink :to="{ name: 'CreateGameFrame' }">
+        <button>Create a new game</button>
+    </RouterLink>
+    <hr>
+
+    <div v-for="game in gamesList">
+        Id -> {{ game.id }}
+        <br/>
+        Name -> {{ game.name }}
+        <br/>
+        Status -> {{ game.status }}
+        <br/>
+        Bots -> {{ game.bots }}
+    </div>
+</div>

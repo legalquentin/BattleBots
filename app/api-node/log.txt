@@ -93,3 +93,71 @@ Error {"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address
 Error {"errno":-2,"syscall":"open","code":"ENOENT","path":"undefined/api-ssl/key.pem"}
 Error {"errno":-2,"syscall":"open","code":"ENOENT","path":"undefined/api-ssl/key.pem"}
 Error {"errno":-2,"syscall":"open","code":"ENOENT","path":"/home/pi/BattleBots/app/api-node/api-ssl/key.pem"}
+Error {"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":5432}
+Error {"name":"error","length":96,"severity":"FATAL","code":"28000","file":"miscinit.c","line":"607","routine":"InitializeSessionUserId"}
+Error {"name":"error","length":96,"severity":"FATAL","code":"28000","file":"miscinit.c","line":"607","routine":"InitializeSessionUserId"}
+Error {"name":"error","length":96,"severity":"FATAL","code":"28000","file":"miscinit.c","line":"607","routine":"InitializeSessionUserId"}
+Error {"name":"error","length":96,"severity":"FATAL","code":"28000","file":"miscinit.c","line":"607","routine":"InitializeSessionUserId"}
+Error {"name":"error","length":96,"severity":"FATAL","code":"28000","file":"miscinit.c","line":"607","routine":"InitializeSessionUserId"}
+Error {"name":"error","length":96,"severity":"FATAL","code":"28000","file":"miscinit.c","line":"607","routine":"InitializeSessionUserId"}
+Error {"name":"error","length":96,"severity":"FATAL","code":"28000","file":"miscinit.c","line":"607","routine":"InitializeSessionUserId"}
+Error {"name":"error","length":96,"severity":"FATAL","code":"28000","file":"miscinit.c","line":"607","routine":"InitializeSessionUserId"}
+Error {"name":"error","length":96,"severity":"FATAL","code":"28000","file":"miscinit.c","line":"607","routine":"InitializeSessionUserId"}
+Error {"name":"error","length":96,"severity":"FATAL","code":"28000","file":"miscinit.c","line":"607","routine":"InitializeSessionUserId"}
+Error {"name":"error","length":100,"severity":"FATAL","code":"28P01","file":"auth.c","line":"333","routine":"auth_failed"}
+Error {"name":"error","length":100,"severity":"FATAL","code":"28P01","file":"auth.c","line":"333","routine":"auth_failed"}
+Error {"name":"error","length":100,"severity":"FATAL","code":"28P01","file":"auth.c","line":"333","routine":"auth_failed"}
+Error {"name":"error","length":104,"severity":"FATAL","code":"28P01","file":"auth.c","line":"333","routine":"auth_failed"}
+Error {"name":"error","length":87,"severity":"FATAL","code":"3D000","file":"postinit.c","line":"890","routine":"InitPostgres"}
+log - preRequest - error - relation "log" does not exist
+log - preRequest - error - relation "log" does not exist
+log - preRequest - error - relation "log" does not exist
+Error {"message":"column cnst.consrc does not exist","name":"QueryFailedError","length":196,"severity":"ERROR","code":"42703","hint":"Perhaps you meant to reference the column \"cnst.conkey\" or the column \"cnst.conbin\".","position":"194","file":"parse_relation.c","line":"3377","routine":"errorMissingColumn","query":"SELECT \"ns\".\"nspname\" AS \"table_schema\", \"t\".\"relname\" AS \"table_name\", \"cnst\".\"conname\" AS \"constraint_name\", CASE \"cnst\".\"contype\" WHEN 'x' THEN pg_get_constraintdef(\"cnst\".\"oid\", true) ELSE \"cnst\".\"consrc\" END AS \"expression\", CASE \"cnst\".\"contype\" WHEN 'p' THEN 'PRIMARY' WHEN 'u' THEN 'UNIQUE' WHEN 'c' THEN 'CHECK' WHEN 'x' THEN 'EXCLUDE' END AS \"constraint_type\", \"a\".\"attname\" AS \"column_name\" FROM \"pg_constraint\" \"cnst\" INNER JOIN \"pg_class\" \"t\" ON \"t\".\"oid\" = \"cnst\".\"conrelid\" INNER JOIN \"pg_namespace\" \"ns\" ON \"ns\".\"oid\" = \"cnst\".\"connamespace\" LEFT JOIN \"pg_attribute\" \"a\" ON \"a\".\"attrelid\" = \"cnst\".\"conrelid\" AND \"a\".\"attnum\" = ANY (\"cnst\".\"conkey\") WHERE \"t\".\"relkind\" = 'r' AND ((\"ns\".\"nspname\" = 'public' AND \"t\".\"relname\" = 'log') OR (\"ns\".\"nspname\" = 'public' AND \"t\".\"relname\" = 'users') OR (\"ns\".\"nspname\" = 'public' AND \"t\".\"relname\" = 'robots_arena') OR (\"ns\".\"nspname\" = 'public' AND \"t\".\"relname\" = 'arena') OR (\"ns\".\"nspname\" = 'public' AND \"t\".\"relname\" = 'streams') OR (\"ns\".\"nspname\" = 'public' AND \"t\".\"relname\" = 'games') OR (\"ns\".\"nspname\" = 'public' AND \"t\".\"relname\" = 'robots_game') OR (\"ns\".\"nspname\" = 'public' AND \"t\".\"relname\" = 'robots') OR (\"ns\".\"nspname\" = 'public' AND \"t\".\"relname\" = 'player'))","parameters":[]}
+Error {"message":"column cnst.consrc does not exist","name":"QueryFailedError","length":196,"severity":"ERROR","code":"42703","hint":"Perhaps you meant to reference the column \"cnst.conkey\" or the column \"cnst.conbin\".","position":"194","file":"parse_relation.c","line":"3377","routine":"errorMissingColumn","query":"SELECT \"ns\".\"nspname\" AS \"table_schema\", \"t\".\"relname\" AS \"table_name\", \"cnst\".\"conname\" AS \"constraint_name\", CASE \"cnst\".\"contype\" WHEN 'x' THEN pg_get_constraintdef(\"cnst\".\"oid\", true) ELSE \"cnst\".\"consrc\" END AS \"expression\", CASE \"cnst\".\"contype\" WHEN 'p' THEN 'PRIMARY' WHEN 'u' THEN 'UNIQUE' WHEN 'c' THEN 'CHECK' WHEN 'x' THEN 'EXCLUDE' END AS \"constraint_type\", \"a\".\"attname\" AS \"column_name\" FROM \"pg_constraint\" \"cnst\" INNER JOIN \"pg_class\" \"t\" ON \"t\".\"oid\" = \"cnst\".\"conrelid\" INNER JOIN \"pg_namespace\" \"ns\" ON \"ns\".\"oid\" = \"cnst\".\"connamespace\" LEFT JOIN \"pg_attribute\" \"a\" ON \"a\".\"attrelid\" = \"cnst\".\"conrelid\" AND \"a\".\"attnum\" = ANY (\"cnst\".\"conkey\") WHERE \"t\".\"relkind\" = 'r' AND ((\"ns\".\"nspname\" = 'public' AND \"t\".\"relname\" = 'log') OR (\"ns\".\"nspname\" = 'public' AND \"t\".\"relname\" = 'users') OR (\"ns\".\"nspname\" = 'public' AND \"t\".\"relname\" = 'robots_arena') OR (\"ns\".\"nspname\" = 'public' AND \"t\".\"relname\" = 'arena') OR (\"ns\".\"nspname\" = 'public' AND \"t\".\"relname\" = 'streams') OR (\"ns\".\"nspname\" = 'public' AND \"t\".\"relname\" = 'games') OR (\"ns\".\"nspname\" = 'public' AND \"t\".\"relname\" = 'robots_game') OR (\"ns\".\"nspname\" = 'public' AND \"t\".\"relname\" = 'robots') OR (\"ns\".\"nspname\" = 'public' AND \"t\".\"relname\" = 'player'))","parameters":[]}
+Error {"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":5432}
+Error {"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":5432}
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint
+log - preRequest - error - null value in column "body" violates not-null constraint

@@ -43,6 +43,8 @@ export class UserServiceImpl implements UserService {
             return Promise.resolve(new SendResource<HttpResponseModel<IResourceId>>("UserController", response.httpCode, response));
         }
         catch (e){
+            console.error(e);
+
             const response: HttpResponseModel<IResourceId> = {
                 httpCode: 409,
                 data: null,
