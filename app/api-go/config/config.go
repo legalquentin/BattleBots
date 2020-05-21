@@ -18,7 +18,11 @@ func ReadConfig() *error {
 	var env = os.Getenv("ENV")
 
 	game.Appartement.Bots = Config.Bots
-	file, err := os.Open("/env/config." + env + ".json")
+	dir, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+	file, err := os.Open(dir + "/env/config." + env + ".json")
 	if err != nil {
 		log.Println(prefixWarn, "ENV must be of: 'localhost', 'dev' or 'prod'. starting with default configuration")
 		return &err

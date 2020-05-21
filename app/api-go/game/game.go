@@ -4,18 +4,13 @@ package game
 // not as an api (it should go in the api package)
 
 import (
-	"bufio"
 	"crypto/rand"
 	"encoding/json"
 	"fmt"
 	"log"
-	"os"
 
 	"net/http"
-	"net/url"
 	"strconv"
-
-	"github.com/gorilla/websocket"
 )
 
 // CreateGame function need to be called once to setup everything
@@ -50,32 +45,8 @@ func CreateGame(res http.ResponseWriter, req *http.Request) {
 	return
 }
 
-// Daemon long running process to recover video feed even when no player is connected, is linked to a bot instance
-func Daemon(bot *Bot) {
-	log.Println(prefixLog, "opening conn with robot: "+bot.Name)
-	u := url.URL{Scheme: "ws", Host: bot.Address + ":8084", Path: "/wsvideo"}
-	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
-	defer c.Close()
-	if err != nil {
-		log.Println(prefixErr, err)
-	}
-	// defer file.Close()
-	f, err := os.Create("/home/pi/stream_" + bot.Name)
-	w := bufio.NewWriter(f)
-	defer f.Close()
-
-	bot.Socket = c
-	for {
-		_, p, err := c.ReadMessage()
-		if err != nil {
-			log.Println(prefixErr, err)
-			return
-		}
-		_, e := w.Write(p)
-		if e != nil {
-			log.Fatal(err)
-		}
-	}
+// Daemon long running process to manage game instances
+func Daemon() {
 }
 
 // JoinGame function can be called by a client to authentify and add him to the player,

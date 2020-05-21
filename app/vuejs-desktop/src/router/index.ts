@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 
 import SplashView from '@/views/SplashScreen/index.vue';
 import MainFrame from '@/views/MainFrame/index.vue';
+import GameFrame from '@/views/GameFrame/index.vue';
 
 Vue.use(VueRouter)
 
@@ -17,6 +18,11 @@ const routes = [
     path: '/MainFrame',
     name: 'MainFrame',
     component: MainFrame,
+  },
+  {
+    path: '/GameFrame',
+    name: 'GameFrame',
+    component: GameFrame,
   }
 ];
 
