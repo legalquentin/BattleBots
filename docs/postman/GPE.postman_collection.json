@@ -199,7 +199,7 @@
 					}
 				],
 				"url": {
-					"raw": "{{API_ADDRESS}}/games",
+					"raw": "{{API_ADDRESS}}/battle",
 					"host": [
 						"{{API_ADDRESS}}"
 					],
@@ -357,17 +357,17 @@
 						"type": "text"
 					},
 					{
-						"key": "Authorization",
-						"value": "234",
+						"key": "x-api-key",
+						"value": "1234567890",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": ""
+					"raw": "{\n\t\"id\": 1,\n\t\"name\": \"totogame\",\n\t\"token\": \"test\"\n}"
 				},
 				"url": {
-					"raw": "https://127.0.0.1:1234/api/game/join",
+					"raw": "https://127.0.0.1:443/api/game/create",
 					"protocol": "https",
 					"host": [
 						"127",
@@ -375,11 +375,51 @@
 						"0",
 						"1"
 					],
-					"port": "1234",
+					"port": "443",
 					"path": [
 						"api",
 						"game",
-						"join"
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Go/Delete",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "234"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://127.0.0.1:443/api/game/",
+					"protocol": "https",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "443",
+					"path": [
+						"api",
+						"game",
+						""
 					]
 				}
 			},
@@ -405,11 +445,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"GameID\": \"26\",\n\t\"PlayerID\": \"654\"\n}"
+					"raw": "{\n\t\"GameID\": \"1\",\n\t\"PlayerID\": \"654\"\n}"
 				},
 				"url": {
-					"raw": "https://{{API_ADDRESS}}:443/api/game/join",
-					"protocol": "https",
+					"raw": "{{API_ADDRESS}}:443/api/game/join",
 					"host": [
 						"{{API_ADDRESS}}"
 					],
