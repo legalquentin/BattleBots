@@ -28,9 +28,11 @@
 
                     <SuiGridRow>
                         <SuiGridColumn>
-                            <SuiButton basic class="secondary-game-button">
-                                Parties en cours
-                            </SuiButton>
+                            <RouterLink :to="{name: 'GamesListFrame'}">
+                                <SuiButton basic class="secondary-game-button">
+                                    Parties en cours
+                                </SuiButton>
+                            </RouterLink>
                         </SuiGridColumn>
                     </SuiGridRow>
 
