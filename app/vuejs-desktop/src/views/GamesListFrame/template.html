@@ -5,7 +5,7 @@
     </RouterLink>
     <hr>
 
-    <div v-for="game in gamesList">
+    <div v-for="game in gamesList" @click="joinGame(game.id)">
         Id -> {{ game.id }}
         <br/>
         Name -> {{ game.name }}
@@ -13,5 +13,6 @@
         Status -> {{ game.status }}
         <br/>
         Bots -> {{ game.bots }}
+        <br/>
     </div>
 </div>

@@ -11,5 +11,5 @@ export abstract class GameService {
     public abstract linkStreamToGame(streamId: number, gameId: number);
     public abstract linkArenaToGame(arenaId: number, gameId: number);
 
-    public abstract joinGame(gameId: string, userId: string);
+    public abstract joinGame(gameId: string, userId: number);
 }

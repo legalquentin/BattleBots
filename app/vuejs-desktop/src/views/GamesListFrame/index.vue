@@ -37,5 +37,23 @@ export default class GamesListFrame extends AVue {
         console.error(error);
     }
   }
+
+  private async joinGame(gameId: number) {
+    const jwt: string|null = localStorage.getItem("jwt");
+    if (!_.size(jwt)) {
+      this.$router.push({ name: "MainFrame" });
+    }
+
+    try {
+      const result = await axios.put(`http://localhost/api/games/join/${gameId}`, {}, {
+        headers: {
+          Authorization: `Bearer ${jwt}`
+        }
+      });
+      console.log(result);
+    } catch (error) {
+        console.error(error);
+    }
+  }
 }
 </script>
