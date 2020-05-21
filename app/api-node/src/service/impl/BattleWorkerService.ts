@@ -94,8 +94,8 @@ export default class BattleWorkerService implements IBattleWorkerService {
             request({
                 agentOptions: { rejectUnauthorized: false },
                 body: {
-                    gameId: gameId,
-                    playerId:playerId,
+                    gameId:""+gameId,
+                    playerId:""+playerId,
                 },
                 headers: {
                     'x-api-key': worker.secret
@@ -112,7 +112,7 @@ export default class BattleWorkerService implements IBattleWorkerService {
         });
     }
 
-    public async joinGame(battleId: string, playerId: string) {
+    public async joinGame(battleId: string, playerId: number) {
         const gameMeta = Workers[battleId];
         if (typeof gameMeta === 'undefined') {
             console.log('[ERROR](JOIN)', 'lost handle on worker process... do $> pkill Worker');
