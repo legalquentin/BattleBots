@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import VueRouter, { RouteConfig } from 'vue-router'
+import VueRouter from 'vue-router'
 
 import SplashView from '@/views/SplashScreen/index.vue';
 import MainFrame from '@/views/MainFrame/index.vue';
@@ -17,19 +17,13 @@ const routes = [
     path: '/MainFrame',
     name: 'MainFrame',
     component: MainFrame,
-  },
-
-  {
-    path: '/GameFrame',
-    name: 'GameFrame',
-    component: () => import('@/views/GameFrame/index.vue'),
   }
 ];
 
 const router = new VueRouter({
   mode: 'hash',
   base: process.env.BASE_URL,
-  routes: routes as RouteConfig[],
+  routes
 })
 
 export default router
