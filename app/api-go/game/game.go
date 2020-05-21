@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"time"
 
 	"net/http"
 	"strconv"
@@ -32,7 +33,13 @@ func CreateGame(res http.ResponseWriter, req *http.Request) {
 		http.Error(res, "Game already exist", 400)
 		return
 	}
-	baseGameInstances[id] = Game{t.Name, t.Token, false, &Appartement, nil}
+	baseGameInstances[id] = Game{
+		Name:      t.Name,
+		Token:     t.Token,
+		Started:   false,
+		Env:       &Appartement,
+		CreatedAt: time.Now(),
+	}
 
 	// baseGameInstances
 	log.Println(prefixLog, "creating game...", baseGameInstances[id].Name)
@@ -47,6 +54,13 @@ func CreateGame(res http.ResponseWriter, req *http.Request) {
 
 // Daemon long running process to manage game instances
 func Daemon() {
+	for {
+		for key, game := range baseGameInstances {
+			fmt.Println("GameID:", key, "=>", "Players:", len(game.Players))
+		}
+		fmt.Println("#####################")
+		time.Sleep(time.Second * 2)
+	}
 }
 
 // JoinGame function can be called by a client to authentify and add him to the player,
@@ -100,19 +114,24 @@ func JoinGame(res http.ResponseWriter, req *http.Request) {
 // DeleteGame function can be called by a client to authentify and add him to the player,
 // if the client is already registered, just update his credentials
 func DeleteGame(res http.ResponseWriter, req *http.Request) {
-	decoder := json.NewDecoder(req.Body)
-	var t DeleteGameValidation
-	err := decoder.Decode(&t)
-	if err != nil {
-		res.Header().Set("Content-Type", "application/json")
+	res.Header().Set("Content-Type", "application/json")
+
+	key, ok := req.URL.Query()["id"]
+	if !ok || len(key[0]) < 1 {
 		log.Println(prefixWarn, "Bad request")
-		json.NewEncoder(res).Encode(&Response{"invalid payload", 400})
+		json.NewEncoder(res).Encode(&Response{"Url Param 'id' is missing", 400})
 		return
 	}
-
-	delete(baseGameInstances, strconv.Itoa(t.id))
-	// TODO: remove ressources created by the game, close player sockets etc..
-
+	if _, ok := baseGameInstances[key[0]]; ok {
+		// TODO: remove ressources created by the game, close player sockets etc..
+		delete(baseGameInstances, key[0])
+		log.Println(prefixLog, "deleted game: "+key[0])
+		json.NewEncoder(res).Encode(&Response{"deleted, closing connections", 200})
+		return
+	}
+	log.Println(prefixWarn, "Not found")
+	delete(baseGameInstances, key[0])
+	json.NewEncoder(res).Encode(&Response{"game to delete not found", 404})
 }
 
 // WorkerInfo function return some info about what's currently running on the worker

@@ -36,7 +36,7 @@ var Routes = []Route{
 	},
 	Route{
 		"Delete a game instance",
-		"POST",
+		"DELETE",
 		"/api/game/delete",
 		game.DeleteGame,
 		true,

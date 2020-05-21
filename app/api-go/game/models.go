@@ -1,6 +1,10 @@
 package game
 
-import "github.com/gorilla/websocket"
+import (
+	"time"
+
+	"github.com/gorilla/websocket"
+)
 
 // Worker is the main data struct holding all games
 type Worker struct {
@@ -9,11 +13,15 @@ type Worker struct {
 
 // Game is the struct holding all data of each instance
 type Game struct {
-	Name    string       `json:"name,omitempty"`
-	Token   string       `json:"token,omitempty"`
-	Started bool         `json:"started,omitempty"`
-	Env     *Environment `json:"environment,omitempty"`
-	Players []Player     `json:"players,omitempty"`
+	Name      string        `json:"name,omitempty"`
+	Token     string        `json:"token,omitempty"`
+	Started   bool          `json:"started,omitempty"`
+	TTL       time.Duration `json:"ttl,omitempty"`
+	StartedAt time.Time     `json:"startedAt,omitempty"`
+	EndedAt   time.Time     `json:"endedAt,omitempty"`
+	CreatedAt time.Time     `json:"createdAt,omitempty"`
+	Env       *Environment  `json:"environment,omitempty"`
+	Players   []Player      `json:"players,omitempty"`
 }
 
 // Player is one of the entity playing in a game, it hold bot data
