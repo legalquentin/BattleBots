@@ -103,7 +103,7 @@ export class GameController {
     }
 
 
-    @PUT
+    @POST
     @Path("/join/:gameId")
     @Security("ROLE_USER", "Bearer")
     @Consumes("application/json; charset=UTF-8")
