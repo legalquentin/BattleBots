@@ -14,6 +14,7 @@ import { IGameResource } from "../../resources/IGameResource";
 import { Singleton, Inject } from 'typescript-ioc';
 import IBattleWorkerService from '../IBattleWorkerService';
 import IConfig from '../IConfig';
+import { resolve } from 'dns';
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 let Workers: IWorkerMeta = null;
@@ -89,7 +90,30 @@ export default class BattleWorkerService implements IBattleWorkerService {
         return false;
     }
 
-    public joinGame(battleId: string): SendResource<HttpResponseModel<any>> {
+    private async callWorkerJoin(gameId, playerId, worker) {
+        return await new Promise(resolve=> {
+            request({
+                agentOptions: { rejectUnauthorized: false },
+                body: {
+                    gameId: gameId,
+                    playerId:playerId,
+                },
+                headers: {
+                    'x-api-key': worker.secret
+                },
+                json: true,
+                method: "POST",
+                strictSSL: false,
+                url: worker.url + "/api/game/join",
+            }, (err, res) => {
+                console.log("###### Game Join end #######");
+                console.log(err,res);
+                resolve(res.body);
+            });
+        });
+    }
+
+    public joinGame(battleId: string, playerId: string): SendResource<HttpResponseModel<any>> {
         const gameMeta = Workers[battleId];
         if (typeof gameMeta === 'undefined') {
             console.log('[ERROR](JOIN)', 'lost handle on worker process... do $> pkill Worker');
@@ -99,11 +123,12 @@ export default class BattleWorkerService implements IBattleWorkerService {
                 message: `Game instance could not be found, contact an administrator`
             }));
         } else {
-            return new SendResource<HttpResponseModel<any>>("BattleController", 200, {
-                data: { url: gameMeta.url },
-                httpCode: 200,
-                message: `game instance address`
-            });
+            return (new SendResource<HttpResponseModel<any>>("BattleController", 404, this.callWorkerJoin(battleId, playerId, gameMeta)));
+            // return new SendResource<HttpResponseModel<any>>("BattleController", 200, {
+            //     data: { url: gameMeta.url },
+            //     httpCode: 200,
+            //     message: `game instance address`
+            // });
         }
     }
 }

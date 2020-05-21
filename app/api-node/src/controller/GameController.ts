@@ -1,6 +1,6 @@
 import { GameService } from "../service/GameService";
 import { Inject } from "typescript-ioc";
-import { Path, PreProcessor, PostProcessor, POST, PUT, PathParam, GET, DELETE, Security  } from "typescript-rest";
+import { Path, PreProcessor, PostProcessor, POST, PUT, PathParam, GET, DELETE, Security, ContextRequest  } from "typescript-rest";
 import { preRequest } from "../service/interceptors/preRequest/preRequest";
 import { postRequest } from "../service/interceptors/postRequest/postRequest";
 import { IGameResource } from "../resources/IGameResource";
@@ -110,7 +110,8 @@ export class GameController {
     @Produces("application/json; charset=UTF-8")
     @Response<HttpResponseModel<IGameResource>>(200)
     @Response<HttpResponseModel<IGameResource>>(400)
-    public async joinGame(@PathParam("gameId") gameId: string){
-        return (this.gameService.joinGame(gameId));
+    public async joinGame(@ContextRequest req, @PathParam("gameId") gameId: string){
+
+        return (this.gameService.joinGame(gameId, req.user.id));
     }
 }
