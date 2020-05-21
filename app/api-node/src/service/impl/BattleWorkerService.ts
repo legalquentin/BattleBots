@@ -14,7 +14,6 @@ import { IGameResource } from "../../resources/IGameResource";
 import { Singleton, Inject } from 'typescript-ioc';
 import IBattleWorkerService from '../IBattleWorkerService';
 import IConfig from '../IConfig';
-import { resolve } from 'dns';
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 let Workers: IWorkerMeta = null;
@@ -113,7 +112,7 @@ export default class BattleWorkerService implements IBattleWorkerService {
         });
     }
 
-    public joinGame(battleId: string, playerId: string): SendResource<HttpResponseModel<any>> {
+    public async joinGame(battleId: string, playerId: string) {
         const gameMeta = Workers[battleId];
         if (typeof gameMeta === 'undefined') {
             console.log('[ERROR](JOIN)', 'lost handle on worker process... do $> pkill Worker');
@@ -123,7 +122,11 @@ export default class BattleWorkerService implements IBattleWorkerService {
                 message: `Game instance could not be found, contact an administrator`
             }));
         } else {
-            return (new SendResource<HttpResponseModel<any>>("BattleController", 404, this.callWorkerJoin(battleId, playerId, gameMeta)));
+            return (new SendResource<HttpResponseModel<any>>("BattleController", 200, {
+                data: this.callWorkerJoin(battleId, playerId, gameMeta),
+                httpCode: 200,
+                message: "ok"
+            }));
             // return new SendResource<HttpResponseModel<any>>("BattleController", 200, {
             //     data: { url: gameMeta.url },
             //     httpCode: 200,
