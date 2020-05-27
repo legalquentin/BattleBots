@@ -36,7 +36,7 @@ func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
 	}
 
 	// Read c(robot) video stream and write to conn(client)
-	defer c.Close()
+	// defer c.Close()
 	for {
 		messageType, p, err := c.ReadMessage()
 		if err != nil {
