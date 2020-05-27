@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"../game"
-	"../socket"
 	"github.com/gorilla/websocket"
 )
 
@@ -18,16 +17,22 @@ import (
 
 // WsHandlerCtrl handle client input, game
 func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
-	player, conn := socket.WsAuth(res, req)
+	player, _ := socket.WsAuth(res, req)
 	if player == nil || conn == nil {
 		return
 	}
 
-	u := url.URL{Scheme: "ws", Host: player.BotSpecs.Address + ":8088", Path: "/wsctrl"}
+	u := url.URL{Scheme: "ws", Host: "192.168.1.66:8088", Path: "/wsctrl"}
 
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
 	if err != nil {
 		log.Println(prefixErr, err)
+	}
+	conn, err := (&websocket.Upgrader{CheckOrigin: func(r *http.Request) bool { return true }}).Upgrade(res, req, nil)
+	if err != nil {
+		log.Println(prefixErr, err)
+		http.NotFound(res, req)
+		return
 	}
 
 	var flag = true
