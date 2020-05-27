@@ -72,7 +72,7 @@ export default class BattleWorkerService implements IBattleWorkerService {
                     url: `https://${addr}:${port}/api/game/create`
                 }, (err, res, body) => {
                     console.log("###### Game Created #######");
-                    rslv({ game: body, token: game.token, secret: secret });
+                    rslv({ game: body, token: game.token });
                 });
             });
             return p;
@@ -178,7 +178,8 @@ export default class BattleWorkerService implements IBattleWorkerService {
                 this.killGoWorker();
                 Workers = [];
             } else {
-                this.callWorkerDelete(gameMeta);
+                await this.callWorkerDelete(gameMeta);
+                return
             }
         }
     }
