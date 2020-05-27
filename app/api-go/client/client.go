@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"../game"
+	"../socket"
 	"github.com/gorilla/websocket"
 )
 
@@ -18,7 +19,7 @@ import (
 // WsHandlerCtrl handle client input, game
 func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 	player, _ := socket.WsAuth(res, req)
-	if player == nil || conn == nil {
+	if player == nil {
 		return
 	}
 
