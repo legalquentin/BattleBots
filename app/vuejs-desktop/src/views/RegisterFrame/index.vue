@@ -22,7 +22,7 @@ export default class RegisterFrame extends Vue {
     
     async register(): Promise<void> {
         try {
-            const result = await axios.post('http://localhost/api/users', _.clone(this.registerFields));
+            const result = await axios.post('http://hardwar.ddns.net/api/users', _.clone(this.registerFields));
             console.log(result);
         } catch (error) {
             console.error(error);

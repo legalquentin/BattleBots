@@ -16,7 +16,7 @@ export default class CreateGameFrame extends Vue {
     }
 
     try {
-      const result = await axios.post("http://localhost/api/games", { name: this.name }, {
+      const result = await axios.post("http://hardwar.ddns.net/api/games", { name: this.name }, {
         headers: {
           Authorization: `Bearer ${jwt}`
         }

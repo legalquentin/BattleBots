@@ -27,7 +27,7 @@ export default class GamesListFrame extends AVue {
     }
 
     try {
-      const result = await axios.get("http://localhost/api/games", {
+      const result = await axios.get("http://hardwar.ddns.net/api/games", {
         headers: {
           Authorization: `Bearer ${jwt}`
         }
@@ -45,7 +45,7 @@ export default class GamesListFrame extends AVue {
     }
 
     try {
-      const result = await axios.put(`http://localhost/api/games/join/${gameId}`, {}, {
+      const result = await axios.put(`http://hardwar.ddns.net/api/games/join/${gameId}`, {}, {
         headers: {
           Authorization: `Bearer ${jwt}`
         }
