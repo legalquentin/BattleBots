@@ -156,8 +156,10 @@ func WorkerInfo(res http.ResponseWriter, req *http.Request) {
 
 // GetPlayer return a ref to a Player in Game or nil
 func GetPlayer(gameID string, playerID string) *Player {
+	log.Println(prefixLog, "search for:", playerID)
 	if selected, ok := baseGameInstances[gameID]; ok {
 		for _, p := range selected.Players {
+			log.Println(prefixLog, "player:", p.ID)
 			if p.ID == playerID {
 				log.Println(prefixLog, "found player", p.Token)
 				return &p
