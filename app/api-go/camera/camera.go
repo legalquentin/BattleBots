@@ -27,7 +27,7 @@ func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	u := url.URL{Scheme: "ws", Host: player.BotSpecs.Address + ":8084", Path: "/wsvideo"}
+	u := url.URL{Scheme: "ws", Host: player.BotSpecs.Address + ":8084", Path: "/"}
 
 	log.Println(prefixLog, req.Host+"=>"+u.String())
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
