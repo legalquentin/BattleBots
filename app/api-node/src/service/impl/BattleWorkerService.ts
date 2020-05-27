@@ -19,7 +19,8 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 let Workers: IWorkerMeta[] = [];
 
 interface IWorkerMeta {
-    key: string;
+    secret: string;
+    token: string;
     process: cp.ChildProcess;
     url: string;
     gameId: number;
@@ -42,17 +43,19 @@ export default class BattleWorkerService implements IBattleWorkerService {
             const port = "443";// this.config.getWorkerPort();
             const p = await new Promise(async rslv => {
                 const WORKER_PATH = `${this.config.getWorkerDir()}/main.go`; // '/home/quentin/go/src/TIC-GPE5/Worker';
-                const secret = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                game.token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                let secret = "";
                 if (Workers.length < 1) {
+                    secret = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
                     const child = cp.spawn('go', ['run', WORKER_PATH, secret], { stdio: [process.stdin, process.stdout, process.stderr] });
-                    Workers.push({ gameId: game.id, process: child, url: addr + ":" + port, key: secret });
+                    Workers.push({ gameId: game.id, process: child, url: addr + ":" + port, secret: secret, token: game.token});
                     // give 3 sec to start the worker
                     await new Promise(resolve => setTimeout(resolve, 5000));
                 } else {
+                    secret = Workers[0].secret;
                     // TODO impl a new way of using the workers
-                    Workers.push({ gameId: game.id, process: Workers[0].process, url: addr + ":" + port, key: Workers[0].key });
+                    Workers.push({ gameId: game.id, process: Workers[0].process, url: addr + ":" + port, secret: Workers[0].secret, token: game.token });
                 }
-                game.token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
                 request({
                     agentOptions: { rejectUnauthorized: false },
                     body: {
@@ -67,9 +70,9 @@ export default class BattleWorkerService implements IBattleWorkerService {
                     method: "POST",
                     strictSSL: false,
                     url: `https://${addr}:${port}/api/game/create`
-                }, (err, res) => {
+                }, (err, res, body) => {
                     console.log("###### Game Created #######");
-                    rslv({ token: game.token, secret: secret });
+                    rslv({ game: body, token: game.token, secret: secret });
                 });
             });
             return p;
@@ -130,7 +133,7 @@ export default class BattleWorkerService implements IBattleWorkerService {
             console.log("########################");
             console.log(r);
             return (new SendResource<HttpResponseModel<any>>("BattleController", 200, {
-                data: r,
+                data: {game: r, token: gameMeta.token},
                 httpCode: 200,
                 message: "ok"
             }));
@@ -140,6 +143,43 @@ export default class BattleWorkerService implements IBattleWorkerService {
             //     httpCode: 200,
             //     message: `game instance address`
             // });
+        }
+    }
+
+    private async callWorkerDelete(meta: IWorkerMeta) {
+        return await new Promise(resolve => {
+            request({
+                agentOptions: { rejectUnauthorized: false },
+                headers: {
+                    'x-api-key': meta.secret
+                },
+                json: true,
+                method: "DELETE",
+                strictSSL: false,
+                url: "https://" + meta.url + "/api/game/delete/" + meta.gameId,
+            }, (err, res, body) => {
+                console.log("###### Game Join end #######");
+                console.log(err, body);
+                resolve(body);
+            });
+        });
+    }
+
+    public async deleteGame(battleId: number) {
+        const gameMeta = Workers.find(item => item.gameId == battleId);
+        if (!gameMeta) {
+            return
+        } else {
+            // !! IMPORTANT
+            // I choose to remove the child process of the go api when we remove all game instance in the node api 
+            // so we can make live change to the go source code and restart it whil  node still run
+            // IT SHOULD CHANGE, as of many things tho, like we should build a go exec in the end anyway...
+            if (Workers.length == 1) {
+                this.killGoWorker();
+                Workers = [];
+            } else {
+                this.callWorkerDelete(gameMeta);
+            }
         }
     }
 }

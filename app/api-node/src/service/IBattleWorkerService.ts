@@ -4,4 +4,5 @@ export default abstract class IBattleWorkerService {
     abstract startGoWorker(game: IGameResource);
     abstract killGoWorker(): boolean;
     abstract joinGame(battleId: number, playerId: number);
+    abstract deleteGame(battleId: number);
 };

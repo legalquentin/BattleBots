@@ -34,7 +34,7 @@ func PreProcessHandler(w http.ResponseWriter, r *http.Request, router *mux.Route
 	for _, v := range Routes {
 		if v.Pattern == r.RequestURI && v.secure {
 			if strings.Split(r.RemoteAddr, ":")[0] != "127.0.0.1" {
-				log.Println(prefixWarn, "invalid host triggering 'CreateGame'")
+				log.Println(prefixWarn, "invalid host triggering '"+v.Pattern+"'")
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(403)
 				json.NewEncoder(w).Encode(game.Response{Message: "forbidden", Code: 403})
