@@ -138,7 +138,7 @@ export default class Home extends Vue
     console.log('GAMEDATA', gameData);
     gameData = {
       data: {
-        id: 49
+        id: 50
       }
     }
     if (gameData) {
