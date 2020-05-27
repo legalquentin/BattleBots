@@ -31,7 +31,7 @@ export class GameServiceImpl implements GameService {
             game.id = saved.id;
             const r = await this.battleWorkerService.startGoWorker(game);
             console.log(r);
-            if (!r || !r.token || !r.secret) {
+            if (!r || !r.token || !r.game) {
                 const response: HttpResponseModel<IGameResource> = {
                     httpCode: 500,
                     message: JSON.stringify(r)
