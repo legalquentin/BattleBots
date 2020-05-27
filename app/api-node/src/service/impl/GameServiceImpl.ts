@@ -59,7 +59,7 @@ export class GameServiceImpl implements GameService {
         }
     }
 
-    public joinGame(gameId: string, userId: number) {
+    public joinGame(gameId: number, userId: number) {
         return Promise.resolve(this.battleWorkerService.joinGame(gameId, userId));
     }
 
