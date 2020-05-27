@@ -55,10 +55,10 @@ func CreateGame(res http.ResponseWriter, req *http.Request) {
 // Daemon long running process to manage game instances
 func Daemon() {
 	for {
+		tnow := time.Now()
 		for key, game := range baseGameInstances {
-			fmt.Println("GameID:", key, "=>", "Players:", len(game.Players))
+			fmt.Println("gid:", key, "nbP:", len(game.Players), "started", game.Started, "created_since:", game.CreatedAt.Sub(tnow))
 		}
-		fmt.Println("#####################")
 		time.Sleep(time.Second * 2)
 	}
 }
@@ -98,6 +98,17 @@ func JoinGame(res http.ResponseWriter, req *http.Request) {
 				baseGameInstances[t.GameID] = g
 				res.Header().Set("Content-Type", "application/json")
 				json.NewEncoder(res).Encode(&p)
+				for _, b := range selected.Env.Bots {
+					if b.Taken == false {
+						// still one slot left, we don't start the game
+						return
+					}
+				}
+				// all slot taken, we start the game
+				g = baseGameInstances[t.GameID]
+				g.Started = true
+				g.StartedAt = time.Now()
+				baseGameInstances[t.GameID] = g
 				return
 			}
 		}
