@@ -134,8 +134,13 @@ export default class Home extends Vue
 
   public mounted()
   {
-    const gameData: any = this.$route.params.gameData;
+    let gameData: any = this.$route.params.gameData;
     console.log('GAMEDATA', gameData);
+    gameData = {
+      data: {
+        id: 49
+      }
+    }
     if (gameData) {
       this.ref.gameid =gameData.data.id
 
@@ -173,30 +178,30 @@ export default class Home extends Vue
       this.videoCanvas = this.$refs.videoCanvas as HTMLCanvasElement;
       this.videoCanvas2DContext = this.videoCanvas.getContext('2d');
     
-      const joinWorkerUri = 'https://hardwar.ddns.net/api/game/join';
-      const axios = Axios.create({ headers: { 'Content-Type': 'application/json'} ,
-        httpsAgent: new https.Agent({ rejectUnauthorized: false })
-      })
+      // const joinWorkerUri = 'https://hardwar.ddns.net/api/game/join';
+      // const axios = Axios.create({ headers: { 'Content-Type': 'application/json'} ,
+      //   httpsAgent: new https.Agent({ rejectUnauthorized: false })
+      // })
 
       const agent = new https.Agent({  
         rejectUnauthorized: false
       });
 
-      const resp = await axios.post(joinWorkerUri, {
-        GameID: this.ref.gameid.toString(),
-        PlayerID: this.userId + '',
-      },  { httpsAgent: agent }
-      );
+      // const resp = await axios.post(joinWorkerUri, {
+      //   GameID: this.ref.gameid.toString(),
+      //   PlayerID: this.userId + '',
+      // },  { httpsAgent: agent }
+      // );
 
-      console.log(this.id)
-      console.log(this.userId)
+      // console.log(this.id)
+      // console.log(this.userId)
 
-      console.log('JOIN RESP', resp);
+      // console.log('JOIN RESP', resp);
       
-      const token = resp.data.token;
+      const token = "qpsm8m4rvjxjr5h0rsz6";
 
-      const addr_cam = 'wss://hardwar.ddns.net/api/bots/wscam?gameid='+this.ref.gameid+'&playerid='+this.userId+'&token='+token;
-      const addr_ctrl = 'wss://hardwar.ddns.net/api/bots/ws?gameid='+this.ref.gameid+'&playerid='+this.userId+'&token='+token;
+      const addr_cam = 'wss://hardwar.ddns.net/api/bots/wscam?gameid='+this.ref.gameid+'&playerid=1&token='+token;
+      const addr_ctrl = 'wss://hardwar.ddns.net/api/bots/ws?gameid='+this.ref.gameid+'&playerid=1&token='+token;
       
       this.cam(addr_cam);
       this.socket.start(addr_ctrl).onerror = (event) => {
