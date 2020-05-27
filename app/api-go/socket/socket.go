@@ -35,7 +35,9 @@ func WsAuth(res http.ResponseWriter, req *http.Request) (player *game.Player, co
 
 	if player == nil {
 		err = &game.Response{Message: "player not found", Code: 404}
+		return
 	}
+
 	if token != player.Token {
 		err = &game.Response{Message: "forbidden", Code: 403}
 	}

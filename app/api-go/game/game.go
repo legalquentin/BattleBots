@@ -159,10 +159,12 @@ func GetPlayer(gameID string, playerID string) *Player {
 	if selected, ok := baseGameInstances[gameID]; ok {
 		for _, p := range selected.Players {
 			if p.ID == playerID {
+				log.Println(prefixLog, "found player", p.Token)
 				return &p
 			}
 		}
 	}
+	log.Println(prefixWarn, "couldn't find player")
 	return nil
 }
 
