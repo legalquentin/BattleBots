@@ -146,3 +146,11 @@ type Info struct {
 	Code  int
 	games []Game
 }
+
+// Data hold info about game you can have things such as:
+// energy charge at 20 ex: (dt:'e', dv:'20')
+// overheat at 50 (dt:'e', dv:'ov')
+type Data struct {
+	Type  int16 `json:"dt,omitempty"`
+	Value int16 `json:"dv,omitempty"`
+}

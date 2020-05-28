@@ -23,7 +23,6 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 	player.BotSpecs.SocketClientCtrl = conn
-	player.BotContext.Heat = 0
 	player.BotContext.Moving = false
 
 	u := url.URL{Scheme: "ws", Host: "192.168.1.66:8088", Path: "/wsctrl"}
@@ -95,27 +94,27 @@ func doEvery(d time.Duration, f func(*game.Player, *websocket.Conn, *websocket.C
 func calcAttributes(player *game.Player, conn *websocket.Conn, bot *websocket.Conn) {
 	if player.BotContext.Moving {
 		if player.BotContext.Energy > 0 {
-			player.BotContext.Energy--
-			conn.WriteJSON(&Data{TYPE_ENERGY, player.BotContext.Energy})
+			player.BotContext.Energy = player.BotContext.Energy - 1
+			conn.WriteJSON(&game.Data{Type: game.TYPE_ENERGY, Value: player.BotContext.Energy})
 		} else {
 			player.BotContext.Moving = false
 			bot.WriteJSON(&Key{"0", false})
 		}
 		if player.BotContext.Heat < 100 {
-			player.BotContext.Heat += 2
-			conn.WriteJSON(&Data{TYPE_OVERHEAT, player.BotContext.Heat})
+			player.BotContext.Heat = player.BotContext.Heat + 2
+			conn.WriteJSON(&game.Data{Type: game.TYPE_OVERHEAT, Value: player.BotContext.Heat})
 		} else {
 			player.BotContext.Moving = false
 			bot.WriteJSON(&Key{"0", false})
 		}
 	} else {
 		if player.BotContext.Energy < 100 {
-			player.BotContext.Energy++
-			conn.WriteJSON(&Data{TYPE_ENERGY, player.BotContext.Energy})
+			player.BotContext.Energy = player.BotContext.Energy + 1
+			conn.WriteJSON(&game.Data{Type: game.TYPE_ENERGY, Value: player.BotContext.Energy})
 		}
 		if player.BotContext.Heat > 0 {
-			player.BotContext.Heat -= 2
-			conn.WriteJSON(&Data{TYPE_OVERHEAT, player.BotContext.Heat})
+			player.BotContext.Heat = player.BotContext.Heat - 2
+			conn.WriteJSON(&game.Data{Type: game.TYPE_OVERHEAT, Value: player.BotContext.Heat})
 		}
 	}
 }

@@ -26,3 +26,7 @@ var Appartement = Environment{
 
 // RunningBots map existing Bots
 var RunningBots = []*Bot{}
+
+// TODO: Define types
+const TYPE_ENERGY = 1
+const TYPE_OVERHEAT = 2
