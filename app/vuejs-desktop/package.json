@@ -12,6 +12,7 @@
     "axios": "^0.19.2",
     "core-js": "^3.4.4",
     "is-electron": "^2.2.0",
+    "jsmpeg": "^1.0.0",
     "moment": "^2.24.0",
     "semantic-ui-css": "^2.4.1",
     "v8-compile-cache": "^2.1.0",

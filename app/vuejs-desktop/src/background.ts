@@ -13,6 +13,16 @@ app.on('ready', () => {
   app.commandLine.appendSwitch('disable-renderer-backgrounding');
 });
 
+app.on('certificate-error', (event, webContents, url, error, certificate, callback) => {
+  // On certificate error we disable default behaviour (stop loading the page)
+  // and we then say "it is all fine - true" to the callback
+  event.preventDefault();
+  callback(true);
+});
+
+//app.commandLine.appendSwitch('ignore-certificate-errors', 'true');
+
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win: BrowserWindow | null;
@@ -22,7 +32,7 @@ protocol.registerSchemesAsPrivileged([{scheme: 'app', privileges: { secure: true
 
 function createWindow () {
   // Create the browser window.
-  win = new BrowserWindow({ width: 800, height: 600, webPreferences: {
+  win = new BrowserWindow({ width: 870, height: 710, minWidth: 870, minHeight: 710, webPreferences: {
     nodeIntegration: true,
     backgroundThrottling: false,
   } })

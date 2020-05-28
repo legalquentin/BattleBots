@@ -1,6 +1,18 @@
-<div class="root" style="padding: 10px">
+<SuiContainer class="root" style="padding-top: 15px;">
     <SuiGrid>
-        <SuiGridRow textAlign="left" :columns="10" v-if="true">
+        <SuiGridRow :columns="2" style="width: 701px !important; margin: 0 auto">
+            <SuiGridColumn style="margin-top: 20px" textAlign="left" :width="3">
+                <RouterLink :to="{ name: 'CreateGameFrame' }">
+                    <SuiButton @click="$router.back()" basic left icon label-position="left" icon="arrow left">Retour</SuiButton>
+                </RouterLink>
+            </SuiGridColumn>
+            <SuiGridColumn :width="13" style="margin-top: 20px" textAlign="right">
+                
+                    <SuiButton @click="openExternal()" basic color="red">Testeurs : En cas d'erreur, essayer de cliquer ici et d'accepter le certificat</SuiButton>
+                
+            </SuiGridColumn>
+        </SuiGridRow>
+        <SuiGridRow textAlign="left" :columns="10" v-if="true" style="padding-top: 0px; padding-bottom: 0px">
             <!-- <SuiGridColumn>
                 Toolbar
             </SuiGridColumn>
@@ -33,13 +45,21 @@
             </SuiGridColumn> -->
         </SuiGridRow>
 
-        <SuiGridRow :columns="2" verticalAlign="middle" style="height: 100vh;">
-            <SuiGridColumn :width="9" textAlign="center">
-                <div class="game-frame" style="width: 100%;max-width: 600px; height: 140px; background-color: blue"></div>
+
+        <SuiGridRow :columns="1" verticalAlign="middle" textAlign="center">
+            <SuiGridColumn textAlign="center">
+                <canvas class="ui segment raised" ref="videoCanvas" id="videoCanvas" width="670" height="392" style="background-color: #85858573; width: 670px; height: 392px; margin: 0 auto">
+                    <p>
+                      Please use a browser that supports the Canvas Element, like
+                      <a href="http://www.google.com/chrome">Chrome</a>,
+                      <a href="http://www.mozilla.com/firefox/">Firefox</a>,
+                      <a href="http://www.apple.com/safari/">Safari</a> or Internet Explorer 10
+                    </p>
+                </canvas>
             </SuiGridColumn>
 
-            <SuiGridColumn :width="7" textAlign="left">
-                <h2 is="SuiHeader">
+            <!-- <SuiGridColumn :width="7" textAlign="left"> -->
+                <!-- <h2 is="SuiHeader">
                     <SuiIcon name="comments outline" />
                     <SuiHeaderContent>Chat</SuiHeaderContent>
                   </h2>
@@ -98,11 +118,28 @@
                         <SuiLabel basic style="position: absolute; top: -12px; right: -8px"><b>Username</b> - <b>datetime</b> <br /></SuiLabel>
                         Lorem ipsum 
                     </div>
-                </div>
+                </div> -->
 
 
 
+            <!-- </SuiGridColumn> -->
+        </SuiGridRow>
+        <SuiGridRow :columns="3" style="width: 701px !important; margin: 0 auto">
+            <SuiGridColumn :width="6">
+                <sui-progress color="yellow" indicating :percent="'77'" label="ENERGIE"/>
+            </SuiGridColumn>
+            <SuiGridColumn :width="5" textAlign="right">
+                <sui-statistic size="tiny">
+                    <sui-statistic-value>5,550</sui-statistic-value>
+                    <sui-statistic-label>secondes écoulées</sui-statistic-label>
+                  </sui-statistic>
+            </SuiGridColumn>
+            <SuiGridColumn :width="5" textAlign="right">
+                <sui-statistic size="tiny">
+                    <sui-statistic-value>5,550</sui-statistic-value>
+                    <sui-statistic-label>secondes totales</sui-statistic-label>
+                  </sui-statistic>
             </SuiGridColumn>
         </SuiGridRow>
     </SuiGrid>
-</div>
+</SuiContainer>

@@ -50,7 +50,27 @@ export default class GamesListFrame extends AVue {
           Authorization: `Bearer ${jwt}`
         }
       });
-      console.log(result);
+      
+      this.$router.push({ name: 'GameFrame', params: { gameInfos: result.data.data, gameId } as any });
+    } catch (error) {
+        console.error(error);
+    }
+  }
+
+  private async deleteGame(gameId: number) {
+    const jwt: string|null = localStorage.getItem("jwt");
+    if (!_.size(jwt)) {
+      this.$router.push({ name: "MainFrame" });
+    }
+
+    try {
+      const result = await axios.delete(`http://hardwar.ddns.net/api/games/${gameId}`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`
+        }
+      });
+      
+      this.gamesList = _.filter(this.gamesList, (game: IGame) => game.id !== gameId);
     } catch (error) {
         console.error(error);
     }
