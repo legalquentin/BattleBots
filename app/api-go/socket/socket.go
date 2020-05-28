@@ -1,8 +1,6 @@
 package socket
 
 import (
-	"encoding/json"
-	"log"
 	"net/http"
 
 	"../game"
@@ -37,24 +35,23 @@ func WsAuth(res http.ResponseWriter, req *http.Request) (player *game.Player, co
 		err = &game.Response{Message: "player not found", Code: 404}
 		return
 	}
-
 	if token != player.Token {
 		err = &game.Response{Message: "forbidden", Code: 403}
 	}
 
-	conn, errc := (&websocket.Upgrader{CheckOrigin: wsOriginAllowed}).Upgrade(res, req, nil)
-	if errc != nil {
-		log.Println(prefixErr, errc.Error())
-		err = &game.Response{Message: errc.Error(), Code: 500}
-	}
+	// conn, errc := (&websocket.Upgrader{CheckOrigin: wsOriginAllowed}).Upgrade(res, req, nil)
+	// if errc != nil {
+	// 	log.Println(prefixErr, errc.Error())
+	// 	err = &game.Response{Message: errc.Error(), Code: 500}
+	// }
 
-	if err != nil {
-		res.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(res).Encode(err)
-		player = nil
-	}
+	// if err != nil {
+	// 	res.Header().Set("Content-Type", "application/json")
+	// 	json.NewEncoder(res).Encode(err)
+	// 	player = nil
+	// }
 
-	return player, conn
+	return player, nil
 }
 
 // allow cross origin for req
