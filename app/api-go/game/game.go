@@ -59,6 +59,9 @@ func Daemon() {
 		tnow := time.Now()
 		for key, game := range baseGameInstances {
 			fmt.Println(key, len(game.Players), game.CreatedAt.Sub(tnow))
+			if game.CreatedAt.Sub(tnow).Minutes() > 2 {
+				delete(baseGameInstances, key)
+			}
 			for _, player := range game.Players {
 				if player.BotSpecs.SocketClientCtrl != nil {
 					// k := Data{Type: TYPE_ENERGY, Value: player.BotContext.Energy}
