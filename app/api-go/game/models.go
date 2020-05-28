@@ -22,7 +22,7 @@ type Game struct {
 	EndedAt   time.Time     `json:"endedAt,omitempty"`
 	CreatedAt time.Time     `json:"createdAt,omitempty"`
 	Env       *Environment  `json:"environment,omitempty"`
-	Players   []Player      `json:"players,omitempty"`
+	Players   []*Player     `json:"players,omitempty"`
 }
 
 // Player is one of the entity playing in a game, it hold bot data
@@ -32,19 +32,14 @@ type Player struct {
 	// botAttr  BotAttr
 	BotSpecs   *Bot    `json:"botSpecs,omitempty"`
 	BotContext Context `json:"botContext,omitempty"`
-}
-
-// IntMutex to change values vbetween goroutines
-type IntMutex struct {
-	Mutex *sync.Mutex
-	Value int16 `json:"value,omitempty"`
+	Mutex     sync.Mutex
 }
 
 // Context hold game data on a specific bot while running
 type Context struct {
-	Moving bool     `json:"moving,omitempty"`
-	Energy IntMutex `json:"energy,omitempty"`
-	Heat   IntMutex `json:"heat,omitempty"`
+	Moving bool  `json:"moving,omitempty"`
+	Energy int16 `json:"energy,omitempty"`
+	Heat   int16 `json:"heat,omitempty"`
 }
 
 // BotAttr hold game data on a specific bot (default multiplicators & values)

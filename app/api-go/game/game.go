@@ -101,13 +101,15 @@ func JoinGame(res http.ResponseWriter, req *http.Request) {
 			if b.Taken == false {
 				log.Println(prefixLog, "reserving a bot")
 				// TODO: add a real token generation
-				p = Player{t.PlayerID, tokenGenerator(), &b, Context{Moving: false, Energy: IntMutex{Mutex: &sync.Mutex{}, Value: 100}, Heat: IntMutex{Mutex: &sync.Mutex{}, Value: 0}}}
+				p = Player{t.PlayerID, tokenGenerator(), &b, Context{Moving: false, Energy: 100, Heat: 0}, sync.Mutex{}}
 				b.Taken = true
 				var g = baseGameInstances[t.GameID]
-				g.Players = append(g.Players, p)
+				p.Mutex.Lock()
+				g.Players = append(g.Players, &p)
 				baseGameInstances[t.GameID] = g
 				res.Header().Set("Content-Type", "application/json")
 				json.NewEncoder(res).Encode(&g)
+				p.Mutex.Unlock()
 				for _, b := range selected.Env.Bots {
 					if b.Taken == false {
 						// still one slot left, we don't start the game
@@ -169,12 +171,12 @@ func GetPlayer(gameID string, playerID string) *Player {
 	log.Println(prefixLog, "search for:", playerID)
 	if selected, ok := baseGameInstances[gameID]; ok {
 		for _, p := range selected.Players {
+			p.Mutex.Lock()
 			log.Println(prefixLog, "player:", p.ID)
 			if p.ID == playerID {
-				p.BotContext.Energy.Mutex.Lock()
-				log.Println(prefixLog, "found player", p.Token, "energy", p.BotContext.Energy.Value)
-				p.BotContext.Energy.Mutex.Unlock()
-				return &p
+				log.Println(prefixLog, "found player", p.Token, "energy", p.BotContext.Energy)
+				p.Mutex.Unlock()
+				return p
 			}
 		}
 	}
