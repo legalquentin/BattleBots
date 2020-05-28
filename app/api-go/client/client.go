@@ -52,7 +52,7 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 			player.BotContext.Moving = r.Press
 
 			if flag {
-				go doEvery(100*time.Millisecond, calcAttributes, player, conn, c)
+				go doEvery(100*time.Millisecond, calcAttributes, &player, conn, c)
 				flag = false
 			}
 
@@ -84,8 +84,8 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func doEvery(d time.Duration, f func(*game.Player, *websocket.Conn, *websocket.Conn),
-	player *game.Player, conn *websocket.Conn, bot *websocket.Conn) {
+func doEvery(d time.Duration, f func(**game.Player, *websocket.Conn, *websocket.Conn),
+	player **game.Player, conn *websocket.Conn, bot *websocket.Conn) {
 	for range time.Tick(d) {
 		f(player, conn, bot)
 	}
