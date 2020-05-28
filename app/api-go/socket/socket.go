@@ -1,7 +1,7 @@
 package socket
 
 import (
-	"encoding/json"
+	"log"
 	"net/http"
 
 	"../game"
@@ -47,9 +47,7 @@ func WsAuth(res http.ResponseWriter, req *http.Request) (player *game.Player, co
 	// }
 
 	if err != nil {
-		res.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(res).Encode(err)
-		player = nil
+		log.Println(prefixErr, err)
 	}
 
 	return player, nil
