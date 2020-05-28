@@ -21,32 +21,12 @@ export default class SplashScreenView extends Vue {
     splashes = [
         {
             imgName: 'splash1.png',
-            durationMS: 10000,
+            durationMS: 2000,
             isActive: false,
         },
         {
             imgName: 'splash2.png',
-            durationMS: 10000,
-            isActive: false,
-        },
-        {
-            imgName: 'splash1.png',
-            durationMS: 10000,
-            isActive: false,
-        },
-        {
-            imgName: 'splash2.png',
-            durationMS: 10000,
-            isActive: false,
-        },
-        {
-            imgName: 'splash1.png',
-            durationMS: 10000,
-            isActive: false,
-        },
-        {
-            imgName: 'splash2.png',
-            durationMS: 10000,
+            durationMS: 2000,
             isActive: false,
         },
     ];
@@ -71,7 +51,7 @@ export default class SplashScreenView extends Vue {
     mounted() {
         if (isElectron()) {
             const eWindow: BrowserWindow = electron.remote.getCurrentWindow();
-            eWindow.setFullScreen(true);
+            // eWindow.setFullScreen(true);
         }
 
         // mounted is unset from 'this' after it initial call

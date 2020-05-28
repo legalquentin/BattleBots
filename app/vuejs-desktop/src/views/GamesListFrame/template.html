@@ -1,18 +1,57 @@
 <div>
+    <SuiContainer>
+        <SuiGrid>
+            <SuiGridRow :columns="2">
+                <SuiGridColumn style="margin-top: 20px" textAlign="left">
+                    <RouterLink :to="{ name: 'CreateGameFrame' }">
+                        <SuiButton @click="$router.back()" basic left icon label-position="left" icon="arrow left">Retour</SuiButton>
+                    </RouterLink>
+                </SuiGridColumn>
+                <SuiGridColumn style="margin-top: 20px" textAlign="right">
+                    <RouterLink :to="{ name: 'CreateGameFrame' }">
+                        <SuiButton circular color="facebook">Créer une nouvelle partie</SuiButton>
+                    </RouterLink>
+                </SuiGridColumn>
+            </SuiGridRow>
+            <SuiDivider></SuiDivider>
+            <SuiGridRow>
+                <SuiGridColumn>
+                    <SuiSegments>
+                        <SuiSegment v-for="game in gamesList" style="position: relative">
+                            <SuiLabel style="position: absolute; left: -15px; top: 17px" ribbon basic :color="game.status === 'CREATED' ? '' : ''">Partie ouverte
+                                <sui-label-detail>
+                                    <SuiIcon v-if="game.status === 'CREATED'" name="check" color="green" />
+                                    <SuiIcon v-else name="close" color="red" />
+                                </sui-label-detail>
+                            </SuiLabel> 
+                            <SuiGrid verticalAlign="middle">
+                                <SuiGridRow :columns="3">
+                                    <SuiGridColumn textAlign="left" :width="4">
+                                        
+                                    </SuiGridColumn>
+                                    <SuiGridColumn textAlign="left" :width="7">
+                                        <SuiLabel basic>Nom de la partie
+                                            <sui-label-detail>{{ game.name }}</sui-label-detail>
+                                        </SuiLabel> 
+                                    </SuiGridColumn>
 
-    <RouterLink :to="{ name: 'CreateGameFrame' }">
-        <button>Create a new game</button>
-    </RouterLink>
-    <hr>
+                                    
 
-    <div v-for="game in gamesList" @click="joinGame(game.id)">
-        Id -> {{ game.id }}
-        <br/>
-        Name -> {{ game.name }}
-        <br/>
-        Status -> {{ game.status }}
-        <br/>
-        Bots -> {{ game.bots }}
-        <br/>
-    </div>
+                                    <SuiGridColumn textAlign="right" :width="5">
+                                        <SuiButtonGroup>
+                                            <SuiButton size="tiny" :color="game.status === 'CREATED' ? 'green' : 'red'" :disabled="game.status !== 'CREATED'" @click="joinGame(game.id)">
+                                                {{ game.status === 'CREATED' ? 'Rejoindre' : 'Partie fermée' }}
+                                            </SuiButton>
+                                            <SuiButton size="tiny" basic color="green" icon="trash alternate outline" @click="deleteGame(game.id)" style="color: grey !important"></SuiButton>
+                                        </SuiButtonGroup>
+                                        
+                                    </SuiGridColumn>
+                                </SuiGridRow>
+                            </SuiGrid>
+                        </SuiSegment>
+                    </SuiSegments>
+                </SuiGridColumn>
+            </SuiGridRow>
+        </SuiGrid>
+    </SuiContainer>
 </div>

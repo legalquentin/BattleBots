@@ -1,7 +1,38 @@
-<div>
 
-    <input v-model="name" type="text" placeholder="Nom de la partie" />
+    <SuiContainer style="height: 100%">
 
+        <SuiGrid verticalAlign="middle" style="min-height: 10vh !important">
+            <SuiGridRow :columns="2">
+                <SuiGridColumn style="margin-top: 20px" textAlign="left">
+                    <RouterLink :to="{ name: 'CreateGameFrame' }">
+                        <SuiButton @click="$router.back()" basic left icon label-position="left" icon="arrow left">Retour</SuiButton>
+                    </RouterLink>
+                </SuiGridColumn>
+                <SuiGridColumn style="margin-top: 20px" textAlign="right">
+                    
+                </SuiGridColumn>
+            </SuiGridRow>
 
-    <button @click="createGame()">Créer la partie</button>
-</div>
+        </SuiGrid>
+
+        <SuiGrid verticalAlign="middle" style="min-height: 90vh !important">
+            <SuiGridRow>
+                <SuiGridColumn>
+                    <SuiSegment style="padding: 40px" stacked="tall">
+
+                        <SuiForm size="big">
+                            <SuiFormField>
+                                <input v-model="name" type="text" placeholder="Nom de la partie" />
+                            </SuiFormField>
+                        </SuiForm>
+
+                        <SuiButton :disabled="gameCreateLoading" :loading="gameCreateLoading" size="big" color="blue" @click="createGame()" style="margin-top: 40px">Créer la partie !</SuiButton>
+                        
+
+                    </SuiSegment>
+                </SuiGridColumn>
+            </SuiGridRow>
+
+        </SuiGrid>
+
+    </SuiContainer>

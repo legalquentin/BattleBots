@@ -22,7 +22,7 @@ export default class LoginFrame extends Vue {
 
     async login(): Promise<void> {
         try {
-            const result = await axios.post('http://localhost/api/users/login', _.clone(this.loginFields));
+            const result = await axios.post('http://hardwar.ddns.net/api/users/login', _.clone(this.loginFields));
             const jwt = _.get(result, 'data.data.data');
             if (!_.size(jwt)) {
                 throw 'No JWT token exception';

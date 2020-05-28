@@ -30,6 +30,7 @@ const routes = [
     path: '/GameFrame',
     name: 'GameFrame',
     component: GameFrame,
+    props: true,
   },
   
   /**
