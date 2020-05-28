@@ -38,51 +38,51 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 
 	var flag = true
 
-	go func(flag bool) {
-		defer conn.Close()
-		for {
-			// read a message from the client [c]
-			// TODO: check if message is valid
-			var r = Key{}
-			if err := conn.ReadJSON(&r); err != nil {
-				log.Println(prefixWarn, err)
-				break
-			}
-
-			player.BotContext.Moving = r.Press
-
-			if flag {
-				go doEvery(100*time.Millisecond, calcAttributes, player, conn, c)
-				flag = false
-			}
-
-			// write a message to the bot [conn]
-			if player.BotContext.Energy <= 0 || player.BotContext.Heat >= 100 {
-				r = Key{"0", false}
-			}
-
-			if err := c.WriteJSON(r); err != nil {
-				log.Println(prefixWarn, err)
-				return
-			}
-		}
-	}(flag)
-
+	// go func(flag bool) {
 	defer c.Close()
+	defer conn.Close()
 	for {
 		// read a message from the client [c]
 		// TODO: check if message is valid
-		_, p, err := c.ReadMessage()
-		if err != nil {
+		var r = Key{}
+		if err := conn.ReadJSON(&r); err != nil {
 			log.Println(prefixWarn, err)
-			return
+			break
 		}
+
+		player.BotContext.Moving = r.Press
+
+		if flag {
+			go doEvery(100*time.Millisecond, calcAttributes, player, conn, c)
+			flag = false
+		}
+
 		// write a message to the bot [conn]
-		if err := conn.WriteMessage(websocket.TextMessage, p); err != nil {
+		if player.BotContext.Energy <= 0 || player.BotContext.Heat >= 100 {
+			r = Key{"0", false}
+		}
+
+		if err := c.WriteJSON(r); err != nil {
 			log.Println(prefixWarn, err)
 			return
 		}
 	}
+	// }(flag)
+
+	// for {
+	// 	// read a message from the client [c]
+	// 	// TODO: check if message is valid
+	// 	_, p, err := c.ReadMessage()
+	// 	if err != nil {
+	// 		log.Println(prefixWarn, err)
+	// 		return
+	// 	}
+	// 	// write a message to the bot [conn]
+	// 	if err := conn.WriteMessage(websocket.TextMessage, p); err != nil {
+	// 		log.Println(prefixWarn, err)
+	// 		return
+	// 	}
+	// }
 
 }
 
