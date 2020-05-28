@@ -59,7 +59,6 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 
 			if flag {
 				go doEvery(100*time.Millisecond, calcAttributes, player, conn, c)
-
 				flag = false
 			}
 
@@ -69,10 +68,10 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 				r = Key{"0", false}
 			}
 			player.Mutex.Unlock()
-			// if err := c.WriteJSON(r); err != nil {
-			// 	log.Println(prefixWarn, err)
-			// 	return
-			// }
+			if err := c.WriteJSON(r); err != nil {
+				log.Println(prefixWarn, err)
+				return
+			}
 		}
 	}(flag)
 
@@ -105,19 +104,16 @@ func calcAttributes(player *game.Player, conn *websocket.Conn, bot *websocket.Co
 	if player.BotContext.Moving {
 		log.Println(prefixLog, "moving, changing energy: ", player.BotContext.Energy)
 		if player.BotContext.Energy > 0 {
-
 			player.BotContext.Energy = player.BotContext.Energy - 1
 			conn.WriteJSON(&game.Data{Type: game.TYPE_ENERGY, Value: player.BotContext.Energy})
 		} else {
 			player.BotContext.Moving = false
-			bot.WriteJSON(&Key{"0", false})
 		}
 		if player.BotContext.Heat < 100 {
-			// player.BotContext.Heat.Value = player.BotContext.Heat.Value + 2
-			// conn.WriteJSON(&game.Data{Type: game.TYPE_OVERHEAT, Value: player.BotContext.Heat.Value})
+			player.BotContext.Heat = player.BotContext.Heat + 2
+			conn.WriteJSON(&game.Data{Type: game.TYPE_OVERHEAT, Value: player.BotContext.Heat})
 		} else {
 			player.BotContext.Moving = false
-			bot.WriteJSON(&Key{"0", false})
 		}
 	} else {
 		// if player.BotContext.Energy < 100 {
