@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"time"
 
 	"../game"
+	"../socket"
 	"github.com/gorilla/websocket"
 )
 
@@ -17,20 +17,14 @@ import (
 
 // WsHandlerCtrl handle client input, game
 func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
-	// player, _ := socket.WsAuth(res, req)
-	// if player == nil {
-	// 	return
-	// }
+	player, conn := socket.WsAuth(res, req)
+	if player == nil {
+		return
+	}
 
 	u := url.URL{Scheme: "ws", Host: "192.168.1.66:8088", Path: "/wsctrl"}
 
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
-	if err != nil {
-		log.Println(prefixErr, err)
-		http.NotFound(res, req)
-		return
-	}
-	conn, err := (&websocket.Upgrader{CheckOrigin: func(r *http.Request) bool { return true }}).Upgrade(res, req, nil)
 	if err != nil {
 		log.Println(prefixErr, err)
 		http.NotFound(res, req)
@@ -52,13 +46,6 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-}
-
-func doEvery(d time.Duration, f func(*game.Player, *websocket.Conn, *websocket.Conn),
-	player *game.Player, conn *websocket.Conn, bot *websocket.Conn) {
-	for range time.Tick(d) {
-		f(player, conn, bot)
-	}
 }
 
 func calcAttributes(player *game.Player, conn *websocket.Conn, bot *websocket.Conn) {

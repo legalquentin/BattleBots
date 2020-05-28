@@ -40,17 +40,17 @@ func WsAuth(res http.ResponseWriter, req *http.Request) (player *game.Player, co
 		err = &game.Response{Message: "forbidden", Code: 403}
 	}
 
-	// conn, errc := (&websocket.Upgrader{CheckOrigin: wsOriginAllowed}).Upgrade(res, req, nil)
-	// if errc != nil {
-	// 	log.Println(prefixErr, errc.Error())
-	// 	err = &game.Response{Message: errc.Error(), Code: 500}
-	// }
+	conn, errc := (&websocket.Upgrader{CheckOrigin: wsOriginAllowed}).Upgrade(res, req, nil)
+	if errc != nil {
+		log.Println(prefixErr, errc.Error())
+		err = &game.Response{Message: errc.Error(), Code: 500}
+	}
 
 	if err != nil {
 		log.Println(prefixErr, err)
 	}
 
-	return player, nil
+	return player, conn
 }
 
 // allow cross origin for req
