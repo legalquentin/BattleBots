@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"sync"
 	"time"
 
 	"net/http"
@@ -87,6 +88,7 @@ func JoinGame(res http.ResponseWriter, req *http.Request) {
 	var flag = false
 	var p = Player{}
 	if selected, ok := baseGameInstances[t.GameID]; ok {
+
 		// if the player already exist return it
 		for _, p := range selected.Players {
 			if p.ID == t.PlayerID {
@@ -99,7 +101,7 @@ func JoinGame(res http.ResponseWriter, req *http.Request) {
 			if b.Taken == false {
 				log.Println(prefixLog, "reserving a bot")
 				// TODO: add a real token generation
-				p = Player{t.PlayerID, tokenGenerator(), &b, Context{Moving: false, Energy: 100, Heat: 0}}
+				p = Player{t.PlayerID, tokenGenerator(), &b, Context{Moving: false, Energy: IntMutex{Mutex: sync.Mutex{}, Value: 100}, Heat: IntMutex{Mutex: sync.Mutex{}, Value: 0}}}
 				b.Taken = true
 				var g = baseGameInstances[t.GameID]
 				g.Players = append(g.Players, p)

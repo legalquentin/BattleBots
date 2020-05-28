@@ -1,6 +1,7 @@
 package game
 
 import (
+	"sync"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -33,11 +34,17 @@ type Player struct {
 	BotContext Context `json:"botContext,omitempty"`
 }
 
+// IntMutex to change values vbetween goroutines
+type IntMutex struct {
+	Mutex sync.Mutex
+	Value int16 `json:"value,omitempty"`
+}
+
 // Context hold game data on a specific bot while running
 type Context struct {
-	Moving bool  `json:"moving,omitempty"`
-	Energy int16 `json:"energy,omitempty"`
-	Heat   int16 `json:"heat,omitempty"`
+	Moving bool     `json:"moving,omitempty"`
+	Energy IntMutex `json:"energy,omitempty"`
+	Heat   IntMutex `json:"heat,omitempty"`
 }
 
 // BotAttr hold game data on a specific bot (default multiplicators & values)
