@@ -60,10 +60,10 @@ func Daemon() {
 			fmt.Println(key, len(game.Players), game.CreatedAt.Sub(tnow))
 			for _, player := range game.Players {
 				if player.BotSpecs.SocketClientCtrl != nil {
-					k := Data{Type: TYPE_ENERGY, Value: player.BotContext.Energy}
-					player.BotSpecs.SocketClientCtrl.WriteJSON(&k)
-					k = Data{Type: TYPE_OVERHEAT, Value: player.BotContext.Heat}
-					player.BotSpecs.SocketClientCtrl.WriteJSON(&k)
+					// k := Data{Type: TYPE_ENERGY, Value: player.BotContext.Energy}
+					// player.BotSpecs.SocketClientCtrl.WriteJSON(&k)
+					// k = Data{Type: TYPE_OVERHEAT, Value: player.BotContext.Heat}
+					// player.BotSpecs.SocketClientCtrl.WriteJSON(&k)
 				}
 			}
 		}
@@ -99,7 +99,7 @@ func JoinGame(res http.ResponseWriter, req *http.Request) {
 			if b.Taken == false {
 				log.Println(prefixLog, "reserving a bot")
 				// TODO: add a real token generation
-				p = Player{t.PlayerID, tokenGenerator(), &b, Context{false, 100, 0}}
+				p = Player{t.PlayerID, tokenGenerator(), &b, Context{Moving: false, Energy: 100, Heat: 0}}
 				b.Taken = true
 				var g = baseGameInstances[t.GameID]
 				g.Players = append(g.Players, p)

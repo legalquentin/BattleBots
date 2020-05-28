@@ -69,7 +69,7 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 	}(flag)
 
 	for {
-		// read a message from the client [c]
+		// read a message from the bot [c]
 		// TODO: check if message is valid
 		_, p, err := c.ReadMessage()
 		if err != nil {
@@ -93,6 +93,7 @@ func doEvery(d time.Duration, f func(*game.Player, *websocket.Conn, *websocket.C
 
 func calcAttributes(player *game.Player, conn *websocket.Conn, bot *websocket.Conn) {
 	if player.BotContext.Moving {
+		log.Println(prefixLog, "moving, changing energy: ", player.BotContext.Energy)
 		if player.BotContext.Energy > 0 {
 			player.BotContext.Energy = player.BotContext.Energy - 1
 			conn.WriteJSON(&game.Data{Type: game.TYPE_ENERGY, Value: player.BotContext.Energy})
