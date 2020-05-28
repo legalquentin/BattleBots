@@ -62,7 +62,7 @@ func main() {
 	game.WorkerCtx.Secret = r
 
 	// Infinite running fun to handle game events
-	// go game.Daemon()
+	go game.Daemon()
 
 	log.Println(prefixLog, "Starting HTTP server on port:", config.Config.Port)
 	log.Println(prefixLog, "secret is :", game.WorkerCtx.Secret)
