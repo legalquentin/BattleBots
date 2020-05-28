@@ -57,7 +57,7 @@ func Daemon() {
 	for {
 		tnow := time.Now()
 		for key, game := range baseGameInstances {
-			fmt.Println("gid:", key, "nbP:", len(game.Players), "started", game.Started, "created_since:", game.CreatedAt.Sub(tnow))
+			fmt.Println(key, len(game.Players), game.CreatedAt.Sub(tnow))
 			for _, player := range game.Players {
 				if player.BotSpecs.SocketClientCtrl != nil {
 					if player.BotContext.Moving {
