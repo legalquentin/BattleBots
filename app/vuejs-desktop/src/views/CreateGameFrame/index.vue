@@ -21,12 +21,12 @@ export default class CreateGameFrame extends Vue {
           Authorization: `Bearer ${jwt}`
         }
       });
-      this.gameCreateLoading = false;
-      console.log(result);
       this.$router.back();
     } catch (error) {
       console.error(error);
+      alert("Une erreur fatale s'est produite lors de la création de la partie :/ Merci de remonter le problème aux développeurs")
     }
+    this.gameCreateLoading = false;
   }
 }
 </script>

@@ -16,8 +16,28 @@ import { Vue, Component } from 'vue-property-decorator';
 @Component
 export default class MainFrame extends Vue {
 
+    openLoginRegisterModal = false;
+
     mounted(): void {
         
+    }
+
+    passThrough(): void {
+        if (localStorage.getItem('jwt')) {
+            this.$router.push({ name: 'CreateGameFrame' });
+            return;
+        }
+
+        this.openLoginRegisterModal = true;
+    }
+
+    passToGameList(): void {
+        if (localStorage.getItem('jwt')) {
+            this.$router.push({ name: 'GamesListFrame' });
+            return;
+        }
+
+        this.openLoginRegisterModal = true;
     }
 
 };

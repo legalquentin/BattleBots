@@ -7,7 +7,8 @@
             <SuiGridColumn style="height: 10px">
                 <h1 is="SuiHeader">
                     <SuiHeaderContent>
-                        <span style="color: white; text-shadow: 0.8px 0.8px 0 #10AC84, 0.8px -0.8px 0 #10AC84, -0.8px 0.8px 0 #10AC84, -0.8px -0.8px 0 #10AC84, 0.8px 0px 0 #10AC84, 0px 0.8px 0 #10AC84, -0.8px 0px 0 #10AC84, 0px -0.8px 0 #10AC84;">Battlebot</span>
+                        <span
+                            style="color: white; text-shadow: 0.8px 0.8px 0 #10AC84, 0.8px -0.8px 0 #10AC84, -0.8px 0.8px 0 #10AC84, -0.8px -0.8px 0 #10AC84, 0.8px 0px 0 #10AC84, 0px 0.8px 0 #10AC84, -0.8px 0px 0 #10AC84, 0px -0.8px 0 #10AC84;">Battlebot</span>
                         <SuiHeaderSubheader>Hardwar technology powered</SuiHeaderSubheader>
                     </SuiHeaderContent>
                 </h1>
@@ -20,7 +21,8 @@
                 <SuiGrid>
                     <SuiGridRow>
                         <SuiGridColumn>
-                            <SuiButton @click="$router.push({ name: 'GameFrame' })" basic style="border-bottom: 4px solid #10AC84; box-shadow: 0 0 0 1px #10AC84 inset, 0 0 0 0 #10AC84 inset !important;">
+                            <SuiButton @click="passThrough()" basic
+                                style="border-bottom: 4px solid #10AC84; box-shadow: 0 0 0 1px #10AC84 inset, 0 0 0 0 #10AC84 inset !important;">
                                 Commencer à jouer
                             </SuiButton>
                         </SuiGridColumn>
@@ -28,18 +30,18 @@
 
                     <SuiGridRow>
                         <SuiGridColumn>
-                            <RouterLink :to="{name: 'GamesListFrame'}">
-                                <SuiButton basic class="secondary-game-button">
+                            
+                                <SuiButton @click="passToGameList()" basic class="secondary-game-button">
                                     Parties en cours
                                 </SuiButton>
-                            </RouterLink>
+                            
                         </SuiGridColumn>
                     </SuiGridRow>
 
                     <SuiGridRow>
                         <SuiGridColumn>
-                            <SuiButton basic class="secondary-game-button">
-                                Paramètres
+                            <SuiButton basic disabled class="secondary-game-button">
+                                Paramètres <SuiLabel circular color="yellow">Bientôt</SuiLabel>
                             </SuiButton>
                         </SuiGridColumn>
                     </SuiGridRow>
@@ -49,10 +51,32 @@
             </SuiGridColumn>
 
             <SuiGridColumn>
-                Je suis la 2eme colone (actualité etc.)
+
             </SuiGridColumn>
         </SuiGridRow>
 
     </SuiGrid>
+
+    <sui-modal v-model="openLoginRegisterModal">
+        <sui-modal-header>Vous devez être connecté</sui-modal-header>
+        <sui-modal-content>
+
+            <sui-modal-description>
+                <sui-header>Pour continuer, vous devez créer un compte ou vous connecter</sui-header>
+                <p>
+                    C'est gratuit, et ça ne prend que quelques secondes
+                </p>
+            </sui-modal-description>
+        </sui-modal-content>
+        <sui-modal-actions>
+            <sui-button @click="$router.push({ name: 'RegisterFrame' })">
+                Pas de compte ? S'inscrire
+            </sui-button>
+            <sui-button @click="$router.push({ name: 'LoginFrame' })">
+                Deja un compte ? Se connecter
+            </sui-button>
+
+        </sui-modal-actions>
+    </sui-modal>
 
 </div>

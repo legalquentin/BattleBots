@@ -1,18 +1,26 @@
-<SuiContainer class="root" style="padding-top: 5px;">
-    <SuiButton style="position: absolute; width: 580px; right: -3px; top: 0px; border-radius: 0px; opacity: 0.5" size="mini" @click="openExternal()" color="yellow">Pour les testeurs : en cas de problème de connexion, essayez de cliquer ici et d'accepter le certificat (temporaire)</SuiButton>
-    <SuiGrid>
-        <SuiGridRow :columns="2" style="width: 701px !important; margin: 0 auto" verticalAlign="middle">
-            <SuiGridColumn style="margin-top: 20px" textAlign="left" :width="3">
+<SuiContainer class="root" style="padding-top: 15px; height: 100vh">
+    <SuiButton style="position: absolute; width: 100%; right: -3px; top: 0px; border-radius: 0px; opacity: 0.5; z-index: 999999; color: black" size="mini" @click="openExternal()" color="yellow">Pour les testeurs : en cas de problème de connexion, essayez de cliquer ici et d'accepter le certificat (solution temporaire)</SuiButton>
+    <SuiGrid verticalAlign="middle" style="width: 701px !important; margin-left: auto; margin-right: auto">
+        <SuiGridRow :columns="3">
+                
+            <SuiGridColumn style="margin-top: 20px" textAlign="left" :width="9">
+                <h3 is="sui-header">
+                    <sui-icon name="gamepad" color="violet" />
+                    <sui-header-content>Partie en cours : {{ gameInfos.game.name }}</sui-header-content>
+                  </h3>
+            </SuiGridColumn>
+            <SuiGridColumn style="margin-top: 20px; opacity: 0" textAlign="center" :width="2">
+                <SuiButton circular color="facebook" disabled>Ok</SuiButton>
+            </SuiGridColumn>
+            <SuiGridColumn style="margin-top: 20px" textAlign="right" :width="5">
                 <RouterLink :to="{ name: 'CreateGameFrame' }">
-                    <SuiButton @click="$router.back()" basic left icon label-position="left" icon="arrow left">Retour</SuiButton>
+                    <SuiButton size="mini" @click="$router.back()" basic left icon label-position="right" icon="arrow up">Liste des parties</SuiButton>
                 </RouterLink>
             </SuiGridColumn>
-            <!-- <SuiGridColumn :width="13" style="margin-top: 20px;position: absolute" textAlign="right"> -->
-                
-                    <!-- <SuiButton style="position: absolute; width: 100%; right: 0px; top: 0px" size="mini" @click="openExternal()" basic color="yellow">Pour les testeurs : en cas de problème de connexion, essayez de cliquer ici et d'accepter le certificat (temporaire)</SuiButton> -->
-                
-            <!-- </SuiGridColumn> -->
         </SuiGridRow>
+    </SuiGrid>
+    <SuiDivider style="width: 670px !important; margin-left: auto; margin-right: auto"></SuiDivider>
+    <SuiGrid verticalAlign="middle" style="height: calc(100vh - 100px);">
         <SuiGridRow textAlign="left" :columns="10" v-if="true" style="padding-top: 0px; padding-bottom: 0px">
             <!-- <SuiGridColumn>
                 Toolbar
@@ -49,7 +57,7 @@
 
         <SuiGridRow :columns="1" verticalAlign="middle" textAlign="center">
             <SuiGridColumn textAlign="center">
-                <canvas class="ui segment raised" ref="videoCanvas" id="videoCanvas" width="670" height="392" style="background-color: #85858573; width: 670px; height: 392px; margin: 0 auto">
+                <canvas class="ui segment raised" ref="videoCanvas" id="videoCanvas" width="670" height="370" style="background-color: #85858573; width: 670px; height: 370px; margin: 0 auto">
                     <p>
                       Please use a browser that supports the Canvas Element, like
                       <a href="http://www.google.com/chrome">Chrome</a>,
@@ -126,10 +134,10 @@
             <!-- </SuiGridColumn> -->
         </SuiGridRow>
         <SuiGridRow :columns="3" style="width: 701px !important; margin: 0 auto">
-            <SuiGridColumn :width="6">
-                <sui-progress color="yellow" indicating :percent="'77'" label="ENERGIE"/>
+            <SuiGridColumn :width="7">
+                <sui-progress color="yellow" indicating :percent="botContext.energy" label="ENERGIE"/>
             </SuiGridColumn>
-            <SuiGridColumn :width="5" textAlign="right">
+            <SuiGridColumn :width="4" textAlign="right">
                 <sui-statistic size="tiny">
                     <sui-statistic-value>{{ elapsedTime }}</sui-statistic-value>
                     <sui-statistic-label>secondes écoulées</sui-statistic-label>

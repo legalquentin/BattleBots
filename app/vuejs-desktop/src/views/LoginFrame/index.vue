@@ -18,6 +18,7 @@ export default class LoginFrame extends Vue {
     
     mounted() {
         localStorage.removeItem('jwt');
+        localStorage.removeItem('userId');
     }
 
     async login(): Promise<void> {
@@ -29,9 +30,13 @@ export default class LoginFrame extends Vue {
             }
 
             localStorage.setItem('jwt', jwt);
-            this.$router.push({ name: 'MainFrame' });
+            const Authorization = `Bearer ${jwt}`;
+            const profile = await axios.get('http://hardwar.ddns.net/api/users/profile', { headers:  { Authorization }});
+
+            localStorage.setItem('userId', _.get(profile, 'data.data.id'));
+            this.$router.replace({ name: 'GamesListFrame' });
         } catch (error) {
-            console.error(error);
+            alert("Nom de compte ou mot de passe incorrect");
         }
     }
 };
