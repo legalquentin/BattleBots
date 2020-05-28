@@ -22,6 +22,7 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 	if player == nil {
 		return
 	}
+
 	player.BotSpecs.SocketClientCtrl = conn
 	player.BotContext.Moving = false
 
@@ -52,7 +53,15 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 			player.BotContext.Moving = r.Press
 
 			if flag {
-				go doEvery(100*time.Millisecond, calcAttributes, &player, conn, c)
+
+				chEnergy := make(chan int16)
+				chHeat := make(chan int16)
+
+				go doEvery(100*time.Millisecond, calcAttributes, player, conn, c, chEnergy, chHeat)
+
+				player.BotContext.Energy = <-chEnergy
+				player.BotContext.Heat = <-chHeat
+
 				flag = false
 			}
 
@@ -84,18 +93,19 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func doEvery(d time.Duration, f func(**game.Player, *websocket.Conn, *websocket.Conn),
-	player **game.Player, conn *websocket.Conn, bot *websocket.Conn) {
+func doEvery(d time.Duration, f func(*game.Player, *websocket.Conn, *websocket.Conn, chan int16, chan int16),
+	player *game.Player, conn *websocket.Conn, bot *websocket.Conn, che chan int16, chh chan int16) {
 	for range time.Tick(d) {
-		f(player, conn, bot)
+		f(player, conn, bot, che, chh)
 	}
 }
 
-func calcAttributes(player *game.Player, conn *websocket.Conn, bot *websocket.Conn) {
+func calcAttributes(player *game.Player, conn *websocket.Conn, bot *websocket.Conn, che chan int16, chh chan int16) {
 	if player.BotContext.Moving {
 		log.Println(prefixLog, "moving, changing energy: ", player.BotContext.Energy)
 		if player.BotContext.Energy > 0 {
 			player.BotContext.Energy = player.BotContext.Energy - 1
+			che <- player.BotContext.Energy
 			conn.WriteJSON(&game.Data{Type: game.TYPE_ENERGY, Value: player.BotContext.Energy})
 		} else {
 			player.BotContext.Moving = false
@@ -103,6 +113,7 @@ func calcAttributes(player *game.Player, conn *websocket.Conn, bot *websocket.Co
 		}
 		if player.BotContext.Heat < 100 {
 			player.BotContext.Heat = player.BotContext.Heat + 2
+			chh <- player.BotContext.Heat
 			conn.WriteJSON(&game.Data{Type: game.TYPE_OVERHEAT, Value: player.BotContext.Heat})
 		} else {
 			player.BotContext.Moving = false
@@ -115,6 +126,7 @@ func calcAttributes(player *game.Player, conn *websocket.Conn, bot *websocket.Co
 		// }
 		if player.BotContext.Heat > 0 {
 			player.BotContext.Heat = player.BotContext.Heat - 2
+			chh <- player.BotContext.Heat
 			conn.WriteJSON(&game.Data{Type: game.TYPE_OVERHEAT, Value: player.BotContext.Heat})
 		}
 	}
