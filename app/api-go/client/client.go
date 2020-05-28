@@ -69,26 +69,27 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 				r = Key{"0", false}
 			}
 			player.Mutex.Unlock()
-			if err := c.WriteJSON(r); err != nil {
-				log.Println(prefixWarn, err)
-				return
-			}
+			// if err := c.WriteJSON(r); err != nil {
+			// 	log.Println(prefixWarn, err)
+			// 	return
+			// }
 		}
 	}(flag)
 
 	for {
 		// read a message from the bot [c]
 		// TODO: check if message is valid
-		_, p, err := c.ReadMessage()
+		_, _, err := c.ReadMessage()
 		if err != nil {
 			log.Println(prefixWarn, err)
 			return
 		}
-		// write a message to the bot [conn]
-		if err := conn.WriteMessage(websocket.TextMessage, p); err != nil {
-			log.Println(prefixWarn, err)
-			return
-		}
+		// // write a message to the bot [conn]
+		log.Println(prefixLog, "Message from bot", websocket.TextMessage)
+		// if err := conn.WriteMessage(websocket.TextMessage, p); err != nil {
+		// 	log.Println(prefixWarn, err)
+		// 	return
+		// }
 	}
 }
 
