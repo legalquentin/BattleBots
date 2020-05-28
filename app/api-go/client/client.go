@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"time"
 
 	"../game"
 	"../socket"
@@ -35,24 +36,60 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 	}
 	player.BotSpecs.SocketBotCtrl = c
 
+	var flag = true
+
+	go func(flag bool) {
+		defer conn.Close()
+		for {
+			// read a message from the client [c]
+			// TODO: check if message is valid
+			var r = Key{}
+			if err := conn.ReadJSON(&r); err != nil {
+				log.Println(err)
+				break
+			}
+
+			log.Println(prefixLog, "command sent;", r.Content, r.Press)
+			player.BotContext.Moving = r.Press
+
+			if flag {
+				go doEvery(100*time.Millisecond, calcAttributes, player, conn, c)
+				flag = false
+			}
+
+			// write a message to the bot [conn]
+			if player.BotContext.Energy <= 0 || player.BotContext.Heat >= 100 {
+				r = Key{"0", false}
+			}
+
+			if err := c.WriteJSON(r); err != nil {
+				log.Println(prefixWarn, err)
+				return
+			}
+		}
+	}(flag)
+
 	for {
 		// read a message from the client [c]
 		// TODO: check if message is valid
-		var cmd Key
-		err := c.ReadJSON(&cmd)
+		_, p, err := c.ReadMessage()
 		if err != nil {
 			log.Println(prefixWarn, err)
 			return
 		}
-		log.Println(prefixLog, "command sent;", cmd.Content, cmd.Press)
-		player.BotContext.Moving = cmd.Press
 		// write a message to the bot [conn]
-		if err := conn.WriteJSON(&cmd); err != nil {
+		if err := conn.WriteMessage(websocket.TextMessage, p); err != nil {
 			log.Println(prefixWarn, err)
 			return
 		}
 	}
+}
 
+func doEvery(d time.Duration, f func(*game.Player, *websocket.Conn, *websocket.Conn),
+	player *game.Player, conn *websocket.Conn, bot *websocket.Conn) {
+	for range time.Tick(d) {
+		f(player, conn, bot)
+	}
 }
 
 func calcAttributes(player *game.Player, conn *websocket.Conn, bot *websocket.Conn) {
