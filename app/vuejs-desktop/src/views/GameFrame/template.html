@@ -1,16 +1,17 @@
-<SuiContainer class="root" style="padding-top: 15px;">
+<SuiContainer class="root" style="padding-top: 5px;">
+    <SuiButton style="position: absolute; width: 580px; right: -3px; top: 0px; border-radius: 0px; opacity: 0.5" size="mini" @click="openExternal()" color="yellow">Pour les testeurs : en cas de problème de connexion, essayez de cliquer ici et d'accepter le certificat (temporaire)</SuiButton>
     <SuiGrid>
-        <SuiGridRow :columns="2" style="width: 701px !important; margin: 0 auto">
+        <SuiGridRow :columns="2" style="width: 701px !important; margin: 0 auto" verticalAlign="middle">
             <SuiGridColumn style="margin-top: 20px" textAlign="left" :width="3">
                 <RouterLink :to="{ name: 'CreateGameFrame' }">
                     <SuiButton @click="$router.back()" basic left icon label-position="left" icon="arrow left">Retour</SuiButton>
                 </RouterLink>
             </SuiGridColumn>
-            <SuiGridColumn :width="13" style="margin-top: 20px" textAlign="right">
+            <!-- <SuiGridColumn :width="13" style="margin-top: 20px;position: absolute" textAlign="right"> -->
                 
-                    <SuiButton @click="openExternal()" basic color="red">Testeurs : En cas d'erreur, essayer de cliquer ici et d'accepter le certificat</SuiButton>
+                    <!-- <SuiButton style="position: absolute; width: 100%; right: 0px; top: 0px" size="mini" @click="openExternal()" basic color="yellow">Pour les testeurs : en cas de problème de connexion, essayez de cliquer ici et d'accepter le certificat (temporaire)</SuiButton> -->
                 
-            </SuiGridColumn>
+            <!-- </SuiGridColumn> -->
         </SuiGridRow>
         <SuiGridRow textAlign="left" :columns="10" v-if="true" style="padding-top: 0px; padding-bottom: 0px">
             <!-- <SuiGridColumn>
@@ -130,14 +131,14 @@
             </SuiGridColumn>
             <SuiGridColumn :width="5" textAlign="right">
                 <sui-statistic size="tiny">
-                    <sui-statistic-value>5,550</sui-statistic-value>
+                    <sui-statistic-value>{{ elapsedTime }}</sui-statistic-value>
                     <sui-statistic-label>secondes écoulées</sui-statistic-label>
                   </sui-statistic>
             </SuiGridColumn>
             <SuiGridColumn :width="5" textAlign="right">
                 <sui-statistic size="tiny">
-                    <sui-statistic-value>5,550</sui-statistic-value>
-                    <sui-statistic-label>secondes totales</sui-statistic-label>
+                    <sui-statistic-value>{{ remainingTime }}</sui-statistic-value>
+                    <sui-statistic-label>secondes restantes</sui-statistic-label>
                   </sui-statistic>
             </SuiGridColumn>
         </SuiGridRow>
