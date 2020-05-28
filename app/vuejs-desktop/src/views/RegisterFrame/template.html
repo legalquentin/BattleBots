@@ -1,12 +1,109 @@
-<div>
+<SuiContainer style="padding-bottom: 20px; padding-top: 0px">
 
-    <input v-model="registerFields.firstname" type="text" placeholder="firstname" />
-    <input v-model="registerFields.lastname" type="text" placeholder="lastname" />
-    <input v-model="registerFields.pseudo" type="text" placeholder="pseudo" />
-    <input v-model="registerFields.email" type="text" placeholder="email" />
-    <input v-model="registerFields.address" type="text" placeholder="address" />
-    <input v-model="registerFields.password" type="password" placeholder="password" />
+    <SuiGrid>
+        <SuiGridRow :columns="3" verticalAlign="middle">
+            
+            <SuiGridColumn style="margin-top: 20px" textAlign="left" :width="6">
+                <h3 is="sui-header">
+                    <sui-icon name="users" color="purple" />
+                    <sui-header-content>Nous rejoindre</sui-header-content>
+                  </h3>
+            </SuiGridColumn>
+            <SuiGridColumn style="margin-top: 20px; opacity: 0" textAlign="center" :width="2">
+                <RouterLink :to="{ name: 'CreateGameFrame' }">
+                    <SuiButton circular color="facebook">A</SuiButton>
+                </RouterLink>
+            </SuiGridColumn>
+            <SuiGridColumn style="margin-top: 20px" textAlign="right" :width="8">
+                <SuiButtonGroup size="mini">
+                    <SuiButton class="register-jump-button" size="mini" @click="$router.push({ name: 'LoginFrame'})" left icon label-position="right" icon="random">Deja un compte ? Se connecter</SuiButton>
+                    <SuiButton size="mini" @click="$router.push({ name: 'MainFrame' })" basic left icon label-position="right" icon="arrow up">Menu principal</SuiButton>
+                </SuiButtonGroup>
+                
+            </SuiGridColumn>
+        </SuiGridRow>
+    </SuiGrid>
+    <SuiDivider></SuiDivider>
 
-    <button @click="register()">S'inscrire</button>
+    <SuiSegments>
+        <SuiSegment color="blue">
 
-</div>
+            <h4 is="sui-header">
+                A propos de vous
+            </h4>
+            <SuiDivider></SuiDivider>
+            <SuiForm>
+
+                <sui-form-fields>
+                    <sui-form-field>
+                        <label>First name</label>
+                        <input v-model="registerFields.firstname" type="text" placeholder="firstname" />
+                    </sui-form-field>
+                    <sui-form-field>
+                        <label>Last name</label>
+                        <input v-model="registerFields.lastname" type="text" placeholder="lastname" />
+                    </sui-form-field>
+
+                    <sui-form-field>
+                        <label>Adresse</label>
+                        <input v-model="registerFields.address" type="text" placeholder="address" />
+                    </sui-form-field>
+
+                    
+                </sui-form-fields>
+
+            </SuiForm>
+
+        </SuiSegment>
+
+        <SuiSegment color="purple">
+            <h4 is="sui-header">
+                Vous contacter
+            </h4>
+            <SuiDivider></SuiDivider>
+
+            <SuiForm>
+                <sui-form-fields>
+                    <sui-form-field>
+                        <label>Mail</label>
+                        <input v-model="registerFields.email" type="text" placeholder="email" />
+                    </sui-form-field>
+                </sui-form-fields>
+            </SuiForm>
+        </SuiSegment>
+
+        <SuiSegment color="teal">
+            <h4 is="sui-header">
+                Vos informations de connexion
+            </h4>
+            <SuiDivider></SuiDivider>
+
+            <SuiForm>
+                <sui-form-fields>
+                    <sui-form-field>
+                        <label>Pseudo</label>
+                        <input v-model="registerFields.pseudo" type="text" placeholder="pseudo" />
+                    </sui-form-field>
+
+                    <sui-form-field>
+                        <label>Mot de passe</label>
+                        <input v-model="registerFields.password" type="password" placeholder="password" />
+                    </sui-form-field>
+
+                    <sui-form-field>
+                        <label>Mot de passe (encore !)</label>
+                        <input v-model="registerFields.password" type="password" placeholder="password" />
+                    </sui-form-field>
+                </sui-form-fields>
+            </SuiForm>
+        </SuiSegment>
+    </SuiSegments>
+
+    
+    
+
+    
+
+    <SuiButton color="purple" @click="register()">Rejoindre Battle-bot !</SuiButton>
+
+</SuiContainer>

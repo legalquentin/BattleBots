@@ -57,22 +57,22 @@
 
     </SuiGrid>
 
-    <sui-modal v-model="openLoginRegisterModal">
-        <sui-modal-header>Vous devez être connecté</sui-modal-header>
+    <sui-modal size="large" :closeIcon="false" v-model="openLoginRegisterModal">
+        <sui-modal-header style="text-align: center">Accès non autorisé <SuiIcon name="frown outline" color="red"></SuiIcon></sui-modal-header>
         <sui-modal-content>
 
             <sui-modal-description>
-                <sui-header>Pour continuer, vous devez créer un compte ou vous connecter</sui-header>
-                <p>
-                    C'est gratuit, et ça ne prend que quelques secondes
-                </p>
+                <sui-header>Pour continuer, vous devez créer un compte ou vous connecter <SuiIcon name="meh outline" color="violet"></SuiIcon></sui-header>
+                <sui-header size="small">
+                    <span>C'est gratuit <SuiIcon name="smile outline" color="orange" style="margin-right:3px"></SuiIcon>et ça ne prend que quelques secondes <SuiIcon name="heart outline" color="pink"></SuiIcon></span> 
+                </sui-header>
             </sui-modal-description>
         </sui-modal-content>
         <sui-modal-actions>
-            <sui-button @click="$router.push({ name: 'RegisterFrame' })">
+            <sui-button @click="$router.push({ name: 'RegisterFrame' })" label-position="right" color="purple" icon="users">
                 Pas de compte ? S'inscrire
             </sui-button>
-            <sui-button @click="$router.push({ name: 'LoginFrame' })">
+            <sui-button @click="$router.push({ name: 'LoginFrame' })" label-position="right" color="orange" icon="key">
                 Deja un compte ? Se connecter
             </sui-button>
 

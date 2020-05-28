@@ -21,6 +21,7 @@ import jsmpeg from "jsmpeg";
 import _ from "lodash";
 import moment from "moment";
 import { shell } from "electron";
+import axios from 'axios';
 
 import SocketService from "./SocketService";
 
@@ -63,6 +64,7 @@ export default class GameFrame extends Vue {
       this.$router.replace({ name: 'LoginFrame' });
     }
     console.log('test', this.gameInfos)
+    this.createdAt = moment(this.gameInfos.game.createdAt);
 
     this.cameraUrl = `wss://hardwar.ddns.net/api/bots/wscam?gameid=${this.gameId}&playerid=${this.playerId}&token=${_.find(this.gameInfos.game.players, (player: any) => Number(player.id) === this.playerId).token}`;
     this.controlUrl = `wss://hardwar.ddns.net/api/bots/ws?gameid=${this.gameId}&playerid=${this.playerId}&token=${_.find(this.gameInfos.game.players, (player: any) => Number(player.id) === this.playerId).token}`;
@@ -83,11 +85,9 @@ export default class GameFrame extends Vue {
     const now: moment.Moment = moment();
     if (this.createdAt) {
       this.elapsedTime = now.diff(this.createdAt, 'seconds');
-      this.remainingTime = 180 - this.elapsedTime;
+      this.remainingTime = 300 - this.elapsedTime;
       
-      if (this.remainingTime < 0) {
-        alert("Partie terminée");
-        this.$router.back();
+      if (this.remainingTime < 1) {
         return;
       }
     }
@@ -109,7 +109,16 @@ export default class GameFrame extends Vue {
     // console.log(message);
     if (message.dt === 1) {
         this.botContext.energy = (!message.dv) ? 0 : message.dv;  
+        return;
     }
+
+    if (message.dt === -1) { //  && message.dv === 0
+      alert("La partie est terminée");
+      this.deleteGame(this.gameId);
+
+      this.$router.back();
+    }
+
     
     // return;
     // const player: any = _.find(
@@ -154,6 +163,23 @@ export default class GameFrame extends Vue {
 
   public openExternal() {
     shell.openExternal("https://hardwar.ddns.net");
+  }
+
+  private async deleteGame(gameId: number) {
+    const jwt: string|null = localStorage.getItem("jwt");
+    if (!_.size(jwt)) {
+      this.$router.push({ name: "MainFrame" });
+    }
+
+    try {
+      const result = await axios.delete(`http://hardwar.ddns.net/api/games/${gameId}`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`
+        }
+      });
+    } catch (error) {
+        console.error(error);
+    }
   }
 }
 </script>

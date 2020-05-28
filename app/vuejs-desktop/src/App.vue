@@ -53,6 +53,16 @@ body
   background-color: transparent !important;
 }
 
+.mini.button.register-jump-button .random {
+  color: #a333c8;
+  background-color: transparent !important;
+}
+
+.mini.button.login-jump-button .random {
+  color: #f2711c;
+  background-color: transparent !important;
+}
+
 
 .ui.progress .bar {
   min-width: 0em !important;
