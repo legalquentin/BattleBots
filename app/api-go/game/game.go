@@ -171,7 +171,9 @@ func GetPlayer(gameID string, playerID string) *Player {
 		for _, p := range selected.Players {
 			log.Println(prefixLog, "player:", p.ID)
 			if p.ID == playerID {
-				log.Println(prefixLog, "found player", p.Token)
+				p.BotContext.Energy.Mutex.Lock()
+				log.Println(prefixLog, "found player", p.Token, "energy", p.BotContext.Energy.Value)
+				p.BotContext.Energy.Mutex.Unlock()
 				return &p
 			}
 		}
