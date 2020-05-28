@@ -58,9 +58,18 @@ func Daemon() {
 	for {
 		tnow := time.Now()
 		for key, game := range baseGameInstances {
-			//fmt.Println(key, len(game.Players), game.CreatedAt.Sub(tnow).Minutes(), float64(3))
+			fmt.Println(key, len(game.Players), game.CreatedAt.Sub(tnow).Minutes(), float64(3))
 			if tnow.Sub(game.CreatedAt).Minutes() > float64(1) {
-				log.Println(prefixWarn, "DELETING game", game.Name, "reached 2 minutes")
+				log.Println(prefixWarn, "DELETING game [", game.Name, "] reached 5 minutes")
+				for _, player := range game.Players {
+					player.Mutex.Lock()
+					player.BotSpecs.SocketClientCam.Close()
+					player.BotSpecs.SocketClientCtrl.WriteJSON(Data{Type: TYPE_DISCONNECT, Value: 0})
+					player.BotSpecs.SocketClientCtrl.Close()
+					player.BotSpecs.SocketBotCam.Close()
+					player.BotSpecs.SocketBotCtrl.Close()
+					player.Mutex.Unlock()
+				}
 				delete(baseGameInstances, key)
 			} else {
 				for _, player := range game.Players {

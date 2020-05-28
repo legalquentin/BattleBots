@@ -28,5 +28,6 @@ var Appartement = Environment{
 var RunningBots = []*Bot{}
 
 // TODO: Define types
+const TYPE_DISCONNECT = -1
 const TYPE_ENERGY = 1
 const TYPE_OVERHEAT = 2
