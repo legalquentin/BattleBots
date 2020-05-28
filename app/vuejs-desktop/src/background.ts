@@ -1,6 +1,7 @@
 'use strict'
 
-import { app, protocol, BrowserWindow } from 'electron'
+import { app, protocol, BrowserWindow, } from 'electron'
+
 import {
   createProtocol,
   installVueDevtools
@@ -12,6 +13,8 @@ app.commandLine.appendSwitch('disable-smooth-scrolling');
 app.on('ready', () => {
   app.commandLine.appendSwitch('disable-renderer-backgrounding');
 });
+
+
 
 app.on('certificate-error', (event, webContents, url, error, certificate, callback) => {
   // On certificate error we disable default behaviour (stop loading the page)
@@ -32,7 +35,7 @@ protocol.registerSchemesAsPrivileged([{scheme: 'app', privileges: { secure: true
 
 function createWindow () {
   // Create the browser window.
-  win = new BrowserWindow({ width: 890, height: 710, minWidth: 875, minHeight: 710, webPreferences: {
+  win = new BrowserWindow({ width: 990, height: 710, minWidth: 875, minHeight: 710, webPreferences: {
     nodeIntegration: true,
     backgroundThrottling: false,
   } })

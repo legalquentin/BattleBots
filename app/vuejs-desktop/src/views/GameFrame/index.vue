@@ -12,6 +12,7 @@
 #videoCanvas {
   border-radius: 0.28571429rem;
 }
+
 </style>
 
 <script lang="ts">
@@ -33,10 +34,10 @@ export default class GameFrame extends Vue {
   @Prop() private gameInfos: any;
   @Prop() private gameId: any;
 
-  private playerId: number = 1; // grab from auth
+  private playerId: number|null = Number(localStorage.getItem('userId'));
 
-  private cameraUrl: string = `wss://hardwar.ddns.net/api/bots/wscam?gameid=${this.gameId}&playerid=${this.playerId}&token=${this.gameInfos.game.token}`;
-  private controlUrl: string = `wss://hardwar.ddns.net/api/bots/ws?gameid=${this.gameId}&playerid=${this.playerId}&token=${this.gameInfos.game.token}`;
+  private cameraUrl: string = '';
+  private controlUrl: string = '';
 
   private socketService: SocketService = new SocketService();
 
@@ -57,6 +58,15 @@ export default class GameFrame extends Vue {
   remainingTime: number = 0;
 
   mounted() {
+    if (!this.playerId) {
+      alert("Something goes wrong. Please try login again...");
+      this.$router.replace({ name: 'LoginFrame' });
+    }
+    console.log('test', this.gameInfos)
+
+    this.cameraUrl = `wss://hardwar.ddns.net/api/bots/wscam?gameid=${this.gameId}&playerid=${this.playerId}&token=${_.find(this.gameInfos.game.players, (player: any) => Number(player.id) === this.playerId).token}`;
+    this.controlUrl = `wss://hardwar.ddns.net/api/bots/ws?gameid=${this.gameId}&playerid=${this.playerId}&token=${_.find(this.gameInfos.game.players, (player: any) => Number(player.id) === this.playerId).token}`;
+
     console.log(this.gameInfos);
     console.log(this.videoCanvas);
     console.log(this.cameraUrl);
@@ -90,13 +100,25 @@ export default class GameFrame extends Vue {
   }
 
   private onGameMessage(message: any) {
-    const player: any = _.find(
-      message.players,
-      (player: any) => Number(player.id) === this.playerId
-    );
-    this.botContext = player.botContext;
-    let createdAt: string = message.createdAt;
-    this.createdAt = moment(createdAt);
+    // switch(message.dt) {
+    //   case 1:
+    //     console.log('gros connard', message.dv);
+    //     this.botContext.energy = message.dv === undefined ? 0 : message.dv;  
+    //     break;
+    // }
+    // console.log(message);
+    if (message.dt === 1) {
+        this.botContext.energy = (!message.dv) ? 0 : message.dv;  
+    }
+    
+    // return;
+    // const player: any = _.find(
+    //   message.players,
+    //   (player: any) => Number(player.id) === this.playerId
+    // );
+    // this.botContext = player.botContext;
+    // let createdAt: string = message.createdAt;
+    // this.createdAt = moment(createdAt);
   }
 
   private cam() {

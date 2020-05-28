@@ -2,31 +2,38 @@
     <SuiContainer style="height: 100%">
 
         <SuiGrid verticalAlign="middle" style="min-height: 10vh !important">
-            <SuiGridRow :columns="2">
+            <SuiGridRow :columns="3">
+                
                 <SuiGridColumn style="margin-top: 20px" textAlign="left">
-                    <RouterLink :to="{ name: 'CreateGameFrame' }">
-                        <SuiButton @click="$router.back()" basic left icon label-position="left" icon="arrow left">Retour</SuiButton>
-                    </RouterLink>
+                    <h3 is="sui-header">
+                        <sui-icon name="dolly" color="blue" />
+                        <sui-header-content>Ajouter une partie</sui-header-content>
+                      </h3>
+                </SuiGridColumn>
+                <SuiGridColumn style="margin-top: 20px; opacity: 0" textAlign="center">
+                    <SuiButton circular color="facebook" disabled>Créer une nouvelle partie</SuiButton>
                 </SuiGridColumn>
                 <SuiGridColumn style="margin-top: 20px" textAlign="right">
-                    
+                    <RouterLink :to="{ name: 'CreateGameFrame' }">
+                        <SuiButton size="mini" @click="$router.back()" basic left icon label-position="right" icon="arrow up">Liste des parties</SuiButton>
+                    </RouterLink>
                 </SuiGridColumn>
             </SuiGridRow>
 
         </SuiGrid>
-
+        <SuiDivider></SuiDivider>
         <SuiGrid verticalAlign="middle" style="min-height: 90vh !important">
             <SuiGridRow>
                 <SuiGridColumn>
-                    <SuiSegment style="padding: 40px" stacked="tall">
+                    <SuiSegment raised style="padding: 40px" stacked="tall">
 
-                        <SuiForm size="big">
+                        <SuiForm size="medium">
                             <SuiFormField>
                                 <input v-model="name" type="text" placeholder="Nom de la partie" />
                             </SuiFormField>
                         </SuiForm>
 
-                        <SuiButton :disabled="gameCreateLoading" :loading="gameCreateLoading" size="big" color="blue" @click="createGame()" style="margin-top: 40px">Créer la partie !</SuiButton>
+                        <SuiButton :disabled="gameCreateLoading" :loading="gameCreateLoading" size="medium" color="blue" @click="createGame()" style="margin-top: 40px">Ajouter la partie</SuiButton>
                         
 
                     </SuiSegment>

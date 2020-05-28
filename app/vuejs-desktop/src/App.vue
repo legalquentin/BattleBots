@@ -47,4 +47,23 @@ body
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
+
+.mini.button .arrow.up {
+  color: red;
+  background-color: transparent !important;
+}
+
+
+.ui.progress .bar {
+  min-width: 0em !important;
+}
+
+.bar {
+  min-width: 0em !important;
+}
 </style>
+
+
+<script lang="ts">
+require('electron').webFrame.setZoomFactor(1.2);
+</script>
