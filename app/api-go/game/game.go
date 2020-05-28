@@ -60,10 +60,6 @@ func Daemon() {
 			fmt.Println(key, len(game.Players), game.CreatedAt.Sub(tnow))
 			for _, player := range game.Players {
 				if player.BotSpecs.SocketClientCtrl != nil {
-					if player.BotContext.Moving {
-						player.BotContext.Energy--
-						player.BotContext.Heat++
-					}
 					player.BotSpecs.SocketClientCtrl.WriteJSON(&player.BotContext)
 				}
 			}
