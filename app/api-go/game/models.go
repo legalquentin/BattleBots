@@ -36,7 +36,7 @@ type Player struct {
 
 // IntMutex to change values vbetween goroutines
 type IntMutex struct {
-	Mutex sync.Mutex
+	Mutex *sync.Mutex
 	Value int16 `json:"value,omitempty"`
 }
 
