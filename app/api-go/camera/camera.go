@@ -28,6 +28,7 @@ func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	player.Mutex.Lock()
 	player.BotSpecs.SocketClientCam = conn
 
 	u := url.URL{Scheme: "ws", Host: player.BotSpecs.Address + ":8084", Path: "/"}
@@ -38,6 +39,7 @@ func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
 		log.Println(prefixErr, err)
 	}
 	player.BotSpecs.SocketBotCam = c
+	player.Mutex.Unlock()
 
 	// Read c(robot) video stream and write to conn(client)
 	defer conn.Close()

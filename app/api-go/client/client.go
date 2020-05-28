@@ -24,6 +24,7 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	player.Mutex.Lock()
 	player.BotSpecs.SocketClientCtrl = conn
 	player.BotContext.Moving = false
 
@@ -36,6 +37,7 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 	player.BotSpecs.SocketBotCtrl = c
+	player.Mutex.Unlock()
 
 	var flag = true
 
@@ -51,7 +53,9 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 			}
 
 			log.Println(prefixLog, "command sent;", r.Content, r.Press)
+			player.Mutex.Lock()
 			player.BotContext.Moving = r.Press
+			player.Mutex.Unlock()
 
 			if flag {
 				go doEvery(100*time.Millisecond, calcAttributes, player, conn, c)
@@ -64,7 +68,7 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 			if player.BotContext.Energy <= 0 || player.BotContext.Heat >= 100 {
 				r = Key{"0", false}
 			}
-
+			player.Mutex.Unlock()
 			if err := c.WriteJSON(r); err != nil {
 				log.Println(prefixWarn, err)
 				return
@@ -91,13 +95,12 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 func doEvery(d time.Duration, f func(*game.Player, *websocket.Conn, *websocket.Conn),
 	player *game.Player, conn *websocket.Conn, bot *websocket.Conn) {
 	for range time.Tick(d) {
-		player.Mutex.Lock()
 		f(player, conn, bot)
-		player.Mutex.Unlock()
 	}
 }
 
 func calcAttributes(player *game.Player, conn *websocket.Conn, bot *websocket.Conn) {
+	player.Mutex.Lock()
 	if player.BotContext.Moving {
 		log.Println(prefixLog, "moving, changing energy: ", player.BotContext.Energy)
 		if player.BotContext.Energy > 0 {
@@ -125,4 +128,5 @@ func calcAttributes(player *game.Player, conn *websocket.Conn, bot *websocket.Co
 			conn.WriteJSON(&game.Data{Type: game.TYPE_OVERHEAT, Value: player.BotContext.Heat})
 		}
 	}
+	player.Mutex.Unlock()
 }
