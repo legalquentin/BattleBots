@@ -27,6 +27,7 @@ func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
 	if player == nil {
 		return
 	}
+
 	player.BotSpecs.SocketClientCam = conn
 
 	u := url.URL{Scheme: "ws", Host: "192.168.1.66:8084", Path: "/"}
