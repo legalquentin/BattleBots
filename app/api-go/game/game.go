@@ -59,7 +59,9 @@ func Daemon() {
 		for key, game := range baseGameInstances {
 			fmt.Println("gid:", key, "nbP:", len(game.Players), "started", game.Started, "created_since:", game.CreatedAt.Sub(tnow))
 			for _, player := range game.Players {
-				player.BotSpecs.SocketClientCtrl.WriteJSON(&game)
+				if player.BotSpecs.SocketClientCtrl != nil {
+					player.BotSpecs.SocketClientCtrl.WriteJSON(&game)
+				}
 			}
 		}
 		time.Sleep(time.Second * 1)
