@@ -108,10 +108,10 @@ func calcAttributes(player *game.Player, conn *websocket.Conn, bot *websocket.Co
 			bot.WriteJSON(&Key{"0", false})
 		}
 	} else {
-		if player.BotContext.Energy < 100 {
-			player.BotContext.Energy = player.BotContext.Energy + 1
-			conn.WriteJSON(&game.Data{Type: game.TYPE_ENERGY, Value: player.BotContext.Energy})
-		}
+		// if player.BotContext.Energy < 100 {
+		// 	player.BotContext.Energy = player.BotContext.Energy + 1
+		// 	conn.WriteJSON(&game.Data{Type: game.TYPE_ENERGY, Value: player.BotContext.Energy})
+		// }
 		if player.BotContext.Heat > 0 {
 			player.BotContext.Heat = player.BotContext.Heat - 2
 			conn.WriteJSON(&game.Data{Type: game.TYPE_OVERHEAT, Value: player.BotContext.Heat})
