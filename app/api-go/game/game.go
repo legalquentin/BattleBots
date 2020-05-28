@@ -60,7 +60,11 @@ func Daemon() {
 			fmt.Println("gid:", key, "nbP:", len(game.Players), "started", game.Started, "created_since:", game.CreatedAt.Sub(tnow))
 			for _, player := range game.Players {
 				if player.BotSpecs.SocketClientCtrl != nil {
-					player.BotSpecs.SocketClientCtrl.WriteJSON(&game)
+					if player.BotContext.Moving {
+						player.BotContext.Energy--
+						player.BotContext.Heat++
+					}
+					player.BotSpecs.SocketClientCtrl.WriteJSON(&player.BotContext)
 				}
 			}
 		}
@@ -88,7 +92,7 @@ func JoinGame(res http.ResponseWriter, req *http.Request) {
 		for _, p := range selected.Players {
 			if p.ID == t.PlayerID {
 				res.Header().Set("Content-Type", "application/json")
-				json.NewEncoder(res).Encode(&p)
+				json.NewEncoder(res).Encode(selected)
 				return
 			}
 		}
@@ -102,7 +106,7 @@ func JoinGame(res http.ResponseWriter, req *http.Request) {
 				g.Players = append(g.Players, p)
 				baseGameInstances[t.GameID] = g
 				res.Header().Set("Content-Type", "application/json")
-				json.NewEncoder(res).Encode(&p)
+				json.NewEncoder(res).Encode(&g)
 				for _, b := range selected.Env.Bots {
 					if b.Taken == false {
 						// still one slot left, we don't start the game

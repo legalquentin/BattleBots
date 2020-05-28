@@ -22,6 +22,8 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 	player.BotSpecs.SocketClientCtrl = conn
+	player.BotContext.Heat = 0
+	player.BotContext.Moving = false
 
 	u := url.URL{Scheme: "ws", Host: "192.168.1.66:8088", Path: "/wsctrl"}
 
@@ -36,13 +38,16 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 	for {
 		// read a message from the client [c]
 		// TODO: check if message is valid
-		_, p, err := c.ReadMessage()
+		var cmd Key
+		err := c.ReadJSON(&cmd)
 		if err != nil {
 			log.Println(prefixWarn, err)
 			return
 		}
+		log.Println(prefixLog, "command sent;", cmd.Content, cmd.Press)
+		player.BotContext.Moving = cmd.Press
 		// write a message to the bot [conn]
-		if err := conn.WriteMessage(websocket.TextMessage, p); err != nil {
+		if err := conn.WriteJSON(&cmd); err != nil {
 			log.Println(prefixWarn, err)
 			return
 		}
