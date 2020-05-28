@@ -58,17 +58,18 @@ func Daemon() {
 	for {
 		tnow := time.Now()
 		for key, game := range baseGameInstances {
-			fmt.Println(key, len(game.Players), game.CreatedAt.Sub(tnow))
-			if game.CreatedAt.Sub(tnow).Minutes() > 2 {
+			fmt.Println(key, len(game.Players), game.CreatedAt.Sub(tnow).Minutes())
+			if game.CreatedAt.Sub(tnow).Minutes() > float64(3) {
 				log.Println(prefixWarn, "DELETING game", game.Name, "reached 2 minutes")
 				delete(baseGameInstances, key)
-			}
-			for _, player := range game.Players {
-				if player.BotSpecs.SocketClientCtrl != nil {
-					// k := Data{Type: TYPE_ENERGY, Value: player.BotContext.Energy}
-					// player.BotSpecs.SocketClientCtrl.WriteJSON(&k)
-					// k = Data{Type: TYPE_OVERHEAT, Value: player.BotContext.Heat}
-					// player.BotSpecs.SocketClientCtrl.WriteJSON(&k)
+			} else {
+				for _, player := range game.Players {
+					if player.BotSpecs.SocketClientCtrl != nil {
+						// k := Data{Type: TYPE_ENERGY, Value: player.BotContext.Energy}
+						// player.BotSpecs.SocketClientCtrl.WriteJSON(&k)
+						// k = Data{Type: TYPE_OVERHEAT, Value: player.BotContext.Heat}
+						// player.BotSpecs.SocketClientCtrl.WriteJSON(&k)
+					}
 				}
 			}
 		}
