@@ -15,12 +15,13 @@ import (
 
 // TODO: Need to secure who can open a socket to the robot feed
 
-// WsHandlerCtrl handle client input, game
+// WsHandlerCtrl handle client input, game event and data
 func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 	player, conn := socket.WsAuth(res, req)
 	if player == nil {
 		return
 	}
+	player.BotSpecs.SocketClientCtrl = conn
 
 	u := url.URL{Scheme: "ws", Host: "192.168.1.66:8088", Path: "/wsctrl"}
 
@@ -30,6 +31,7 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 		http.NotFound(res, req)
 		return
 	}
+	player.BotSpecs.SocketBotCtrl = c
 
 	for {
 		// read a message from the client [c]

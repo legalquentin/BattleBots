@@ -31,7 +31,6 @@ func WsAuth(res http.ResponseWriter, req *http.Request) (player *game.Player, co
 	}
 
 	player = game.GetPlayer(gameID, playerID)
-
 	if player == nil {
 		err = &game.Response{Message: "player not found", Code: 404}
 		return
@@ -45,11 +44,9 @@ func WsAuth(res http.ResponseWriter, req *http.Request) (player *game.Player, co
 		log.Println(prefixErr, errc.Error())
 		err = &game.Response{Message: errc.Error(), Code: 500}
 	}
-
 	if err != nil {
 		log.Println(prefixErr, err)
 	}
-
 	return player, conn
 }
 

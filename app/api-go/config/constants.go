@@ -15,7 +15,6 @@ var Config = Configuration{
 		Address:      "192.168.1.66",
 		Running:      true,
 		Taken:        false,
-		Socket:       nil,
 		Name:         "Rocinante",
 		BaseSpeed:    100,
 		BaseDamage:   100,

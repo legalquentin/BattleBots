@@ -60,12 +60,14 @@ type BotAttr struct {
 // think about the attributes that shouldn't be changed (ip, id, basestats)
 type Bot struct {
 	// technical stuff
-	ID      int16  `json:"id,omitempty"`
-	Address string `json:"address,omitempty"`
-	Running bool   `json:"running,omitempty"`
-	Taken   bool   `json:"taken,omitempty"`
-	Socket  *websocket.Conn
-	Client  *websocket.Conn
+	ID               int16  `json:"id,omitempty"`
+	Address          string `json:"address,omitempty"`
+	Running          bool   `json:"running,omitempty"`
+	Taken            bool   `json:"taken,omitempty"`
+	SocketBotCam     *websocket.Conn
+	SocketClientCam  *websocket.Conn
+	SocketBotCtrl    *websocket.Conn
+	SocketClientCtrl *websocket.Conn
 
 	// game relative stuff
 	Name         string `json:"name,omitempty"`

@@ -23,11 +23,11 @@ var upgrader = websocket.Upgrader{
 
 // WsHandlerCam pipe camera output from bot to frontend via sockets
 func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
-
 	player, conn := socket.WsAuth(res, req)
-	if player == nil || conn == nil {
+	if player == nil {
 		return
 	}
+	player.BotSpecs.SocketClientCam = conn
 
 	u := url.URL{Scheme: "ws", Host: "192.168.1.66:8084", Path: "/"}
 
@@ -36,6 +36,7 @@ func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		log.Println(prefixErr, err)
 	}
+	player.BotSpecs.SocketBotCam = c
 
 	// Read c(robot) video stream and write to conn(client)
 	defer conn.Close()
