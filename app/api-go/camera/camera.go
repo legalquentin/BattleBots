@@ -30,7 +30,7 @@ func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
 
 	player.BotSpecs.SocketClientCam = conn
 
-	u := url.URL{Scheme: "ws", Host: "192.168.1.66:8084", Path: "/"}
+	u := url.URL{Scheme: "ws", Host: player.BotSpecs.Address + ":8084", Path: "/"}
 
 	log.Println(prefixLog, req.Host+"=>"+u.String())
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)

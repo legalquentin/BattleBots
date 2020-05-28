@@ -29,6 +29,7 @@ func WsAuth(res http.ResponseWriter, req *http.Request) (player *game.Player, co
 
 	if len(token) == 0 || len(gameID) == 0 || len(playerID) == 0 {
 		err = &game.Response{Message: "bad request", Code: 400}
+		log.Println(prefixWarn, "bad request")
 		res.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(res).Encode(err)
 		return nil, nil
@@ -37,12 +38,14 @@ func WsAuth(res http.ResponseWriter, req *http.Request) (player *game.Player, co
 	player = game.GetPlayer(gameID, playerID)
 	if player == nil {
 		err = &game.Response{Message: "player not found", Code: 404}
+		log.Println(prefixWarn, "bad request")
 		res.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(res).Encode(err)
 		return nil, nil
 	}
 
 	if token != player.Token {
+		log.Println(prefixWarn, "bad token")
 		err = &game.Response{Message: "forbidden", Code: 403}
 		res.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(res).Encode(err)
