@@ -58,7 +58,7 @@ func Daemon() {
 	for {
 		tnow := time.Now()
 		for key, game := range baseGameInstances {
-			// fmt.Println(key, len(game.Players), game.CreatedAt.Sub(tnow).Minutes())
+			fmt.Println(key, len(game.Players), game.CreatedAt.Sub(tnow).Minutes(), float64(3))
 			if game.CreatedAt.Sub(tnow).Minutes() > float64(3) {
 				log.Println(prefixWarn, "DELETING game", game.Name, "reached 2 minutes")
 				delete(baseGameInstances, key)
