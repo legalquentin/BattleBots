@@ -87,13 +87,26 @@ export abstract class ApiServer {
             res.status(200);
             next();
         });
+        /**
+         * Check host for update games by workers
+         */
         this.app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-            console.log("enter ?");
-            console.log(req.socket.localAddress);
-            console.log(req.socket.remoteAddress);
-            console.log(req.socket.remoteFamily);
-            console.log(req.socket.address());
-            next();
+            const address = req.socket.remoteAddress;
+            const endpoint = "/api/games/worker";
+            const localhost = "127.0.0.1"
+
+            if (req.url === endpoint && address === localhost) {
+                next();
+            }
+            else if (req.url !== endpoint){
+                next();
+            }
+            else {
+                res.status(400);
+                res.json(({
+                    message: "ERROR"
+                }));
+            }
         });
         this.app.use("/public", express.static(__dirname + '/public'));
         this.app.engine('html', require('ejs').renderFile);
