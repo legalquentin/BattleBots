@@ -7,7 +7,7 @@ export class HttpApiServer extends ApiServer{
 
     public runServer() {
         return new Promise<any>((resolve, reject) => {
-            this.httpServer = this.app.listen(this.PORT);
+            this.httpServer = this.app.listen(this.PORT, '0.0.0.0');
             console.log(`The server is started on ${this.scheme}://${this.serviceConfig.getApiAddress()}:${this.PORT}`);
         });
     }

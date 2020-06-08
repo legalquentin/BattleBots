@@ -19,12 +19,24 @@ export class GameController {
     @Path("/")
     @Security("ROLE_USER", "Bearer")
     @Produces("application/json;charset=UTF-8")
-    @Response<HttpResponseModel<IGameResource>>(200, "create game")
+    @Consumes("application/json; charset=UTF-8")
+    @Response<HttpResponseModel<IGameResource>>(201, "create game")
+    @Response<HttpResponseModel<IGameResource>>(200)
     @Response<HttpResponseModel<IGameResource>>(400)
     public async insert(resource: IGameResource){
         return this.gameService.saveOrUpdate(resource);
     }
 
+
+    @PUT
+    @Path("/worker")
+    @Produces("application/json; charset=UTF-8")
+    @Consumes("application/json; charset=UTF-8")
+    @Response<HttpResponseModel<IGameResource>>(200)
+    @Response<HttpResponseModel<IGameResource>>(400)
+    public async updateByWorker(resource: IGameResource){
+        return this.gameService.updateByWorker(resource);
+    }
 
     @GET
     @Path("/")

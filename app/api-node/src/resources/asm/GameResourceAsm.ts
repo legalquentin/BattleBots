@@ -36,8 +36,6 @@ export class GameResourceAsm {
         const arenaResourceAsm = Container.get(ArenaResourceAsm);
 
         if (entity.arena){
-            console.log(entity.arena);
-            console.log(resource.arena);
             resource.arena = await arenaResourceAsm.toResource(entity.arena);
             await arenaResourceAsm.addBotResource(entity.arena, resource.arena);
         }

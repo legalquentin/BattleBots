@@ -66,7 +66,6 @@ export class UserGameProfileResourceAsm {
             pseudo: user.pseudo,
             id: user.id,
             address: user.address,
-            password: user.hash,
             roles: user.roles
         };
 

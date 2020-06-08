@@ -87,6 +87,14 @@ export abstract class ApiServer {
             res.status(200);
             next();
         });
+        this.app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+            console.log("enter ?");
+            console.log(req.socket.localAddress);
+            console.log(req.socket.remoteAddress);
+            console.log(req.socket.remoteFamily);
+            console.log(req.socket.address());
+            next();
+        });
         this.app.use("/public", express.static(__dirname + '/public'));
         this.app.engine('html', require('ejs').renderFile);
         this.app.set('views', __dirname + '/public');

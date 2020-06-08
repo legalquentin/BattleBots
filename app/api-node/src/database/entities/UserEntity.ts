@@ -7,10 +7,10 @@ import { ERolesStatus } from '../../resources/ERolesStatus';
 @Entity({ name: 'users' })
 export default class UserEntity extends AbstractEntity {
 
-    @Column({ name: 'firstname', length: 255 })
+    @Column({ name: 'firstname' })
     public firstname: string;
 
-    @Column({ name: 'lastname', length: 255 })
+    @Column({ name: 'lastname' })
     public lastname: string;
 
     @Column({name: "roles"})
@@ -18,6 +18,7 @@ export default class UserEntity extends AbstractEntity {
 
     @Column({ name: 'hash' })
     public hash: string;
+
     @Column({ name: "email", unique: true })
     public email: string;
 

@@ -19,16 +19,39 @@ export class GameServiceImpl implements GameService {
     @Inject
     private battleWorkerService: IBattleWorkerService;
 
+    public async updateByWorker(game: IGameResource) {
+        if (!game.id){
+            const response: HttpResponseModel<IGameResource> = {
+                httpCode: 400,
+                data: null,
+                message: "ERROR"
+            };
+
+            return new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response);
+        }
+        const gameResourceAsm = Container.get(GameResourceAsm);
+        const entity = await gameResourceAsm.toEntity(game);
+        const updated = await this.serviceFactory.getGameRepository().saveOrUpdate(entity);
+        const response : HttpResponseModel<IGameResource> = {
+            httpCode: 200,
+            data: await gameResourceAsm.toResource(updated),
+            message: "game updated"
+        };
+        return new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response);
+    }
+
     public async saveOrUpdate(game: IGameResource) {
         if (!game.status){
             game.status = EGameStatus.CREATED;
         }
         const gameResourceAsm = Container.get(GameResourceAsm);
         try {
+            const httpCode = game.id ? 200 : 201;
             const entity = await gameResourceAsm.toEntity(game);
             const saved = await this.serviceFactory.getGameRepository().saveOrUpdate(entity);
             const resource = await gameResourceAsm.toResource(saved);
             game.id = saved.id;
+            /*
             const r = await this.battleWorkerService.startGoWorker(game);
             console.log(r);
             if (!r || !r.token || !r.game) {
@@ -42,8 +65,9 @@ export class GameServiceImpl implements GameService {
             }
             resource.token = r.token;
             resource.secret = r.secret;
+            */
             const response : HttpResponseModel<IGameResource> = {
-                httpCode: 200,
+                httpCode: httpCode,
                 message: "game create",
                 data: resource
             };

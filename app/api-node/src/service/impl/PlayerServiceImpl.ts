@@ -19,6 +19,9 @@ export class PlayerServiceImpl implements PlayerService {
             const entity = new PlayerEntity();
 
             entity.user = await this.factory.getUserRepository().findOne(id);
+            if (!player.total_points){
+                player.total_points = 0;
+            }
             entity.total_points = player.total_points;
             entity.name = player.name;
             const finded = await this.factory.getPlayerRepository().findOne({
@@ -102,7 +105,7 @@ export class PlayerServiceImpl implements PlayerService {
     public async search(userId: number) {
         const gameProfileResourceAsm = Container.get(GameProfileResourceAsm);
         try {
-            const user = await this.factory.getPlayerRepository().findOne(userId);
+            const user = await this.factory.getUserRepository().findOne(userId);
             const players = await this.factory.getPlayerRepository().find({
                 where: [
                     {

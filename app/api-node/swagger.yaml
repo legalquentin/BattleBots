@@ -480,6 +480,12 @@ paths:
             operationId: GameInsert
             responses:
                 '200':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
+                '201':
                     description: 'create game'
                     content:
                         application/json;charset=UTF-8:
@@ -499,11 +505,7 @@ paths:
                     Bearer:
                         - ROLE_USER
             requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/IGameResource'
-                required: true
+                $ref: '#/components/requestBodies/IGameResource'
         get:
             operationId: GameList
             responses:
@@ -549,11 +551,28 @@ paths:
                     Bearer:
                         - ROLE_USER
             requestBody:
-                content:
-                    'application/json; charset=UTF-8':
-                        schema:
-                            $ref: '#/components/schemas/IGameResource'
-                required: true
+                $ref: '#/components/requestBodies/IGameResource'
+    /api/games/worker:
+        put:
+            operationId: GameUpdateByWorker
+            responses:
+                '200':
+                    description: ""
+                    content:
+                        'application/json; charset=UTF-8':
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
+                '204':
+                    description: 'No content'
+                '400':
+                    description: ""
+                    content:
+                        'application/json; charset=UTF-8':
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameResource'
+            description: ""
+            requestBody:
+                $ref: '#/components/requestBodies/IGameResource'
     '/api/games/{id}':
         get:
             operationId: GameDetail
@@ -1211,6 +1230,12 @@ servers:
         url: /
 components:
     requestBodies:
+        IGameResource:
+            content:
+                'application/json; charset=UTF-8':
+                    schema:
+                        $ref: '#/components/schemas/IGameResource'
+            required: true
         IArenaResource:
             content:
                 application/json;charset=UTF-8:

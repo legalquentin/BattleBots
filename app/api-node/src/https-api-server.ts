@@ -16,7 +16,7 @@ export class HttpsApiServer extends ApiServer{
                     encoding: "utf8"
                 })
             };
-            this.httpsServer = https.createServer(this.options, this.app).listen(this.PORT);
+            this.httpsServer = https.createServer(this.options, this.app).listen(this.PORT, "0.0.0.0");
             console.log(`The server is started on ${this.scheme}://${this.serviceConfig.getApiAddress()}:${this.PORT}`);
         });
     }
