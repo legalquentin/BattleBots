@@ -9,7 +9,6 @@ export default class Config extends IConfig{
         super();
         this.secret = config.get('secrets.secret');
         this.salt = config.get('secrets.salt');
-        console.log(this.salt);
         this.workerAddress = config.get('worker_address');
         this.workerPort = config.get('worker_port');
         this.workerDirectory = config.get('worker_directory');
