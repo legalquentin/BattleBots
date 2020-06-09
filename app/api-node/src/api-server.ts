@@ -101,7 +101,7 @@ export abstract class ApiServer {
             else if (req.url !== endpoint){
                 next();
             }
-            else {
+            else {
                 res.status(400);
                 res.json(({
                     message: "ERROR"
