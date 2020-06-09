@@ -1,4 +1,4 @@
-import { PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, Entity } from "typeorm";
+import { Column, OneToOne, JoinColumn, Entity } from "typeorm";
 import { AbstractEntity } from "./AbstractEntity";
 import { LogEntity } from "./LogEntity";
 
@@ -13,7 +13,6 @@ export class GeoIpEntity extends AbstractEntity {
     })
     @OneToOne(type => LogEntity, log => log.geoips, {
         nullable: true,
-        eager: true
     })
     public log: LogEntity;
 
