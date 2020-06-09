@@ -803,7 +803,7 @@ paths:
                     required: true
                     schema:
                         type: string
-    /api/games/info:
+    /api/games/worker/info:
         get:
             operationId: GameGameInfoList
             responses:
@@ -826,7 +826,7 @@ paths:
                 -
                     Bearer:
                         - ROLE_USER
-    '/api/games/info/{id}':
+    '/api/games/worker/info/{id}':
         get:
             operationId: GameGameInfoDetails
             responses:

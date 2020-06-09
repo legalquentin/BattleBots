@@ -1261,7 +1261,7 @@
 				]
 			}
 		},
-		"/api/games/info": {
+		"/api/games/worker/info": {
 			"get": {
 				"operationId": "GameGameInfoList",
 				"responses": {
@@ -1299,7 +1299,7 @@
 				]
 			}
 		},
-		"/api/games/info/{id}": {
+		"/api/games/worker/info/{id}": {
 			"get": {
 				"operationId": "GameGameInfoDetails",
 				"responses": {

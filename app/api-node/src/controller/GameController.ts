@@ -150,8 +150,8 @@ export class GameController {
     @Path("/worker/info/:id")
     @Security("ROLE_USER", "Bearer")
     @Produces("application/json;charset=UTF-8")
-    @Response<HttpResponseModel<IGameInfoResource[]>>(200)
-    @Response<HttpResponseModel<IGameInfoResource[]>>(400)
+    @Response<HttpResponseModel<IGameInfoResource>>(200)
+    @Response<HttpResponseModel<IGameInfoResource>>(400)
     public async gameInfoDetails(@PathParam("id") id: number){
         return (this.gameInfoService.findOne(id));
     }
