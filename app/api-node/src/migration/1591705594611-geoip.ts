@@ -27,12 +27,12 @@ export class geoip1591705594611 implements MigrationInterface {
                 },
                 {
                     "name": "latitude",
-                    "type": "integer",
+                    "type": "numeric",
                     "isNullable": false
                 },
                 {
                     "name": "longitude",
-                    "type": "integer",
+                    "type": "numeric",
                     "isNullable": false
                 },
                 {

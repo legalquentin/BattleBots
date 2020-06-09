@@ -11,7 +11,7 @@ export class GeoIpResourceAsm {
         geoip.country = resource.country;
         geoip.latitude = resource.ll[0];
         geoip.longitude = resource.ll[1];
-        geoip.timezone = resource.timezeone;
+        geoip.timezone = resource.timezone;
         return (geoip);
     }
 }

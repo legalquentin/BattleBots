@@ -21,6 +21,9 @@ export class GeoIpEntity extends AbstractEntity {
     public latitude: number;
 
     @Column()
+    public ip: string;
+
+    @Column()
     public country: string;
 
     @Column()

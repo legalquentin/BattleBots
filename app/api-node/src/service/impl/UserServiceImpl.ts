@@ -37,8 +37,8 @@ export class UserServiceImpl implements UserService {
     
                 return Promise.resolve(new SendResource<HttpResponseModel<IResourceId>>("UserController", response.httpCode, response));
             }
-            entity.hash = hashSync(entity.hash, this.config.genSalt());
-            const savedUser = await this.factory.getUserRepository().saveOrUpdate(entity);
+	    entity.hash = hashSync(entity.hash, this.config.genSalt());
+	    const savedUser = await this.factory.getUserRepository().saveOrUpdate(entity);
             const resourceId: IResourceId = {
                 id: savedUser.id
             };

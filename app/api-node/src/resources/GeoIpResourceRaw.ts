@@ -3,7 +3,7 @@ export interface GeoIpResourceModel {
     country?: string;
     region?: string;
     eu?: string;
-    timezeone?: string;
+    timezone?: string;
     city?: string;
     ll?: Array<number>;
     metro?: number;

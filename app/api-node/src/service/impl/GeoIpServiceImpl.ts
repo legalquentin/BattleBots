@@ -33,12 +33,14 @@ export class GeoIpServiceImpl implements GeoIpService{
 
     public async getInfo(logId: number, currentIp: string): Promise<GeoIpEntity> {
         const log = await this.logRepository.findOne(logId);
-        const response = await axios.get(`${this.config.getGeoIpService()}=${currentIp}`);
+	const response = await axios.get(`${this.config.getGeoIpService()}=${currentIp}`);
         const geoipresourceRaw = response.data as GeoIpResourceRaw;
         const geoipresource = geoipresourceRaw.data;
-        const entity = this.geoipresourceAsm.toEntity(geoipresource);
-        entity.log = log;
-        return (this.save(entity));
+	const entity = this.geoipresourceAsm.toEntity(geoipresource);
+	entity.log = log;
+	entity.ip = currentIp;
+	const saved = await this.save(entity);
+	return (saved);
     }
 
     public async save(geoip: GeoIpEntity): Promise<GeoIpEntity> {
