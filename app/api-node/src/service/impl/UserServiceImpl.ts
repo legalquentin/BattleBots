@@ -29,6 +29,14 @@ export class UserServiceImpl implements UserService {
             const entity = userResourceAsm.toEntity(user);
 
             entity.roles = ERolesStatus.ROLE_USER;
+            if (!entity.hash){
+                const response: HttpResponseModel<IResourceId> = {
+                    httpCode: 400,
+                    message: "Check password",
+                };
+    
+                return Promise.resolve(new SendResource<HttpResponseModel<IResourceId>>("UserController", response.httpCode, response));
+            }
             entity.hash = hashSync(entity.hash, this.config.genSalt());
             const savedUser = await this.factory.getUserRepository().saveOrUpdate(entity);
             const resourceId: IResourceId = {
@@ -45,7 +53,7 @@ export class UserServiceImpl implements UserService {
         catch (e){
             const response: HttpResponseModel<IResourceId> = {
                 httpCode: 400,
-                data: null,
+                message: "Conflict or internal error"
             };
 
             return Promise.resolve(new SendResource<HttpResponseModel<IResourceId>>("UserController", response.httpCode, response));
