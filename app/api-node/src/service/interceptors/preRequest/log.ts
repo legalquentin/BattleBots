@@ -11,6 +11,7 @@ export async function preRequestLog(req: express.Request){
     const userRepository  = Container.get(UserRepository);
     const geoIpService = Container.get(GeoIpService);
     const log = new LogEntity();
+    const LOCAL_ADDRESS = "127.0.0.1";
 
     log.complete = 0;
     log.method = req.method
@@ -35,7 +36,9 @@ export async function preRequestLog(req: express.Request){
         req['log'] = {
             id: saved.id
         };
-        await geoIpService.getInfo(saved.id, req.socket.remoteAddress);
+        if (req.socket.remoteAddress !== LOCAL_ADDRESS){
+            await geoIpService.getInfo(saved.id, req.socket.remoteAddress);
+        }
     }
     catch (e){
          fs.appendFileSync(`./log.txt`, `log - preRequest - error - ${e.message}\n`);
