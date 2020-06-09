@@ -65,8 +65,9 @@ export class GeoIpServiceImpl implements GeoIpService{
         }
     }
     public list(): Promise<GeoIpEntity[]> {
-        return (this.repository.find());
+        return (this.repository.createQueryBuilder("geoip").leftJoin("geoip.user", "user").getMany());
     }
+
     public findOne(id: number): Promise<GeoIpEntity> {
         return (this.repository.findOne(id));
     }
