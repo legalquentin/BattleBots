@@ -3,6 +3,7 @@ import { AbstractEntity } from './AbstractEntity';
 import { PlayerEntity } from './PlayerEntity';
 import { LogEntity } from './LogEntity';
 import { ERolesStatus } from '../../resources/ERolesStatus';
+import { GeoIpEntity } from './GeoIpEntity';
 
 @Entity({ name: 'users' })
 export default class UserEntity extends AbstractEntity {
@@ -29,10 +30,18 @@ export default class UserEntity extends AbstractEntity {
     public address: string;
 
     @OneToMany(type => PlayerEntity, player => player.user, {
-        cascade: ["remove", "insert", "update"]
+        cascade: ["remove", "insert", "update"],
+        lazy: true
     })
-    public players?: Promise<Array<PlayerEntity>>;
+    public players?: Array<PlayerEntity>;
 
-    @OneToMany(type => LogEntity, log => log.user)
-    public logs?: Promise<Array<LogEntity>>;
+    @OneToMany(type => LogEntity, log => log.user, {
+        lazy: true
+    })
+    public logs?: Array<LogEntity>;
+
+    @OneToMany(type => GeoIpEntity, geoip => geoip.user, {
+        lazy: true
+    })
+    public geoips?: Array<GeoIpEntity>;
 }

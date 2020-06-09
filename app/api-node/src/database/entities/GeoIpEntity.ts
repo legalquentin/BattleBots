@@ -1,6 +1,7 @@
 import { Column, OneToOne, JoinColumn, Entity } from "typeorm";
 import { AbstractEntity } from "./AbstractEntity";
 import { LogEntity } from "./LogEntity";
+import UserEntity from "./UserEntity";
 
 @Entity({
     name: "geoip"
@@ -11,8 +12,8 @@ export class GeoIpEntity extends AbstractEntity {
         name: "log_id",
         referencedColumnName: "id"
     })
-    @OneToOne(type => LogEntity, log => log.geoips)
-    public log: LogEntity;
+    @OneToOne(type => UserEntity, user => user.geoips)
+    public user: UserEntity;
 
     @Column()
     public longitude: number;

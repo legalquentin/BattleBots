@@ -41,9 +41,4 @@ export class LogEntity extends AbstractEntity{
         nullable: true
     })
     public user?: UserEntity;
-
-    @OneToOne(type => GeoIpEntity, ip => ip.log, {
-        lazy: true
-    })
-    public geoips: Array<GeoIpEntity>;
 }
