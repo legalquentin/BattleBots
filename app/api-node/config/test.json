@@ -10,5 +10,6 @@
     "api_port": "443",
     "api_useSSL": false,
     "api_scheme": "http",
-    "home_api_node": "/home/pi/BattleBots/app/api-node"
+    "home_api_node": "/home/pi/BattleBots/app/api-node",
+    "geoip_service": "http://geoip.devcode.fr/lookat?ip"
 }

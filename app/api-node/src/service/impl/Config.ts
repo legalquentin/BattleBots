@@ -16,7 +16,12 @@ export default class Config extends IConfig{
         this.apiPort = config.get('api_port');
         this.apiScheme = config.get('api_scheme');
         this.apiUseSSL = config.get('api_useSSL') 
-        this.homeApiNode =  config.get('home_api_node')       
+        this.homeApiNode =  config.get('home_api_node')  
+        this.geoipService = config.get('geoip_service');     
+    }
+
+    getGeoIpService(): string {
+        return (this.geoipService);
     }
 
     getApiAddress(): string {

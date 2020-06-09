@@ -1,9 +1,10 @@
 import { AbstractEntity } from "./AbstractEntity";
-import { Entity, Column, JoinColumn, ManyToOne, OneToMany } from "typeorm";
+import { Entity, Column, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
 import { ArenaEntity } from "./ArenaEntity";
 import { RobotGameEntity } from "./RobotGameEntity";
 import { StreamsEntity } from "./StreamsEntity";
 import { EGameStatus } from "../../resources/EGameStatus";
+import { GameInfoEntity } from "./GameInfoEntity";
 
 @Entity({
     name: "games"
@@ -34,5 +35,8 @@ export class GameEntity extends AbstractEntity {
         lazy: true
     })
     public streams?: Array<StreamsEntity>;
+
+    @OneToOne(type => GameInfoEntity, gameInfoEntity => gameInfoEntity.game)
+    public info: GameInfoEntity
 
 }

@@ -33,6 +33,12 @@ import { BotGameRepository } from './database/repositories/BotGameRepository';
 import { Scope } from 'typescript-ioc';
 import IBattleWorkerService from './service/IBattleWorkerService';
 import BattleWorkerService from './service/impl/BattleWorkerService';
+import { GeoIpRepository } from './database/repositories/GeoIpRepository';
+import { GeoIpService } from "./service/GeoIpService";
+import { GeoIpServiceImpl } from "./service/impl/GeoIpServiceImpl";
+import { GameInfoService } from './service/GameInfoService';
+import { GameInfoServiceImpl } from './service/impl/GameInfoServiceImpl';
+import { GameInfoRepository } from './database/repositories/GameInfoRepository';
 
 const iocConfig =  {
         env: {
@@ -128,6 +134,11 @@ const iocConfig =  {
                     scope: Scope.Singleton
                 },
                 {
+                    bind: GeoIpRepository,
+                    to: FakeRepository,
+                    scope: Scope.Singleton
+                }, 
+                {
                     bind: BotArenaRepository,
                     to: FakeRepository,
                     scope: Scope.Singleton
@@ -140,6 +151,21 @@ const iocConfig =  {
                 {
                     bind: IBattleWorkerService,
                     to: BattleWorkerService,
+                    scope: Scope.Singleton
+                },
+                {
+                    bind: GeoIpService,
+                    to: GeoIpServiceImpl,
+                    scope: Scope.Singleton
+                },
+                {
+                    bind: GameInfoRepository,
+                    to: GameInfoRepository,
+                    scope: Scope.Singleton
+                },
+                {
+                    bind: GameInfoService,
+                    to: GameInfoServiceImpl,
                     scope: Scope.Singleton
                 }
             ],
@@ -235,6 +261,11 @@ const iocConfig =  {
                     scope: Scope.Singleton
                 },
                 {
+                    bind: GeoIpRepository,
+                    to: GeoIpRepository,
+                    scope: Scope.Singleton
+                },
+                {
                     bind: BotArenaRepository,
                     to: BotArenaRepository,
                     scope: Scope.Singleton
@@ -247,6 +278,21 @@ const iocConfig =  {
                 {
                     bind: IBattleWorkerService,
                     to: BattleWorkerService,
+                    scope: Scope.Singleton
+                },
+                {
+                    bind: GeoIpService,
+                    to: GeoIpServiceImpl,
+                    scope: Scope.Singleton
+                },
+                {
+                    bind: GameInfoService,
+                    to: GameInfoServiceImpl,
+                    scope: Scope.Singleton
+                },
+                {
+                    bind: GameInfoRepository,
+                    to: GameInfoRepository,
                     scope: Scope.Singleton
                 }
         ],
@@ -342,6 +388,11 @@ const iocConfig =  {
                 scope: Scope.Singleton
             },
             {
+                bind: GeoIpRepository,
+                to: GeoIpRepository,
+                scope: Scope.Singleton
+            },
+            {
                 bind: BotArenaRepository,
                 to: BotArenaRepository,
                 scope: Scope.Singleton
@@ -354,6 +405,21 @@ const iocConfig =  {
             {
                 bind: IBattleWorkerService,
                 to: BattleWorkerService,
+                scope: Scope.Singleton
+            },
+            {
+                bind: GeoIpService,
+                to: GeoIpServiceImpl,
+                scope: Scope.Singleton
+            },
+            {
+                bind: GameInfoService,
+                to: GameInfoServiceImpl,
+                scope: Scope.Singleton
+            },
+            {
+                bind: GameInfoRepository,
+                to: GameInfoRepository,
                 scope: Scope.Singleton
             }
         ]

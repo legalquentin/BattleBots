@@ -6,6 +6,9 @@ import { postRequest } from "../service/interceptors/postRequest/postRequest";
 import { IGameResource } from "../resources/IGameResource";
 import HttpResponseModel from "../resources/HttpResponseModel";
 import { Produces, Response, Consumes } from "typescript-rest-swagger";
+import { IGameInfoResource } from "../resources/IGameInfoResource";
+import { GameInfoService } from "../service/GameInfoService";
+import { EGameStatus } from "../resources/EGameStatus";
 
 @Path("/api/games")
 @PreProcessor(preRequest)
@@ -14,6 +17,9 @@ export class GameController {
 
     @Inject
     private gameService: GameService;
+
+    @Inject
+    private gameInfoService: GameInfoService;
 
     @POST
     @Path("/")
@@ -29,13 +35,16 @@ export class GameController {
 
 
     @PUT
-    @Path("/worker")
+    @Path("/worker_end")
     @Produces("application/json; charset=UTF-8")
     @Consumes("application/json; charset=UTF-8")
     @Response<HttpResponseModel<IGameResource>>(200)
     @Response<HttpResponseModel<IGameResource>>(400)
-    public async updateByWorker(resource: IGameResource){
-        return this.gameService.updateByWorker(resource);
+    public async endGame(resource: IGameInfoResource){
+        if (resource.game){
+            resource.game.status = EGameStatus.ENDED;
+        }
+        return this.gameInfoService.save(resource);
     }
 
     @GET
@@ -124,5 +133,26 @@ export class GameController {
     @Response<HttpResponseModel<IGameResource>>(400)
     public async joinGame(@ContextRequest req, @PathParam("gameId") gameId: string) {
         return (this.gameService.joinGame(parseInt(gameId), req.user.id));
+    }
+
+
+    @GET
+    @Path("/info")
+    @Security("ROLE_USER", "Bearer")
+    @Produces("application/json;charset=UTF-8")
+    @Response<HttpResponseModel<IGameInfoResource[]>>(200)
+    @Response<HttpResponseModel<IGameInfoResource[]>>(400)
+    public async gameInfoList(){
+        return (this.gameInfoService.list());
+    }
+
+    @GET
+    @Path("/info/:id")
+    @Security("ROLE_USER", "Bearer")
+    @Produces("application/json;charset=UTF-8")
+    @Response<HttpResponseModel<IGameInfoResource[]>>(200)
+    @Response<HttpResponseModel<IGameInfoResource[]>>(400)
+    public async gameInfoDetails(@PathParam("id") id: number){
+        return (this.gameInfoService.findOne(id));
     }
 }

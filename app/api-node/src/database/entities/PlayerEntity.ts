@@ -2,6 +2,7 @@ import { AbstractEntity } from "./AbstractEntity";
 import { Column, ManyToOne, JoinColumn, Entity, OneToMany } from "typeorm";
 import UserEntity from "./UserEntity";
 import { RobotsEntity } from "./RobotsEntity";
+import { GameInfoEntity } from "./GameInfoEntity";
 
 @Entity({
     name: "player"
@@ -22,4 +23,10 @@ export class PlayerEntity extends AbstractEntity {
 
     @OneToMany(type => RobotsEntity, robotEntity => robotEntity.player)
     public robots?:  Promise<Array<RobotsEntity>>;
+
+    @OneToMany(type => GameInfoEntity, gameInfoEntity => gameInfoEntity.winner)
+    public infoWinner: Array<GameInfoEntity>;
+
+    @OneToMany(type => GameInfoEntity, gameInfoEntity => gameInfoEntity.loser)
+    public infoLoser: Array<GameInfoEntity>;
 }

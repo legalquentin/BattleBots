@@ -1,6 +1,7 @@
 import UserEntity from "./UserEntity";
 import { AbstractEntity } from "./AbstractEntity";
-import { Entity, ManyToOne, Column, JoinColumn } from "typeorm";
+import { Entity, ManyToOne, Column, JoinColumn, OneToOne } from "typeorm";
+import { GeoIpEntity } from "./GeoIpEntity";
 
 @Entity({
     name: "log"
@@ -41,4 +42,8 @@ export class LogEntity extends AbstractEntity{
     })
     public user?: UserEntity;
 
+    @OneToOne(type => GeoIpEntity, ip => ip.log, {
+        eager: true,
+    })
+    public geoips: Array<GeoIpEntity>;
 }

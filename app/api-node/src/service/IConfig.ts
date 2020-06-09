@@ -9,6 +9,7 @@ export default abstract class IConfig {
     protected apiUseSSL: boolean;
     protected apiScheme: string;
     protected homeApiNode: string;
+    protected geoipService: string;
 
     abstract genSalt(): string;
     abstract getSecret(): string;
@@ -22,4 +23,5 @@ export default abstract class IConfig {
     abstract getApiUseSSL(): boolean;
     abstract getApiScheme(): string;    
     abstract getHomeApiNode(): string;
+    abstract getGeoIpService(): string;
 };
