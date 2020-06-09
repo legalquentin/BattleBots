@@ -835,7 +835,7 @@ paths:
                     content:
                         application/json;charset=UTF-8:
                             schema:
-                                $ref: '#/components/schemas/HttpResponseModelIGameInfoResourceArray'
+                                $ref: '#/components/schemas/HttpResponseModelIGameInfoResource'
                 '204':
                     description: 'No content'
                 '400':
@@ -843,7 +843,7 @@ paths:
                     content:
                         application/json;charset=UTF-8:
                             schema:
-                                $ref: '#/components/schemas/HttpResponseModelIGameInfoResourceArray'
+                                $ref: '#/components/schemas/HttpResponseModelIGameInfoResource'
             description: ""
             security:
                 -
@@ -1742,6 +1742,19 @@ components:
                     items:
                         $ref: '#/components/schemas/IGameInfoResource'
                     description: ""
+            type: object
+        HttpResponseModelIGameInfoResource:
+            description: ""
+            properties:
+                message:
+                    type: string
+                    description: ""
+                httpCode:
+                    type: number
+                    format: double
+                    description: ""
+                data:
+                    $ref: '#/components/schemas/IGameInfoResource'
             type: object
         HttpResponseModelIStreamResource:
             description: ""

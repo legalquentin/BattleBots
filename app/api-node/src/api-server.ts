@@ -27,11 +27,10 @@ export abstract class ApiServer {
         this.app = express();
 
         Server.useIoC();
-        const bodyParser = require('body-parser');
         Container.configure(iocConfig);
         Container.environment(connectionName());
         this.config();
-        Server.loadServices(this.app, 'controller/**/*.{js, ts}', __dirname);
+        Server.loadServices(this.app, 'controller/*', __dirname);
         Server.swagger(this.app, { 
             swaggerUiOptions: {
                 customSiteTitle: 'BattleBots'
@@ -41,12 +40,6 @@ export abstract class ApiServer {
             host: "hardwar.ddns.net",
             schemes: [this.serviceConfig.getApiScheme()]
         });
-        this.app.use(bodyParser.json({ verify: function(req, res, buf, encoding){
-            req.rawBody = buf.toString();
-        }}));
-        this.app.use(bodyParser.raw({ type: "*/*", verify: function(req, res, buf, encoding){
-            req.rawBody = buf.toString();
-        }}));
         this.app.use("*", function (req, res, next) {
             if (!res.headersSent) { res.render("App/index.html"); }
             next();
@@ -81,6 +74,7 @@ export abstract class ApiServer {
      * Configure the express app.
      */
     private config(): void {
+        const bodyParser = require('body-parser');
         this.app.use(function (req, res, next) {
             res.header("Access-Control-Allow-Origin", req.get("Origin"));
             res.header("Access-Control-Allow-Credentials", "true");
@@ -88,6 +82,14 @@ export abstract class ApiServer {
             res.status(200);
             next();
         });
+        this.app.use(bodyParser.json({ verify: function(req, res, buf, encoding){
+            req.rawBody = buf.toString();
+            console.log(buf.toString());
+        }}));
+        this.app.use(bodyParser.raw({ type: "*/*", verify: function(req, res, buf, encoding){
+            req.rawBody = buf.toString();
+            console.log(buf.toString());
+        }}));
         /**
          * Check host for update games by workers
          */

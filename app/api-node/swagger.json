@@ -1308,7 +1308,7 @@
 						"content": {
 							"application/json;charset=UTF-8": {
 								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIGameInfoResourceArray"
+									"$ref": "#/components/schemas/HttpResponseModelIGameInfoResource"
 								}
 							}
 						}
@@ -1321,7 +1321,7 @@
 						"content": {
 							"application/json;charset=UTF-8": {
 								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIGameInfoResourceArray"
+									"$ref": "#/components/schemas/HttpResponseModelIGameInfoResource"
 								}
 							}
 						}
@@ -2667,6 +2667,24 @@
 							"$ref": "#/components/schemas/IGameInfoResource"
 						},
 						"description": ""
+					}
+				},
+				"type": "object"
+			},
+			"HttpResponseModelIGameInfoResource": {
+				"description": "",
+				"properties": {
+					"message": {
+						"type": "string",
+						"description": ""
+					},
+					"httpCode": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"data": {
+						"$ref": "#/components/schemas/IGameInfoResource"
 					}
 				},
 				"type": "object"
