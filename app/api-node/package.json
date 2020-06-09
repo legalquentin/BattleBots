@@ -6,9 +6,8 @@
   "original": "https://github.com/vrudikov/typescript-rest-boilerplate.git",
   "license": "MIT",
   "scripts": {
-    "dev": "npm run swagger && ts-node src/index.ts",
-    "start": "npm run start:production",
-    "start:production": "npm run build && cd dist && node src/index.js",
+    "start": "npm run swagger && ts-node src/index.ts",
+    "build:bundle": "npm run build",
     "start:cluster": "cross-env ENV=prod && npm i && npm run swagger && cross-env NODE_ENV=production ts-node src/cluster.ts",
     "docker:build": "npm run build && cp Dockerfile dist && cd dist && docker build -t battlebots-api .",
     "build": "npm run tsc && npm run swagger && cp swagger.yaml dist && cp -r config dist && cp -r src/public dist/src && cp ormconfig.prod.json dist/ormconfig.json && cp package.json dist && cd dist && npm install",
