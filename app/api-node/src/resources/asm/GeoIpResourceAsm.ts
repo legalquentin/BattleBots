@@ -1,12 +1,13 @@
 import { GeoIpResourceModel } from "../GeoIpResourceRaw";
 import { GeoIpEntity } from "../../database/entities/GeoIpEntity";
-import { Singleton } from "typescript-ioc";
+import { Singleton, Inject } from "typescript-ioc";
 import { IGeoIpResource } from "../IGeoIpResource";
 import { UserResourceAsm } from "./UserResourceAsm";
 
 @Singleton
 export class GeoIpResourceAsm {
 
+    @Inject
     private userResourceAsm: UserResourceAsm;
 
     toEntity(resource: GeoIpResourceModel){
