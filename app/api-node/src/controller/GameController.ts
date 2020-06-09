@@ -137,7 +137,7 @@ export class GameController {
 
 
     @GET
-    @Path("/info")
+    @Path("/worker/info")
     @Security("ROLE_USER", "Bearer")
     @Produces("application/json;charset=UTF-8")
     @Response<HttpResponseModel<IGameInfoResource[]>>(200)
@@ -147,7 +147,7 @@ export class GameController {
     }
 
     @GET
-    @Path("/info/:id")
+    @Path("/worker/info/:id")
     @Security("ROLE_USER", "Bearer")
     @Produces("application/json;charset=UTF-8")
     @Response<HttpResponseModel<IGameInfoResource[]>>(200)
