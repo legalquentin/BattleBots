@@ -22,6 +22,7 @@ export class GeoIpController {
     public async list(){
         const tab = await this.geoipService.list();
 
+        console.log(tab);
         if (tab){
             return this.geoipResourceAsm.toResources(tab);
         }
