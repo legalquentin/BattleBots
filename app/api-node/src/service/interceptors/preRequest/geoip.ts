@@ -11,7 +11,7 @@ export async function preRequestGeoIp(req: express.Request){
 
     if (req.user){
         try {
-            const user = await userRepository.findOne(req.user.sub);
+            const user = await userRepository.findOne(req.user.id);
             
             if (req.socket.remoteAddress !== LOCAL_ADDRESS){
                 await geoIpService.getInfo(user.id, req.socket.remoteAddress);
