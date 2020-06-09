@@ -1,6 +1,5 @@
-import { Column, OneToOne, JoinColumn, Entity } from "typeorm";
+import { Column, JoinColumn, Entity, ManyToOne } from "typeorm";
 import { AbstractEntity } from "./AbstractEntity";
-import { LogEntity } from "./LogEntity";
 import UserEntity from "./UserEntity";
 
 @Entity({
@@ -9,10 +8,10 @@ import UserEntity from "./UserEntity";
 export class GeoIpEntity extends AbstractEntity {
 
     @JoinColumn({
-        name: "log_id",
+        name: "user_id",
         referencedColumnName: "id"
     })
-    @OneToOne(type => UserEntity, user => user.geoips)
+    @ManyToOne(type => UserEntity, user => user.geoips)
     public user: UserEntity;
 
     @Column()

@@ -1,7 +1,6 @@
 import UserEntity from "./UserEntity";
 import { AbstractEntity } from "./AbstractEntity";
-import { Entity, ManyToOne, Column, JoinColumn, OneToOne } from "typeorm";
-import { GeoIpEntity } from "./GeoIpEntity";
+import { Entity, ManyToOne, Column, JoinColumn } from "typeorm";
 
 @Entity({
     name: "log"
