@@ -1,0 +1,98 @@
+[
+   {
+      "name": "production",
+      "type": "postgres",
+      "host": "localhost",
+      "port": 5432,
+      "username": "root",
+      "password": "p@ssw0rd",
+      "database": "db",
+      "logging": false,
+      "entities": [
+         "src/database/entities/**/*.js"
+      ],
+      "migrations": [
+         "src/migration/**/*.js"
+      ],
+      "subscribers": [
+         "src/subscriber/**/*.js"
+      ],
+      "cli": {
+         "entitiesDir": "src/database/entities",
+         "migrationsDir": "src/migration",
+         "subscribersDir": "src/subscriber"
+      }
+   },
+   {
+      "name": "default",
+      "type": "postgres",
+      "host": "localhost",
+      "port": 5432,
+      "username": "root",
+      "password": "p@ssw0rd",
+      "database": "db",
+      "logging": false,
+      "entities": [
+         "src/database/entities/**/*.js"
+      ],
+      "migrations": [
+         "src/migration/**/*.js"
+      ],
+      "subscribers": [
+         "src/subscriber/**/*.js"
+      ],
+      "cli": {
+         "entitiesDir": "src/database/entities",
+         "migrationsDir": "src/migration",
+         "subscribersDir": "src/subscriber"
+      }
+   },
+   {
+      "name": "development",
+      "type": "postgres",
+      "host": "localhost",
+      "port": 5432,
+      "username": "root",
+      "password": "p@ssw0rd",
+      "database": "db",
+      "logging": false,
+      "entities": [
+         "src/database/entities/**/*.js"
+      ],
+      "migrations": [
+         "src/migration/**/*.js"
+      ],
+      "subscribers": [
+         "src/subscriber/**/*.js"
+      ],
+      "cli": {
+         "entitiesDir": "src/database/entities",
+         "migrationsDir": "src/migration",
+         "subscribersDir": "src/subscriber"
+      }
+   },
+   {
+      "name": "staging",
+      "type": "postgres",
+      "host": "localhost",
+      "port": 5432,
+      "username": "root",
+      "password": "p@ssw0rd",
+      "database": "db",
+      "logging": false,
+      "entities": [
+         "src/database/entities/**/*.js"
+      ],
+      "migrations": [
+         "src/migration/**/*.js"
+      ],
+      "subscribers": [
+         "src/subscriber/**/*.js"
+      ],
+      "cli": {
+         "entitiesDir": "src/database/entities",
+         "migrationsDir": "src/migration",
+         "subscribersDir": "src/subscriber"
+      }
+   }
+]

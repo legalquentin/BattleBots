@@ -1,4 +1,3 @@
-import { GameInfoEntity } from "../database/entities/GameInfoEntity";
 import { IGameInfoResource } from "../resources/IGameInfoResource";
 import HttpResponseModel from "../resources/HttpResponseModel";
 

@@ -1,5 +1,5 @@
 import { Inject } from "typescript-ioc";
-import { Security, Path, GET, PreProcessor, PostProcessor } from "typescript-rest";
+import { Security, Path, GET, PreProcessor, PostProcessor, PathParam } from "typescript-rest";
 import { GeoIpService } from "../service/GeoIpService";
 import { preRequest } from "../service/interceptors/preRequest/preRequest";
 import { postRequest } from "../service/interceptors/postRequest/postRequest";
@@ -22,7 +22,7 @@ export class GeoIpController {
     @Path("/:id")
     @GET
     @Security("ROLE_USER", "Bearer")
-    public async findOne(id: number){
+    public async findOne(@PathParam("id") id: number){
         return this.geoipService.findOne(id);
     }
 }

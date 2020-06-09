@@ -9,14 +9,13 @@ import { UserRepository } from './database/repositories/UserRepository';
 import { Strategy, StrategyOptions, ExtractJwt } from 'passport-jwt';
 import { connectionName } from "./service/util/connectionName"; 
 import * as moment from "moment";
-import { timingSafeEqual } from 'crypto';
 
 export abstract class ApiServer {
     public PORT: number; // +process.env.PORT || 8080;
     public scheme: string;
 
     protected readonly app;
-     protected options: any;
+    protected options: any;
 
     @Inject
     protected serviceConfig: IConfig;
@@ -32,7 +31,7 @@ export abstract class ApiServer {
         Container.configure(iocConfig);
         Container.environment(connectionName());
         this.config();
-        Server.loadServices(this.app, 'controller/**/*.ts', __dirname);
+        Server.loadServices(this.app, 'controller/**/*.{js, ts}', __dirname);
         Server.swagger(this.app, { 
             swaggerUiOptions: {
                 customSiteTitle: 'BattleBots'

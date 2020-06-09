@@ -552,9 +552,9 @@ paths:
                         - ROLE_USER
             requestBody:
                 $ref: '#/components/requestBodies/IGameResource'
-    /api/games/worker:
+    /api/games/worker_end:
         put:
-            operationId: GameUpdateByWorker
+            operationId: GameEndGame
             responses:
                 '200':
                     description: ""
@@ -572,7 +572,11 @@ paths:
                                 $ref: '#/components/schemas/HttpResponseModelIGameResource'
             description: ""
             requestBody:
-                $ref: '#/components/requestBodies/IGameResource'
+                content:
+                    'application/json; charset=UTF-8':
+                        schema:
+                            $ref: '#/components/schemas/IGameInfoResource'
+                required: true
     '/api/games/{id}':
         get:
             operationId: GameDetail
@@ -799,6 +803,92 @@ paths:
                     required: true
                     schema:
                         type: string
+    /api/games/info:
+        get:
+            operationId: GameGameInfoList
+            responses:
+                '200':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameInfoResourceArray'
+                '204':
+                    description: 'No content'
+                '400':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameInfoResourceArray'
+            description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
+    '/api/games/info/{id}':
+        get:
+            operationId: GameGameInfoDetails
+            responses:
+                '200':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameInfoResourceArray'
+                '204':
+                    description: 'No content'
+                '400':
+                    description: ""
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIGameInfoResourceArray'
+            description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
+            parameters:
+                -
+                    description: ""
+                    in: path
+                    name: id
+                    required: true
+                    schema:
+                        type: number
+                        format: double
+    /api/geoip/:
+        get:
+            operationId: GeoIpList
+            responses:
+                '204':
+                    description: 'No content'
+            description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
+    '/api/geoip/{id}':
+        get:
+            operationId: GeoIpFindOne
+            responses:
+                '204':
+                    description: 'No content'
+            description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
+            parameters:
+                -
+                    description: ""
+                    in: path
+                    name: id
+                    required: true
+                    schema:
+                        type: number
+                        format: double
     /api/logs/:
         get:
             operationId: LogList
@@ -966,6 +1056,29 @@ paths:
                     application/json;charset=UTF-8:
                         schema:
                             $ref: '#/components/schemas/IUserHttpModel'
+                required: true
+    /api/users/login/up:
+        post:
+            operationId: UserLoginUp
+            responses:
+                '200':
+                    description: 'User find'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelITokenHttp'
+                '404':
+                    description: 'user not found'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelITokenHttp'
+            description: ""
+            requestBody:
+                content:
+                    application/json;charset=UTF-8:
+                        schema:
+                            $ref: '#/components/schemas/ITokenHttp'
                 required: true
     /api/users/:
         post:
@@ -1573,6 +1686,62 @@ components:
                     description: ""
                 data:
                     $ref: '#/components/schemas/IGameResource'
+            type: object
+        IGameInfoResource:
+            description: ""
+            properties:
+                winner:
+                    $ref: '#/components/schemas/IGameProfileResource'
+                loser:
+                    $ref: '#/components/schemas/IGameProfileResource'
+                winnerpoints:
+                    type: number
+                    format: double
+                    description: ""
+                loserpoints:
+                    type: number
+                    format: double
+                    description: ""
+                gamestarted_at:
+                    type: string
+                    format: date-time
+                    description: ""
+                gameended_at:
+                    type: string
+                    format: date-time
+                    description: ""
+                video_winner:
+                    type: string
+                    description: ""
+                video_loser:
+                    type: string
+                    description: ""
+                game:
+                    $ref: '#/components/schemas/IGameResource'
+                created_at:
+                    type: string
+                    format: date-time
+                    description: ""
+                updated_at:
+                    type: string
+                    format: date-time
+                    description: ""
+            type: object
+        HttpResponseModelIGameInfoResourceArray:
+            description: ""
+            properties:
+                message:
+                    type: string
+                    description: ""
+                httpCode:
+                    type: number
+                    format: double
+                    description: ""
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/IGameInfoResource'
+                    description: ""
             type: object
         HttpResponseModelIStreamResource:
             description: ""

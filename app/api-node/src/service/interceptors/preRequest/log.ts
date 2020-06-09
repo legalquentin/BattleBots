@@ -1,17 +1,17 @@
 import { Container } from "typescript-ioc";
 import { LogEntity } from "../../../database/entities/LogEntity";
-import { LogRepository } from "../../../database/repositories/LogRepository";
+//import { LogRepository } from "../../../database/repositories/LogRepository";
 import * as fs from "fs";
 import { UserRepository } from "../../../database/repositories/UserRepository";
-import { GeoIpService } from "../../GeoIpService";
+//import { GeoIpService } from "../../GeoIpService";
 import * as express from "express";
 
 export async function preRequestLog(req: express.Request){
-    const logRepository = Container.get(LogRepository);
+    //const logRepository = Container.get(LogRepository);
     const userRepository  = Container.get(UserRepository);
-    const geoIpService = Container.get(GeoIpService);
+    //const geoIpService = Container.get(GeoIpService);
     const log = new LogEntity();
-    const LOCAL_ADDRESS = "127.0.0.1";
+    //const LOCAL_ADDRESS = "127.0.0.1";
 
     log.complete = 0;
     log.method = req.method
@@ -31,6 +31,7 @@ export async function preRequestLog(req: express.Request){
             fs.appendFileSync(`./log.txt`, `log - preRequest - error - ${e.message}\n`);
         }
     }
+    /*
     try {
         const saved = await logRepository.save(log);
         req['log'] = {
@@ -43,4 +44,5 @@ export async function preRequestLog(req: express.Request){
     catch (e){
          fs.appendFileSync(`./log.txt`, `log - preRequest - error - ${e.message}\n`);
     }
+    */
 }

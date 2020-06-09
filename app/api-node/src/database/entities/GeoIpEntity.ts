@@ -11,9 +11,7 @@ export class GeoIpEntity extends AbstractEntity {
         name: "log_id",
         referencedColumnName: "id"
     })
-    @OneToOne(type => LogEntity, log => log.geoips, {
-        nullable: true,
-    })
+    @OneToOne(type => LogEntity, log => log.geoips)
     public log: LogEntity;
 
     @Column()

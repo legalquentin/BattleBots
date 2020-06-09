@@ -1,5 +1,4 @@
 import { GameInfoService } from "../GameInfoService";
-import { GameInfoEntity } from "../../database/entities/GameInfoEntity";
 import { IGameInfoResource } from "../../resources/IGameInfoResource";
 import { GameInfoRepository } from "../../database/repositories/GameInfoRepository";
 import { GameInfoResourceAsm } from "../../resources/asm/GameInfoResourceAsm";
