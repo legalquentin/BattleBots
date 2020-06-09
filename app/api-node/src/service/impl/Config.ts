@@ -9,6 +9,7 @@ export default class Config extends IConfig{
         super();
         this.secret = config.get('secrets.secret');
         this.salt = config.get('secrets.salt');
+        this.expirationTime = config.get('secrets.expiration_time');
         this.workerAddress = config.get('worker_address');
         this.workerPort = config.get('worker_port');
         this.workerDirectory = config.get('worker_directory');
@@ -62,5 +63,9 @@ export default class Config extends IConfig{
     
     getHomeApiNode(): string {
         return this.homeApiNode;
+    }
+
+    getExpirationTime(): string {
+        return (this.expirationTime);
     }
 };

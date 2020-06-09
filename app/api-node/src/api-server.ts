@@ -8,6 +8,8 @@ import IConfig from './service/IConfig';
 import { UserRepository } from './database/repositories/UserRepository';
 import { Strategy, StrategyOptions, ExtractJwt } from 'passport-jwt';
 import { connectionName } from "./service/util/connectionName"; 
+import * as moment from "moment";
+import { timingSafeEqual } from 'crypto';
 
 export abstract class ApiServer {
     public PORT: number; // +process.env.PORT || 8080;
@@ -130,12 +132,19 @@ export abstract class ApiServer {
                 done(null, null, 403);
             }
             else {
-                const o = {
+                const creationTime = moment(payload.creationTime);
+                const exp = creationTime.add({
+                    "seconds": parseInt(this.serviceConfig.getExpirationTime())
+                });
+                if (moment().isAfter(exp)){
+                    return done(null, null, 403);
+                }
+                const o2 = {
                     id: user.id,
                     roles: user.roles
                 };
 
-                done(null, o, null);
+                done(null, o2, null);
             }
         });
         const authenticator = new PassportAuthenticator(strategy, {

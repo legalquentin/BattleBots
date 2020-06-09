@@ -41,6 +41,16 @@ export class UserController {
         return this.authService.authenticate(user.username, user.password);
     }
 
+    @Consumes("application/json;charset=UTF-8")
+    @Produces("application/json;charset=UTF-8")
+    @Response<HttpResponseModel<ITokenHttp>>(200, "User find")
+    @Response<HttpResponseModel<ITokenHttp>>(404, "user not found")
+    @Path('/login/up')
+    @POST 
+    public async loginUp(token: ITokenHttp): Promise<SendResource<HttpResponseModel<ITokenHttp>>> {
+        return this.authService.refresh(token.data);
+    }
+
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
     @Response<HttpResponseModel<IResourceId>>(201, "User created")

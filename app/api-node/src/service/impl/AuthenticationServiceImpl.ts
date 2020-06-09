@@ -2,11 +2,12 @@ import { AuthenticationService } from "../AuthenticationService";
 import IServiceFactory from "../IServiceFactory";
 import { Inject, Singleton } from "typescript-ioc";
 import { compare } from "bcrypt";
-import { sign } from "jsonwebtoken";
+import { sign, decode } from "jsonwebtoken";
 import IConfig from "../IConfig";
 import ITokenHttp from "../../resources/ITokenHttp";
 import HttpResponseModel from "../../resources/HttpResponseModel";
 import { SendResource } from "../../../lib/ReturnExtended";
+import * as moment from "moment";
 
 @Singleton
 export class AuthenticationServiceImpl implements AuthenticationService {
@@ -17,6 +18,46 @@ export class AuthenticationServiceImpl implements AuthenticationService {
     @Inject
     private config: IConfig;
 
+    /**
+     * The user have 5 minutes for refresh the token
+     * 
+     */
+    public refresh(token: string) {
+        try {
+            const o: any = decode(token);
+            const creationTime = moment(o.creationTime);
+            const exp2 = creationTime.add({
+                "seconds": parseInt(this.config.getExpirationTime()) + (5 * 60)
+            });
+
+            if (moment().isAfter(exp2)){
+                const response: HttpResponseModel<ITokenHttp> = {
+                    httpCode: 400
+                };
+
+                return (response);
+            }
+            o.creationTime = Date.now();
+            const data = sign(o, this.config.getSecret(), {
+                algorithm: "HS512"
+            });
+            const response : HttpResponseModel<ITokenHttp> = {
+                httpCode: 200,
+                data: {
+                    data
+                }
+            };
+            return (response);
+        }
+        catch (e){
+            const response: HttpResponseModel<ITokenHttp> = {
+                httpCode: 400
+            };
+
+            return (response);
+        }
+    }
+    
     public async authenticate(username: string, password: string){
         try {
             const user = await this.factory.getUserRepository().findOne({

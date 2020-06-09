@@ -10,9 +10,11 @@ export default abstract class IConfig {
     protected apiScheme: string;
     protected homeApiNode: string;
     protected geoipService: string;
+    protected expirationTime: string;
 
     abstract genSalt(): string;
     abstract getSecret(): string;
+    abstract getExpirationTime(): string;
 
     abstract getWorkerAddress(): string;
     abstract getWorkerPort(): string;
