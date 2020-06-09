@@ -30,7 +30,7 @@ export abstract class ApiServer {
         Container.configure(iocConfig);
         Container.environment(connectionName());
         this.config();
-        Server.loadServices(this.app, 'controller/*', __dirname);
+        Server.loadServices(this.app, 'controller/**/*.(js|ts)', __dirname);
         Server.swagger(this.app, { 
             swaggerUiOptions: {
                 customSiteTitle: 'BattleBots'
