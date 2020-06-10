@@ -99,7 +99,7 @@ export abstract class ApiServer {
             const endpoint = "/api/games/worker";
             const localhost = "127.0.0.1"
 
-            if (req.url === endpoint && address === localhost) {
+            if (req.url.startsWith(endpoint) && address === localhost) {
                 next();
             }
             else if (req.url !== endpoint){

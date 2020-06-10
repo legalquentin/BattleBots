@@ -33,6 +33,28 @@ export class GameController {
         return this.gameService.saveOrUpdate(resource);
     }
 
+    @PUT
+    @Path("/worker_energy")
+    @Produces("application/json; charset=UTF-8")
+    @Consumes("application/json; charset=UTF-8")
+    @Response<HttpResponseModel<IGameResource>>(200)
+    @Response<HttpResponseModel<IGameResource>>(400)
+    public async workerEnergy(resource: IGameResource){
+        return this.gameService.saveOrUpdate(resource);
+    }
+
+    @PUT
+    @Path("/worker_start")
+    @Produces("application/json; charset=UTF-8")
+    @Consumes("application/json; charset=UTF-8")
+    @Response<HttpResponseModel<IGameResource>>(200)
+    @Response<HttpResponseModel<IGameResource>>(400)
+    public async startGame(resource: IGameResource){
+        if (resource){
+            resource.status = EGameStatus.STARTED;
+        }
+        return this.gameService.saveOrUpdate(resource);
+    }
 
     @PUT
     @Path("/worker_end")
