@@ -6,6 +6,8 @@ import { EntityError } from "../../../lib/EntityError";
 import { EEntityStatus } from "../../../lib/EEntityStatus";
 import { ArenaRepository } from "./ArenaRepository";
 import { connectionName } from "../../service/util/connectionName";
+import { BotGameRepository } from "./BotGameRepository";
+import { BotsRepository } from "./BotsRepository";
 
 @EntityRepository(GameEntity)
 @Singleton
@@ -90,19 +92,38 @@ export class GameRepository extends Repository<GameEntity> {
 
     public async saveOrUpdate(game: GameEntity): Promise<GameEntity>
     {
-        try {
-            if (game.id){
-                await this.update(game.id, game);
-                return (game);
+        return getManager(connectionName()).transaction(async (manager : EntityManager) => {
+            try {
+                const botGames = await game.robots;
+                const streams = await game.streams;
+                await manager.getCustomRepository(BotGameRepository).deleteAllBotGame(game);
+                await manager.getCustomRepository(StreamsRepository).deleteByGame(game);
+                for (let botGame of botGames){
+                    if (!botGame.bot.id){
+                        await manager.getCustomRepository(BotsRepository).save(botGame.bot);
+                    }
+                    else{
+                        await manager.getCustomRepository(BotsRepository).update(botGame.bot.id, botGame.bot);
+                    }
+                    await manager.getCustomRepository(BotGameRepository).save(botGame);
+                }
+                for (let stream of streams){
+                    stream.id = null;
+                    await manager.getCustomRepository(StreamsRepository).save(stream);
+                }
+                if (game.id){
+                    await this.update(game.id, game);
+                    return (game);
+                }
+                else {
+                    const saved = await this.save(game);
+            
+                    return (saved);
+                }
             }
-            else {
-                const saved = await this.save(game);
-        
-                return (saved);
+            catch (e){
+                throw e;
             }
-        }
-        catch (e){
-            throw e;
-        }
+        });
     }
 }

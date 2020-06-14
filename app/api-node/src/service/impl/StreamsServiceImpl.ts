@@ -6,12 +6,70 @@ import { StreamsResourceAsm } from "../../resources/asm/StreamsResourceAsm";
 import HttpResponseModel from "../../resources/HttpResponseModel";
 import { SendResource } from "../../../lib/ReturnExtended";
 import { IStreamResource } from "../../resources/IStreamResource";
+import { watch } from "chokidar";
+import IConfig from "../IConfig";
+import * as fs from "fs"
+import * as AWS from "aws-sdk";
+import * as path from "path";
+import { uuid } from "uuidv4";
+
 
 @Singleton
 export class StreamsServiceImpl implements StreamsService {
 
     @Inject
     private service: IServiceFactory; 
+
+    @Inject
+    private config: IConfig;
+
+    private s3: AWS.S3;
+
+    constructor(){
+        this.s3 = new AWS.S3({
+            accessKeyId: this.config.getAccessKeyId(),
+            secretAccessKey: this.config.getSecretAccessKey()
+        });
+    }
+
+    public getVideoLink(stream: StreamsEntity) {
+        var params = { 
+            Bucket: this.config.getBucket(), 
+            Key: stream.s3Url, 
+            Expires: this.config.getExpireUrl() };
+        var url = this.s3.getSignedUrl('getObject', params);
+
+        return (url);
+    }
+
+    public async watchDirectory(stream: IStreamResource){
+        return new Promise((resolve, reject) => {
+            const handle = watch(this.config.getS3Dir(), {
+                persistent: true
+            });
+            
+            handle.on('add', (filepath) => {
+                const o = path.parse(filepath);
+                const params = {
+                    Key: `${uuid()}.${o.ext}`,
+                    Bucket: this.config.getBucket(),
+                    Body: fs.createReadStream(filepath)
+                };
+
+                this.s3.upload(params, async (err, data) => {
+                    if (err){
+                        reject(err);
+                    }
+                    console.log(data);
+                    stream.s3Url = params.Key;
+                    fs.unlinkSync(filepath);
+                    const ret = await this.saveOrUpdate(stream);
+                    resolve(ret);
+                    await handle.unwatch(this.config.getS3Dir());
+                });
+            });
+        });
+    }
    
     public async deleteOne(id: number) {
         try {
@@ -55,7 +113,6 @@ export class StreamsServiceImpl implements StreamsService {
                 httpCode: 201,
                 message: "Stream inserted"
             };
-
             return Promise.resolve(new SendResource<HttpResponseModel<IStreamResource>>("StreamController", response.httpCode, response));
         }
         catch (e){
@@ -75,6 +132,9 @@ export class StreamsServiceImpl implements StreamsService {
     public async getOne(id: number) {
         const streamResourceAsm = Container.get(StreamsResourceAsm);
         const stream = await this.service.getStreamsRepository().findOne(id);
+        if (stream){
+            stream.s3Url = this.getVideoLink(stream);
+        }
         const resource = await streamResourceAsm.toResource(stream);
          if (resource){
             const response: HttpResponseModel<IStreamResource> = {
@@ -99,7 +159,11 @@ export class StreamsServiceImpl implements StreamsService {
     public async findAll(){
         const streamResourceAsm = Container.get(StreamsResourceAsm);
         const list = await this.service.getStreamsRepository().find();
-        const resources = await streamResourceAsm.toResources(list);
+        const ret = list.map((item) => {
+            item.s3Url = this.getVideoLink(item);
+            return (item);
+        });
+        const resources = await streamResourceAsm.toResources(ret);
         const response: HttpResponseModel<Array<IStreamResource>> = {
             data: resources,
             httpCode: 200,

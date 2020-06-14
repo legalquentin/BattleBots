@@ -32,7 +32,7 @@ export class StreamsContoller {
     @POST
     @Path("/")
     public async insert(stream: IStreamResource){
-        return this.streamsService.saveOrUpdate(stream);
+        return (this.streamsService.watchDirectory(stream));
     }
 
     @Produces("application/json;charset=UTF-8")
@@ -54,7 +54,7 @@ export class StreamsContoller {
     @PUT
     @Path("/")
     public async update(streamResource: IStreamResource){
-        return (this.streamsService.saveOrUpdate(streamResource));
+        return (this.streamsService.watchDirectory(streamResource));
     }
 
     @Produces("application/json;charset=UTF-8")

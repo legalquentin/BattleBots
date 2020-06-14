@@ -8,4 +8,6 @@ export abstract class StreamsService {
     public abstract search(options: any): Promise<StreamsEntity[]>;
     public abstract findAll();
     public abstract deleteByBot(botId: number): Promise<any>;
+    public abstract watchDirectory(stream: IStreamResource);
+    public abstract getVideoLink(stream: StreamsEntity);
 }

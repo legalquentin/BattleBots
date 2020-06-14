@@ -18,7 +18,32 @@ export default class Config extends IConfig{
         this.apiScheme = config.get('api_scheme');
         this.apiUseSSL = config.get('api_useSSL') 
         this.homeApiNode =  config.get('home_api_node')  
-        this.geoipService = config.get('geoip_service');     
+        this.geoipService = config.get('geoip_service');
+        this.s3dir = config.get('s3_dir');
+        this.bucket = config.get('bucket');
+        this.expireUrl = config.get('url_expire');
+        this.accessKeyId = config.get('accessKeyId');
+        this.secretAccessKey = config.get('secretAccessKey');
+    }
+
+    getAccessKeyId(): string {
+        return (this.accessKeyId);
+    }
+    
+    getSecretAccessKey(): string {
+        return (this.secretAccessKey);
+    }
+
+    getExpireUrl(): string {
+        return (this.expireUrl);
+    }
+
+    getBucket(): string {
+        return (this.bucket);
+    }
+
+    getS3Dir(): string {
+        return (this.s3dir);
     }
 
     getGeoIpService(): string {

@@ -27,7 +27,7 @@ export class GameEntity extends AbstractEntity {
     public game_status: EGameStatus;
 
     @OneToMany(type => RobotGameEntity, robotGame => robotGame.game, {
-        lazy: true
+        lazy: true,
     })
     public robots?: Array<RobotGameEntity>;
 

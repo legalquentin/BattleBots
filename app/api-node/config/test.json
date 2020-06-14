@@ -12,5 +12,10 @@
     "api_useSSL": false,
     "api_scheme": "http",
     "home_api_node": "/home/pi/BattleBots/app/api-node",
-    "geoip_service": "http://geoip.devcode.fr/lookat?ip"
+    "geoip_service": "http://geoip.devcode.fr/lookat?ip",
+    "s3_dir": "",
+    "bucket": "",
+    "url_expire": 7200,
+    "accessKeyId": "",
+    "secretAccessKey": ""
 }

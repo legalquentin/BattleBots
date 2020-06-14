@@ -2,6 +2,7 @@ import { Repository, EntityRepository, EntityManager, EntityMetadata, getManager
 import { StreamsEntity } from "../entities/StreamsEntity";
 import { Singleton } from "typescript-ioc";
 import { connectionName } from "../../service/util/connectionName";
+import { GameEntity } from "../entities/GameEntity";
 
 @Singleton
 @EntityRepository(StreamsEntity)
@@ -27,6 +28,12 @@ export class StreamsRepository extends Repository<StreamsEntity> {
         return this.createQueryBuilder().delete().from(StreamsEntity).where("robot_id = :id", {
             "id": botId
         }).execute();
+    }
+
+    public async deleteByGame(game: GameEntity){
+        return (this.createQueryBuilder().delete().from(StreamsEntity).where("game_id = :id", {
+            "id": game.id
+        }));
     }
 
     public async saveOrUpdate(stream: StreamsEntity): Promise<StreamsEntity> {
