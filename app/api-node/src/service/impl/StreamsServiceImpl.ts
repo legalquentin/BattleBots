@@ -6,7 +6,6 @@ import { StreamsResourceAsm } from "../../resources/asm/StreamsResourceAsm";
 import HttpResponseModel from "../../resources/HttpResponseModel";
 import { SendResource } from "../../../lib/ReturnExtended";
 import { IStreamResource } from "../../resources/IStreamResource";
-import { watch } from "chokidar";
 import IConfig from "../IConfig";
 import * as fs from "fs"
 import * as AWS from "aws-sdk";
@@ -44,28 +43,25 @@ export class StreamsServiceImpl implements StreamsService {
 
     public async watchDirectory(stream: IStreamResource){
         return new Promise((resolve, reject) => {
-            const handle = watch(this.config.getS3Dir(), {
-                persistent: true
-            });
-            
-            handle.on('add', (filepath) => {
-                const o = path.parse(filepath);
+            fs.readdirSync(this.config.getS3Dir()).forEach((file) => {
+                if (stream.s3Url !== file){
+                    return;
+                }
+                const o = path.parse(file);
                 const params = {
                     Key: `${uuid()}.${o.ext}`,
                     Bucket: this.config.getBucket(),
-                    Body: fs.createReadStream(filepath)
+                    Body: fs.createReadStream(file)
                 };
-
                 this.s3.upload(params, async (err, data) => {
                     if (err){
                         reject(err);
                     }
                     console.log(data);
                     stream.s3Url = params.Key;
-                    fs.unlinkSync(filepath);
+                    fs.unlinkSync(file);
                     const ret = await this.saveOrUpdate(stream);
                     resolve(ret);
-                    await handle.unwatch(this.config.getS3Dir());
                 });
             });
         });
