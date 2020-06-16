@@ -10,8 +10,9 @@ export class IGameResource {
     bots?: Array<IBotsResource>;
     streams?: Array<IStreamResource>;
     status: EGameStatus;
-    createdAt?: string;
-    updatedAt?: string;
+    createdAt?: number;
+    startedAt?: number;
+    endedAt?: number;
     token?: string;
     secret?: string;
 }
