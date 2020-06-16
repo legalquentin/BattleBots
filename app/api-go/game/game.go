@@ -4,6 +4,7 @@ package game
 // not as an api (it should go in the api package)
 
 import (
+	"TIC-GPE5/Worker/game"
 	"crypto/rand"
 	"encoding/json"
 	"fmt"
@@ -53,7 +54,41 @@ func CreateGame(res http.ResponseWriter, req *http.Request) {
 	return
 }
 
+
+func updateGameApi(game Game) {
+	
+	winner,loser,min := game.Players[0]
+	for idx, player := range game.Players {
+		if (player.BotContext.Energy > min.BotContext.Energy) {
+			winner = player
+		} else {
+			loser = player
+		}
+	}
+
+	var ngi = NodeGameInfo{
+		WinnerID: game.Players.
+	}
+	winner?: IGameProfileResource;
+    loser?: IGameProfileResource;
+    winnerpoints?: number;
+    loserpoints?: number;
+    gamestarted_at?: Date;
+    gameended_at?: Date;
+    video_winner?: string;
+    video_loser?: string;
+    game?: IGameResource;
+    created_at?: Date;
+	updated_at?: Date;
+	
+	url := "http://hardwar.ddns.net/api/games/worker_end"
+    fmt.Println(prefixLog, url)
+    var jsonStr = []byte(`{"title":"Buy cheese and bread for breakfast."}`)
+    req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+}
+
 func terminateGame(game Game) {
+	updateGameApi(game);
 	for _, player := range game.Players {
 		player.Mutex.Lock()
 		player.BotSpecs.SocketClientCam.Close()
@@ -165,6 +200,7 @@ func DeleteGame(res http.ResponseWriter, req *http.Request) {
 	}
 	if _, ok := baseGameInstances[key[0]]; ok {
 		// TODO: remove ressources created by the game, close player sockets etc..
+		terminateGame(baseGameInstances[key[0]])
 		delete(baseGameInstances, key[0])
 		log.Println(prefixLog, "deleted game: "+key[0])
 		json.NewEncoder(res).Encode(&Response{"deleted, closing connections", 200})
