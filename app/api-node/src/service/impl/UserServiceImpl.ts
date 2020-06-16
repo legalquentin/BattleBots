@@ -51,6 +51,7 @@ export class UserServiceImpl implements UserService {
             return Promise.resolve(new SendResource<HttpResponseModel<IResourceId>>("UserController", response.httpCode, response));
         }
         catch (e){
+            console.log(e.message);
             const response: HttpResponseModel<IResourceId> = {
                 httpCode: 400,
                 message: "Conflict or internal error"

@@ -21,12 +21,18 @@ export class PlayerEntity extends AbstractEntity {
     @Column({name: "name"})
     public name?: string;
 
-    @OneToMany(type => RobotsEntity, robotEntity => robotEntity.player)
+    @OneToMany(type => RobotsEntity, robotEntity => robotEntity.player, {
+        lazy: true
+    })
     public robots?:  Promise<Array<RobotsEntity>>;
 
-    @OneToMany(type => GameInfoEntity, gameInfoEntity => gameInfoEntity.winner)
+    @OneToMany(type => GameInfoEntity, gameInfoEntity => gameInfoEntity.winner, {
+        lazy: true
+    })
     public infoWinner: Array<GameInfoEntity>;
 
-    @OneToMany(type => GameInfoEntity, gameInfoEntity => gameInfoEntity.loser)
+    @OneToMany(type => GameInfoEntity, gameInfoEntity => gameInfoEntity.loser, {
+        lazy: true
+    })
     public infoLoser: Array<GameInfoEntity>;
 }

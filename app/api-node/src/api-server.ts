@@ -14,7 +14,7 @@ export abstract class ApiServer {
     public PORT: number; // +process.env.PORT || 8080;
     public scheme: string;
 
-    protected readonly app;
+    protected readonly app: express.Application;
     protected options: any;
 
     @Inject
@@ -27,10 +27,10 @@ export abstract class ApiServer {
         this.app = express();
 
         Server.useIoC();
-        Container.configure(iocConfig);
         Container.environment(connectionName());
+        Container.configure(iocConfig);
         this.config();
-        Server.loadServices(this.app, 'controller/**/*.{js,ts}', __dirname);
+        Server.loadServices(this.app, 'controller/**/*.ts', __dirname);
         Server.swagger(this.app, { 
             swaggerUiOptions: {
                 customSiteTitle: 'BattleBots'
