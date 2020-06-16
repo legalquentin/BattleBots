@@ -157,17 +157,26 @@ type Data struct {
 	Value int16 `json:"dv,omitempty"`
 }
 
+// NodeGame useful for converting ts to epoch
+type NodeGame struct {
+	Name      string        `json:"name,omitempty"`
+	Token     string        `json:"token,omitempty"`
+	Started   bool          `json:"started,omitempty"`
+	TTL       time.Duration `json:"ttl,omitempty"`
+	StartedAt int64         `json:"startedAt,omitempty"`
+	EndedAt   int64         `json:"endedAt,omitempty"`
+	CreatedAt int64         `json:"createdAt,omitempty"`
+	Env       *Environment  `json:"environment,omitempty"`
+	Players   []*Player     `json:"players,omitempty"`
+}
+
 // NodeGameInfo is the format ingested by the node api to update a game via http
 type NodeGameInfo struct {
-	WinnerID      int16  `json:"winner_id,omitempty"`
-	LoserID       int16  `json:"loser_id,omitempty"`
-	WinnerPoints  int16  `json:"winnerpoints,omitempty"`
-	LoserPoints   int16  `json:"loserpoints,omitempty"`
-	GameStartedAt string `json:"gamestarted_at,omitempty"`
-	GameEndedAt   string `json:"gameended_at,omitempty"`
-	VideoWinner   string `json:"video_winner,omitempty"`
-	VideoLoser    string `json:"video_loser,omitempty"`
-	Game          Game   `json:"game,omitempty"`
-	CreatedAt     string `json:"created_at,omitempty"`
-	UpdatedAt     string `json:"updated_at,omitempty"`
+	WinnerID     string   `json:"winner_id,omitempty"`
+	LoserID      string   `json:"loser_id,omitempty"`
+	WinnerPoints int16    `json:"winnerpoints,omitempty"`
+	LoserPoints  int16    `json:"loserpoints,omitempty"`
+	VideoWinner  string   `json:"video_winner,omitempty"`
+	VideoLoser   string   `json:"video_loser,omitempty"`
+	Game         NodeGame `json:"game,omitempty"`
 }

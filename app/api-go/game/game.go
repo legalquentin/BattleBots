@@ -4,7 +4,7 @@ package game
 // not as an api (it should go in the api package)
 
 import (
-	"TIC-GPE5/Worker/game"
+	"bytes"
 	"crypto/rand"
 	"encoding/json"
 	"fmt"
@@ -54,41 +54,50 @@ func CreateGame(res http.ResponseWriter, req *http.Request) {
 	return
 }
 
+func updateGameAPI(game Game) {
 
-func updateGameApi(game Game) {
-	
-	winner,loser,min := game.Players[0]
+	winner := game.Players[0]
+	loser := game.Players[0]
+	min := game.Players[0]
 	for idx, player := range game.Players {
-		if (player.BotContext.Energy > min.BotContext.Energy) {
+		if player.BotContext.Energy > min.BotContext.Energy {
 			winner = player
 		} else {
 			loser = player
 		}
 	}
 
+	game.EndedAt = time.Now()
+
 	var ngi = NodeGameInfo{
-		WinnerID: game.Players.
+		WinnerID:     winner.ID,
+		LoserID:      loser.ID,
+		WinnerPoints: winner.BotContext.Energy,
+		LoserPoints:  loser.BotContext.Energy,
+		VideoLoser:   "",
+		VideoWinner:  "",
+		Game: NodeGame{
+			game.Name,
+			game.Token,
+			game.Started,
+			game.TTL,
+			game.StartedAt.Unix(),
+			game.EndedAt.Unix(),
+			game.CreatedAt.Unix(),
+			game.Env,
+			game.Players,
+		},
 	}
-	winner?: IGameProfileResource;
-    loser?: IGameProfileResource;
-    winnerpoints?: number;
-    loserpoints?: number;
-    gamestarted_at?: Date;
-    gameended_at?: Date;
-    video_winner?: string;
-    video_loser?: string;
-    game?: IGameResource;
-    created_at?: Date;
-	updated_at?: Date;
-	
+
 	url := "http://hardwar.ddns.net/api/games/worker_end"
-    fmt.Println(prefixLog, url)
-    var jsonStr = []byte(`{"title":"Buy cheese and bread for breakfast."}`)
-    req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+	fmt.Println(prefixLog, url)
+
+	requestByte, _ := json.Marshal(ngi)
+	req, err := http.NewRequest("POST", url, bytes.NewReader(requestByte))
 }
 
 func terminateGame(game Game) {
-	updateGameApi(game);
+	updateGameAPI(game)
 	for _, player := range game.Players {
 		player.Mutex.Lock()
 		player.BotSpecs.SocketClientCam.Close()
