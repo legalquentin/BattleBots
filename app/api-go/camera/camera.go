@@ -1,9 +1,12 @@
 package camera
 
 import (
+	"bufio"
 	"log"
 	"net/http"
 	"net/url"
+	"os"
+	"time"
 
 	"../socket"
 
@@ -39,7 +42,16 @@ func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
 		log.Println(prefixErr, err)
 	}
 	player.BotSpecs.SocketBotCam = c
+
+	file, err := os.OpenFile("./streams/"+player.BotSpecs.ID+"_"+time.Now().Unix()+".bbs", os.O_APPEND|os.O_WRONLY, 0600)
 	player.Mutex.Unlock()
+
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	bufferedWriter := bufio.NewWriter(file)
 
 	// Read c(robot) video stream and write to conn(client)
 	defer conn.Close()
@@ -53,6 +65,10 @@ func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
 
 		if err := conn.WriteMessage(messageType, p); err != nil {
 			log.Println(prefixWarn, err)
+			return
+		}
+		written, error := bufferedWriter.Write(p)
+		if err != nil {
 			return
 		}
 	}
