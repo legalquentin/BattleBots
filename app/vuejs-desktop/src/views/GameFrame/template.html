@@ -3,22 +3,30 @@
     <SuiGrid verticalAlign="middle" style="width: 701px !important; margin-left: auto; margin-right: auto">
         <SuiGridRow :columns="3">
                 
-            <SuiGridColumn style="margin-top: 20px" textAlign="left" :width="9">
+            <SuiGridColumn style="margin-top: 20px" textAlign="left" :width="7">
                 <h3 is="sui-header">
                     <sui-icon name="gamepad" color="violet" />
                     <sui-header-content>Partie en cours : {{ gameInfos.game.name }}</sui-header-content>
                   </h3>
             </SuiGridColumn>
-            <SuiGridColumn style="margin-top: 20px; opacity: 0" textAlign="center" :width="2">
-                <SuiButton circular color="facebook" disabled>Ok</SuiButton>
-            </SuiGridColumn>
-            <SuiGridColumn style="margin-top: 20px" textAlign="right" :width="5">
+            <SuiGridColumn style="margin-top: 20px" textAlign="right" :width="6">
                 <!-- <RouterLink :to="{ name: 'CreateGameFrame' }"> -->
-                    <SuiButton size="mini" @click="$router.back()" basic left icon label-position="right" icon="arrow up">Liste des parties</SuiButton>
+                    <SuiButton size="mini" @click="helpModal = true" color="violet" left icon label-position="right" icon="question mark">Comment jouer</SuiButton>
+                    
+                <!-- </RouterLink> -->
+            </SuiGridColumn>
+            <SuiGridColumn style="margin-top: 20px" textAlign="right" :width="3">
+                <!-- <RouterLink :to="{ name: 'CreateGameFrame' }"> -->
+                    
+                    <SuiButton size="mini" @click="$router.back()" basic left icon label-position="right" icon="arrow up">Retour</SuiButton>
+                    
                 <!-- </RouterLink> -->
             </SuiGridColumn>
         </SuiGridRow>
     </SuiGrid>
+
+    
+
     <SuiDivider style="width: 670px !important; margin-left: auto; margin-right: auto"></SuiDivider>
     <SuiGrid verticalAlign="middle" style="height: calc(100vh - 100px);">
         <SuiGridRow textAlign="left" :columns="10" v-if="true" style="padding-top: 0px; padding-bottom: 0px">
