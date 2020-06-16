@@ -156,3 +156,20 @@ type Data struct {
 	Type  int16 `json:"dt,omitempty"`
 	Value int16 `json:"dv,omitempty"`
 }
+
+
+
+// NodeGameInfo, format ingested by the node api to update a game via http
+type NodeGameInfo struct {
+	winner: IGameProfileResource; `json:"winner,omitempty"`
+	loser: IGameProfileResource; `json:"loser,omitempty"`
+    WinnerPoints int16 `json:"winnerpoints,omitempty"`
+    LoserPoints int16 `json:"loserpoints,omitempty"`
+    GameStartedAt: string `json:"gamestarted_at,omitempty"`
+    GameEndedAt: string `json:"gameended_at,omitempty"`
+    VideoWinner: string `json:"video_winner,omitempty"`
+    VideoLoser: string `json:"video_loser,omitempty"`
+    Game: IGameResource; `json:"game,omitempty"`
+    CreatedAt: string `json:"created_at,omitempty"`
+    UpdatedAt: string `json:"updated_at,omitempty"`
+}

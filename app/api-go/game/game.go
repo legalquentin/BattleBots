@@ -53,23 +53,27 @@ func CreateGame(res http.ResponseWriter, req *http.Request) {
 	return
 }
 
+func terminateGame(game Game) {
+	for _, player := range game.Players {
+		player.Mutex.Lock()
+		player.BotSpecs.SocketClientCam.Close()
+		player.BotSpecs.SocketClientCtrl.WriteJSON(Data{Type: TYPE_DISCONNECT, Value: 0})
+		player.BotSpecs.SocketClientCtrl.Close()
+		player.BotSpecs.SocketBotCam.Close()
+		player.BotSpecs.SocketBotCtrl.Close()
+		player.Mutex.Unlock()
+	}
+}
+
 // Daemon long running process to manage game instances
 func Daemon() {
 	for {
 		tnow := time.Now()
 		for key, game := range baseGameInstances {
 			fmt.Println(key, len(game.Players), game.CreatedAt.Sub(tnow).Minutes())
-			if tnow.Sub(game.CreatedAt).Minutes() > float64(5) {
+			if tnow.Sub(game.CreatedAt).Minutes() > float64(GameDuration) {
 				// log.Println(prefixWarn, "DELETING game [", game.Name, "] reached 5 minutes")
-				for _, player := range game.Players {
-					player.Mutex.Lock()
-					player.BotSpecs.SocketClientCam.Close()
-					player.BotSpecs.SocketClientCtrl.WriteJSON(Data{Type: TYPE_DISCONNECT, Value: 0})
-					player.BotSpecs.SocketClientCtrl.Close()
-					player.BotSpecs.SocketBotCam.Close()
-					player.BotSpecs.SocketBotCtrl.Close()
-					player.Mutex.Unlock()
-				}
+				terminateGame(game)
 				delete(baseGameInstances, key)
 			} else {
 				for _, player := range game.Players {

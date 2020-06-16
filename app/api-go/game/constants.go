@@ -24,6 +24,9 @@ var Appartement = Environment{
 	1, "martin's appartement", AvailableBots, true,
 }
 
+// GameDuration in minutes
+const GameDuration = 5
+
 // RunningBots map existing Bots
 var RunningBots = []*Bot{}
 
