@@ -14,7 +14,7 @@ export abstract class ApiServer {
     public PORT: number; // +process.env.PORT || 8080;
     public scheme: string;
 
-    protected readonly app;
+    protected readonly app: express.Application;
     protected options: any;
 
     @Inject

@@ -52,9 +52,9 @@ export class UserGameProfileResourceAsm {
         if (!resource.gameProfile){
             resource.gameProfile = [];
         }
-        entity.players = Promise.resolve(resource.gameProfile.map(profile => {
+        entity.players = resource.gameProfile.map(profile => {
             return this.toPlayerEntity(profile);
-        }));
+        });
         return (entity);
     }
 

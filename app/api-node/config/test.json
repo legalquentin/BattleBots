@@ -13,9 +13,9 @@
     "api_scheme": "http",
     "home_api_node": "/home/pi/BattleBots/app/api-node",
     "geoip_service": "http://geoip.devcode.fr/lookat?ip",
-    "s3_dir": "",
-    "bucket": "",
+    "s3_dir": "/Users/simoes_t/Documents/S3",
+    "bucket": "qlg-demo-bucket",
     "url_expire": 7200,
-    "accessKeyId": "",
-    "secretAccessKey": ""
+    "accessKeyId": "AKIAWN2ZPWNZF3NV7B2A",
+    "secretAccessKey": "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"
 }

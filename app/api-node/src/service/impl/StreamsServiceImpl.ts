@@ -29,6 +29,15 @@ export class StreamsServiceImpl implements StreamsService {
             accessKeyId: this.config.getAccessKeyId(),
             secretAccessKey: this.config.getSecretAccessKey()
         });
+
+        this.s3.listBuckets((err, data) => {
+            if (err){
+                console.log(err.message);
+            }
+            else {
+                console.log(data);
+            }
+        })
     }
 
     public getVideoLink(stream: StreamsEntity) {
@@ -42,28 +51,52 @@ export class StreamsServiceImpl implements StreamsService {
     }
 
     public async watchDirectory(stream: IStreamResource){
+        console.log("enter");
         return new Promise((resolve, reject) => {
-            fs.readdirSync(this.config.getS3Dir()).forEach((file) => {
-                if (stream.s3Url !== file){
-                    return;
-                }
-                const o = path.parse(file);
+            const resolve_path = `${this.config.getS3Dir()}/${stream.s3Url}`;
+            console.log(resolve_path);
+            if (fs.existsSync(resolve_path) && fs.statSync(resolve_path).isFile()){
+                const o = path.parse(resolve_path);
+                console.log(o);
                 const params = {
                     Key: `${uuid()}.${o.ext}`,
                     Bucket: this.config.getBucket(),
-                    Body: fs.createReadStream(file)
+                    Body: fs.createReadStream(resolve_path)
                 };
+                console.log(params);
                 this.s3.upload(params, async (err, data) => {
+                    console.log("enter");
+                    console.log(err);
                     if (err){
-                        reject(err);
+                        const response: HttpResponseModel<IStreamResource> = {
+                            message: err.message,
+                            httpCode: 400
+                        };
+
+                        resolve(response);
                     }
+                    console.log("here");
                     console.log(data);
                     stream.s3Url = params.Key;
-                    fs.unlinkSync(file);
-                    const ret = await this.saveOrUpdate(stream);
-                    resolve(ret);
+                    fs.unlinkSync(resolve_path);
+                    const ret: any = await this.saveOrUpdate(stream);
+                    const response: HttpResponseModel<IStreamResource> = {
+                        httpCode: 200,
+                        message: "stream updated",
+                        data: ret.data
+                    };
+
+                    resolve(response);
                 });
-            });
+            }
+            else {
+                const response: HttpResponseModel<IStreamResource> = {
+                    httpCode: 400,
+                    message: "File not found"
+                };
+
+                resolve(response);
+            }
         });
     }
    

@@ -21,7 +21,7 @@ export class StreamsContoller {
     @Path("/")
     @GET
     public async list(){
-        return this.streamsService.findAll();
+        return (await this.streamsService.findAll());
     }
 
     @Produces("application/json;charset=UTF-8")
@@ -32,7 +32,7 @@ export class StreamsContoller {
     @POST
     @Path("/")
     public async insert(stream: IStreamResource){
-        return (this.streamsService.watchDirectory(stream));
+        return (await this.streamsService.watchDirectory(stream));
     }
 
     @Produces("application/json;charset=UTF-8")
@@ -43,7 +43,7 @@ export class StreamsContoller {
     @DELETE
     @Path("/:id")
     public async delete(@PathParam("id")id: number){
-        return (this.streamsService.deleteOne(id));
+        return (await this.streamsService.deleteOne(id));
     }
 
     @Produces("application/json;charset=UTF-8")
@@ -54,7 +54,7 @@ export class StreamsContoller {
     @PUT
     @Path("/")
     public async update(streamResource: IStreamResource){
-        return (this.streamsService.watchDirectory(streamResource));
+        return (await this.streamsService.watchDirectory(streamResource));
     }
 
     @Produces("application/json;charset=UTF-8")
@@ -64,6 +64,6 @@ export class StreamsContoller {
     @GET
     @Path("/:id")
     public async detail(@PathParam("id")id: number){
-        return (this.streamsService.getOne(id));
+        return (await this.streamsService.getOne(id));
     }
 }
