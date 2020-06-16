@@ -27,10 +27,10 @@ export abstract class ApiServer {
         this.app = express();
 
         Server.useIoC();
-        Container.configure(iocConfig);
         Container.environment(connectionName());
+        Container.configure(iocConfig);
         this.config();
-        Server.loadServices(this.app, 'controller/**/*.{js,ts}', __dirname);
+        Server.loadServices(this.app, 'controller/**/*.ts', __dirname);
         Server.swagger(this.app, { 
             swaggerUiOptions: {
                 customSiteTitle: 'BattleBots'
