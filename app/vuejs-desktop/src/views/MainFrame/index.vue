@@ -8,6 +8,15 @@
     .secondary-game-button:hover {
         box-shadow: 0 0 0 1px #10AC84 inset, 0 0 0 0 #10AC84 inset !important;
     }
+
+    .ui.modal .content.scrolling::-webkit-scrollbar-thumb {
+        background-color: white;
+    }
+
+    .ui.grid .row {
+
+        min-height: 100px;
+    }
 </style>
 
 <script lang="ts">
@@ -17,9 +26,15 @@ import { Vue, Component } from 'vue-property-decorator';
 export default class MainFrame extends Vue {
 
     openLoginRegisterModal = false;
-
+    helpModal = true;
+    energy = 100;
     mounted(): void {
-        
+        setInterval(() => {
+            if (this.energy === 0) {
+                this.energy = 101;
+            }
+            this.energy -= 0.5;
+        }, 150);
     }
 
     passThrough(): void {

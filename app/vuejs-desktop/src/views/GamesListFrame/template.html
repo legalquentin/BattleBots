@@ -18,9 +18,30 @@
                     <RouterLink :to="{ name: 'CreateGameFrame' }">
                         <SuiButton size="mini" @click="$router.back()" basic left icon label-position="right" icon="arrow up">Menu principal</SuiButton>
                     </RouterLink>
+                    
+                    <SuiButton size="mini" @click="disconnectModal = true" basic left icon color="red" icon="lock"></SuiButton>
                 </SuiGridColumn>
             </SuiGridRow>
         </SuiGrid>
+        <sui-modal basic inverted v-model="disconnectModal">
+            <sui-modal-header style="text-align: center; ">Se déconnecter ?</sui-modal-header>
+            
+            <sui-modal-actions style="text-align: center; margin-left: -10px">
+                <div is="sui-button-group">
+                    <sui-button color="red" @click.native="disconnect()">
+                        Confirmer
+                    </sui-button>
+                    <sui-button-or text="ou" />
+                    <sui-button @click.native="disconnectModal = false">
+                        Annuler
+                    </sui-button>
+                    
+                    
+                  </div>
+              
+              
+            </sui-modal-actions>
+          </sui-modal>
         <SuiDivider></SuiDivider>
         <SuiGrid>
             <SuiGridRow>

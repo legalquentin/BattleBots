@@ -56,7 +56,105 @@
         </SuiGridRow>
 
     </SuiGrid>
+    <sui-modal basic v-model="helpModal" scrolling>
+        <sui-modal-header>Comment jouer ?</sui-modal-header>
+        <sui-modal-content scrolling>
+          <sui-modal-description style="color: black">
+              <SuiSegment raised>
+                <h4 is="sui-header">
+                    <sui-icon color="black" name="plug" />
+                    Déplacements
+                </h4>
+                <SuiDivider></SuiDivider>
 
+                    <p>
+                        <b>Pour controler le robot, utilisez les touches directionelles de votre clavier :</b>
+                        <SuiGrid textAlign="center" style="width: 140px; margin-top: 20px; margin-left: 20px">
+                            <SuiGridRow :columns="3">
+                                <SuiGridColumn>
+
+                                </SuiGridColumn>
+                                <SuiGridColumn>
+                                    <SuiButton disabled icon="arrow up" color  style="box-shadow: 1px 1px 2px black !important" ></SuiButton>
+                                </SuiGridColumn>
+                                <SuiGridColumn></SuiGridColumn>
+                            </SuiGridRow>
+                            <SuiGridRow :columns="3" style="margin-top: -50px;">
+
+                                <SuiGridColumn>
+                                    <SuiButton style="box-shadow: 1px 1px 2px black !important" disabled icon="arrow left" color></SuiButton>
+                                </SuiGridColumn>
+                                <SuiGridColumn>
+                                    <SuiButton  style="box-shadow: 1px 1px 2px black !important" disabled icon="arrow down" color></SuiButton>
+                                </SuiGridColumn>
+                                <SuiGridColumn>
+                                    <SuiButton  style="box-shadow: 1px 1px 2px black !important"  disabled icon="arrow right" color></SuiButton>
+                                </SuiGridColumn>
+                            </SuiGridRow>
+                        </SuiGrid>
+                        
+                        
+                    </p>
+                </SuiSegment>
+                <SuiSegment raised>
+                    <h4 is="sui-header">
+                        <sui-icon color="black" name="plug" />
+                        Informations sur la partie et votre robot
+                    </h4>
+
+                    <SuiDivider></SuiDivider>
+
+                    <p>
+                        <b> Vous aurez accès aux informations suivantes tout au long de votre partie :</b>
+                    </p>
+                    <SuiGrid celled>
+                        <SuiGridRow :columns="2" verticalAlign="middle" textAlign="center">
+                            <SuiGridColumn :width="6">
+                                <sui-progress color="yellow" indicating :percent="energy" label="ENERGIE"/>
+                            </SuiGridColumn>
+                            <SuiGridColumn :width="10">
+                                L'energie restante de votre robot. Lorsqu'elle cette jauge atteint 0, le robot est immobilisé et la partie prend fin.
+                            </SuiGridColumn>
+                        </SuiGridRow>
+
+                        <SuiGridRow :columns="2" verticalAlign="middle" textAlign="center">
+                            <SuiGridColumn :width="10">
+                                Affiche le temps écoulé depuis le démarrage de la partie.
+                            </SuiGridColumn>
+                            <SuiGridColumn :width="6">
+                                <sui-statistic size="tiny">
+                                    <sui-statistic-value>0</sui-statistic-value>
+                                    <sui-statistic-label>secondes écoulées</sui-statistic-label>
+                                </sui-statistic>
+                            </SuiGridColumn>
+                            
+                        </SuiGridRow>
+
+                        <SuiGridRow :columns="2" verticalAlign="middle" textAlign="center">
+                            <SuiGridColumn :width="6">
+                                <sui-statistic size="tiny">
+                                    <sui-statistic-value>400</sui-statistic-value>
+                                    <sui-statistic-label>secondes restantes</sui-statistic-label>
+                                </sui-statistic>
+                            </SuiGridColumn>
+                            <SuiGridColumn :width="10">
+                                Affiche le temps restant avant la fin de la partie. Ce compteur peut être bloqué temporairement en utilisant le pack <b>Givre</b>
+                            </SuiGridColumn>
+                        </SuiGridRow>
+
+                        
+                    </SuiGrid>
+              
+                </SuiSegment>
+          </sui-modal-description>
+        </sui-modal-content>
+        <sui-modal-actions>
+          <sui-button @click.native="helpModal = false">
+            Fermer
+          </sui-button>
+        </sui-modal-actions>
+      </sui-modal>
+      
     <sui-modal size="large" :closeIcon="false" v-model="openLoginRegisterModal">
         <sui-modal-header style="text-align: center">Accès non autorisé <SuiIcon name="frown outline" color="red"></SuiIcon></sui-modal-header>
         <sui-modal-content>
