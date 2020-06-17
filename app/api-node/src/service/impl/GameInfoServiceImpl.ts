@@ -6,6 +6,7 @@ import { Inject } from "typescript-ioc";
 import HttpResponseModel from "../../resources/HttpResponseModel";
 import { GameRepository } from "../../database/repositories/GameRepository";
 import { StreamsService } from "../StreamsService";
+import { GameService } from "../GameService";
 
 export class GameInfoServiceImpl implements GameInfoService  {
 
@@ -14,6 +15,9 @@ export class GameInfoServiceImpl implements GameInfoService  {
 
     @Inject
     gameRepository: GameRepository;
+    
+    @Inject
+    gameService: GameService
 
     @Inject
     gameInfoResourceAsm: GameInfoResourceAsm;
@@ -58,7 +62,7 @@ export class GameInfoServiceImpl implements GameInfoService  {
                     encodage: "ffmpeg" 
                 });
             }
-            const r = await this.gameRepository.save(entity.game);
+            const r = await this.gameService.updateByWorker(gameInfo.game);
             console.log("response from gameRepository.update", r);
             const saved = await this.gameInfoRepository.save(entity);
             const resource = await this.gameInfoResourceAsm.toResource(saved);
