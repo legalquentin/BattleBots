@@ -116,7 +116,7 @@ export default class GameFrame extends Vue {
 
     if (message.dt === -1) { //  && message.dv === 0
       alert("La partie est terminée");
-      this.deleteGame(this.gameId);
+      // this.deleteGame(this.gameId);
 
       this.$router.back();
     }
