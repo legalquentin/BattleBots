@@ -37,7 +37,7 @@ export class GameInfoServiceImpl implements GameInfoService  {
             // entity.game.
             entity.game.ended_at = new Date();
             if (gameInfo.video_loser) {
-                await this.streamsService.watchDirectory({
+                this.streamsService.watchDirectory({
                     game: gameInfo.game,
                     s3Url: gameInfo.video_loser,
                     kinesisUrl: null,
@@ -46,8 +46,9 @@ export class GameInfoServiceImpl implements GameInfoService  {
                     duration: 1,
                     encodage: "ffmpeg" 
                 });
-            if (gameInfo.video_winner)
-                await this.streamsService.watchDirectory({
+            }
+            if (gameInfo.video_winner) {
+                this.streamsService.watchDirectory({
                     game: gameInfo.game,
                     s3Url: gameInfo.video_winner,
                     kinesisUrl: null,
@@ -57,7 +58,6 @@ export class GameInfoServiceImpl implements GameInfoService  {
                     encodage: "ffmpeg" 
                 });
             }
-            console.log("saving", entity)
             await this.gameRepository.update(entity.game.id, entity.game);
             const saved = await this.gameInfoRepository.save(entity);
             const resource = await this.gameInfoResourceAsm.toResource(saved);
