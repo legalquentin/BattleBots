@@ -50,7 +50,7 @@ func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	defer f.Close()
+	defer file.Close()
 
 	bufferedWriter := bufio.NewWriter(file)
 
@@ -68,7 +68,7 @@ func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
 			log.Println(prefixWarn, err)
 			return
 		}
-		written, error := bufferedWriter.Write(p)
+		_, error := bufferedWriter.Write(p)
 		if err != nil {
 			return
 		}
