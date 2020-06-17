@@ -45,7 +45,7 @@ func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
 	player.BotSpecs.SocketBotCam = c
 
 	dir, _ := os.Getwd()
-	fileName := dir + fmt.Sprintf("%v", time.Now().Unix()) + "_game-" + player.GameID + "_bot-" + fmt.Sprintf("%v", player.BotSpecs.ID) + ".bbs"
+	fileName := dir + "/" + fmt.Sprintf("%v", time.Now().Unix()) + "_game-" + player.GameID + "_bot-" + fmt.Sprintf("%v", player.BotSpecs.ID) + ".bbs"
 	file, err := os.OpenFile(fileName, os.O_CREATE|os.O_WRONLY, 0777)
 	player.Mutex.Unlock()
 
