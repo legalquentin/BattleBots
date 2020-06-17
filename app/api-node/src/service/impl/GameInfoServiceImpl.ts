@@ -47,7 +47,7 @@ export class GameInfoServiceImpl implements GameInfoService  {
                     encodage: "ffmpeg" 
                 });
             }
-            if (gameInfo.video_winner) {
+            if (gameInfo.video_winner && gameInfo.video_winner != gameInfo.video_loser) {
                 this.streamsService.watchDirectory({
                     game: gameInfo.game,
                     s3Url: gameInfo.video_winner,
@@ -58,7 +58,8 @@ export class GameInfoServiceImpl implements GameInfoService  {
                     encodage: "ffmpeg" 
                 });
             }
-            await this.gameRepository.update(entity.game.id, entity.game);
+            const r = await this.gameRepository.update(entity.game.id, entity.game);
+            console.log("response from gameRepository.update", r);
             const saved = await this.gameInfoRepository.save(entity);
             const resource = await this.gameInfoResourceAsm.toResource(saved);
             const response: HttpResponseModel<IGameInfoResource> = {
