@@ -5,6 +5,7 @@ import { GameInfoResourceAsm } from "../../resources/asm/GameInfoResourceAsm";
 import { Inject } from "typescript-ioc";
 import HttpResponseModel from "../../resources/HttpResponseModel";
 import { GameRepository } from "../../database/repositories/GameRepository";
+import { StreamsService } from "../StreamsService";
 
 export class GameInfoServiceImpl implements GameInfoService  {
 
@@ -17,6 +18,10 @@ export class GameInfoServiceImpl implements GameInfoService  {
     @Inject
     gameInfoResourceAsm: GameInfoResourceAsm;
 
+    @Inject
+    streamsService: StreamsService;
+
+
     public async save(gameInfo: IGameInfoResource): Promise<HttpResponseModel<IGameInfoResource>> {
         try {
             const entity = await this.gameInfoResourceAsm.toEntity(gameInfo);
@@ -24,13 +29,33 @@ export class GameInfoServiceImpl implements GameInfoService  {
                 const response: HttpResponseModel<IGameInfoResource> = {
                     httpCode: 400,
                     message: "bad request"
-                };
-            
+                };            
                 return(response);
             }
             entity.game = await this.gameRepository.findOne(entity.game.id);
             entity.game.game_status = gameInfo.game.status;
+            // entity.game.
             entity.game.ended_at = new Date();
+            if (gameInfo.video_loser) {
+                await this.streamsService.watchDirectory({
+                    game: gameInfo.game,
+                    s3Url: gameInfo.video_loser,
+                    kinesisUrl: null,
+                    private: 0,
+                    running: 0,
+                    duration: 1,
+                    encodage: "ffmpeg" 
+                });
+                await this.streamsService.watchDirectory({
+                    game: gameInfo.game,
+                    s3Url: gameInfo.video_winner,
+                    kinesisUrl: null,
+                    private: 0,
+                    running: 0,
+                    duration: 1,
+                    encodage: "ffmpeg" 
+                });
+            }
             await this.gameRepository.update(entity.game.id, entity.game);
             const saved = await this.gameInfoRepository.save(entity);
             const resource = await this.gameInfoResourceAsm.toResource(saved);
