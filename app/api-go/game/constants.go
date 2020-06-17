@@ -31,6 +31,13 @@ const GameDuration = 5
 var RunningBots = []*Bot{}
 
 // TODO: Define types
-const TYPE_DISCONNECT = -1
-const TYPE_ENERGY = 1
-const TYPE_OVERHEAT = 2
+const TypeDisconnect = -1
+const TypeEnergy = 1
+const TypeOverheat = 2
+
+type GameStatus int
+
+const StatusCreated = "CREATED"
+const StatusStarted = "STARTED"
+const StatusStopped = "STOPPED"
+const StatusEnded = "ENDED"

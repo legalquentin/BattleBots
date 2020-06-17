@@ -8,6 +8,7 @@ import (
 	"crypto/rand"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"sync"
 	"time"
@@ -54,17 +55,82 @@ func CreateGame(res http.ResponseWriter, req *http.Request) {
 	return
 }
 
-func updateGameAPI(game Game) {
+func updateGameAPI(gameInfo NodeGameInfo) {
+	url := "http://hardwar.ddns.net/api/games/worker_end"
+	fmt.Println(prefixLog, url)
 
+	requestByte, _ := json.Marshal(gameInfo)
+	req, err := http.NewRequest("POST", url, bytes.NewReader(requestByte))
+	if err != nil {
+		panic(err)
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	fmt.Println(prefixLog, "response Status:", resp.Status)
+	// fmt.Println(prefixLog, "response Headers:", resp.Header)
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println(prefixLog, "response Body:", string(body))
+}
+
+func terminateGameAPI(game Game) {
+	game.EndedAt = time.Now()
+	bots := []NodeBots{}
+
+	for _, player := range game.Players {
+		pid, err := strconv.ParseInt(player.ID, 10, 16)
+		if err != nil {
+			panic(err)
+		}
+		bots = append(bots, NodeBots{player.BotSpecs.ID, player.BotSpecs.Address, NodePlayer{int16(pid)}})
+	}
+
+	var ngi = NodeGameInfo{
+		WinnerID:     "",
+		LoserID:      "",
+		WinnerPoints: 0,
+		LoserPoints:  0,
+		VideoLoser:   "",
+		VideoWinner:  "",
+		Game: NodeGame{
+			game.Name,
+			game.Token,
+			game.Started,
+			game.TTL,
+			game.StartedAt.Unix(),
+			game.EndedAt.Unix(),
+			game.CreatedAt.Unix(),
+			game.Env,
+			bots,
+			StatusStopped,
+		},
+	}
+	updateGameAPI(ngi)
+}
+
+func finishGameAPI(game Game) {
 	winner := game.Players[0]
 	loser := game.Players[0]
 	min := game.Players[0]
+	bots := []NodeBots{}
 	for _, player := range game.Players {
 		if player.BotContext.Energy > min.BotContext.Energy {
 			winner = player
 		} else {
 			loser = player
 		}
+		pid, err := strconv.ParseInt(player.ID, 10, 16)
+		if err != nil {
+			panic(err)
+		}
+		bots = append(bots, NodeBots{player.BotSpecs.ID, player.BotSpecs.Address, NodePlayer{int16(pid)}})
 	}
 
 	game.EndedAt = time.Now()
@@ -85,23 +151,18 @@ func updateGameAPI(game Game) {
 			game.EndedAt.Unix(),
 			game.CreatedAt.Unix(),
 			game.Env,
-			game.Players,
+			bots,
+			StatusEnded,
 		},
 	}
-
-	url := "http://hardwar.ddns.net/api/games/worker_end"
-	fmt.Println(prefixLog, url)
-
-	requestByte, _ := json.Marshal(ngi)
-	req, err := http.NewRequest("POST", url, bytes.NewReader(requestByte))
+	updateGameAPI(ngi)
 }
 
-func terminateGame(game Game) {
-	updateGameAPI(game)
+func closePlayerConn(game Game) {
 	for _, player := range game.Players {
 		player.Mutex.Lock()
 		player.BotSpecs.SocketClientCam.Close()
-		player.BotSpecs.SocketClientCtrl.WriteJSON(Data{Type: TYPE_DISCONNECT, Value: 0})
+		player.BotSpecs.SocketClientCtrl.WriteJSON(Data{Type: TypeDisconnect, Value: 0})
 		player.BotSpecs.SocketClientCtrl.Close()
 		player.BotSpecs.SocketBotCam.Close()
 		player.BotSpecs.SocketBotCtrl.Close()
@@ -117,14 +178,15 @@ func Daemon() {
 			fmt.Println(key, len(game.Players), game.CreatedAt.Sub(tnow).Minutes())
 			if tnow.Sub(game.CreatedAt).Minutes() > float64(GameDuration) {
 				// log.Println(prefixWarn, "DELETING game [", game.Name, "] reached 5 minutes")
-				terminateGame(game)
+				finishGameAPI(game)
+				closePlayerConn(game)
 				delete(baseGameInstances, key)
 			} else {
 				for _, player := range game.Players {
 					if player.BotSpecs.SocketClientCtrl != nil {
-						// k := Data{Type: TYPE_ENERGY, Value: player.BotContext.Energy}
+						// k := Data{Type: TypeEnergy, Value: player.BotContext.Energy}
 						// player.BotSpecs.SocketClientCtrl.WriteJSON(&k)
-						// k = Data{Type: TYPE_OVERHEAT, Value: player.BotContext.Heat}
+						// k = Data{Type: TypeOverheat, Value: player.BotContext.Heat}
 						// player.BotSpecs.SocketClientCtrl.WriteJSON(&k)
 					}
 				}
@@ -209,7 +271,8 @@ func DeleteGame(res http.ResponseWriter, req *http.Request) {
 	}
 	if _, ok := baseGameInstances[key[0]]; ok {
 		// TODO: remove ressources created by the game, close player sockets etc..
-		terminateGame(baseGameInstances[key[0]])
+		terminateGameAPI(baseGameInstances[key[0]])
+		closePlayerConn(baseGameInstances[key[0]])
 		delete(baseGameInstances, key[0])
 		log.Println(prefixLog, "deleted game: "+key[0])
 		json.NewEncoder(res).Encode(&Response{"deleted, closing connections", 200})
