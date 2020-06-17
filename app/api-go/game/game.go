@@ -36,6 +36,7 @@ func CreateGame(res http.ResponseWriter, req *http.Request) {
 		http.Error(res, "Game already exist", 400)
 		return
 	}
+
 	baseGameInstances[id] = Game{
 		Name:      t.Name,
 		Token:     t.Token,
@@ -93,12 +94,12 @@ func terminateGameAPI(game Game) {
 	}
 
 	var ngi = NodeGameInfo{
-		WinnerID:     "",
-		LoserID:      "",
+		WinnerID:     "NA",
+		LoserID:      "NA",
 		WinnerPoints: 0,
 		LoserPoints:  0,
-		VideoLoser:   "",
-		VideoWinner:  "",
+		VideoLoser:   "NA",
+		VideoWinner:  "NA",
 		Game: NodeGame{
 			game.Name,
 			game.Token,
@@ -140,8 +141,8 @@ func finishGameAPI(game Game) {
 		LoserID:      loser.ID,
 		WinnerPoints: winner.BotContext.Energy,
 		LoserPoints:  loser.BotContext.Energy,
-		VideoLoser:   "",
-		VideoWinner:  "",
+		VideoLoser:   loser.Stream,
+		VideoWinner:  winner.Stream,
 		Game: NodeGame{
 			game.Name,
 			game.Token,
@@ -225,7 +226,7 @@ func JoinGame(res http.ResponseWriter, req *http.Request) {
 			if b.Taken == false {
 				log.Println(prefixLog, "reserving a bot")
 				// TODO: add a real token generation
-				p = Player{t.PlayerID, tokenGenerator(), &b, Context{Moving: false, Energy: 100, Heat: 0}, sync.Mutex{}}
+				p = Player{t.PlayerID, tokenGenerator(), &b, Context{Moving: false, Energy: 100, Heat: 0}, "", t.GameID, sync.Mutex{}}
 				b.Taken = true
 				var g = baseGameInstances[t.GameID]
 				p.Mutex.Lock()

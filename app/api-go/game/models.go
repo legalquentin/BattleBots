@@ -32,6 +32,8 @@ type Player struct {
 	// botAttr  BotAttr
 	BotSpecs   *Bot    `json:"botSpecs,omitempty"`
 	BotContext Context `json:"botContext,omitempty"`
+	Stream     string  `json:"stream,omitempty"`
+	GameID     string  `json:"gameID"`
 	Mutex      sync.Mutex
 }
 

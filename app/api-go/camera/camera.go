@@ -44,7 +44,8 @@ func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
 	}
 	player.BotSpecs.SocketBotCam = c
 
-	fileName := fmt.Sprintf("%v", player.BotSpecs.ID) + "_" + fmt.Sprintf("%v", time.Now().Unix()) + ".bbs"
+	dir, _ := os.Getwd()
+	fileName := dir + fmt.Sprintf("%v", time.Now().Unix()) + "_game-" + player.GameID + "_bot-" + fmt.Sprintf("%v", player.BotSpecs.ID) + ".bbs"
 	file, err := os.OpenFile(fileName, os.O_CREATE|os.O_WRONLY, 0777)
 	player.Mutex.Unlock()
 
@@ -54,6 +55,7 @@ func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
 	defer file.Close()
 
 	bufferedWriter := bufio.NewWriter(file)
+	player.Stream = fileName
 
 	// Read c(robot) video stream and write to conn(client)
 	defer conn.Close()
