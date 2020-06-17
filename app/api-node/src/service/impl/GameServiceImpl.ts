@@ -60,7 +60,6 @@ export class GameServiceImpl implements GameService {
             const saved = await this.serviceFactory.getGameRepository().saveOrUpdate(entity);
             const resource = await gameResourceAsm.toResource(saved);
             game.id = saved.id;
-            /*
             const r = await this.battleWorkerService.startGoWorker(game);
             if (!r || !r.token || !r.game) {
                 const response: HttpResponseModel<IGameResource> = {
@@ -73,7 +72,6 @@ export class GameServiceImpl implements GameService {
             }
             resource.token = r.token;
             resource.secret = r.secret;
-            */
             const response : HttpResponseModel<IGameResource> = {
                 httpCode: httpCode,
                 message: "game create",
