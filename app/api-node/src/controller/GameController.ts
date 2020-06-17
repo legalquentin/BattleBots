@@ -63,9 +63,9 @@ export class GameController {
     @Response<HttpResponseModel<IGameResource>>(200)
     @Response<HttpResponseModel<IGameResource>>(400)
     public async endGame(resource: IGameInfoResource){
-        if (resource.game){
-            resource.game.status = EGameStatus.ENDED;
-        }
+        // if (resource.game){
+        resource.game.status = EGameStatus.ENDED;
+        // }
         return this.gameInfoService.save(resource);
     }
 

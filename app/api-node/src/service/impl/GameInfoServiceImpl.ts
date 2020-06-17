@@ -56,6 +56,7 @@ export class GameInfoServiceImpl implements GameInfoService  {
                     encodage: "ffmpeg" 
                 });
             }
+            console.log("saving", entity)
             await this.gameRepository.update(entity.game.id, entity.game);
             const saved = await this.gameInfoRepository.save(entity);
             const resource = await this.gameInfoResourceAsm.toResource(saved);
