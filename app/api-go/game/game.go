@@ -60,7 +60,7 @@ func updateGameAPI(gameInfo NodeGameInfo) {
 	fmt.Println(prefixLog, url)
 
 	requestByte, _ := json.Marshal(gameInfo)
-	req, err := http.NewRequest("POST", url, bytes.NewReader(requestByte))
+	req, err := http.NewRequest("PUT", url, bytes.NewReader(requestByte))
 	if err != nil {
 		panic(err)
 	}
