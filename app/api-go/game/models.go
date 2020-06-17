@@ -173,6 +173,7 @@ type NodeBots struct {
 
 // NodeGame useful for converting ts to epoch
 type NodeGame struct {
+	ID        int16         `json:"id,omitempty"`
 	Name      string        `json:"name,omitempty"`
 	Token     string        `json:"token,omitempty"`
 	Started   bool          `json:"started,omitempty"`

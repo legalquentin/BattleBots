@@ -81,7 +81,7 @@ func updateGameAPI(gameInfo NodeGameInfo) {
 	fmt.Println(prefixLog, "response Body:", string(body))
 }
 
-func terminateGameAPI(game Game) {
+func terminateGameAPI(game Game, id string) {
 	game.EndedAt = time.Now()
 	bots := []NodeBots{}
 
@@ -92,6 +92,7 @@ func terminateGameAPI(game Game) {
 		}
 		bots = append(bots, NodeBots{player.BotSpecs.ID, player.BotSpecs.Address, NodePlayer{int16(pid)}})
 	}
+	i, _ := strconv.Atoi(id)
 
 	var ngi = NodeGameInfo{
 		WinnerID:     "NA",
@@ -101,6 +102,7 @@ func terminateGameAPI(game Game) {
 		VideoLoser:   "NA",
 		VideoWinner:  "NA",
 		Game: NodeGame{
+			int16(i),
 			game.Name,
 			game.Token,
 			game.Started,
@@ -116,7 +118,7 @@ func terminateGameAPI(game Game) {
 	updateGameAPI(ngi)
 }
 
-func finishGameAPI(game Game) {
+func finishGameAPI(game Game, id string) {
 	winner := game.Players[0]
 	loser := game.Players[0]
 	min := game.Players[0]
@@ -135,6 +137,7 @@ func finishGameAPI(game Game) {
 	}
 
 	game.EndedAt = time.Now()
+	i, _ := strconv.Atoi(id)
 
 	var ngi = NodeGameInfo{
 		WinnerID:     winner.ID,
@@ -144,6 +147,7 @@ func finishGameAPI(game Game) {
 		VideoLoser:   loser.Stream,
 		VideoWinner:  winner.Stream,
 		Game: NodeGame{
+			int16(i),
 			game.Name,
 			game.Token,
 			game.Started,
@@ -179,7 +183,7 @@ func Daemon() {
 			fmt.Println(key, len(game.Players), game.CreatedAt.Sub(tnow).Minutes())
 			if tnow.Sub(game.CreatedAt).Minutes() > float64(GameDuration) {
 				// log.Println(prefixWarn, "DELETING game [", game.Name, "] reached 5 minutes")
-				finishGameAPI(game)
+				finishGameAPI(game, key)
 				closePlayerConn(game)
 				delete(baseGameInstances, key)
 			} else {
@@ -272,7 +276,7 @@ func DeleteGame(res http.ResponseWriter, req *http.Request) {
 	}
 	if _, ok := baseGameInstances[key[0]]; ok {
 		// TODO: remove ressources created by the game, close player sockets etc..
-		terminateGameAPI(baseGameInstances[key[0]])
+		terminateGameAPI(baseGameInstances[key[0]], key[0])
 		closePlayerConn(baseGameInstances[key[0]])
 		delete(baseGameInstances, key[0])
 		log.Println(prefixLog, "deleted game: "+key[0])
