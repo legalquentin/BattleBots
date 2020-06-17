@@ -6,11 +6,28 @@
       <router-link to="/coco">Coco l'asticot</router-link>
     </div>
     -->
+    
     <router-view/>
   </div>
 </template>
 
 <style lang="less">
+
+// When using <transition name>, we have weird unknow render bug. Need more efforts
+
+// .fade-enter-active, .fade-leave-active {
+//   transition-property: opacity;
+//   transition-duration: .30s;
+// }
+
+// .fade-enter-active {
+//   transition-delay: .30s;
+// }
+
+// .fade-enter, .fade-leave-active {
+//   opacity: 0
+// }
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

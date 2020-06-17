@@ -75,20 +75,20 @@
 
                                 </SuiGridColumn>
                                 <SuiGridColumn>
-                                    <SuiButton disabled icon="arrow up" color  style="box-shadow: 1px 1px 2px black !important" ></SuiButton>
+                                    <SuiButton disabled icon="arrow up" style="box-shadow: 1px 1px 2px black !important" ></SuiButton>
                                 </SuiGridColumn>
                                 <SuiGridColumn></SuiGridColumn>
                             </SuiGridRow>
                             <SuiGridRow :columns="3" style="margin-top: -50px;">
 
                                 <SuiGridColumn>
-                                    <SuiButton style="box-shadow: 1px 1px 2px black !important" disabled icon="arrow left" color></SuiButton>
+                                    <SuiButton style="box-shadow: 1px 1px 2px black !important" disabled icon="arrow left"></SuiButton>
                                 </SuiGridColumn>
                                 <SuiGridColumn>
-                                    <SuiButton  style="box-shadow: 1px 1px 2px black !important" disabled icon="arrow down" color></SuiButton>
+                                    <SuiButton  style="box-shadow: 1px 1px 2px black !important" disabled icon="arrow down"></SuiButton>
                                 </SuiGridColumn>
                                 <SuiGridColumn>
-                                    <SuiButton  style="box-shadow: 1px 1px 2px black !important"  disabled icon="arrow right" color></SuiButton>
+                                    <SuiButton  style="box-shadow: 1px 1px 2px black !important"  disabled icon="arrow right"></SuiButton>
                                 </SuiGridColumn>
                             </SuiGridRow>
                         </SuiGrid>
@@ -98,7 +98,7 @@
                 </SuiSegment>
                 <SuiSegment raised>
                     <h4 is="sui-header">
-                        <sui-icon color="black" name="plug" />
+                        <sui-icon name="plug" />
                         Informations sur la partie et votre robot
                     </h4>
 
@@ -110,7 +110,7 @@
                     <SuiGrid celled>
                         <SuiGridRow :columns="2" verticalAlign="middle" textAlign="center">
                             <SuiGridColumn :width="6">
-                                <sui-progress color="yellow" indicating :percent="energy" label="ENERGIE"/>
+                                <sui-progress indicating :percent="energy" label="ENERGIE"/>
                             </SuiGridColumn>
                             <SuiGridColumn :width="10">
                                 L'energie restante de votre robot. Lorsqu'elle cette jauge atteint 0, le robot est immobilisé et la partie prend fin.

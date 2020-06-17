@@ -14,7 +14,6 @@
     }
 
     .ui.grid .row {
-
         min-height: 100px;
     }
 </style>
@@ -31,10 +30,12 @@ export default class MainFrame extends Vue {
     mounted(): void {
         setInterval(() => {
             if (this.energy === 0) {
-                this.energy = 101;
+                this.energy = 100;
             }
-            this.energy -= 0.5;
-        }, 150);
+            if (this.helpModal) {
+                this.energy -= 5;
+            }
+        }, 1000);
     }
 
     passThrough(): void {
