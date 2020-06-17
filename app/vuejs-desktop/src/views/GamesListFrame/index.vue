@@ -10,9 +10,9 @@
 </style>
 
 <script lang="ts">
-import { Vue, Component, Watch } from "vue-property-decorator";
-import axios from "axios";
-import _ from "lodash";
+import { Vue, Component, Watch } from 'vue-property-decorator';
+import axios from 'axios';
+import _ from 'lodash';
 
 import IGame from '../../types/IGame';
 
@@ -28,15 +28,16 @@ abstract class AVue extends Vue {
 @Component
 export default class GamesListFrame extends AVue {
   private gamesList: IGame[] = [];
+  private disconnectModal: boolean = false;
 
   protected async displayed() {
-    const jwt: string|null = localStorage.getItem("jwt");
+    const jwt: string|null = localStorage.getItem('jwt');
     if (!_.size(jwt)) {
-      this.$router.push({ name: "MainFrame" });
+      this.$router.push({ name: 'MainFrame' });
     }
 
     try {
-      const result = await axios.get("http://hardwar.ddns.net/api/games", {
+      const result = await axios.get('http://hardwar.ddns.net/api/games', {
         headers: {
           Authorization: `Bearer ${jwt}`
         }
@@ -48,9 +49,9 @@ export default class GamesListFrame extends AVue {
   }
 
   private async joinGame(gameId: number) {
-    const jwt: string|null = localStorage.getItem("jwt");
+    const jwt: string|null = localStorage.getItem('jwt');
     if (!_.size(jwt)) {
-      this.$router.push({ name: "MainFrame" });
+      this.$router.push({ name: 'MainFrame' });
     }
 
     try {
@@ -67,9 +68,9 @@ export default class GamesListFrame extends AVue {
   }
 
   private async deleteGame(gameId: number) {
-    const jwt: string|null = localStorage.getItem("jwt");
+    const jwt: string|null = localStorage.getItem('jwt');
     if (!_.size(jwt)) {
-      this.$router.push({ name: "MainFrame" });
+      this.$router.push({ name: 'MainFrame' });
     }
 
     try {
@@ -84,5 +85,12 @@ export default class GamesListFrame extends AVue {
         console.error(error);
     }
   }
+
+  disconnect() {
+    this.disconnectModal = false;
+    localStorage.removeItem('jwt');
+    this.$router.push({ name: 'MainFrame' });
+  }
+
 }
 </script>

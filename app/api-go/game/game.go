@@ -59,7 +59,7 @@ func updateGameAPI(game Game) {
 	winner := game.Players[0]
 	loser := game.Players[0]
 	min := game.Players[0]
-	for idx, player := range game.Players {
+	for _, player := range game.Players {
 		if player.BotContext.Energy > min.BotContext.Energy {
 			winner = player
 		} else {

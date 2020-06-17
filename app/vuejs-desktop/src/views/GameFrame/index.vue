@@ -58,6 +58,8 @@ export default class GameFrame extends Vue {
   elapsedTime: number = 0;
   remainingTime: number = 0;
 
+  helpModal: boolean = false;
+
   mounted() {
     if (!this.playerId) {
       alert("Something goes wrong. Please try login again...");

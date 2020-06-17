@@ -8,6 +8,7 @@ import RegisterFrame from '@/views/RegisterFrame/index.vue';
 import LoginFrame from '@/views/LoginFrame/index.vue';
 import GamesListFrame from '@/views/GamesListFrame/index.vue';
 import CreateGameFrame from '@/views/CreateGameFrame/index.vue';
+import EndOfGameFrame from '@/views/EndOfGameFrame/index.vue';
 
 Vue.use(VueRouter)
 
@@ -62,6 +63,12 @@ const routes = [
     name: 'CreateGameFrame',
     component: CreateGameFrame,
   },
+
+  {
+    path: '/EndOfGameFrame',
+    name: 'EndOfGameFrame',
+    component: EndOfGameFrame,
+  }
 ];
 
 const router = new VueRouter({
