@@ -68,8 +68,9 @@ func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
 			log.Println(prefixWarn, err)
 			return
 		}
-		_, error := bufferedWriter.Write(p)
-		if err != nil {
+		_, err2 := bufferedWriter.Write(p)
+		if err2 != nil {
+			log.Println(prefixErr, err2)
 			return
 		}
 	}
