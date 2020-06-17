@@ -59,11 +59,12 @@ export class StreamsServiceImpl implements StreamsService {
                 const o = path.parse(resolve_path);
                 console.log(o);
                 const params = {
-                    Key: `${uuid()}.${o.ext}`,
+                    Key: `${uuid()}${o.ext}`,
                     Bucket: this.config.getBucket(),
                     Body: fs.createReadStream(resolve_path)
                 };
-                console.log(params);
+                console.log(params.Bucket);
+                console.log(params.Key);
                 this.s3.upload(params, async (err, data) => {
                     console.log("enter");
                     console.log(err);
@@ -73,10 +74,9 @@ export class StreamsServiceImpl implements StreamsService {
                             httpCode: 400
                         };
 
-                        resolve(response);
+                        return resolve(response);
                     }
                     console.log("here");
-                    console.log(data);
                     stream.s3Url = params.Key;
                     fs.unlinkSync(resolve_path);
                     const ret: any = await this.saveOrUpdate(stream);

@@ -1,5 +1,4 @@
-import { AbstractEntity } from "./AbstractEntity";
-import { Entity, Column, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
+import { Entity, Column, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { ArenaEntity } from "./ArenaEntity";
 import { RobotGameEntity } from "./RobotGameEntity";
 import { StreamsEntity } from "./StreamsEntity";
@@ -9,7 +8,19 @@ import { GameInfoEntity } from "./GameInfoEntity";
 @Entity({
     name: "games"
 })
-export class GameEntity extends AbstractEntity {
+export class GameEntity  {
+
+    @PrimaryGeneratedColumn({ name: 'id' })
+    public id?: number;
+
+    @Column({name: "created_at"})
+    public created_at: Date;
+
+    @Column({name: "started_at"})
+    public started_at: Date;
+
+    @Column({name: "ended_at"})
+    public ended_at: Date;
 
     @Column({ name: "game_name", nullable: false })
     public game_name: string;

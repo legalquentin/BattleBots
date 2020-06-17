@@ -166,3 +166,5 @@ log - preRequest - error - relation "log" does not exist
 log - preRequest - error - relation "log" does not exist
 log - preRequest - error - relation "log" does not exist
 log - preRequest - error - relation "log" does not exist
+Error {"diagnosticText":"src/resources/IGameInfoResource.ts(1,1): error TS6133: 'IGameProfileResource' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+Error {"diagnosticText":"src/controller/UserController.ts(29,13): error TS6133: 'playerService' is declared but its value is never read.\n","diagnosticCodes":[6133]}

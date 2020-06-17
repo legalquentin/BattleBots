@@ -3,9 +3,9 @@ import { RobotsEntity } from "../entities/RobotsEntity";
 import { Singleton, Container } from "typescript-ioc";
 import { EntityError } from "../../../lib/EntityError";
 import { EEntityStatus } from "../../../lib/EEntityStatus";
-import { PlayerRepository } from "./PlayerRepository";
 import { StreamsRepository } from "./StreamsRepository";
 import { connectionName } from "../../service/util/connectionName"; 
+import { UserRepository } from "./UserRepository";
 
 @Singleton
 @EntityRepository(RobotsEntity)
@@ -39,26 +39,26 @@ export class BotsRepository extends Repository<RobotsEntity> {
     {
         return (this.
         createQueryBuilder("bots").
-        leftJoinAndSelect("bots.player", "player").
+        leftJoinAndSelect("bots.user", "user").
         where("bots.id = :id", {
             "id": id
         }).getOne());
     }
 
     public async linkBotToPlayer(botId: number, playerId: number): Promise<RobotsEntity> {
-        const playerRepository = Container.get(PlayerRepository);
+        const userRepository = Container.get(UserRepository);
         try {
             const bot = await this.findOne(botId);
 
             if (!bot){
                 throw new EntityError(EEntityStatus.NOT_FOUND, "bot not found");
             }
-            const player = await playerRepository.findOne(playerId);
+            const player = await userRepository.findOne(playerId);
 
             if (!player){
                 throw new EntityError(EEntityStatus.NOT_FOUND, "player not found");
             }
-            bot.player = player;
+            bot.user = player;
             await this.update(bot.id, bot);
             return (bot);
         }

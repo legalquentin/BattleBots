@@ -1,4 +1,3 @@
-import IGameProfileResource from "./IGameProfileResource";
 import { IGameResource } from "./IGameResource";
 
 export class IGameInfoResource {
@@ -11,6 +10,7 @@ export class IGameInfoResource {
     video_winner?: string;
     video_loser?: string;
     game?: IGameResource;
+    id?: number;
     // created_at?: Date;
     // updated_at?: Date;
 }

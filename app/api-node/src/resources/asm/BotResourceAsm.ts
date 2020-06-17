@@ -4,8 +4,8 @@ import { Singleton, Container } from "typescript-ioc";
 //import { GameProfileResourceAsm } from "./GameProfileResourceAsm";
 import { ArenaEntity } from "../../database/entities/ArenaEntity";
 import { RobotsArenaEntity } from "../../database/entities/RobotsArenaEntity";
-import { GameProfileResourceAsm } from "./GameProfileResourceAsm";
 import { StreamsResourceAsm } from "./StreamsResourceAsm";
+import { UserResourceAsm } from "./UserResourceAsm";
 /*
 import { GameResourceAsm } from "./GameResourceAsm";
 import { StreamsResourceAsm } from "./StreamsResourceAsm";
@@ -26,7 +26,7 @@ export class BotResourceAsm {
     */
 
     public async toResource(robot: RobotsEntity) {
-        const gameProfileResourceAsm = Container.get(GameProfileResourceAsm);
+        const userResourceAsm = Container.get(UserResourceAsm);
         const streamResourceAsm = Container.get(StreamsResourceAsm);
         const resource : IBotsResource = {
             id: robot.id,
@@ -40,8 +40,8 @@ export class BotResourceAsm {
             name: robot.name
         };
 
-        if (robot.player){
-            resource.gameProfile = await gameProfileResourceAsm.toResource(robot.player);
+        if (robot.user){
+            resource.gameProfile = await userResourceAsm.toResource(robot.user);
         }
         /*
         if (robot.robotGame){
@@ -79,7 +79,7 @@ export class BotResourceAsm {
 
     public async toEntity(bot: IBotsResource) {
         const robot = new RobotsEntity();
-        const gameProfileResourceAsm = Container.get(GameProfileResourceAsm);
+        const userResourceAsm = Container.get(UserResourceAsm);
 
         robot.id = bot.id;
         robot.botIp = bot.botIp;
@@ -91,7 +91,7 @@ export class BotResourceAsm {
         robot.running = bot.running;
         robot.name = bot.name;
         if (bot.gameProfile){
-            robot.player = gameProfileResourceAsm.toEntity(bot.gameProfile);
+            robot.user = await userResourceAsm.toEntity(bot.gameProfile);
         }
         /*
         if (bot.streams){

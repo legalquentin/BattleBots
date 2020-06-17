@@ -1,4 +1,4 @@
-import IGameProfileResource from "./IGameProfileResource";
+import { IBotsResource } from "./IBotsResource";
 
 export default interface IUserResource {
     id?: number;
@@ -11,5 +11,5 @@ export default interface IUserResource {
     createdAt?: string;
     updatedAt?: string;
     password?: string;
-    gameProfile?: Array<IGameProfileResource>
+    gameProfile?: Array<IBotsResource>
 };

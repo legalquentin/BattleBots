@@ -33,16 +33,6 @@ export class gameInfo1591709632400 implements MigrationInterface {
                     "isNullable": false
                 },
                 {
-                    "name": "gamestarted_at",
-                    "type": "timestamp",
-                    "isNullable": false
-                },
-                {
-                    "name": "gameended_at",
-                    "type": "timestamp",
-                    "isNullable": false
-                },
-                {
                     "name": "video_winner",
                     "type": "varchar",
                     "isNullable": false

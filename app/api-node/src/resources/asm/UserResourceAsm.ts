@@ -28,12 +28,12 @@ export class UserResourceAsm {
         return resources;
     }
 
-    public toEntity(resource: IUserResource){
-        return this.userGameProfileResourceAsm.toUserEntity(resource);
+    public async toEntity(resource: IUserResource){
+        return await this.userGameProfileResourceAsm.toUserEntity(resource);
     }
 
-    public toAdminEntity(resource: IUserResource){
-        const entity = this.toEntity(resource);
+    public async toAdminEntity(resource: IUserResource){
+        const entity = await this.toEntity(resource);
 
         entity.roles = ERolesStatus.ROLE_ADMIN;
         return (entity);

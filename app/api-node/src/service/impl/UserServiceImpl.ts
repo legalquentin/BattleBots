@@ -26,8 +26,7 @@ export class UserServiceImpl implements UserService {
         const userResourceAsm = Container.get(UserResourceAsm);
 
         try {
-            const entity = userResourceAsm.toEntity(user);
-
+            const entity = await userResourceAsm.toEntity(user);
             entity.roles = ERolesStatus.ROLE_USER;
             if (!entity.hash){
                 const response: HttpResponseModel<IResourceId> = {
@@ -37,8 +36,8 @@ export class UserServiceImpl implements UserService {
     
                 return Promise.resolve(new SendResource<HttpResponseModel<IResourceId>>("UserController", response.httpCode, response));
             }
-	    entity.hash = hashSync(entity.hash, this.config.genSalt());
-	    const savedUser = await this.factory.getUserRepository().saveOrUpdate(entity);
+	        entity.hash = hashSync(entity.hash, this.config.genSalt());
+	        const savedUser = await this.factory.getUserRepository().saveOrUpdate(entity);
             const resourceId: IResourceId = {
                 id: savedUser.id
             };
@@ -47,11 +46,9 @@ export class UserServiceImpl implements UserService {
                 message: "User registerd",
                 data: resourceId
             };
-
             return Promise.resolve(new SendResource<HttpResponseModel<IResourceId>>("UserController", response.httpCode, response));
         }
         catch (e){
-            console.log(e.message);
             const response: HttpResponseModel<IResourceId> = {
                 httpCode: 400,
                 message: "Conflict or internal error"

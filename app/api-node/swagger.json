@@ -1864,83 +1864,6 @@
 				]
 			}
 		},
-		"/api/users/{id}/player": {
-			"post": {
-				"operationId": "UserRegisterPlayer",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/SendResourceHttpResponseModel"
-								}
-							}
-						}
-					},
-					"201": {
-						"description": "Player created",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIResourceId"
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIResourceId"
-								}
-							}
-						}
-					},
-					"409": {
-						"description": "Player already exist",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIResourceId"
-								}
-							}
-						}
-					}
-				},
-				"description": "",
-				"security": [
-					{
-						"Bearer": [
-							"ROLE_USER"
-						]
-					}
-				],
-				"parameters": [
-					{
-						"description": "",
-						"in": "path",
-						"name": "id",
-						"required": true,
-						"schema": {
-							"type": "number",
-							"format": "double"
-						}
-					}
-				],
-				"requestBody": {
-					"content": {
-						"application/json;charset=UTF-8": {
-							"schema": {
-								"$ref": "#/components/schemas/IGameProfileResource"
-							}
-						}
-					},
-					"required": true
-				}
-			}
-		},
 		"/api/users/profile/{id}": {
 			"get": {
 				"operationId": "UserRead",
@@ -2019,113 +1942,6 @@
 						"Bearer": [
 							"ROLE_USER"
 						]
-					}
-				]
-			}
-		},
-		"/api/users/{userId}/players": {
-			"get": {
-				"operationId": "UserPlayers",
-				"responses": {
-					"200": {
-						"description": "User list",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIUserResourceArray"
-								}
-							}
-						}
-					},
-					"400": {
-						"description": "",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIUserResourceArray"
-								}
-							}
-						}
-					}
-				},
-				"description": "",
-				"security": [
-					{
-						"Bearer": [
-							"ROLE_USER"
-						]
-					}
-				],
-				"parameters": [
-					{
-						"description": "",
-						"in": "path",
-						"name": "userId",
-						"required": true,
-						"schema": {
-							"type": "number",
-							"format": "double"
-						}
-					}
-				]
-			}
-		},
-		"/api/users/player/{playerId}": {
-			"delete": {
-				"operationId": "UserDeletePlayer",
-				"responses": {
-					"200": {
-						"description": "Player deleted",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIUserResourceArray"
-								}
-							}
-						}
-					},
-					"204": {
-						"description": "No content"
-					},
-					"400": {
-						"description": "",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIUserResourceArray"
-								}
-							}
-						}
-					},
-					"404": {
-						"description": "Player not found",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIUserResourceArray"
-								}
-							}
-						}
-					}
-				},
-				"description": "",
-				"security": [
-					{
-						"Bearer": [
-							"ROLE_USER"
-						]
-					}
-				],
-				"parameters": [
-					{
-						"description": "",
-						"in": "path",
-						"name": "playerId",
-						"required": true,
-						"schema": {
-							"type": "number",
-							"format": "double"
-						}
 					}
 				]
 			}
@@ -2331,7 +2147,7 @@
 						"description": ""
 					},
 					"gameProfile": {
-						"$ref": "#/components/schemas/IGameProfileResource"
+						"$ref": "#/components/schemas/IUserResource"
 					}
 				},
 				"type": "object",
@@ -2439,11 +2255,18 @@
 						"description": ""
 					},
 					"createdAt": {
-						"type": "string",
+						"type": "number",
+						"format": "double",
 						"description": ""
 					},
-					"updatedAt": {
-						"type": "string",
+					"startedAt": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"endedAt": {
+						"type": "number",
+						"format": "double",
 						"description": ""
 					},
 					"token": {
@@ -2460,29 +2283,6 @@
 					"name",
 					"status"
 				]
-			},
-			"IGameProfileResource": {
-				"description": "",
-				"properties": {
-					"total_points": {
-						"type": "number",
-						"format": "double",
-						"description": ""
-					},
-					"id": {
-						"type": "number",
-						"format": "double",
-						"description": ""
-					},
-					"name": {
-						"type": "string",
-						"description": ""
-					},
-					"user": {
-						"$ref": "#/components/schemas/IUserResource"
-					}
-				},
-				"type": "object"
 			},
 			"IUserResource": {
 				"description": "",
@@ -2531,7 +2331,7 @@
 					"gameProfile": {
 						"type": "array",
 						"items": {
-							"$ref": "#/components/schemas/IGameProfileResource"
+							"$ref": "#/components/schemas/IBotsResource"
 						},
 						"description": ""
 					}
@@ -2667,11 +2467,15 @@
 			"IGameInfoResource": {
 				"description": "",
 				"properties": {
-					"winner": {
-						"$ref": "#/components/schemas/IGameProfileResource"
+					"winner_id": {
+						"type": "number",
+						"format": "double",
+						"description": ""
 					},
-					"loser": {
-						"$ref": "#/components/schemas/IGameProfileResource"
+					"loser_id": {
+						"type": "number",
+						"format": "double",
+						"description": ""
 					},
 					"winnerpoints": {
 						"type": "number",
@@ -2681,16 +2485,6 @@
 					"loserpoints": {
 						"type": "number",
 						"format": "double",
-						"description": ""
-					},
-					"gamestarted_at": {
-						"type": "string",
-						"format": "date-time",
-						"description": ""
-					},
-					"gameended_at": {
-						"type": "string",
-						"format": "date-time",
 						"description": ""
 					},
 					"video_winner": {
@@ -2704,14 +2498,9 @@
 					"game": {
 						"$ref": "#/components/schemas/IGameResource"
 					},
-					"created_at": {
-						"type": "string",
-						"format": "date-time",
-						"description": ""
-					},
-					"updated_at": {
-						"type": "string",
-						"format": "date-time",
+					"id": {
+						"type": "number",
+						"format": "double",
 						"description": ""
 					}
 				},

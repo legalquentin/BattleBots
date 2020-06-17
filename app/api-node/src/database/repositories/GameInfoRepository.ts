@@ -14,4 +14,14 @@ export class GameInfoRepository extends Repository<GameInfoEntity> {
         this.manager = getManager(connectionName());
         this.metadata = getConnection(connectionName()).getMetadata(GameInfoEntity);
     }
+
+    getOne(id: number){
+        return this.createQueryBuilder("gameInfo").leftJoinAndSelect("gameInfo.game", "game").where("game.id = :id", {
+            "id": id
+        }).getOne();
+    }
+
+    findAll(){
+        return this.createQueryBuilder("gameInfo").leftJoinAndSelect("gameInfo.game", "game").getMany()
+    }
 }

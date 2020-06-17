@@ -47,10 +47,20 @@ export class GameServiceImpl implements GameService {
         const gameResourceAsm = Container.get(GameResourceAsm);
         try {
             const httpCode = game.id ? 200 : 201;
+            if (game.status == EGameStatus.CREATED){
+                game.createdAt = new Date().getTime();
+            }
+            else if (game.status == EGameStatus.STARTED){
+                game.startedAt = new Date().getTime();
+            }
+            else if (game.status == EGameStatus.ENDED){
+                game.endedAt = new Date().getTime();
+            }
             const entity = await gameResourceAsm.toEntity(game);
             const saved = await this.serviceFactory.getGameRepository().saveOrUpdate(entity);
             const resource = await gameResourceAsm.toResource(saved);
             game.id = saved.id;
+            /*
             const r = await this.battleWorkerService.startGoWorker(game);
             if (!r || !r.token || !r.game) {
                 const response: HttpResponseModel<IGameResource> = {
@@ -63,6 +73,7 @@ export class GameServiceImpl implements GameService {
             }
             resource.token = r.token;
             resource.secret = r.secret;
+            */
             const response : HttpResponseModel<IGameResource> = {
                 httpCode: httpCode,
                 message: "game create",
@@ -71,6 +82,7 @@ export class GameServiceImpl implements GameService {
             return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));        
         }
         catch (e){
+            console.log(e.message);
             const response: HttpResponseModel<IGameResource> = {
                 httpCode: 400,
                 message: "Bad Request"

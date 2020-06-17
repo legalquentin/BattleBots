@@ -12,7 +12,7 @@ import { Inject } from "typescript-ioc";
 import { Consumes, Produces, Response } from "typescript-rest-swagger";
 import { UserService } from "../service/UserService";
 import { AuthenticationService } from "../service/AuthenticationService";
-import { PlayerService } from "../service/PlayerService";
+//import { PlayerService } from "../service/PlayerService";
 import IGameProfileResource from "../resources/IGameProfileResource";
 import { preRequest } from "../service/interceptors/preRequest/preRequest";
 import { postRequest } from "../service/interceptors/postRequest/postRequest";
@@ -25,8 +25,10 @@ export class UserController {
     @Inject
     private userService: UserService;
 
+    /*
     @Inject
     private playerService: PlayerService;
+    */
 
     @Inject
     private authService: AuthenticationService;
@@ -62,6 +64,7 @@ export class UserController {
         return this.userService.saveOrUpdate(user);
     }
 
+    /*
     @Path("/:id/player")
     @POST
     @Security("ROLE_USER", "Bearer")
@@ -73,6 +76,7 @@ export class UserController {
     public async registerPlayer(player: IGameProfileResource, @PathParam("id") id: number): Promise<SendResource<HttpResponseModel<IResourceId>>> {
         return this.playerService.register(player, id);
     }
+    */
 
     @Path('/profile/:id')
     @Security("ROLE_USER", "Bearer")
@@ -108,6 +112,8 @@ export class UserController {
         return this.userService.findAll();
     }
 
+    /*
+
     @Path('/:userId/players')
     @Security("ROLE_USER", "Bearer")
     @Consumes("application/json;charset=UTF-8")
@@ -118,7 +124,9 @@ export class UserController {
     public async players(@PathParam("userId")userId: number): Promise<SendResource<HttpResponseModel<IGameProfileResource[]>>> {
         return (this.playerService.search(userId));
     }
+    */
 
+    /*
     @Path('/player/:playerId')
     @Security("ROLE_USER", "Bearer")
     @Consumes("application/json;charset=UTF-8")
@@ -130,6 +138,7 @@ export class UserController {
     public async deletePlayer(@PathParam("playerId")playerId:  number){
         return (this.playerService.deleteOne(playerId));
     }
+    */
 
     @Path('/:userId')
     @Security("ROLE_USER", "Bearer")

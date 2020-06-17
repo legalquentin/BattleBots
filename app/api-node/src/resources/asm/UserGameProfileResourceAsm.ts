@@ -1,12 +1,12 @@
-import { Singleton } from "typescript-ioc";
+import { Singleton, Container } from "typescript-ioc";
 import UserEntity from "../../database/entities/UserEntity";
-import { PlayerEntity } from "../..//database/entities/PlayerEntity";
 import IUserResource from "../IUserResource";
-import IGameProfileResource from "../IGameProfileResource";
 import { ERolesStatus } from "../ERolesStatus";
+import { BotResourceAsm } from "./BotResourceAsm";
 
 @Singleton
 export class UserGameProfileResourceAsm {
+    /*
     public toPlayerEntity(resource: IGameProfileResource){
         const player = new PlayerEntity();
 
@@ -21,7 +21,9 @@ export class UserGameProfileResourceAsm {
         }
         return (player);
     }
+    */
 
+    /*
     public async toPlayerResource(player: PlayerEntity){
         const p : IGameProfileResource = {
             total_points: player.total_points,
@@ -38,8 +40,10 @@ export class UserGameProfileResourceAsm {
         }
         return (p);
     }
+    */
 
-    public toUserEntity(resource: IUserResource){
+    public async toUserEntity(resource: IUserResource){
+        const botResourceAsm = Container.get(BotResourceAsm);
         const entity = new UserEntity();
 
         entity.firstname = resource.firstname;
@@ -52,13 +56,17 @@ export class UserGameProfileResourceAsm {
         if (!resource.gameProfile){
             resource.gameProfile = [];
         }
-        entity.players = resource.gameProfile.map(profile => {
-            return this.toPlayerEntity(profile);
-        });
+        entity.robots = [];
+        if (resource.gameProfile){
+            for (let user of resource.gameProfile){
+                entity.robots.push(await botResourceAsm.toEntity(user));
+            }
+        }
         return (entity);
     }
 
     public async toUserResource(user: UserEntity){
+        const botResourceAsm = Container.get(BotResourceAsm);
         const resource: IUserResource = {
             firstname: user.firstname,
             lastname: user.lastname,
@@ -69,14 +77,14 @@ export class UserGameProfileResourceAsm {
             roles: user.roles
         };
 
-        if (user.players != null){
-            const players = await user.players;
+        if (user.robots != null){
+            const players = await user.robots;
             const profiles = await (async () => {
                 const profiles = [];
 
                 for (let player of players){
                     delete player.user;
-                    profiles.push(await this.toPlayerResource(player));
+                    profiles.push(await botResourceAsm.toResource(player));
                 }
                 return (profiles);
             })();

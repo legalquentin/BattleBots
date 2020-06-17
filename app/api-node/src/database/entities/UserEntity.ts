@@ -1,9 +1,10 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import { AbstractEntity } from './AbstractEntity';
-import { PlayerEntity } from './PlayerEntity';
+import { RobotsEntity } from './RobotsEntity';
 import { LogEntity } from './LogEntity';
 import { ERolesStatus } from '../../resources/ERolesStatus';
 import { GeoIpEntity } from './GeoIpEntity';
+import { GameInfoEntity } from './GameInfoEntity';
 
 @Entity({ name: 'users' })
 export default class UserEntity extends AbstractEntity {
@@ -29,11 +30,11 @@ export default class UserEntity extends AbstractEntity {
     @Column({ name: "address" })
     public address: string;
 
-    @OneToMany(type => PlayerEntity, player => player.user, {
+    @OneToMany(type => RobotsEntity, robot => robot.user, {
         cascade: ["remove", "insert", "update"],
         lazy: true
     })
-    public players?: Array<PlayerEntity>;
+    public robots?: Array<RobotsEntity>;
 
     @OneToMany(type => LogEntity, log => log.user, {
         lazy: true
@@ -44,4 +45,14 @@ export default class UserEntity extends AbstractEntity {
         lazy: true
     })
     public geoips?: Array<GeoIpEntity>;
+
+    @OneToMany(type => GameInfoEntity, gameInfoEntity => gameInfoEntity.winner, {
+        lazy: true
+    })
+    public infoWinner?: Array<GameInfoEntity>;
+
+    @OneToMany(type => GameInfoEntity, gameInfoEntity => gameInfoEntity.loser, {
+        lazy: true
+    })
+    public infoLoser?: Array<GameInfoEntity>;
 }

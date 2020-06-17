@@ -18,6 +18,15 @@ export class GameResourceAsm {
         entity.id = game.id;
         entity.game_name = game.name;
         entity.game_status = game.status;
+        if (game.startedAt){
+            entity.started_at = new Date(game.startedAt);
+        }
+        if (game.endedAt){
+            entity.ended_at = new Date(game.endedAt);
+        }
+        if (game.createdAt){
+            entity.created_at = new Date(game.createdAt);
+        }
         return (entity);
     }
 
@@ -29,6 +38,15 @@ export class GameResourceAsm {
             bots: []
         };
 
+        if (entity.started_at){
+            resource.startedAt = entity.started_at.getTime();
+        }
+        if (entity.created_at){
+            resource.createdAt = entity.created_at.getTime();
+        }
+        if (entity.ended_at){
+            resource.endedAt = entity.ended_at.getTime();
+        }
         return (resource);
     }
 

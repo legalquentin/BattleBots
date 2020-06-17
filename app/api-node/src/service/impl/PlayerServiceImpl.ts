@@ -1,18 +1,25 @@
 import { PlayerService } from "../PlayerService";
+/*
 import { PlayerEntity } from "../../database/entities/PlayerEntity";
-import { Inject, Singleton, Container } from "typescript-ioc";
-import IServiceFactory from "../IServiceFactory";
+*/
+import { /*Inject, */ Singleton } from "typescript-ioc";
+//import IServiceFactory from "../IServiceFactory";
+/*
 import HttpResponseModel from "../../resources/HttpResponseModel";
 import IGameProfileResource from "../../resources/IGameProfileResource";
 import { SendResource } from "../../../lib/ReturnExtended";
 import { GameProfileResourceAsm } from "../../resources/asm/GameProfileResourceAsm";
 import IResourceId from "../../resources/IResourceId";
+*/
 
 @Singleton
 export class PlayerServiceImpl implements PlayerService {
 
+    /*
     @Inject
     private factory : IServiceFactory;
+    */
+    /*
 
     public async register(player: IGameProfileResource, id: number) {
         try {
@@ -135,4 +142,5 @@ export class PlayerServiceImpl implements PlayerService {
     public async playerExist(id: number){
         return (await this.factory.getPlayerRepository().findOne(id) != null);
     }
+    */
 }

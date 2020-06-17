@@ -4,6 +4,7 @@ import { GameInfoRepository } from "../../database/repositories/GameInfoReposito
 import { GameInfoResourceAsm } from "../../resources/asm/GameInfoResourceAsm";
 import { Inject } from "typescript-ioc";
 import HttpResponseModel from "../../resources/HttpResponseModel";
+import { GameRepository } from "../../database/repositories/GameRepository";
 
 export class GameInfoServiceImpl implements GameInfoService  {
 
@@ -11,11 +12,26 @@ export class GameInfoServiceImpl implements GameInfoService  {
     gameInfoRepository: GameInfoRepository;
 
     @Inject
+    gameRepository: GameRepository;
+
+    @Inject
     gameInfoResourceAsm: GameInfoResourceAsm;
 
     public async save(gameInfo: IGameInfoResource): Promise<HttpResponseModel<IGameInfoResource>> {
         try {
             const entity = await this.gameInfoResourceAsm.toEntity(gameInfo);
+            if (!entity.game){
+                const response: HttpResponseModel<IGameInfoResource> = {
+                    httpCode: 400,
+                    message: "bad request"
+                };
+            
+                return(response);
+            }
+            entity.game = await this.gameRepository.findOne(entity.game.id);
+            entity.game.game_status = gameInfo.game.status;
+            entity.game.ended_at = new Date();
+            await this.gameRepository.update(entity.game.id, entity.game);
             const saved = await this.gameInfoRepository.save(entity);
             const resource = await this.gameInfoResourceAsm.toResource(saved);
             const response: HttpResponseModel<IGameInfoResource> = {
@@ -26,8 +42,10 @@ export class GameInfoServiceImpl implements GameInfoService  {
             return (response);
         }
         catch (e){
+            console.log(e.message);
             const response: HttpResponseModel<IGameInfoResource> = {
-                httpCode: 400
+                httpCode: 400,
+                message: "bad request"
             };
 
             return (response);
@@ -49,7 +67,8 @@ export class GameInfoServiceImpl implements GameInfoService  {
         }
         catch (e){
             const response: HttpResponseModel<IGameInfoResource> = {
-                httpCode: 400
+                httpCode: 400,
+                message: "bad request"
             };
 
             return (response);
@@ -58,7 +77,7 @@ export class GameInfoServiceImpl implements GameInfoService  {
 
     public async list(): Promise<HttpResponseModel<IGameInfoResource[]>> {
         try {
-            const infos = await this.gameInfoRepository.find();
+            const infos = await this.gameInfoRepository.findAll();
             const resources = await this.gameInfoResourceAsm.toResources(infos);
             const response : HttpResponseModel<IGameInfoResource[]> = {
                 httpCode: 200,
@@ -78,7 +97,7 @@ export class GameInfoServiceImpl implements GameInfoService  {
     
     public async findOne(id: number): Promise<HttpResponseModel<IGameInfoResource>> {
         try {
-            const info = await this.gameInfoRepository.findOne(id);
+            const info = await this.gameInfoRepository.getOne(id);
             const resource = await this.gameInfoResourceAsm.toResource(info);
             const response : HttpResponseModel<IGameInfoResource> = {
                 httpCode: 200,

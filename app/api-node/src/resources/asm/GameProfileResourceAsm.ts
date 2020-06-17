@@ -12,6 +12,7 @@ export class GameProfileResourceAsm {
         this.userGameProfileResourceAsm = Container.get(UserGameProfileResourceAsm);
     }
 
+    /*
     public toEntity(resource: IGameProfileResource){
         return this.userGameProfileResourceAsm.toPlayerEntity(resource);
     }
@@ -19,6 +20,7 @@ export class GameProfileResourceAsm {
     public async toResource(player: PlayerEntity){
         return this.userGameProfileResourceAsm.toPlayerResource(player);
     }
+    
 
     public async toResources(players: Array<PlayerEntity>){
         const resources = (async (players) => {
@@ -32,4 +34,5 @@ export class GameProfileResourceAsm {
 
         return (resources);
     }
+    */
 }

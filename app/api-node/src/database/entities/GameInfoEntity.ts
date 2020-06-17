@@ -1,7 +1,7 @@
 import { AbstractEntity } from "./AbstractEntity";
 import { Entity, ManyToOne, JoinColumn, Column, OneToOne } from "typeorm";
-import { PlayerEntity } from "./PlayerEntity";
 import { GameEntity } from "./GameEntity";
+import UserEntity from "./UserEntity";
 
 @Entity({
     name: "game_info"
@@ -11,15 +11,15 @@ export class GameInfoEntity extends AbstractEntity{
         name: "winner_id",
         referencedColumnName: "id"
     })
-    @ManyToOne(type => PlayerEntity, playerEntity => playerEntity.infoWinner)
-    winner: PlayerEntity;
+    @ManyToOne(type => UserEntity, userEntity => userEntity.infoWinner)
+    winner: UserEntity;
 
     @JoinColumn({
         name: "loser_id",
         referencedColumnName: "id"
     })
-    @ManyToOne(type => PlayerEntity, player => player.infoLoser)
-    loser: PlayerEntity;
+    @ManyToOne(type => UserEntity, userEntity => userEntity.infoLoser)
+    loser: UserEntity;
 
     @Column({
         name: "winnerpoints"
@@ -30,16 +30,6 @@ export class GameInfoEntity extends AbstractEntity{
         name: "loserpoints"
     })
     loserpoints: number;
-
-    @Column({
-        name: "gamestarted_at"
-    })
-    gamestarted_at: Date;
-    
-    @Column({
-        name: "gameended_at"
-    })
-    gameended_at: Date;
 
     @Column({
         name: "video_winner"
