@@ -90,11 +90,11 @@ export class StreamsServiceImpl implements StreamsService {
                 });
             }
             else {
+                console.log("file not found, has it been deleted ?")
                 const response: HttpResponseModel<IStreamResource> = {
                     httpCode: 400,
                     message: "File not found"
                 };
-
                 resolve(response);
             }
         });

@@ -46,6 +46,7 @@ export class GameInfoServiceImpl implements GameInfoService  {
                     duration: 1,
                     encodage: "ffmpeg" 
                 });
+            if (gameInfo.video_winner)
                 await this.streamsService.watchDirectory({
                     game: gameInfo.game,
                     s3Url: gameInfo.video_winner,
