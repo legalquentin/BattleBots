@@ -52,6 +52,11 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 				break
 			}
 
+			// ignore the command if the game hasn't started
+			if !game.GetGameInstance(player.GameID).Started {
+				break
+			}
+
 			log.Println(prefixLog, "command sent;", r.Content, r.Press)
 			player.Mutex.Lock()
 			player.BotContext.Moving = r.Press

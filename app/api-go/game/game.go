@@ -56,6 +56,11 @@ func CreateGame(res http.ResponseWriter, req *http.Request) {
 	return
 }
 
+// GetGameInstance return instance of a game based on it's ID
+func GetGameInstance(id string) Game {
+	return baseGameInstances[id]
+}
+
 func updateGameAPI(game NodeGame) {
 	url := "http://hardwar.ddns.net/api/games/worker_end"
 	fmt.Println(prefixLog, url)
@@ -141,7 +146,7 @@ func Daemon() {
 		tnow := time.Now()
 		for key, game := range baseGameInstances {
 			fmt.Println(key, len(game.Players), game.CreatedAt.Sub(tnow).Minutes())
-			if tnow.Sub(game.CreatedAt).Seconds() > float64(GameDuration) {
+			if game.Started && tnow.Sub(game.StartedAt).Seconds() > float64(GameDuration) {
 				// log.Println(prefixWarn, "DELETING game [", game.Name, "] reached 5 minutes")
 				finishGameAPI(game, key)
 				delete(baseGameInstances, key)
@@ -206,9 +211,10 @@ func JoinGame(res http.ResponseWriter, req *http.Request) {
 				}
 				// all slot taken, we start the game
 				g = baseGameInstances[t.GameID]
-				g.Started = true
 				g.StartedAt = time.Now()
+				g.Started = true
 				baseGameInstances[t.GameID] = g
+				fmt.Println(prefixLog, "All Slot filled, game can start")
 				return
 			}
 		}
