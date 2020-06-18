@@ -220,10 +220,13 @@ func JoinGame(res http.ResponseWriter, req *http.Request) {
 				res.Header().Set("Content-Type", "application/json")
 				json.NewEncoder(res).Encode(&g)
 				p.Mutex.Unlock()
-				for _, b := range selected.Env.Bots {
+				for _, b := range baseGameInstances[t.GameID].Env.Bots {
 					if b.Taken == false {
+						fmt.Println(prefixLog, b.Name+" TAKEN - FALSE")
 						// still one slot left, we don't start the game
-						return
+						// return
+					} else {
+						fmt.Println(prefixLog, b.Name+"TAKEN - TRUE")
 					}
 				}
 				// all slot taken, we start the game
