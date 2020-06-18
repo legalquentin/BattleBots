@@ -84,6 +84,7 @@ export class BotsRepository extends Repository<RobotsEntity> {
             bot.taken = item.taken;
             entities.push(bot);
         }
+        console.log(entities);
         return (entities);
     }
 

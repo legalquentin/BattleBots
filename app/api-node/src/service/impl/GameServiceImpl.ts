@@ -11,6 +11,7 @@ import { GameResourceAsm } from "../../resources/asm/GameResourceAsm";
 import IBattleWorkerService from "../IBattleWorkerService";
 import { IPlayerResource } from "../../resources/IPlayerResource";
 import { UserResourceAsm } from "../../resources/asm/UserResourceAsm";
+import { RobotsEntity } from "../../database/entities/RobotsEntity";
 
 @Singleton
 export class GameServiceImpl implements GameService {
@@ -255,13 +256,13 @@ export class GameServiceImpl implements GameService {
             }
             for (let gameUser of gameUsers){
                 const player : IPlayerResource = await gameResourceAsm.AddGamesUsersInGameResource(gameUser, resource);
-                let bots = await gameUser.user.robotsUser;
+                let list : Array<RobotsEntity> = await this.serviceFactory.getBotsRepository().search(id, player.id);
 
-                if (!bots){
-                    bots = [];
+                if (!list){
+                    list = [];
                 }
-                for (let bot of bots){
-                    await userResourceAsm.AddBotResource(bot.robot, player);
+                for (let bot of list){
+                    await userResourceAsm.AddBotResource(bot, player);
                 }
             }
             const response : HttpResponseModel<IGameResource> = {
