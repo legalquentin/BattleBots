@@ -29,9 +29,9 @@ export class GameResourceAsm {
             entity.created_at = new Date(game.createdAt);
         }
         if (game.players){
-            entity.gameUsers = [];
+            await entity.gameUsers;
 
-            console.log(entity.gameUsers);
+            entity.gameUsers = [];
             for (let player of game.players){
                 const gameUser = new GameUserEntity();
                 const user = await playerResourceAsm.toEntity(player);
