@@ -48,10 +48,10 @@ export class BotsRepository extends Repository<RobotsEntity> {
     public async search(gameId: number, userId: number){
         const result = await this.manager.query(`
             SELECT r.id as id, 
-                   r.botIp as botIp, 
+                   r.bot_ip as botIp, 
                    r.armor as armor, 
                    r.damage as damage, 
-                   r.fireRate as fire_rate, 
+                   r.fire_rate as fireRate, 
                    r.running as running, 
                    r.speed as speed, 
                    r.taken as taken,
@@ -59,16 +59,18 @@ export class BotsRepository extends Repository<RobotsEntity> {
             FROM robots r
             LEFT JOIN robots_game rg
             ON rg.bot_id = r.id
-            LEFT  JOIN games g
+            LEFT JOIN games g
             ON g.id = rg.game_id
             LEFT JOIN user_bot ub
             ON ub.bot_id = r.id
             LEFT JOIN users u
             ON u.id = ub.user_id
             WHERE
-            u.id = ?,
-            g.id = ?
-        `, [userId, gameId]);
+            u.id = ${userId}
+            AND
+            g.id = ${gameId}
+        `);
+        console.log(result);
         const entities = [];
         for (let item of result){
             const bot = new RobotsEntity();
