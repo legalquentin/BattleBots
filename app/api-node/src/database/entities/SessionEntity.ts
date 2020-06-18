@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, JoinColumn, Column, ManyToOne, getManager } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, JoinColumn, Column, ManyToOne } from "typeorm";
 import UserEntity from "./UserEntity";
 import { RobotsEntity } from "./RobotsEntity";
 import { StreamsEntity } from "./StreamsEntity";

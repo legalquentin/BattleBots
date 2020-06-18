@@ -971,14 +971,7 @@
 				},
 				"description": "",
 				"requestBody": {
-					"content": {
-						"application/json; charset=UTF-8": {
-							"schema": {
-								"$ref": "#/components/schemas/IGameInfoResource"
-							}
-						}
-					},
-					"required": true
+					"$ref": "#/components/requestBodies/IGameResource"
 				}
 			}
 		},
@@ -1543,6 +1536,220 @@
 				]
 			}
 		},
+		"/api/sessions/": {
+			"post": {
+				"operationId": "SessionInsert",
+				"responses": {
+					"200": {
+						"description": "session save",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelIContextBotResource"
+								}
+							}
+						}
+					},
+					"204": {
+						"description": "No content"
+					},
+					"400": {
+						"description": "",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelIContextBotResource"
+								}
+							}
+						}
+					}
+				},
+				"description": "",
+				"security": [
+					{
+						"Bearer": [
+							"ROLE_USER"
+						]
+					}
+				],
+				"requestBody": {
+					"$ref": "#/components/requestBodies/IContextBotResource"
+				}
+			},
+			"get": {
+				"operationId": "SessionList",
+				"responses": {
+					"200": {
+						"description": "session list",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelIContextBotResourceArray"
+								}
+							}
+						}
+					},
+					"204": {
+						"description": "No content"
+					},
+					"400": {
+						"description": "",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelIContextBotResourceArray"
+								}
+							}
+						}
+					}
+				},
+				"description": "",
+				"security": [
+					{
+						"Bearer": [
+							"ROLE_USER"
+						]
+					}
+				]
+			},
+			"put": {
+				"operationId": "SessionUpdate",
+				"responses": {
+					"200": {
+						"description": "session save",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelIContextBotResource"
+								}
+							}
+						}
+					},
+					"204": {
+						"description": "No content"
+					},
+					"400": {
+						"description": "",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelIContextBotResource"
+								}
+							}
+						}
+					}
+				},
+				"description": "",
+				"security": [
+					{
+						"Bearer": [
+							"ROLE_USER"
+						]
+					}
+				],
+				"requestBody": {
+					"$ref": "#/components/requestBodies/IContextBotResource"
+				}
+			}
+		},
+		"/api/sessions/{id}": {
+			"get": {
+				"operationId": "SessionGetOne",
+				"responses": {
+					"200": {
+						"description": "game list",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelIContextBotResource"
+								}
+							}
+						}
+					},
+					"204": {
+						"description": "No content"
+					},
+					"400": {
+						"description": "",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelIContextBotResource"
+								}
+							}
+						}
+					}
+				},
+				"description": "",
+				"security": [
+					{
+						"Bearer": [
+							"ROLE_USER"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "number",
+							"format": "double"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "SessionDeleteOne",
+				"responses": {
+					"200": {
+						"description": "session save",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelIContextBotResource"
+								}
+							}
+						}
+					},
+					"204": {
+						"description": "No content"
+					},
+					"400": {
+						"description": "",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelIContextBotResource"
+								}
+							}
+						}
+					}
+				},
+				"description": "",
+				"security": [
+					{
+						"Bearer": [
+							"ROLE_USER"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "number",
+							"format": "double"
+						}
+					}
+				]
+			}
+		},
 		"/api/streams/": {
 			"get": {
 				"operationId": "StreamsContollerList",
@@ -2101,6 +2308,16 @@
 				},
 				"required": true
 			},
+			"IContextBotResource": {
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "#/components/schemas/IContextBotResource"
+						}
+					}
+				},
+				"required": true
+			},
 			"IStreamResource": {
 				"content": {
 					"application/json;charset=UTF-8": {
@@ -2205,9 +2422,6 @@
 							"$ref": "#/components/schemas/IGameResource"
 						},
 						"description": ""
-					},
-					"gameProfile": {
-						"$ref": "#/components/schemas/IUserResource"
 					}
 				},
 				"type": "object",
@@ -2221,98 +2435,6 @@
 					"damage",
 					"fireRate",
 					"armor"
-				]
-			},
-			"IPlayerResource": {
-				"description": "",
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double",
-						"description": ""
-					},
-					"pseudo": {
-						"type": "string",
-						"description": ""
-					},
-					"email": {
-						"type": "string",
-						"description": ""
-					},
-					"roles": {
-						"enum": [
-							"ROLE_USER",
-							"ROLE_ADMIN"
-						],
-						"type": "string",
-						"description": ""
-					},
-					"bots": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/IBotsResource"
-						},
-						"description": ""
-					}
-				},
-				"type": "object",
-				"required": [
-					"id",
-					"pseudo",
-					"email",
-					"roles"
-				]
-			},
-			"IStreamResource": {
-				"description": "",
-				"properties": {
-					"game": {
-						"$ref": "#/components/schemas/IGameResource"
-					},
-					"robot": {
-						"$ref": "#/components/schemas/IBotsResource"
-					},
-					"kinesisUrl": {
-						"type": "string",
-						"description": ""
-					},
-					"s3Url": {
-						"type": "string",
-						"description": ""
-					},
-					"private": {
-						"type": "number",
-						"format": "double",
-						"description": ""
-					},
-					"running": {
-						"type": "number",
-						"format": "double",
-						"description": ""
-					},
-					"duration": {
-						"type": "number",
-						"format": "double",
-						"description": ""
-					},
-					"encodage": {
-						"type": "string",
-						"description": ""
-					},
-					"id": {
-						"type": "number",
-						"format": "double",
-						"description": ""
-					}
-				},
-				"type": "object",
-				"required": [
-					"kinesisUrl",
-					"s3Url",
-					"private",
-					"running",
-					"duration",
-					"encodage"
 				]
 			},
 			"IGameResource": {
@@ -2442,6 +2564,133 @@
 				},
 				"type": "object",
 				"required": [
+					"pseudo",
+					"email",
+					"roles"
+				]
+			},
+			"IStreamResource": {
+				"description": "",
+				"properties": {
+					"game": {
+						"$ref": "#/components/schemas/IGameResource"
+					},
+					"robot": {
+						"$ref": "#/components/schemas/IBotsResource"
+					},
+					"kinesisUrl": {
+						"type": "string",
+						"description": ""
+					},
+					"s3Url": {
+						"type": "string",
+						"description": ""
+					},
+					"private": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"running": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"duration": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"encodage": {
+						"type": "string",
+						"description": ""
+					},
+					"id": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					}
+				},
+				"type": "object",
+				"required": [
+					"kinesisUrl",
+					"s3Url",
+					"private",
+					"running",
+					"duration",
+					"encodage"
+				]
+			},
+			"IContextBotResource": {
+				"description": "",
+				"properties": {
+					"botEnergy": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"botHeat": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"bot": {
+						"$ref": "#/components/schemas/IBotsResource"
+					},
+					"game": {
+						"$ref": "#/components/schemas/IGameResource"
+					},
+					"user": {
+						"$ref": "#/components/schemas/IUserResource"
+					},
+					"stream": {
+						"$ref": "#/components/schemas/IStreamResource"
+					}
+				},
+				"type": "object",
+				"required": [
+					"botEnergy",
+					"botHeat"
+				]
+			},
+			"IPlayerResource": {
+				"description": "",
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"pseudo": {
+						"type": "string",
+						"description": ""
+					},
+					"email": {
+						"type": "string",
+						"description": ""
+					},
+					"roles": {
+						"enum": [
+							"ROLE_USER",
+							"ROLE_ADMIN"
+						],
+						"type": "string",
+						"description": ""
+					},
+					"bot": {
+						"$ref": "#/components/schemas/IBotsResource"
+					},
+					"context": {
+						"$ref": "#/components/schemas/IContextBotResource"
+					},
+					"stream": {
+						"type": "string",
+						"description": ""
+					}
+				},
+				"type": "object",
+				"required": [
+					"id",
 					"pseudo",
 					"email",
 					"roles"
@@ -2646,6 +2895,46 @@
 					},
 					"data": {
 						"$ref": "#/components/schemas/IGameInfoResource"
+					}
+				},
+				"type": "object"
+			},
+			"HttpResponseModelIContextBotResource": {
+				"description": "",
+				"properties": {
+					"message": {
+						"type": "string",
+						"description": ""
+					},
+					"httpCode": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"data": {
+						"$ref": "#/components/schemas/IContextBotResource"
+					}
+				},
+				"type": "object"
+			},
+			"HttpResponseModelIContextBotResourceArray": {
+				"description": "",
+				"properties": {
+					"message": {
+						"type": "string",
+						"description": ""
+					},
+					"httpCode": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"data": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/IContextBotResource"
+						},
+						"description": ""
 					}
 				},
 				"type": "object"
