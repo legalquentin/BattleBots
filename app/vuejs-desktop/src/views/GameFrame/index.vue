@@ -8,7 +8,7 @@ import axios from "axios";
 
 import SocketService from "./SocketService";
 
-import EndOfGameModal from '../EndOfGameFrame/index.vue';
+import EndOfGameModal from '../../components/Modals/EndOfGameModal.vue';
 import HelpModal from '../../components/Modals/HelpModal.vue';
 
 type keyOpt = {
