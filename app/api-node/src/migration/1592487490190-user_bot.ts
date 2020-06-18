@@ -55,9 +55,9 @@ export class userBot1592487490190 implements MigrationInterface {
             botUser.robot = bot;
             await botUserRepository.save(botUser);
         }
-        */
         await queryRunner.dropForeignKey("robots", "fk_robots_player_id");
         await queryRunner.dropColumn("robots", "player_id");
+        */
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
