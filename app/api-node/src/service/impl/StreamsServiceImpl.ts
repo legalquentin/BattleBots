@@ -12,11 +12,12 @@ import * as AWS from "aws-sdk"
 import * as path from "path";
 import { uuid } from "uuidv4";
 
-var s3 = new AWS.S3({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: "eu-central-1"
-});
+
+const credentials = new AWS.SharedIniFileCredentials({profile: 'default'});
+AWS.config.update({region: 'us-west-2'});
+AWS.config.credentials = credentials;
+
+const s3 = new AWS.S3(); 
 
 @Singleton
 export class StreamsServiceImpl implements StreamsService {
@@ -28,7 +29,9 @@ export class StreamsServiceImpl implements StreamsService {
     private config: IConfig;
 
 
-    constructor(){}
+    constructor(){
+        console.log("#################################", credentials)
+    }
 
     public getVideoLink(stream: StreamsEntity) {
         var params = { 
@@ -41,7 +44,6 @@ export class StreamsServiceImpl implements StreamsService {
     }
 
     public async watchDirectory(stream: IStreamResource){
-        console.log("enter");
         return new Promise((resolve, reject) => {
             const resolve_path = `${stream.s3Url}`;
             console.log(resolve_path);
