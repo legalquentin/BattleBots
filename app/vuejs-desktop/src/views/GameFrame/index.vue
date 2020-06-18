@@ -115,7 +115,7 @@ export default class GameFrame extends Vue {
     }
     
     if (message.dt === 2) {
-      this.botContext.thermal = message.dv;
+      this.botContext.thermal = !message.dv ? 0 : message.dv;
       return;
     }
  
