@@ -7,7 +7,7 @@ export interface IPlayerResource {
     pseudo: string; 
     email: string;
     roles: ERolesStatus;
-    bot?: IBotsResource;
-    context?: IContextBotResource;
+    botSpecs?: IBotsResource;
+    botContext?: IContextBotResource;
     stream?: string;
 } 

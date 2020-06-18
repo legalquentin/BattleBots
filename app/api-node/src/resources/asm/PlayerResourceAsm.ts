@@ -24,10 +24,10 @@ export class PlayerResourceAsm {
         entity.roles = resource.roles;
         entity.pseudo = resource.pseudo;
         entity.robotsUser = [];
-        if (resource.bot){
+        if (resource.botSpecs){
             const robotUserEntity = new RobotsUserEntity();
 
-            robotUserEntity.robot = await botResourceAsm.toEntity(resource.bot);
+            robotUserEntity.robot = await botResourceAsm.toEntity(resource.botSpecs);
             robotUserEntity.user = entity;
             entity.robotsUser.push(robotUserEntity);
         }

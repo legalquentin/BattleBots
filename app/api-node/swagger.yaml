@@ -1733,9 +1733,9 @@ components:
                         - ROLE_ADMIN
                     type: string
                     description: ""
-                bot:
+                botSpecs:
                     $ref: '#/components/schemas/IBotsResource'
-                context:
+                botContext:
                     $ref: '#/components/schemas/IContextBotResource'
                 stream:
                     type: string
