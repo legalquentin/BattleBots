@@ -16,6 +16,9 @@ export class RobotsEntity extends AbstractEntity {
     @Column({name: "running"})
     public running: number;
 
+    @Column({name: "player_id"})
+    public user: number;
+
     @Column({name: "taken"})
     public taken: number;
 
