@@ -8,9 +8,10 @@ import { SendResource } from "../../../lib/ReturnExtended";
 import { IStreamResource } from "../../resources/IStreamResource";
 import IConfig from "../IConfig";
 import * as fs from "fs"
+import * as AWS from "aws-sdk";
 import * as path from "path";
 import { uuid } from "uuidv4";
-var AWS = require("aws-sdk");
+
 
 @Singleton
 export class StreamsServiceImpl implements StreamsService {
@@ -32,7 +33,6 @@ export class StreamsServiceImpl implements StreamsService {
             }
         });
 
-        console.log(process.env)
         this.s3 = new AWS.S3();
 
         this.s3.listBuckets((err, data) => {
