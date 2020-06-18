@@ -4,7 +4,6 @@ import { RobotGameEntity } from "./RobotGameEntity";
 import { RobotsArenaEntity } from "./RobotsArenaEntity";
 import { StreamsEntity } from "./StreamsEntity";
 import { RobotsUserEntity } from "./RobotsUserEntity";
-import UserEntity from "./UserEntity";
 
 @Entity({
     name: "robots"
