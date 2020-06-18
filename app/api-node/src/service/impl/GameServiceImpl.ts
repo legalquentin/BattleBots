@@ -74,6 +74,7 @@ export class GameServiceImpl implements GameService {
             }
             const entity = await gameResourceAsm.toEntity(game);
             const players = game.players;
+
             const promise = () => (new Promise(async (resolve, reject) => {
                 if (players){
                     let params = [];
@@ -107,6 +108,7 @@ export class GameServiceImpl implements GameService {
             const resource = await gameResourceAsm.toResource(saved);
             game.id = saved.id;
             const r = await this.battleWorkerService.startGoWorker(game);
+            console.log(r);
             if (!r || !r.token || !r.game) {
                 const response: HttpResponseModel<IGameResource> = {
                     httpCode: 500,
