@@ -37,6 +37,20 @@ func CreateGame(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	var flagAllTaken = true
+
+	for _, bot := range Appartement.Bots {
+		if !bot.Taken {
+			flagAllTaken = false
+		}
+	}
+
+	if flagAllTaken {
+		log.Println(prefixWarn, "No bot left for a new game")
+		http.Error(res, "No available bots for a new game", 400)
+		return
+	}
+
 	baseGameInstances[id] = Game{
 		Name:      t.Name,
 		Token:     t.Token,
@@ -137,6 +151,9 @@ func closePlayerConn(game Game) {
 		player.BotSpecs.SocketBotCam.Close()
 		player.BotSpecs.SocketBotCtrl.Close()
 		player.Mutex.Unlock()
+	}
+	for _, b := range game.Env.Bots {
+		b.Taken = false
 	}
 }
 

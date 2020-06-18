@@ -28,15 +28,24 @@ export default class ConnectionManager extends Vue {
         this.axios.defaults.headers.Authorization = token;
     }
 
+    private hasRefreshToken = false;
+
     private onError(error: AxiosError): Promise<AxiosResponse | string> {
         return new Promise((resolve, reject) => {
             if (!error.response) {
                 return reject(error);
             }
             const errMessage: number = error.response.status;
+            if (this.hasRefreshToken) {
+                this.hasRefreshToken = false;
+                console.log("test")
+
+                return reject("LoginFrame");
+            }
             if (errMessage === 403 && this.getJwt()) {
                 this.refreshToken().then((response: AxiosResponse) => {
                     const jwt = _get(response, 'data.data.data');
+                    console.log('->', response);
                     if (!_size(jwt)) {
                         throw 'No JWT token exception';
                     }
@@ -45,6 +54,7 @@ export default class ConnectionManager extends Vue {
                     const Authorization = `Bearer ${jwt}`;
                     this.axios.defaults.headers.Authorization = Authorization;
                     error.config.headers.Authorization = Authorization;
+                    this.hasRefreshToken = true;
                     this.axios.request(error.config).then((response: AxiosResponse) => {
                         resolve(response);
                     }).catch((err: AxiosError) => {
@@ -52,7 +62,7 @@ export default class ConnectionManager extends Vue {
                     });
                     resolve(response);
                 }).catch(() => {
-                    this.$router.push({ name: 'LoginFrame' });
+
                     reject("LoginFrame");
                 });
             } else {
@@ -78,16 +88,16 @@ export default class ConnectionManager extends Vue {
     }
 
     public getGameList(): Promise<AxiosResponse> {
-        // return this.axios.get('games')
-        //     .then((response: AxiosResponse) => {
-        //         return _get(response, 'data.data', null);
-        //     })
-        // ;
-        return new Promise((resolve)=>{resolve()})
+        return this.axios.get('games');
+        // return new Promise((resolve)=>{resolve()})
     }
 
     public createGame(): void {
 
+    }
+
+    public joinGame(gameId): Promise<AxiosResponse> {
+        return this.axios.put(`games/join/${gameId}`);
     }
 
     private refreshToken(): AxiosPromise {
