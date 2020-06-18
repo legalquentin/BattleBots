@@ -50,10 +50,31 @@ export class StreamsServiceImpl implements StreamsService {
         return (url);
     }
 
+    public async upload(stream: StreamsEntity, params: any, callback: any){
+        const resolve_path = `${stream.s3Url}`;
+        this.s3.upload(params, async (err, data) => {
+            console.log("ERROR", err);
+            if (err){
+                return callback({
+                    code: 400,
+                    data: err
+                });
+            }
+            console.log(data);
+            stream.s3Url = params.Key;
+            fs.unlinkSync(resolve_path);
+            const ret: any = await this.service.getStreamsRepository().saveOrUpdate(stream);
+            callback({
+                code: 200,
+                data: ret
+            });
+        });
+    }
+
     public async watchDirectory(stream: IStreamResource){
-        return new Promise((resolve, reject) => {
+        const streamResourceAsm = Container.get(StreamsResourceAsm);
+        return new Promise(async (resolve, reject) => {
             const resolve_path = `${stream.s3Url}`;
-            console.log(resolve_path);
             if (fs.existsSync(resolve_path) && fs.statSync(resolve_path).isFile()){
                 const o = path.parse(resolve_path);
                 console.log(o);
@@ -62,28 +83,16 @@ export class StreamsServiceImpl implements StreamsService {
                     Bucket: this.config.getBucket(),
                     Body: fs.createReadStream(resolve_path)
                 };
+                const streamEntity = await streamResourceAsm.toEntity(stream);
                 console.log(params.Bucket);
                 console.log(params.Key);
-                this.s3.upload(params, async (err, data) => {
-                    console.log("ERROR", err);
-                    if (err){
-                        const response: HttpResponseModel<IStreamResource> = {
-                            message: err.message,
-                            httpCode: 400
-                        };
-
-                        return resolve(response);
-                    }
-                    console.log(data);
-                    stream.s3Url = params.Key;
-                    fs.unlinkSync(resolve_path);
-                    const ret: any = await this.saveOrUpdate(stream);
-                    console.log(ret)
+                this.upload(streamEntity, params, async (o) => {
+                    console.log("ERROR", o.err);
                     const response: HttpResponseModel<IStreamResource> = {
-                        httpCode: 200,
-                        message: "stream updated",
-                        data: ret.data
+                        message: o.err.message,
+                        httpCode: o.code
                     };
+
                     resolve(response);
                 });
             }
@@ -133,6 +142,7 @@ export class StreamsServiceImpl implements StreamsService {
 
         try {
             const entity = await streamResourceAsm.toEntity(stream);
+
             const finded = await this.service.getStreamsRepository().saveOrUpdate(entity);
             const resource = await streamResourceAsm.toResource(finded);
             const response: HttpResponseModel<IStreamResource> = {

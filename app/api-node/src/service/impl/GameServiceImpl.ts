@@ -13,6 +13,12 @@ import { IPlayerResource } from "../../resources/IPlayerResource";
 import { UserResourceAsm } from "../../resources/asm/UserResourceAsm";
 import { RobotsEntity } from "../../database/entities/RobotsEntity";
 import { SessionResourceAsm } from "../../resources/asm/SessionResourceAsm";
+import { StreamsEntity } from "../../database/entities/StreamsEntity";
+import { StreamsService } from "../StreamsService";
+import IConfig from "../IConfig";
+import { uuid } from "uuidv4";
+import * as path from "path";
+import * as fs from "fs";
 
 @Singleton
 export class GameServiceImpl implements GameService {
@@ -22,6 +28,12 @@ export class GameServiceImpl implements GameService {
 
     @Inject
     private battleWorkerService: IBattleWorkerService;
+
+    @Inject
+    private config: IConfig;
+
+    @Inject
+    private streamService: StreamsService;
 
     public async updateByWorker(game: IGameResource) {
         if (!game.id){
@@ -61,6 +73,28 @@ export class GameServiceImpl implements GameService {
                 game.endedAt = new Date().getTime();
             }
             const entity = await gameResourceAsm.toEntity(game);
+            const players = game.players;
+            if (players){
+                for (let player of players){
+                    const streamEntity = new StreamsEntity();
+                    const resolve_path = `${player.stream}`;
+                    const o = path.parse(resolve_path);
+
+                    streamEntity.s3Url = player.stream;
+                    streamEntity.kinesisUrl = "kinesis.com";
+                    streamEntity.encodage = "ffmpeg";
+                    streamEntity.duration = 1;
+                    streamEntity.running = 1;
+                    streamEntity.private = 1;
+                    await this.streamService.upload(streamEntity, {
+                        Key: `${uuid()}${o.ext}`,
+                        Bucket: this.config.getBucket(),
+                        Body: fs.createReadStream(resolve_path)
+                    }, (param) => {
+
+                    });
+                }
+            }
             const saved = await this.serviceFactory.getGameRepository().saveOrUpdate(entity);
             const resource = await gameResourceAsm.toResource(saved);
             game.id = saved.id;

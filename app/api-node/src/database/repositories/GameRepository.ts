@@ -129,24 +129,32 @@ export class GameRepository extends Repository<GameEntity> {
                         await manager.getCustomRepository(RobotsUserRepository).delete(savedBotUser);
                     }
                 }
-                for (let botGame of botGames){
-                    if (!botGame.bot.id){
-                        await manager.getCustomRepository(BotsRepository).save(botGame.bot);
+                if (botGames && botGames.length){
+                    for (let botGame of botGames){
+                        if (!botGame.bot.id){
+                            await manager.getCustomRepository(BotsRepository).save(botGame.bot);
+                        }
+                        else{
+                            await manager.getCustomRepository(BotsRepository).update(botGame.bot.id, botGame.bot);
+                        }
+                        await manager.getCustomRepository(BotGameRepository).save(botGame);
                     }
-                    else{
-                        await manager.getCustomRepository(BotsRepository).update(botGame.bot.id, botGame.bot);
+                }
+                if (botUsers && botUsers.length){
+                    for (let botUser of botUsers){
+                        await manager.getCustomRepository(RobotsUserRepository).save(botUser);
+                    }   
+                }
+                if (sessions && sessions.length){
+                    for (let session of sessions){
+                        await manager.getCustomRepository(SessionRepository).save(session);
                     }
-                    await manager.getCustomRepository(BotGameRepository).save(botGame);
                 }
-                for (let botUser of botUsers){
-                    await manager.getCustomRepository(RobotsUserRepository).save(botUser);
-                }
-                for (let session of sessions){
-                    await manager.getCustomRepository(SessionRepository).save(session);
-                }
-                for (let stream of streams){
-                    stream.id = null;
-                    await manager.getCustomRepository(StreamsRepository).save(stream);
+                if (streams && streams.length){
+                    for (let stream of streams){
+                        stream.id = null;
+                        await manager.getCustomRepository(StreamsRepository).save(stream);
+                    }
                 }
                 if (game.id){
                     await this.update(game.id, game);
