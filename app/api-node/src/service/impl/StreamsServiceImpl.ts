@@ -8,16 +8,10 @@ import { SendResource } from "../../../lib/ReturnExtended";
 import { IStreamResource } from "../../resources/IStreamResource";
 import IConfig from "../IConfig";
 import * as fs from "fs"
-import * as AWS from "aws-sdk"
+import * as AWS from "aws-sdk";
 import * as path from "path";
 import { uuid } from "uuidv4";
 
-
-const credentials = new AWS.SharedIniFileCredentials({profile: 'default'});
-AWS.config.update({region: 'us-west-2'});
-AWS.config.credentials = credentials;
-
-const s3 = new AWS.S3(); 
 
 @Singleton
 export class StreamsServiceImpl implements StreamsService {
@@ -28,10 +22,22 @@ export class StreamsServiceImpl implements StreamsService {
     @Inject
     private config: IConfig;
 
+    private s3: AWS.S3;
 
     constructor(){
-        console.log("#################################", credentials)
-        console.log("========================", process.env)   
+        this.s3 = new AWS.S3({
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID,// .getAccessKeyId(),
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+        });
+
+        this.s3.listBuckets((err, data) => {
+            if (err){
+                console.log(err.message);
+            }
+            else {
+                console.log(data);
+            }
+        })
     }
 
     public getVideoLink(stream: StreamsEntity) {
@@ -39,14 +45,14 @@ export class StreamsServiceImpl implements StreamsService {
             Bucket: this.config.getBucket(), 
             Key: stream.s3Url, 
             Expires: this.config.getExpireUrl() };
-        var url = s3.getSignedUrl('getObject', params);
+        var url = this.s3.getSignedUrl('getObject', params);
 
         return (url);
     }
 
     public async watchDirectory(stream: IStreamResource){
         return new Promise((resolve, reject) => {
-            const resolve_path = `${stream.s3Url}`;
+            const resolve_path = `${this.config.getS3Dir()}/${stream.s3Url}`;
             console.log(resolve_path);
             if (fs.existsSync(resolve_path) && fs.statSync(resolve_path).isFile()){
                 const o = path.parse(resolve_path);
@@ -58,36 +64,34 @@ export class StreamsServiceImpl implements StreamsService {
                 };
                 console.log(params.Bucket);
                 console.log(params.Key);
-                s3.upload(params, async (err, data) => {
+                this.s3.upload(params, async (err, data) => {
+                    console.log(err);
                     if (err){
-                        console.log("MOTHERFUCKING ERROR", err);
                         const response: HttpResponseModel<IStreamResource> = {
                             message: err.message,
                             httpCode: 400
                         };
 
                         return resolve(response);
-                    } else {
-                        console.log("MOTHERFUCKING SUCCESS", err);
-                        stream.s3Url = params.Key;
-                        fs.unlinkSync(resolve_path);
-                        const ret: any = await this.saveOrUpdate(stream);
-                        const response: HttpResponseModel<IStreamResource> = {
-                            httpCode: 200,
-                            message: "stream updated",
-                            data: ret.data
-                        };
-
-                        resolve(response);
                     }
+                    stream.s3Url = params.Key;
+                    fs.unlinkSync(resolve_path);
+                    const ret: any = await this.saveOrUpdate(stream);
+                    const response: HttpResponseModel<IStreamResource> = {
+                        httpCode: 200,
+                        message: "stream updated",
+                        data: ret.data
+                    };
+
+                    resolve(response);
                 });
             }
             else {
-                console.log("file not found, has it been deleted ?")
                 const response: HttpResponseModel<IStreamResource> = {
                     httpCode: 400,
                     message: "File not found"
                 };
+
                 resolve(response);
             }
         });
