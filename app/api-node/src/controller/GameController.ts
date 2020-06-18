@@ -124,6 +124,17 @@ export class GameController {
     }
 
     @PUT
+    @Path("/:gameId/user/:userId")
+    @Security("ROLE_USER", "Bearer")
+    @Consumes("application/json; charset=UTF-8")
+    @Produces("application/json; charset=UTF-8")
+    @Response<HttpResponseModel<IGameResource>>(200)
+    @Response<HttpResponseModel<IGameResource>>(400)
+    public async linkUserToGame(@PathParam("userId") userId: number, @PathParam("gameId") gameId: number){
+        return (this.gameService.linkUserToGame(userId, gameId));
+    }
+
+    @PUT
     @Path("/:gameId/stream/:streamId")
     @Security("ROLE_USER", "Bearer")
     @Consumes("application/json; charset=UTF-8")

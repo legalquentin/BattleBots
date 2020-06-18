@@ -1,7 +1,4 @@
 import {MigrationInterface, QueryRunner, Table, TableForeignKey, TableColumn} from "typeorm";
-import { BotsRepository } from "../database/repositories/BotsRepository";
-import { RobotsUserRepository } from "../database/repositories/RobotsUserRepository";
-import { RobotsUserEntity } from "../database/entities/RobotsUserEntity";
 
 export class userBot1592487490190 implements MigrationInterface {
 
@@ -46,6 +43,7 @@ export class userBot1592487490190 implements MigrationInterface {
             referencedTableName: "robots",
             referencedColumnNames: ["id"]
         }));
+        /*
         const botRepository : BotsRepository = queryRunner.manager.getCustomRepository(BotsRepository);
         const botUserRepository : RobotsUserRepository = queryRunner.manager.getCustomRepository(RobotsUserRepository);
         const bots = await botRepository.find();
@@ -57,6 +55,7 @@ export class userBot1592487490190 implements MigrationInterface {
             botUser.robot = bot;
             await botUserRepository.save(botUser);
         }
+        */
         await queryRunner.dropForeignKey("robots", "fk_robots_player_id");
         await queryRunner.dropColumn("robots", "player_id");
     }
@@ -72,6 +71,8 @@ export class userBot1592487490190 implements MigrationInterface {
             referencedTableName: "users",
             referencedColumnNames: ["id"]
         }));
+
+        /*
         const botUserRepository : RobotsUserRepository = queryRunner.manager.getCustomRepository(RobotsUserRepository);
         const list = await botUserRepository.find();
         const botRepository : BotsRepository = queryRunner.manager.getCustomRepository(BotsRepository);
@@ -82,6 +83,7 @@ export class userBot1592487490190 implements MigrationInterface {
             bot.user = user;
             await botRepository.update(bot.id, bot);
         }
+        */
         await queryRunner.dropForeignKey("user_bot", "fk_user_bot_user_id");
         await queryRunner.dropForeignKey("user_bot", "fk_user_bot_bot_id");
         await queryRunner.dropTable("user_bot");

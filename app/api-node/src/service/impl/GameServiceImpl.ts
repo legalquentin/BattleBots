@@ -202,7 +202,7 @@ export class GameServiceImpl implements GameService {
     public async findAll(): Promise<SendResource<HttpResponseModel<Array<IGameResource>>>> {
         const gameResourceAsm = Container.get(GameResourceAsm);
         try {
-            const list = await this.serviceFactory.getGameRepository().find();
+            const list = await this.serviceFactory.getGameRepository().list();
             const resources = await gameResourceAsm.toResources(list);
             const response : HttpResponseModel<Array<IGameResource>> = {
                 httpCode: 200,
@@ -245,6 +245,8 @@ export class GameServiceImpl implements GameService {
             if (await this.serviceFactory.getArenaRepository().hasArena(id)){
                 await gameResourceAsm.AddArenaResource(game, resource);
             }
+            const gameUsers = await game.gameUsers;
+            await gameResourceAsm.AddGamesUsersInGameResource(gameUsers, resource);
             const response : HttpResponseModel<IGameResource> = {
                 httpCode: 200,
                 message: "game detail",

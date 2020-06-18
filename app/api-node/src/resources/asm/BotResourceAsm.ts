@@ -5,7 +5,7 @@ import { Singleton, Container, Inject } from "typescript-ioc";
 import { ArenaEntity } from "../../database/entities/ArenaEntity";
 import { RobotsArenaEntity } from "../../database/entities/RobotsArenaEntity";
 import { StreamsResourceAsm } from "./StreamsResourceAsm";
-import { UserResourceAsm } from "./UserResourceAsm";
+//import { UserResourceAsm } from "./UserResourceAsm";
 /*
 import { GameResourceAsm } from "./GameResourceAsm";
 import { StreamsResourceAsm } from "./StreamsResourceAsm";
@@ -27,7 +27,7 @@ export class BotResourceAsm {
 
 
     public async toResource(robot: RobotsEntity) {
-        const userResourceAsm = Container.get(UserResourceAsm);
+       // const userResourceAsm = Container.get(UserResourceAsm);
         const streamResourceAsm = Container.get(StreamsResourceAsm);
         const resource : IBotsResource = {
             id: robot.id,
@@ -77,7 +77,7 @@ export class BotResourceAsm {
 
     public async toEntity(bot: IBotsResource) {
         const robot = new RobotsEntity();
-        const userResourceAsm = Container.get(UserResourceAsm);
+       // const userResourceAsm = Container.get(UserResourceAsm);
 
         robot.id = bot.id;
         robot.botIp = bot.botIp;

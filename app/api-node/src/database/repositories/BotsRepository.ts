@@ -5,7 +5,6 @@ import { EntityError } from "../../../lib/EntityError";
 import { EEntityStatus } from "../../../lib/EEntityStatus";
 import { StreamsRepository } from "./StreamsRepository";
 import { connectionName } from "../../service/util/connectionName"; 
-import { UserRepository } from "./UserRepository";
 
 @Singleton
 @EntityRepository(RobotsEntity)
@@ -39,10 +38,15 @@ export class BotsRepository extends Repository<RobotsEntity> {
     {
         return (this.
         createQueryBuilder("bots").
-        leftJoinAndSelect("bots.user", "user").
+        leftJoinAndSelect("bots.robotsUser", "robotsUser").
+        leftJoinAndSelect("robotsUser.user", "user").
         where("bots.id = :id", {
             "id": id
         }).getOne());
+    }
+
+    public search(gameId: number, userId: number){
+        
     }
 
     public async linkBotToStream(botId: number, streamId: number) {

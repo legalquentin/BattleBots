@@ -1,5 +1,5 @@
 import { BotsService } from "../BotsService";
-import { RobotsEntity } from "../../database/entities/RobotsEntity";
+//import { RobotsEntity } from "../../database/entities/RobotsEntity";
 import IServiceFactory from "../IServiceFactory";
 import { Inject, Singleton, Container } from "typescript-ioc";
 import { IBotsResource } from "../../resources/IBotsResource";
@@ -7,7 +7,7 @@ import { SendResource } from "../../../lib/ReturnExtended";
 import HttpResponseModel from "../../resources/HttpResponseModel";
 import { BotResourceAsm } from "../../resources/asm/BotResourceAsm";
 import { EEntityStatus } from "../../../lib/EEntityStatus";
-import { RobotsUserEntity } from "../../database/entities/RobotsUserEntity";
+//import { RobotsUserEntity } from "../../database/entities/RobotsUserEntity";
 
 @Singleton
 export class BotsServiceImpl implements BotsService {
@@ -162,11 +162,11 @@ export class BotsServiceImpl implements BotsService {
 
     public async linkBotToPlayer(botId: number, playerId: number): Promise<SendResource<HttpResponseModel<IBotsResource>>>{
         try {
-            const botResourceAsm = Container.get(BotResourceAsm);
+           // const botResourceAsm = Container.get(BotResourceAsm);
             const response: HttpResponseModel<IBotsResource> = {};
-            const entity : RobotsUserEntity = await this.service.getBotUserRepository().linkBotToPlayer(botId, playerId);
+            //const entity : RobotsUserEntity = await this.service.getBotUserRepository().linkBotToPlayer(botId, playerId);
             //const resource = await botResourceAsm.toResource(entity);
-
+            await this.service.getBotUserRepository().linkBotToPlayer(botId, playerId);
             response.httpCode = 200;
             //response.data = resource;
             response.message = `link bot ${botId} to player ${playerId}`;

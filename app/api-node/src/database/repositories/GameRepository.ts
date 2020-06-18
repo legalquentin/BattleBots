@@ -24,38 +24,36 @@ export class GameRepository extends Repository<GameEntity> {
     public list(){
         return (this.
             createQueryBuilder("game").
+            leftJoinAndSelect("game.robots", "robots").
+            leftJoinAndSelect("robots.bot", "bot").
+            leftJoinAndSelect("game.gameUsers", "gameUser").
+            leftJoinAndSelect("gameUser.user", "user").
+            leftJoinAndSelect("bot.streams", "streams_1").
+            leftJoinAndSelect("game.arena", "arena").
+            leftJoinAndSelect("arena.robotArena", "robotArena").
+            leftJoinAndSelect("robotArena.robot", "robot", "robot.id = bot_user.id").
+            leftJoinAndSelect("bot_user.streams", "streams_2").
+            getMany());
+    }
+
+    public getOne(id: number){
+        return (this.
+            createQueryBuilder("game").
             leftJoinAndSelect("game.gameUsers", "gameUser").
             leftJoinAndSelect("gameUser.user", "user").
             leftJoinAndSelect("user.robotsUser", "robotsUser").
             leftJoinAndSelect("robotsUser.robot", "bot_user").
             leftJoinAndSelect("game.robots", "robots").
             leftJoinAndSelect("robots.bot", "bot", "bot_user.id = bot.id").
+            leftJoinAndSelect("bot.streams", "streams_1").
             leftJoinAndSelect("game.arena", "arena").
             leftJoinAndSelect("arena.robotArena", "robotArena").
             leftJoinAndSelect("robotArena.robot", "robot", "robot.id = bot_user.id").
-            leftJoinAndSelect("robot.streams", "stream_2").
-            leftJoinAndSelect("game.streams", "streams").
-            getMany());
-    }
-
-    public getOne(id: number){
-        return (this.
-        createQueryBuilder("game").
-        leftJoinAndSelect("game.gameUsers", "gameUser").
-        leftJoinAndSelect("gameUser.user", "user").
-        leftJoinAndSelect("user.robotsUser", "robotsUser").
-        leftJoinAndSelect("robotsUser.robot", "bot_user").
-        leftJoinAndSelect("game.robots", "robots").
-        leftJoinAndSelect("robots.bot", "bot", "bot_user.id = bot.id").
-        leftJoinAndSelect("game.arena", "arena").
-        leftJoinAndSelect("arena.robotArena", "robotArena").
-        leftJoinAndSelect("robotArena.robot", "robot", "robot.id = bot_user.id").
-        leftJoinAndSelect("robot.streams", "stream_2").
-        leftJoinAndSelect("game.streams", "streams").
-        where("game.id = :game_id", {
-            "game_id": id
-        }).
-        getOne());
+            leftJoinAndSelect("bot_user.streams", "streams_2").
+            where("game.id = :game_id", {
+                "game_id": id
+            }).
+            getOne());
     }
 
     public async linkStreamToGame(streamId: number, gameId: number){

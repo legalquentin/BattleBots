@@ -14,8 +14,9 @@ export class PlayerResourceAsm {
             roles: user.roles,
             bots: []
         };
-        if (user.robotsUser){
-            for (let botUser of user.robotsUser){
+        const robotsUser = await user.robotsUser;
+        if (robotsUser){
+            for (let botUser of robotsUser){
                 const bot = botUser.robot;
 
                 resource.bots.push(await botResourceAsm.toResource(bot));

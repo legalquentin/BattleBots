@@ -1,13 +1,10 @@
 import { IGameResource } from "../IGameResource";
 import { GameEntity } from "../../database/entities/GameEntity";
 import { Singleton, Container } from "typescript-ioc";
-import { BotResourceAsm } from "./BotResourceAsm";
 import { StreamsResourceAsm } from "./StreamsResourceAsm";
 import { ArenaResourceAsm } from "./ArenaResourceAsm";
-//import { ArenaResourceAsm } from "./ArenaResourceAsm";
-//import { BotResourceAsm } from "./BotResourceAsm";
-//import { RobotGameEntity } from "../../database/entities/RobotGameEntity";
-//import { StreamsResourceAsm } from "./StreamsResourceAsm";
+import { GameUserEntity } from "../../database/entities/GameUserEntity";
+import { PlayerResourceAsm } from "./PlayerResourceAsm";
 
 @Singleton
 export class GameResourceAsm {
@@ -74,6 +71,20 @@ export class GameResourceAsm {
         return (resource);
     } 
 
+    public async AddGamesUsersInGameResource(gameUsers: Array<GameUserEntity>, resource: IGameResource){
+        const playerResourceAsm = Container.get(PlayerResourceAsm);
+        resource.players = [];
+
+        if (gameUsers){
+            for (let gameUser of gameUsers){
+                const user = gameUser.user;
+
+                resource.players.push(await playerResourceAsm.toResource(user));
+            }
+        }
+        return (resource);
+    }
+
     public async toResource(entity: GameEntity){
         const resource : IGameResource = this.toGameResource(entity);
 
@@ -84,7 +95,10 @@ export class GameResourceAsm {
         const resources = [];
 
         for (let game of games){
-            resources.push(await this.toResource(game));
+            const resource = await this.toResource(game);
+            const gameUsers = await game.gameUsers;
+            await this.AddGamesUsersInGameResource(gameUsers, resource);
+            resources.push(resource);
         }
         return (resources);
     }
