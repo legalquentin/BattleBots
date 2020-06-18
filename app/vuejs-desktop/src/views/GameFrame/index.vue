@@ -8,11 +8,13 @@ import axios from "axios";
 
 import SocketService from "./SocketService";
 
+import EndOfGameModal from '../EndOfGameFrame/index.vue';
+
 type keyOpt = {
   [key: string]: boolean;
 };
 
-@Component
+@Component({ components: { EndOfGameModal } })
 export default class GameFrame extends Vue {
   @Ref("videoCanvas") private videoCanvas?: HTMLCanvasElement;
   @Prop() private gameInfos: any;

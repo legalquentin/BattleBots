@@ -15,7 +15,6 @@ export default class CreateGameFrame extends Vue {
       this.$router.push({ name: "MainFrame" });
     }
     this.gameCreateLoading = true;
-
     const result = await axios.post(
       "http://hardwar.ddns.net/api/games",
       { name: this.name },
