@@ -207,11 +207,11 @@ func JoinGame(res http.ResponseWriter, req *http.Request) {
 				return
 			}
 		}
-		for _, b := range selected.Env.Bots {
+		for idx, b := range selected.Env.Bots {
 			if b.Taken == false {
 				log.Println(prefixLog, "reserving a bot")
 				// TODO: add a real token generation
-				b.Taken = true
+				baseGameInstances[t.GameID].Env.Bots[idx].Taken = true
 				p = Player{t.PlayerID, tokenGenerator(), &b, Context{Moving: false, Energy: 100, Heat: 0}, "", t.GameID, sync.Mutex{}}
 				var g = baseGameInstances[t.GameID]
 				p.Mutex.Lock()
@@ -223,10 +223,11 @@ func JoinGame(res http.ResponseWriter, req *http.Request) {
 				for _, b := range baseGameInstances[t.GameID].Env.Bots {
 					if b.Taken == false {
 						fmt.Println(prefixLog, b.Name+" TAKEN - FALSE")
+						return
 						// still one slot left, we don't start the game
 						// return
 					} else {
-						fmt.Println(prefixLog, b.Name+"TAKEN - TRUE")
+						fmt.Println(prefixLog, b.Name+" TAKEN - TRUE")
 					}
 				}
 				// all slot taken, we start the game
