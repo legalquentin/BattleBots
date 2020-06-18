@@ -8,7 +8,6 @@ import { ArenaRepository } from "./ArenaRepository";
 import { connectionName } from "../../service/util/connectionName";
 import { BotGameRepository } from "./BotGameRepository";
 import { BotsRepository } from "./BotsRepository";
-import { RobotsUserEntity } from "../entities/RobotsUserEntity";
 import { RobotsUserRepository } from "./RobotsUserRepository";
 import { SessionRepository } from "./SessionRepository";
 
