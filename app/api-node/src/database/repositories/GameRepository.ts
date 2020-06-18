@@ -21,18 +21,37 @@ export class GameRepository extends Repository<GameEntity> {
         this.metadata = getConnection(connectionName()).getMetadata(GameEntity);
     }
 
+    public list(){
+        return (this.
+            createQueryBuilder("game").
+            leftJoinAndSelect("game.gameUsers", "gameUser").
+            leftJoinAndSelect("gameUser.user", "user").
+            leftJoinAndSelect("user.robotsUser", "robotsUser").
+            leftJoinAndSelect("robotsUser.robot", "bot_user").
+            leftJoinAndSelect("game.robots", "robots").
+            leftJoinAndSelect("robots.bot", "bot", "bot_user.id = bot.id").
+            leftJoinAndSelect("game.arena", "arena").
+            leftJoinAndSelect("arena.robotArena", "robotArena").
+            leftJoinAndSelect("robotArena.robot", "robot", "robot.id = bot_user.id").
+            leftJoinAndSelect("robot.streams", "stream_2").
+            leftJoinAndSelect("game.streams", "streams").
+            getMany());
+    }
+
     public getOne(id: number){
         return (this.
         createQueryBuilder("game").
+        leftJoinAndSelect("game.gameUsers", "gameUser").
+        leftJoinAndSelect("gameUser.user", "user").
+        leftJoinAndSelect("user.robotsUser", "robotsUser").
+        leftJoinAndSelect("robotsUser.robot", "bot_user").
         leftJoinAndSelect("game.robots", "robots").
-        leftJoinAndSelect("robots.bot", "bot").
-        leftJoinAndSelect("bot.streams", "stream_1").
+        leftJoinAndSelect("robots.bot", "bot", "bot_user.id = bot.id").
         leftJoinAndSelect("game.arena", "arena").
         leftJoinAndSelect("arena.robotArena", "robotArena").
-        leftJoinAndSelect("robotArena.robot", "robot").
+        leftJoinAndSelect("robotArena.robot", "robot", "robot.id = bot_user.id").
         leftJoinAndSelect("robot.streams", "stream_2").
         leftJoinAndSelect("game.streams", "streams").
-        leftJoinAndSelect("bot.user", "user").
         where("game.id = :game_id", {
             "game_id": id
         }).

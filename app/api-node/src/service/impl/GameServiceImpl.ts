@@ -245,17 +245,6 @@ export class GameServiceImpl implements GameService {
             if (await this.serviceFactory.getArenaRepository().hasArena(id)){
                 await gameResourceAsm.AddArenaResource(game, resource);
             }
-            const robotGames = await game.robots;
-            const gameUsers = await game.gameUsers;
-            const players = [];
-            
-            for (let gameUser of gameUsers){
-                players.push(gameUser.user);
-            }
-            for (let robotGame of robotGames){
-                const bot = robotGame.bot;
-                const robotUsers = await bot.robotsUser;
-            }
             const response : HttpResponseModel<IGameResource> = {
                 httpCode: 200,
                 message: "game detail",
