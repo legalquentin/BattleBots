@@ -12,7 +12,6 @@ export class GameResourceAsm {
 
     public async toEntity(game: IGameResource){
         const playerResourceAsm = Container.get(PlayerResourceAsm);
-       // const streamResourceAsm = Container.get(StreamsResourceAsm);
         const sessionResourceAsm = Container.get(SessionResourceAsm);
         const entity = new GameEntity();
         const sessions = [];
