@@ -25,6 +25,7 @@ export class StreamsServiceImpl implements StreamsService {
     private s3: AWS.S3;
 
     constructor(){
+        console.log(process.env)
         this.s3 = new AWS.S3({
             accessKeyId: process.env.AWS_ACCESS_KEY_ID, //  this.config.getAccessKeyId(),
             secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY //this.config.getSecretAccessKey()
