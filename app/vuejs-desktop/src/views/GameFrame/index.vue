@@ -49,6 +49,7 @@ export default class GameFrame extends Vue {
   isEndOfGame: boolean = false;
 
   mounted() {
+    document.body.className = "game";
     if (!this.playerId) {
       alert("Something goes wrong. Please try login again...");
       this.$router.replace({ name: "LoginFrame" });
