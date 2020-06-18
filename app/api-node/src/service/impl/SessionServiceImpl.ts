@@ -19,7 +19,8 @@ export class SessionServiceImpl implements SessionService {
         const resource = this.sessionResourceAsm.toResource(saved);
         const response: HttpResponseModel<IContextBotResource> = {
             httpCode: 200,
-            message: "save session"
+            message: "save session",
+            data: resource
         };
 
         return (response);
@@ -27,7 +28,7 @@ export class SessionServiceImpl implements SessionService {
 
     public async update(context: IContextBotResource): Promise<HttpResponseModel<IContextBotResource>> {
         const entity = this.sessionResourceAsm.toEntity(context);
-        const update = await this.sessionRepository.update(entity.id, entity);
+        await this.sessionRepository.update(entity.id, entity);
         const response: HttpResponseModel<IContextBotResource> = {
             httpCode: 200,
             message: "update session"

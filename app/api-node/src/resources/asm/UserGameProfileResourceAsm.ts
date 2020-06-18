@@ -1,8 +1,7 @@
-import { Singleton, Container } from "typescript-ioc";
+import { Singleton } from "typescript-ioc";
 import UserEntity from "../../database/entities/UserEntity";
 import IUserResource from "../IUserResource";
 import { ERolesStatus } from "../ERolesStatus";
-import { BotResourceAsm } from "./BotResourceAsm";
 
 @Singleton
 export class UserGameProfileResourceAsm {
@@ -43,8 +42,7 @@ export class UserGameProfileResourceAsm {
     */
 
     public async toUserEntity(resource: IUserResource){
-        const botResourceAsm = Container.get(BotResourceAsm);
-        const entity = new UserEntity();
+         const entity = new UserEntity();
 
         entity.firstname = resource.firstname;
         entity.lastname = resource.lastname;
@@ -68,7 +66,6 @@ export class UserGameProfileResourceAsm {
     }
 
     public async toUserResource(user: UserEntity){
-        const botResourceAsm = Container.get(BotResourceAsm);
         const resource: IUserResource = {
             firstname: user.firstname,
             lastname: user.lastname,
