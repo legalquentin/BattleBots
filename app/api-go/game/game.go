@@ -226,9 +226,8 @@ func JoinGame(res http.ResponseWriter, req *http.Request) {
 						return
 						// still one slot left, we don't start the game
 						// return
-					} else {
-						fmt.Println(prefixLog, b.Name+" TAKEN - TRUE")
 					}
+					fmt.Println(prefixLog, b.Name+" TAKEN - TRUE")
 				}
 				// all slot taken, we start the game
 				g = baseGameInstances[t.GameID]
