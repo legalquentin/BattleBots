@@ -22,6 +22,11 @@ export class Session1592498810566 implements MigrationInterface {
                     isNullable: false
                 },
                 {
+                    name: "bot_id",
+                    type: "int",
+                    isNullable: false,
+                },
+                {
                     name: "player_id",
                     type: "int",
                     isNullable: false
@@ -54,7 +59,7 @@ export class Session1592498810566 implements MigrationInterface {
         await queryRunner.createForeignKey("session", new TableForeignKey({
             name: "fk_session_player_id",
             columnNames: ["player_id"],
-            referencedTableName: "player",
+            referencedTableName: "users",
             referencedColumnNames: ["id"]
         }));
 
@@ -67,7 +72,7 @@ export class Session1592498810566 implements MigrationInterface {
 
         await queryRunner.createForeignKey("session", new TableForeignKey({
             name: "fk_session_bot_id",
-            columnNames: ["robots_id"],
+            columnNames: ["bot_id"],
             referencedTableName: "robots",
             referencedColumnNames: ["id"]
         }));
