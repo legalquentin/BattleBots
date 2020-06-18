@@ -45,8 +45,37 @@ export class BotsRepository extends Repository<RobotsEntity> {
         }).getOne());
     }
 
-    public search(gameId: number, userId: number){
-        return (null);
+    public async search(gameId: number, userId: number){
+        const result = await this.manager.query(`
+            SELECT r.id as id, 
+                   r.botIp as botIp, 
+                   r.armor as armor, 
+                   r.damage as damage, 
+                   r.fireRate as fireRate, 
+                   r.running as running, 
+                   r.speed as speed, 
+                   r.taken as taken,
+                   r.name as name
+            FROM robots r
+            LEFT JOIN robots_game
+            ON robots_game.bot_id = 
+        `);
+        const entities = [];
+        for (let item of result){
+            const bot = new RobotsEntity();
+            
+            bot.id = item.id;
+            bot.botIp = item.botIp;
+            bot.armor = item.armor;
+            bot.damage = item.damage;
+            bot.fireRate = item.fireRate;
+            bot.running = item.running;
+            bot.speed = item.speed;
+            bot.name = item.name;
+            bot.taken = item.taken;
+            entities.push(bot);
+        }
+        return (entities);
     }
 
     public async linkBotToStream(botId: number, streamId: number) {
