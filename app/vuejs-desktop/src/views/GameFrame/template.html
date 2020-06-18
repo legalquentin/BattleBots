@@ -6,7 +6,7 @@
             <SuiGridColumn style="max-height: 40px; overflow: hidden" textAlign="left" :width="6">
                 <h3 is="sui-header">
                     <sui-icon name="gamepad" color="violet" />
-                    <sui-header-content>Partie en cours : {{ gameInfos.game.name }}</sui-header-content>
+                    <sui-header-content>{{ gameInfos.game.name }}</sui-header-content>
                   </h3>
             </SuiGridColumn>
             <SuiGridColumn textAlign="right" :width="4">
@@ -145,7 +145,7 @@
                 <sui-progress progress state="active" color="yellow" indicating :percent="botContext.energy" label="ENERGIE"/>
             </SuiGridColumn>
             <SuiGridColumn>
-                <sui-progress progress state="active" color="red" :percent="botContext.thermal" label="CHALEUR"/>
+                <sui-progress progress state="active" color="red" :percent="botContext.thermal" label="SURCHAUFFE"/>
             </SuiGridColumn>
             
         </SuiGridRow>
