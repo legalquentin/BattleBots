@@ -89,7 +89,7 @@ export class GameServiceImpl implements GameService {
                         streamEntity.duration = 1;
                         streamEntity.running = 1;
                         streamEntity.private = 1;
-                        await this.streamService.upload(streamEntity, {
+                        this.streamService.upload(streamEntity, {
                             Key: `${uuid()}${o.ext}`,
                             Bucket: this.config.getBucket(),
                             Body: fs.createReadStream(resolve_path)
