@@ -10,7 +10,6 @@ import { SendResource } from "../../../lib/ReturnExtended";
 import { GameResourceAsm } from "../../resources/asm/GameResourceAsm";
 import IBattleWorkerService from "../IBattleWorkerService";
 import { IPlayerResource } from "../../resources/IPlayerResource";
-import { BotResourceAsm } from "../../resources/asm/BotResourceAsm";
 import { UserResourceAsm } from "../../resources/asm/UserResourceAsm";
 
 @Singleton
