@@ -78,11 +78,12 @@ export default class ConnectionManager extends Vue {
     }
 
     public getGameList(): Promise<AxiosResponse> {
-        return this.axios.get('games')
-            .then((response: AxiosResponse) => {
-                return _get(response, 'data.data', null);
-            })
-        ;
+        // return this.axios.get('games')
+        //     .then((response: AxiosResponse) => {
+        //         return _get(response, 'data.data', null);
+        //     })
+        // ;
+        return new Promise((resolve)=>{resolve()})
     }
 
     public createGame(): void {
