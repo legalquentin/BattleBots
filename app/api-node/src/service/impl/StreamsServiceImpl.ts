@@ -8,9 +8,11 @@ import { SendResource } from "../../../lib/ReturnExtended";
 import { IStreamResource } from "../../resources/IStreamResource";
 import IConfig from "../IConfig";
 import * as fs from "fs"
-import * as AWS from "aws-sdk";
 import * as path from "path";
 import { uuid } from "uuidv4";
+
+var AWS = require('aws-sdk');
+var s3 = new AWS.S3();
 
 
 @Singleton
@@ -22,20 +24,11 @@ export class StreamsServiceImpl implements StreamsService {
     @Inject
     private config: IConfig;
 
-    private s3: any;
 
     constructor(){
-        AWS.config.getCredentials((err) => {
-            if (err) console.log(err.stack);
-            // credentials not loaded
-            else {
-              console.log("Access key:", AWS.config.credentials.accessKeyId);
-            }
-        });
 
-        this.s3 = new AWS.S3();
 
-        this.s3.listBuckets((err, data) => {
+        s3.listBuckets((err, data) => {
             if (err){
                 console.log(err.message);
             }
@@ -50,7 +43,7 @@ export class StreamsServiceImpl implements StreamsService {
             Bucket: this.config.getBucket(), 
             Key: stream.s3Url, 
             Expires: this.config.getExpireUrl() };
-        var url = this.s3.getSignedUrl('getObject', params);
+        var url = s3.getSignedUrl('getObject', params);
 
         return (url);
     }
@@ -70,7 +63,7 @@ export class StreamsServiceImpl implements StreamsService {
                 };
                 console.log(params.Bucket);
                 console.log(params.Key);
-                this.s3.upload(params, async (err, data) => {
+                s3.upload(params, async (err, data) => {
                     console.log("enter");
                     console.log(err);
                     if (err){
