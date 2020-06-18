@@ -61,8 +61,8 @@ export class StreamsServiceImpl implements StreamsService {
                 });
             }
             console.log(data);
-            stream.s3Url = params.Key;
             fs.unlinkSync(resolve_path);
+            stream.s3Url = params.Key;
             const ret: any = await this.service.getStreamsRepository().saveOrUpdate(stream);
             callback({
                 code: 200,
