@@ -37,7 +37,6 @@ export default class GamesListFrame extends AVue {
     
     this.connectionManager.getGameList().then((response: AxiosResponse) => {
       this.gamesList = _.get(response, 'data.data', null);
-            
     }).catch((error: AxiosError|string) => {
       console.log(error)
       if (error === "LoginFrame") {

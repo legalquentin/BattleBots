@@ -39,7 +39,7 @@ export default class ConnectionManager extends Vue {
             if (this.hasRefreshToken) {
                 this.hasRefreshToken = false;
                 console.log("test")
-                
+
                 return reject("LoginFrame");
             }
             if (errMessage === 403 && this.getJwt()) {
@@ -62,7 +62,7 @@ export default class ConnectionManager extends Vue {
                     });
                     resolve(response);
                 }).catch(() => {
-                    
+
                     reject("LoginFrame");
                 });
             } else {
@@ -94,6 +94,10 @@ export default class ConnectionManager extends Vue {
 
     public createGame(): void {
 
+    }
+
+    public joinGame(gameId): Promise<AxiosResponse> {
+        return this.axios.put(`games/join/${gameId}`);
     }
 
     private refreshToken(): AxiosPromise {
