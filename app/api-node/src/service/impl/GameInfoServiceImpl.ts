@@ -40,7 +40,7 @@ export class GameInfoServiceImpl implements GameInfoService  {
                 this.streamsService.watchDirectory({
                     game: gameInfo.game,
                     s3Url: gameInfo.video_loser,
-                    kinesisUrl: null,
+                    kinesisUrl: "none",
                     private: 0,
                     running: 0,
                     duration: 1,
