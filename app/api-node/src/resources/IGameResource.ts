@@ -1,6 +1,6 @@
 import { EGameStatus } from "./EGameStatus";
 import { IArenaResource } from "./IArenaResource";
-import { IStreamResource } from "./IStreamResource";
+//import { IStreamResource } from "./IStreamResource";
 import { IPlayerResource } from "./IPlayerResource";
 
 export class IGameResource {
