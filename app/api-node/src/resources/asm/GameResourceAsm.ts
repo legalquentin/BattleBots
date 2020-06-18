@@ -71,18 +71,14 @@ export class GameResourceAsm {
         return (resource);
     } 
 
-    public async AddGamesUsersInGameResource(gameUsers: Array<GameUserEntity>, resource: IGameResource){
+    public async AddGamesUsersInGameResource(gameUser: GameUserEntity, resource: IGameResource){
         const playerResourceAsm = Container.get(PlayerResourceAsm);
-        resource.players = [];
-
-        if (gameUsers){
-            for (let gameUser of gameUsers){
-                const user = gameUser.user;
-
-                resource.players.push(await playerResourceAsm.toResource(user));
-            }
+        if (!resource.players){
+            resource.players = [];
         }
-        return (resource);
+        const player = await playerResourceAsm.toResource(gameUser.user);
+        resource.players.push(player);
+        return (player);
     }
 
     public async toResource(entity: GameEntity){
@@ -96,8 +92,6 @@ export class GameResourceAsm {
 
         for (let game of games){
             const resource = await this.toResource(game);
-            const gameUsers = await game.gameUsers;
-            await this.AddGamesUsersInGameResource(gameUsers, resource);
             resources.push(resource);
         }
         return (resources);

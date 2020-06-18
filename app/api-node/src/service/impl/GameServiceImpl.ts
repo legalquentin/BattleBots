@@ -9,6 +9,9 @@ import { IGameResource } from "../../resources/IGameResource";
 import { SendResource } from "../../../lib/ReturnExtended";
 import { GameResourceAsm } from "../../resources/asm/GameResourceAsm";
 import IBattleWorkerService from "../IBattleWorkerService";
+import { IPlayerResource } from "../../resources/IPlayerResource";
+import { BotResourceAsm } from "../../resources/asm/BotResourceAsm";
+import { UserResourceAsm } from "../../resources/asm/UserResourceAsm";
 
 @Singleton
 export class GameServiceImpl implements GameService {
@@ -226,6 +229,7 @@ export class GameServiceImpl implements GameService {
         try {
             const game = await this.serviceFactory.getGameRepository().getOne(id);
             const gameResourceAsm = Container.get(GameResourceAsm);
+            const userResourceAsm = Container.get(UserResourceAsm);
 
             if (!game){
                 const response : HttpResponseModel<IGameResource> = {
@@ -245,8 +249,22 @@ export class GameServiceImpl implements GameService {
             if (await this.serviceFactory.getArenaRepository().hasArena(id)){
                 await gameResourceAsm.AddArenaResource(game, resource);
             }
-            const gameUsers = await game.gameUsers;
-            await gameResourceAsm.AddGamesUsersInGameResource(gameUsers, resource);
+            let gameUsers = await game.gameUsers;
+
+            if (!gameUsers){
+                gameUsers = [];
+            }
+            for (let gameUser of gameUsers){
+                const player : IPlayerResource = await gameResourceAsm.AddGamesUsersInGameResource(gameUser, resource);
+                let bots = await gameUser.user.robotsUser;
+
+                if (!bots){
+                    bots = [];
+                }
+                for (let bot of bots){
+                    await userResourceAsm.AddBotResource(bot.robot, player);
+                }
+            }
             const response : HttpResponseModel<IGameResource> = {
                 httpCode: 200,
                 message: "game detail",

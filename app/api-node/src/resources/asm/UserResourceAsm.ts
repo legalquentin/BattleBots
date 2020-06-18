@@ -3,6 +3,9 @@ import IUserResource from "../IUserResource";
 import { ERolesStatus } from "../ERolesStatus";
 import { Singleton, Container } from "typescript-ioc";
 import { UserGameProfileResourceAsm } from "./UserGameProfileResourceAsm";
+import { RobotsEntity } from "../../database/entities/RobotsEntity";
+import { IPlayerResource } from "../IPlayerResource";
+import { BotResourceAsm } from "./BotResourceAsm";
 
 @Singleton
 export class UserResourceAsm {
@@ -14,6 +17,15 @@ export class UserResourceAsm {
 
     public async toResource(user: UserEntity){
         return this.userGameProfileResourceAsm.toUserResource(user);
+    }
+
+    public async AddBotResource(bot: RobotsEntity, player: IPlayerResource){
+        const botResourceAsm = Container.get(BotResourceAsm);
+        if (!player.bots){
+            player.bots = [];
+        }
+        player.bots.push(await botResourceAsm.toResource(bot));
+        return (player);
     }
 
     public async toResources(users: Array<UserEntity>){
