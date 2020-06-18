@@ -28,7 +28,7 @@ export default class GameFrame extends Vue {
 
   private socketService: SocketService = new SocketService();
 
-  private botContext: { energy: number } = { energy: 100 };
+  private botContext: { energy: number, thermal: number } = { energy: 100, thermal: 0 };
 
   private keys: keyOpt = {
     ArrowUp: false,
@@ -108,11 +108,17 @@ export default class GameFrame extends Vue {
     //     break;
     // }
     // console.log(message);
+    
     if (message.dt === 1) {
       this.botContext.energy = !message.dv ? 0 : message.dv;
       return;
     }
-
+    
+    if (message.dt === 2) {
+      this.botContext.thermal = message.dv;
+      return;
+    }
+ 
     if (message.dt === -1) {
       //  && message.dv === 0
       console.log("ticked");
