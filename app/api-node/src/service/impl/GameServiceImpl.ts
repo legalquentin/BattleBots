@@ -81,7 +81,8 @@ export class GameServiceImpl implements GameService {
                         const streamEntity = new StreamsEntity();
                         const resolve_path = `${player.stream}`;
                         const o = path.parse(resolve_path);
-    
+                        let i = 0;
+
                         streamEntity.s3Url = player.stream;
                         streamEntity.kinesisUrl = "kinesis.com";
                         streamEntity.encodage = "ffmpeg";
@@ -93,11 +94,11 @@ export class GameServiceImpl implements GameService {
                             Bucket: this.config.getBucket(),
                             Body: fs.createReadStream(resolve_path)
                         }, (param) => {
-                            console.log(param);
                             params.push(param);
-                            if (players.length == params.length){
+                            if (players.length == (i)){
                                 resolve(params);
                             }
+                            i++;
                         });
                     }
                 }
