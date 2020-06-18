@@ -52,7 +52,7 @@ export class StreamsServiceImpl implements StreamsService {
 
     public async watchDirectory(stream: IStreamResource){
         return new Promise((resolve, reject) => {
-            const resolve_path = `${this.config.getS3Dir()}/${stream.s3Url}`;
+            const resolve_path = `${stream.s3Url}`;
             console.log(resolve_path);
             if (fs.existsSync(resolve_path) && fs.statSync(resolve_path).isFile()){
                 const o = path.parse(resolve_path);
