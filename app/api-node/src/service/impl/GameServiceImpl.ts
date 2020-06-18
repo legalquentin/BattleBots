@@ -103,7 +103,9 @@ export class GameServiceImpl implements GameService {
                     }
                 }
             }));
+            console.log("before ?");
             await promise();
+            console.log("after ?");
             const saved = await this.serviceFactory.getGameRepository().saveOrUpdate(entity);
             const resource = await gameResourceAsm.toResource(saved);
             game.id = saved.id;
