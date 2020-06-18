@@ -91,7 +91,7 @@ export class GameServiceImpl implements GameService {
                         Bucket: this.config.getBucket(),
                         Body: fs.createReadStream(resolve_path)
                     }, (param) => {
-
+                        console.log(param);
                     });
                 }
             }
