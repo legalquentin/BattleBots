@@ -22,7 +22,7 @@ export class UserResourceAsm {
     public async AddBotResource(bot: RobotsEntity, player: IPlayerResource){
         const botResourceAsm = Container.get(BotResourceAsm);
         
-        player.bot = await botResourceAsm.toResource(bot);
+        player.botSpecs = await botResourceAsm.toResource(bot);
         return (player);
     }
 
