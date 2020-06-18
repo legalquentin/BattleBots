@@ -4,6 +4,7 @@ import { RobotGameEntity } from "./RobotGameEntity";
 import { RobotsArenaEntity } from "./RobotsArenaEntity";
 import { StreamsEntity } from "./StreamsEntity";
 import { RobotsUserEntity } from "./RobotsUserEntity";
+import { SessionEntity } from "./SessionEntity";
 
 @Entity({
     name: "robots"
@@ -53,4 +54,9 @@ export class RobotsEntity extends AbstractEntity {
         lazy: true
     })
     public streams?: Array<StreamsEntity>;
+
+    @OneToMany(type => SessionEntity, session => session.bot, {
+        lazy: true
+    })
+    public sessions?: Array<SessionEntity>;
 }

@@ -1,6 +1,5 @@
 import { IStreamResource } from "./IStreamResource";
 import { IGameResource } from "./IGameResource";
-import IUserResource from "./IUserResource";
 
 export interface IBotsResource {
     id: number;
@@ -14,5 +13,4 @@ export interface IBotsResource {
     armor: number;
     streams? : Array<IStreamResource>;
     games?: Array<IGameResource>;
-    gameProfile?: IUserResource;
 }

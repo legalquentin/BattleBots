@@ -41,6 +41,9 @@ import { GameInfoServiceImpl } from './service/impl/GameInfoServiceImpl';
 import { GameInfoRepository } from './database/repositories/GameInfoRepository';
 import { RobotsUserRepository } from './database/repositories/RobotsUserRepository';
 import { UserGameRepository } from './database/repositories/UserGameRepository';
+import { SessionRepository } from './database/repositories/SessionRepository';
+import { SessionService } from './service/SessionService';
+import { SessionServiceImpl } from './service/impl/SessionServiceImpl';
 
 const iocConfig =  {
         env: {
@@ -179,6 +182,16 @@ const iocConfig =  {
                     bind: UserGameRepository,
                     to: FakeRepository,
                     scope: Scope.Singleton
+                },
+                {
+                    bind: SessionRepository,
+                    to: FakeRepository,
+                    scope: Scope.Singleton
+                },
+                {
+                    bind: SessionService,
+                    to: SessionServiceImpl,
+                    scope: Scope.Singleton
                 }
             ],
             "production": [
@@ -316,6 +329,16 @@ const iocConfig =  {
                     bind: UserGameRepository,
                     to: UserGameRepository,
                     scope: Scope.Singleton
+                },
+                {
+                    bind: SessionRepository,
+                    to: SessionRepository,
+                    scope: Scope.Singleton
+                },
+                {
+                    bind: SessionService,
+                    to: SessionServiceImpl,
+                    scope: Scope.Singleton
                 }
         ],
         "development": [
@@ -452,6 +475,16 @@ const iocConfig =  {
             {
                 bind: UserGameRepository,
                 to: UserGameRepository,
+                scope: Scope.Singleton
+            },
+            {
+                bind: SessionRepository,
+                to: SessionRepository,
+                scope: Scope.Singleton
+            },
+            {
+                bind: SessionService,
+                to: SessionServiceImpl,
                 scope: Scope.Singleton
             }
         ]

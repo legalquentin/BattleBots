@@ -6,6 +6,7 @@ import { GeoIpEntity } from './GeoIpEntity';
 import { GameInfoEntity } from './GameInfoEntity';
 import { RobotsUserEntity } from './RobotsUserEntity';
 import { GameUserEntity } from './GameUserEntity';
+import { SessionEntity } from './SessionEntity';
 
 @Entity({ name: 'users' })
 export default class UserEntity extends AbstractEntity {
@@ -60,4 +61,9 @@ export default class UserEntity extends AbstractEntity {
         lazy: true
     })
     public gameUsers?: Array<GameUserEntity>;
+
+    @OneToMany(type => SessionEntity, session => session.player, {
+        lazy: true
+    })
+    public sessions?: Array<SessionEntity>;
 }

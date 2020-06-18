@@ -1,7 +1,8 @@
 import { AbstractEntity } from "./AbstractEntity";
-import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 import { GameEntity } from "./GameEntity";
 import { RobotsEntity } from "./RobotsEntity";
+import { SessionEntity } from "./SessionEntity";
 
 @Entity({
     name: "streams"
@@ -39,4 +40,9 @@ export class StreamsEntity extends AbstractEntity {
 
     @Column({name: "encodage"})
     public encodage: string;
+
+    @OneToMany(type => SessionEntity, session => session.stream, {
+        lazy: true
+    })
+    public sessions?: Array<SessionEntity>;
 }

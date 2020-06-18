@@ -21,10 +21,8 @@ export class UserResourceAsm {
 
     public async AddBotResource(bot: RobotsEntity, player: IPlayerResource){
         const botResourceAsm = Container.get(BotResourceAsm);
-        if (!player.bots){
-            player.bots = [];
-        }
-        player.bots.push(await botResourceAsm.toResource(bot));
+        
+        player.bot = await botResourceAsm.toResource(bot);
         return (player);
     }
 

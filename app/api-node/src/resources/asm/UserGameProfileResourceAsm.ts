@@ -56,12 +56,14 @@ export class UserGameProfileResourceAsm {
         if (!resource.gameProfile){
             resource.gameProfile = [];
         }
-        entity.robots = [];
+        //entity.robots = [];
+        /*
         if (resource.gameProfile){
             for (let user of resource.gameProfile){
-                entity.robots.push(await botResourceAsm.toEntity(user));
+              //  entity.robots.push(await botResourceAsm.toEntity(user));
             }
         }
+        */
         return (entity);
     }
 
@@ -77,6 +79,7 @@ export class UserGameProfileResourceAsm {
             roles: user.roles
         };
 
+        /*
         if (user.robots != null){
             const players = await user.robots;
             const profiles = await (async () => {
@@ -91,6 +94,7 @@ export class UserGameProfileResourceAsm {
         
             resource.gameProfile  =  profiles
         }
+        */
         return (resource);
     }
 }

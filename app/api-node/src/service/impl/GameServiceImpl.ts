@@ -260,8 +260,8 @@ export class GameServiceImpl implements GameService {
                 if (!list){
                     list = [];
                 }
-                for (let bot of list){
-                    await userResourceAsm.AddBotResource(bot, player);
+                if (list.length){
+                    await userResourceAsm.AddBotResource(list[0], player);
                 }
             }
             const response : HttpResponseModel<IGameResource> = {

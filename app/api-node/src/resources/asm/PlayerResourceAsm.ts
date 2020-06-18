@@ -11,7 +11,6 @@ export class PlayerResourceAsm {
             pseudo: user.pseudo,
             id: user.id,
             roles: user.roles,
-            bots: []
         };
         return (resource);
     }
@@ -25,14 +24,12 @@ export class PlayerResourceAsm {
         entity.roles = resource.roles;
         entity.pseudo = resource.pseudo;
         entity.robotsUser = [];
-        if (resource.bots){
-            for (let bot of resource.bots){
-                const robotUserEntity = new RobotsUserEntity();
+        if (resource.bot){
+            const robotUserEntity = new RobotsUserEntity();
 
-                robotUserEntity.robot = await botResourceAsm.toEntity(bot);
-                robotUserEntity.user = entity;
-                entity.robotsUser.push(robotUserEntity);
-            }
+            robotUserEntity.robot = await botResourceAsm.toEntity(resource.bot);
+            robotUserEntity.user = entity;
+            entity.robotsUser.push(robotUserEntity);
         }
         return (entity);
     }

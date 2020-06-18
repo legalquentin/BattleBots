@@ -5,6 +5,7 @@ import { StreamsEntity } from "./StreamsEntity";
 import { EGameStatus } from "../../resources/EGameStatus";
 import { GameInfoEntity } from "./GameInfoEntity";
 import { GameUserEntity } from "./GameUserEntity";
+import { SessionEntity } from "./SessionEntity";
 
 @Entity({
     name: "games"
@@ -55,4 +56,9 @@ export class GameEntity  {
         lazy: true
     })
     public gameUsers?: Array<GameUserEntity>;
+
+    @OneToMany(type => SessionEntity, session => session.game, {
+        lazy: true
+    })
+    public sessions?: Array<SessionEntity>;
 }
