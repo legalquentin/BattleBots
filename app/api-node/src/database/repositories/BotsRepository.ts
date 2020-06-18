@@ -45,28 +45,6 @@ export class BotsRepository extends Repository<RobotsEntity> {
         }).getOne());
     }
 
-    public async linkBotToPlayer(botId: number, playerId: number): Promise<RobotsEntity> {
-        const userRepository = Container.get(UserRepository);
-        try {
-            const bot = await this.findOne(botId);
-
-            if (!bot){
-                throw new EntityError(EEntityStatus.NOT_FOUND, "bot not found");
-            }
-            const player = await userRepository.findOne(playerId);
-
-            if (!player){
-                throw new EntityError(EEntityStatus.NOT_FOUND, "player not found");
-            }
-            bot.user = player;
-            await this.update(bot.id, bot);
-            return (bot);
-        }
-        catch (e){
-            throw new EntityError(EEntityStatus.INTERNAL_ERROR, e.message);
-        }
-    }
-
     public async linkBotToStream(botId: number, streamId: number) {
         const streamRepository = Container.get(StreamsRepository);
         const bot = await this.createQueryBuilder("robots").leftJoinAndSelect("robots.streams", "streams").where("robots.id = :id", {

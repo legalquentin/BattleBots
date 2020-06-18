@@ -39,6 +39,8 @@ import { GeoIpServiceImpl } from "./service/impl/GeoIpServiceImpl";
 import { GameInfoService } from './service/GameInfoService';
 import { GameInfoServiceImpl } from './service/impl/GameInfoServiceImpl';
 import { GameInfoRepository } from './database/repositories/GameInfoRepository';
+import { RobotsUserRepository } from './database/repositories/RobotsUserRepository';
+import { UserGameRepository } from './database/repositories/UserGameRepository';
 
 const iocConfig =  {
         env: {
@@ -160,12 +162,22 @@ const iocConfig =  {
                 },
                 {
                     bind: GameInfoRepository,
-                    to: GameInfoRepository,
+                    to: FakeRepository,
                     scope: Scope.Singleton
                 },
                 {
                     bind: GameInfoService,
                     to: GameInfoServiceImpl,
+                    scope: Scope.Singleton
+                },
+                {
+                    bind: RobotsUserRepository,
+                    to: FakeRepository,
+                    scope: Scope.Singleton
+                },
+                {
+                    bind: UserGameRepository,
+                    to: FakeRepository,
                     scope: Scope.Singleton
                 }
             ],
@@ -294,6 +306,16 @@ const iocConfig =  {
                     bind: GameInfoRepository,
                     to: GameInfoRepository,
                     scope: Scope.Singleton
+                },
+                {
+                    bind: RobotsUserRepository,
+                    to: RobotsUserRepository,
+                    scope: Scope.Singleton
+                },
+                {
+                    bind: UserGameRepository,
+                    to: UserGameRepository,
+                    scope: Scope.Singleton
                 }
         ],
         "development": [
@@ -420,6 +442,16 @@ const iocConfig =  {
             {
                 bind: GameInfoRepository,
                 to: GameInfoRepository,
+                scope: Scope.Singleton
+            },
+            {
+                bind: RobotsUserRepository,
+                to: RobotsUserRepository,
+                scope: Scope.Singleton
+            },
+            {
+                bind: UserGameRepository,
+                to: UserGameRepository,
                 scope: Scope.Singleton
             }
         ]

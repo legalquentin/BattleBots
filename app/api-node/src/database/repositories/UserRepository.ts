@@ -32,4 +32,22 @@ export class UserRepository extends Repository<UserEntity> {
             throw e;
         } 
     }
+
+    public async findByGame(gameId: number){
+        try {
+            this.createQueryBuilder("user").
+            leftJoinAndSelect("user.gameUsers", "gameUsers").
+            leftJoinAndSelect("gameUsers.game", "game").
+            leftJoinAndSelect("user.robotsUser", "robotsUser").
+            leftJoinAndSelect("robotsUser.robot", "robot").
+            leftJoinAndSelect("robot.robotGame", "gameRobot").
+            leftJoinAndSelect("gameRobot.game", "game_1").
+            where("game.id = :id", {
+                id: gameId
+            });
+        }
+        catch (e){
+            return (false);
+        }
+    }
 }

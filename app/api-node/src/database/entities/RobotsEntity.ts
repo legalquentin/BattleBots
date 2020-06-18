@@ -1,9 +1,9 @@
 import { AbstractEntity } from "./AbstractEntity";
-import { Entity, Column, OneToMany, JoinColumn, ManyToOne } from "typeorm";
+import { Entity, Column, OneToMany } from "typeorm";
 import { RobotGameEntity } from "./RobotGameEntity";
 import { RobotsArenaEntity } from "./RobotsArenaEntity";
 import { StreamsEntity } from "./StreamsEntity";
-import UserEntity from "./UserEntity";
+import { RobotsUserEntity } from "./RobotsUserEntity";
 
 @Entity({
     name: "robots"
@@ -34,16 +34,15 @@ export class RobotsEntity extends AbstractEntity {
     @Column({name: "armor"})
     public armor: number;
 
-    @JoinColumn({name: "player_id"})
-    @ManyToOne(type => UserEntity, userEntity => userEntity.robots, {
-        eager: true
-    })
-    public user?: UserEntity;
-
     @OneToMany(type => RobotGameEntity, robotGame => robotGame.bot, {
         lazy: true
     })
     public robotGame?: Array<RobotGameEntity>;
+
+    @OneToMany(type => RobotsUserEntity, robotUserEntity => robotUserEntity.robot, {
+        lazy: true
+    })
+    public robotsUser?: Array<RobotsUserEntity>;
 
     @OneToMany(type => RobotsArenaEntity, robotArena => robotArena.robot, {
         lazy: true

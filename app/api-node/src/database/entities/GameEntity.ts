@@ -4,6 +4,7 @@ import { RobotGameEntity } from "./RobotGameEntity";
 import { StreamsEntity } from "./StreamsEntity";
 import { EGameStatus } from "../../resources/EGameStatus";
 import { GameInfoEntity } from "./GameInfoEntity";
+import { GameUserEntity } from "./GameUserEntity";
 
 @Entity({
     name: "games"
@@ -50,4 +51,8 @@ export class GameEntity  {
     @OneToOne(type => GameInfoEntity, gameInfoEntity => gameInfoEntity.game)
     public info: GameInfoEntity
 
+    @OneToMany(type => GameUserEntity, gameUser => gameUser.game, {
+        lazy: true
+    })
+    public gameUsers?: Array<GameUserEntity>;
 }

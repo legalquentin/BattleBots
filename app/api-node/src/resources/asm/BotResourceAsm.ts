@@ -1,6 +1,6 @@
 import { RobotsEntity } from "../../database/entities/RobotsEntity";
 import { IBotsResource } from "../IBotsResource";
-import { Singleton, Container } from "typescript-ioc";
+import { Singleton, Container, Inject } from "typescript-ioc";
 //import { GameProfileResourceAsm } from "./GameProfileResourceAsm";
 import { ArenaEntity } from "../../database/entities/ArenaEntity";
 import { RobotsArenaEntity } from "../../database/entities/RobotsArenaEntity";
@@ -20,10 +20,11 @@ export class BotResourceAsm {
 
     @Inject
     private gameResourceAsm: GameResourceAsm;
-
+    */
+   
     @Inject
     private streamResourceAsm: StreamsResourceAsm;
-    */
+
 
     public async toResource(robot: RobotsEntity) {
         const userResourceAsm = Container.get(UserResourceAsm);
@@ -40,9 +41,6 @@ export class BotResourceAsm {
             name: robot.name
         };
 
-        if (robot.user){
-            resource.gameProfile = await userResourceAsm.toResource(robot.user);
-        }
         /*
         if (robot.robotGame){
             const botGames = await robot.robotGame;
@@ -90,10 +88,7 @@ export class BotResourceAsm {
         robot.fireRate = bot.fireRate;
         robot.running = bot.running;
         robot.name = bot.name;
-        if (bot.gameProfile){
-            robot.user = await userResourceAsm.toEntity(bot.gameProfile);
-        }
-        /*
+
         if (bot.streams){
             const streams = bot.streams;
             const streamEntities = [];
@@ -101,8 +96,9 @@ export class BotResourceAsm {
             for (let stream of streams){
                 streamEntities.push(await this.streamResourceAsm.toEntity(stream));
             }
-            robot.streams = Promise.resolve(streamEntities);
+            robot.streams = streamEntities;
         }
+        /*
         if (bot.games){
             const games = bot.games;
             const gameEntities = [];

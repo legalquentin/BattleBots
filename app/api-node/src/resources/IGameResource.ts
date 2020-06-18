@@ -1,13 +1,13 @@
 import { EGameStatus } from "./EGameStatus";
-import { IBotsResource } from "./IBotsResource";
 import { IArenaResource } from "./IArenaResource";
 import { IStreamResource } from "./IStreamResource";
+import { IPlayerResource } from "./IPlayerResource";
 
 export class IGameResource {
     id?: number;
     name: string;
     arena?: IArenaResource;
-    bots?: Array<IBotsResource>;
+    players?: Array<IPlayerResource>;
     streams?: Array<IStreamResource>;
     status: EGameStatus;
     createdAt?: number;

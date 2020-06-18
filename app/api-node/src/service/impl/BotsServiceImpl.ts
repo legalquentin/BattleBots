@@ -7,6 +7,7 @@ import { SendResource } from "../../../lib/ReturnExtended";
 import HttpResponseModel from "../../resources/HttpResponseModel";
 import { BotResourceAsm } from "../../resources/asm/BotResourceAsm";
 import { EEntityStatus } from "../../../lib/EEntityStatus";
+import { RobotsUserEntity } from "../../database/entities/RobotsUserEntity";
 
 @Singleton
 export class BotsServiceImpl implements BotsService {
@@ -163,11 +164,11 @@ export class BotsServiceImpl implements BotsService {
         try {
             const botResourceAsm = Container.get(BotResourceAsm);
             const response: HttpResponseModel<IBotsResource> = {};
-            const entity : RobotsEntity = await this.service.getBotsRepository().linkBotToPlayer(botId, playerId);
-            const resource = await botResourceAsm.toResource(entity);
+            const entity : RobotsUserEntity = await this.service.getBotUserRepository().linkBotToPlayer(botId, playerId);
+            //const resource = await botResourceAsm.toResource(entity);
 
             response.httpCode = 200;
-            response.data = resource;
+            //response.data = resource;
             response.message = `link bot ${botId} to player ${playerId}`;
             return Promise.resolve(new SendResource<HttpResponseModel<IBotsResource>>("BotController", response.httpCode, response));
         }

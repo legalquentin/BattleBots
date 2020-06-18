@@ -4,7 +4,7 @@
     "target": "ES6",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "module": "commonjs",
+    "module": "CommonJS",
     "newLine": "LF",
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": false,

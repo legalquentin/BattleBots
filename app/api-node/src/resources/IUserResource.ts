@@ -1,4 +1,5 @@
 import { IBotsResource } from "./IBotsResource";
+import { ERolesStatus } from "./ERolesStatus";
 
 export default interface IUserResource {
     id?: number;
@@ -6,7 +7,7 @@ export default interface IUserResource {
     lastname?: string;
     pseudo: string;
     email: string;
-    roles: string;
+    roles: ERolesStatus;
     address?: string;
     createdAt?: string;
     updatedAt?: string;

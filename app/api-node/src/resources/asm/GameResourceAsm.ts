@@ -35,7 +35,6 @@ export class GameResourceAsm {
             id: entity.id,
             name: entity.game_name,
             status: entity.game_status,
-            bots: []
         };
 
         if (entity.started_at){
@@ -56,21 +55,6 @@ export class GameResourceAsm {
         if (entity.arena){
             resource.arena = await arenaResourceAsm.toResource(entity.arena);
             await arenaResourceAsm.addBotResource(entity.arena, resource.arena);
-        }
-        return (resource);
-    }
-
-    public async AddBotsResource(entity: GameEntity, resource: IGameResource): Promise<IGameResource> {
-        const botResourceAsm = Container.get(BotResourceAsm);
-        const entitiesBots = await entity.robots;
-
-        if (entitiesBots){
-            const bots = [];
-
-            for (let bot of entitiesBots){
-                bots.push(await botResourceAsm.toResource(bot.bot));
-            }
-            resource.bots = bots;
         }
         return (resource);
     }

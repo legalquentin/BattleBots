@@ -144,6 +144,28 @@ export class GameServiceImpl implements GameService {
         }
     }
 
+    public async linkUserToGame(userId: number, gameId: number){
+        try {
+            const gameResourceAsm = Container.get(GameResourceAsm);
+            const userGame  = await this.serviceFactory.getUserGameRepository().linkUserToGame(gameId, userId);
+            const response = {
+                message: `link user ${userId} to game ${gameId}`,
+                httpCode: 200,
+                data: await gameResourceAsm.toResource(userGame.game)
+            };
+
+            return (Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response)));
+        }
+        catch (e){
+            const response = {
+                message: e.message,
+                httpCode: 400
+            };
+
+            return (Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response)));
+        }
+    }
+
     public async deleteOne(id: number) {
         try {
             const game = await this.serviceFactory.getGameRepository().findOne(id);
@@ -223,8 +245,16 @@ export class GameServiceImpl implements GameService {
             if (await this.serviceFactory.getArenaRepository().hasArena(id)){
                 await gameResourceAsm.AddArenaResource(game, resource);
             }
-            if (await this.serviceFactory.getBotsRepository().hasBots(id)){
-                await gameResourceAsm.AddBotsResource(game, resource);
+            const robotGames = await game.robots;
+            const gameUsers = await game.gameUsers;
+            const players = [];
+            
+            for (let gameUser of gameUsers){
+                players.push(gameUser.user);
+            }
+            for (let robotGame of robotGames){
+                const bot = robotGame.bot;
+                const robotUsers = await bot.robotsUser;
             }
             const response : HttpResponseModel<IGameResource> = {
                 httpCode: 200,
@@ -254,7 +284,6 @@ export class GameServiceImpl implements GameService {
                 data: resource
             };
 
-            await gameResourceAsm.AddBotsResource(game, response.data);
             return (Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response)));
         }
         catch (e){
