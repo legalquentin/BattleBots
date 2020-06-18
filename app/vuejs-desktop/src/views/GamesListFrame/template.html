@@ -72,14 +72,20 @@
                                     </SuiGridColumn>
 
                                     <SuiGridColumn textAlign="right" :width="5">
-                                        <SuiButtonGroup>
-                                            <SuiButton v-if="game.status === 'CREATED'" size="tiny" :color="game.status === 'CREATED' ? 'green' : 'red'"
+                                        <SuiButtonGroup v-if="game.status === 'CREATED'">
+                                            <SuiButton size="tiny" :color="game.status === 'CREATED' ? 'green' : 'red'"
                                                 @click="joinGame(game.id)">
                                                 Rejoindre
                                             </SuiButton>
                                             <SuiButton size="tiny" basic color="green" icon="trash alternate outline"
-                                                @click="deleteGame(game.id)" style="color: grey !important"></SuiButton>
+                                                @click="deleteGame(game.id)" style="color: grey !important">
+                                            </SuiButton>
+                                            
                                         </SuiButtonGroup>
+                                        <SuiButton v-else size="tiny" color="blue"
+                                                @click="joinGame(game.id)">
+                                                Infos sur la partie
+                                        </SuiButton>
 
                                     </SuiGridColumn>
                                 </SuiGridRow>
