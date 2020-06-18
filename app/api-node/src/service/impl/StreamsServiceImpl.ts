@@ -11,9 +11,13 @@ import * as fs from "fs"
 import * as path from "path";
 import { uuid } from "uuidv4";
 
-var AWS = require('aws-sdk');
-var s3 = new AWS.S3();
+var AWS = require('aws-sdk'); 
+AWS.config = new AWS.Config();
+AWS.config.accessKeyId = process.env.AWS_ACCESS_KEY_ID;
+AWS.config.secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+AWS.config.region = "eu-central-1";
 
+var s3 = new AWS.S3();
 
 @Singleton
 export class StreamsServiceImpl implements StreamsService {
