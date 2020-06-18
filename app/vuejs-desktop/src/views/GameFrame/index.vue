@@ -8,11 +8,14 @@ import axios from "axios";
 
 import SocketService from "./SocketService";
 
+import EndOfGameModal from '../../components/Modals/EndOfGameModal.vue';
+import HelpModal from '../../components/Modals/HelpModal.vue';
+
 type keyOpt = {
   [key: string]: boolean;
 };
 
-@Component
+@Component({ components: { EndOfGameModal, HelpModal } })
 export default class GameFrame extends Vue {
   @Ref("videoCanvas") private videoCanvas?: HTMLCanvasElement;
   @Prop() private gameInfos: any;
@@ -41,7 +44,7 @@ export default class GameFrame extends Vue {
   elapsedTime: number = 0;
   remainingTime: number = 0;
 
-  helpModal: boolean = false;
+  isHelpModalOpened: boolean = true;
 
   isEndOfGame: boolean = false;
 

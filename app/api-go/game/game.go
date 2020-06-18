@@ -104,6 +104,10 @@ func terminateGameAPI(game Game, id string) {
 	game.EndedAt = time.Now()
 	i, _ := strconv.Atoi(id)
 
+	for idx := range baseGameInstances[id].Env.Bots {
+		baseGameInstances[id].Env.Bots[idx].Taken = false
+	}
+
 	var ngi = NodeGame{
 		int16(i),
 		game.Name,
@@ -124,6 +128,10 @@ func terminateGameAPI(game Game, id string) {
 func finishGameAPI(game Game, id string) {
 	game.EndedAt = time.Now()
 	i, _ := strconv.Atoi(id)
+
+	for idx := range baseGameInstances[id].Env.Bots {
+		baseGameInstances[id].Env.Bots[idx].Taken = false
+	}
 
 	var ngi = NodeGame{
 		int16(i),
