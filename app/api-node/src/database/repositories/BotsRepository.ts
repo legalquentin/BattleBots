@@ -51,15 +51,24 @@ export class BotsRepository extends Repository<RobotsEntity> {
                    r.botIp as botIp, 
                    r.armor as armor, 
                    r.damage as damage, 
-                   r.fireRate as fireRate, 
+                   r.fireRate as fire_rate, 
                    r.running as running, 
                    r.speed as speed, 
                    r.taken as taken,
                    r.name as name
             FROM robots r
-            LEFT JOIN robots_game
-            ON robots_game.bot_id = 
-        `);
+            LEFT JOIN robots_game rg
+            ON rg.bot_id = r.id
+            LEFT  JOIN games g
+            ON g.id = rg.game_id
+            LEFT JOIN user_bot ub
+            ON ub.bot_id = r.id
+            LEFT JOIN users u
+            ON u.id = ub.user_id
+            WHERE
+            u.id = ?,
+            g.id = ?
+        `, [userId, gameId]);
         const entities = [];
         for (let item of result){
             const bot = new RobotsEntity();
