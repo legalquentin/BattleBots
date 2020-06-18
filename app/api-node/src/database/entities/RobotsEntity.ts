@@ -4,6 +4,7 @@ import { RobotGameEntity } from "./RobotGameEntity";
 import { RobotsArenaEntity } from "./RobotsArenaEntity";
 import { StreamsEntity } from "./StreamsEntity";
 import { RobotsUserEntity } from "./RobotsUserEntity";
+import UserEntity from "./UserEntity";
 
 @Entity({
     name: "robots"
@@ -17,7 +18,7 @@ export class RobotsEntity extends AbstractEntity {
     public running: number;
 
     @Column({name: "player_id"})
-    public user: number;
+    public user: UserEntity;
 
     @Column({name: "taken"})
     public taken: number;
