@@ -5,7 +5,7 @@ import { EntityError } from "../../../lib/EntityError";
 import { EEntityStatus } from "../../../lib/EEntityStatus";
 import { StreamsRepository } from "./StreamsRepository";
 import { connectionName } from "../../service/util/connectionName"; 
-import { UserRepository } from "./UserRepository";
+// import { UserRepository } from "./UserRepository";
 
 @Singleton
 @EntityRepository(RobotsEntity)
