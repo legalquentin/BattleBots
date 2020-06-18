@@ -12,4 +12,17 @@ export class SessionRepository extends Repository<SessionEntity> {
         this.manager = getManager(connectionName());
         this.metadata = getConnection(connectionName()).getMetadata(SessionEntity);
     }
+
+    async deleteAllByGame(gameId: number){
+        try {
+            await this.createQueryBuilder("session").delete().where("session.game_id = :id", {
+                id: gameId
+            });
+        
+            return (true);
+        }
+        catch (e){
+            return (false);
+        }
+    }
 }

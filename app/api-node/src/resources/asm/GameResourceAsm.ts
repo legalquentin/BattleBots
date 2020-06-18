@@ -5,12 +5,17 @@ import { StreamsResourceAsm } from "./StreamsResourceAsm";
 import { ArenaResourceAsm } from "./ArenaResourceAsm";
 import { GameUserEntity } from "../../database/entities/GameUserEntity";
 import { PlayerResourceAsm } from "./PlayerResourceAsm";
+import { SessionResourceAsm } from "./SessionResourceAsm";
 
 @Singleton
 export class GameResourceAsm {
 
     public async toEntity(game: IGameResource){
+        const playerResourceAsm = Container.get(PlayerResourceAsm);
+        const streamResourceAsm = Container.get(StreamsResourceAsm);
+        const sessionResourceAsm = Container.get(SessionResourceAsm);
         const entity = new GameEntity();
+        const sessions = [];
 
         entity.id = game.id;
         entity.game_name = game.name;
@@ -24,6 +29,29 @@ export class GameResourceAsm {
         if (game.createdAt){
             entity.created_at = new Date(game.createdAt);
         }
+        if (game.players){
+            entity.gameUsers = [];
+
+            for (let player of game.players){
+                const gameUser = new GameUserEntity();
+                const user = await playerResourceAsm.toEntity(player);
+                gameUser.game = entity;
+                gameUser.user = user;
+
+                sessions.push(sessionResourceAsm.toEntity(player.context));
+                entity.gameUsers.push(gameUser);
+            }
+        }
+        if (game.streams){
+            entity.streams = [];
+
+            for (let stream of game.streams){
+                const entityStream = await streamResourceAsm.toEntity(stream);
+                
+                entity.streams.push(entityStream);
+            }
+        }
+        entity.sessions = sessions;
         return (entity);
     }
 

@@ -8,6 +8,9 @@ import { ArenaRepository } from "./ArenaRepository";
 import { connectionName } from "../../service/util/connectionName";
 import { BotGameRepository } from "./BotGameRepository";
 import { BotsRepository } from "./BotsRepository";
+import { RobotsUserEntity } from "../entities/RobotsUserEntity";
+import { RobotsUserRepository } from "./RobotsUserRepository";
+import { SessionRepository } from "./SessionRepository";
 
 @EntityRepository(GameEntity)
 @Singleton
@@ -113,10 +116,20 @@ export class GameRepository extends Repository<GameEntity> {
     {
         return getManager(connectionName()).transaction(async (manager : EntityManager) => {
             try {
-                const botGames = await game.robots;
-                const streams = await game.streams;
+                const botGames =  game.robots;
+                const streams =  game.streams;
+                const sessions = game.sessions;
+                const botUsers = game.gameUsers;
+                const savedBotUsers = await game.gameUsers;
+
+                await manager.getCustomRepository(SessionRepository).deleteAllByGame(game.id);
                 await manager.getCustomRepository(BotGameRepository).deleteAllBotGame(game);
                 await manager.getCustomRepository(StreamsRepository).deleteByGame(game);
+                if (savedBotUsers){
+                    for (let savedBotUser of savedBotUsers){
+                        await manager.getCustomRepository(RobotsUserRepository).delete(savedBotUser);
+                    }
+                }
                 for (let botGame of botGames){
                     if (!botGame.bot.id){
                         await manager.getCustomRepository(BotsRepository).save(botGame.bot);
@@ -125,6 +138,12 @@ export class GameRepository extends Repository<GameEntity> {
                         await manager.getCustomRepository(BotsRepository).update(botGame.bot.id, botGame.bot);
                     }
                     await manager.getCustomRepository(BotGameRepository).save(botGame);
+                }
+                for (let botUser of botUsers){
+                    await manager.getCustomRepository(RobotsUserRepository).save(botUser);
+                }
+                for (let session of sessions){
+                    await manager.getCustomRepository(SessionRepository).save(session);
                 }
                 for (let stream of streams){
                     stream.id = null;

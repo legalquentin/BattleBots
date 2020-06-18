@@ -12,6 +12,7 @@ import IBattleWorkerService from "../IBattleWorkerService";
 import { IPlayerResource } from "../../resources/IPlayerResource";
 import { UserResourceAsm } from "../../resources/asm/UserResourceAsm";
 import { RobotsEntity } from "../../database/entities/RobotsEntity";
+import { SessionResourceAsm } from "../../resources/asm/SessionResourceAsm";
 
 @Singleton
 export class GameServiceImpl implements GameService {
@@ -230,6 +231,7 @@ export class GameServiceImpl implements GameService {
             const game = await this.serviceFactory.getGameRepository().getOne(id);
             const gameResourceAsm = Container.get(GameResourceAsm);
             const userResourceAsm = Container.get(UserResourceAsm);
+            const sessionResourceAsm = Container.get(SessionResourceAsm);
 
             if (!game){
                 const response : HttpResponseModel<IGameResource> = {
@@ -250,13 +252,22 @@ export class GameServiceImpl implements GameService {
                 await gameResourceAsm.AddArenaResource(game, resource);
             }
             let gameUsers = await game.gameUsers;
+            const sessions = await game.sessions;
             if (!gameUsers){
                 gameUsers = [];
             }
             for (let gameUser of gameUsers){
-                const player : IPlayerResource = await gameResourceAsm.AddGamesUsersInGameResource(gameUser, resource);
-                let list : Array<RobotsEntity> = await this.serviceFactory.getBotsRepository().search(id, player.id);
+                const player: IPlayerResource = await gameResourceAsm.AddGamesUsersInGameResource(gameUser, resource);
+                let list: Array<RobotsEntity> = await this.serviceFactory.getBotsRepository().search(id, player.id);
 
+                //TOFIX: refacto in more readable code 
+                if (sessions && sessions.length){
+                    for (let session of sessions){
+                        if (session.player.id == gameUser.user.id && session.game.id == gameUser.game.id){
+                            player.context = sessionResourceAsm.toResource(session);
+                        }
+                    }
+                }
                 if (!list){
                     list = [];
                 }
