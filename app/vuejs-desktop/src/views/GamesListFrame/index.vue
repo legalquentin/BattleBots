@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator';
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import _ from 'lodash';
 
 import AVue from '../AVue';
@@ -35,12 +35,14 @@ export default class GamesListFrame extends AVue {
       this.$router.push({ name: 'MainFrame' });
     }
     
-    this.connectionManager.getGameList().then((response: any) => {
-      this.gamesList = response;
+    this.connectionManager.getGameList().then((response: AxiosResponse) => {
+      this.gamesList = _.get(response, 'data.data', null);
+            
     }).catch((error: AxiosError|string) => {
-      // if (error === "LoginFrame") {
-        // return this.$router.push({ name: 'LoginFrame' });
-      // }
+      console.log(error)
+      if (error === "LoginFrame") {
+        return this.$router.push({ name: 'LoginFrame' });
+      }
       console.error(error);
     })
   }
