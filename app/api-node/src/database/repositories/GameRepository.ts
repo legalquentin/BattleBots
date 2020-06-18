@@ -50,7 +50,7 @@ export class GameRepository extends Repository<GameEntity> {
             leftJoinAndSelect("bot.streams", "streams_1").
             leftJoinAndSelect("game.arena", "arena").
             leftJoinAndSelect("arena.robotArena", "robotArena").
-            leftJoinAndSelect("robotArena.robot", "robot", "robot.id = bot_user.id").
+            leftJoinAndSelect("robotArena.robot", "robot", "robot.id = bot.id").
             leftJoinAndSelect("bot_user.streams", "streams_2").
             where("game.id = :game_id", {
                 "game_id": id
