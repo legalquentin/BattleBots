@@ -31,6 +31,7 @@ export class StreamsServiceImpl implements StreamsService {
 
     constructor(){
         console.log("#################################", credentials)
+        console.log("========================", process.env)   
     }
 
     public getVideoLink(stream: StreamsEntity) {
