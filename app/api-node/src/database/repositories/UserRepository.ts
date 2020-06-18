@@ -35,7 +35,7 @@ export class UserRepository extends Repository<UserEntity> {
 
     public async findByGame(gameId: number){
         try {
-            this.createQueryBuilder("user").
+            return this.createQueryBuilder("user").
             leftJoinAndSelect("user.gameUsers", "gameUsers").
             leftJoinAndSelect("gameUsers.game", "game").
             leftJoinAndSelect("user.robotsUser", "robotsUser").
