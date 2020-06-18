@@ -298,7 +298,7 @@ export class GameServiceImpl implements GameService {
                 if (sessions && sessions.length){
                     for (let session of sessions){
                         if (session.player.id == gameUser.user.id && session.game.id == gameUser.game.id){
-                            player.context = sessionResourceAsm.toResource(session);
+                            player.botContext = sessionResourceAsm.toResource(session);
                         }
                     }
                 }

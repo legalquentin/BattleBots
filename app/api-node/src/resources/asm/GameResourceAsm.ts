@@ -38,7 +38,7 @@ export class GameResourceAsm {
                 gameUser.game = entity;
                 gameUser.user = user;
 
-                sessions.push(sessionResourceAsm.toEntity(player.context));
+                sessions.push(sessionResourceAsm.toEntity(player.botContext));
                 entity.gameUsers.push(gameUser);
             }
         }
