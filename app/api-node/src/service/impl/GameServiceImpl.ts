@@ -261,6 +261,8 @@ export class GameServiceImpl implements GameService {
                 if (!list){
                     list = [];
                 }
+                console.log(list);
+                console.log(player);
                 for (let bot of list){
                     await userResourceAsm.AddBotResource(bot, player);
                 }
