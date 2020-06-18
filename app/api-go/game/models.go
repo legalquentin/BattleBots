@@ -159,16 +159,6 @@ type Data struct {
 	Value int16 `json:"dv,omitempty"`
 }
 
-// NodeBots to match with node data struct
-type NodeBots struct {
-	ID int16 `json:"id,omitempty"`
-}
-
-type NodePlayer struct {
-	ID  int16    `json:"id,omitempty"`
-	Bot NodeBots `json:"bot,omitempty"`
-}
-
 // NodeGame useful for converting ts to epoch
 type NodeGame struct {
 	ID        int16         `json:"id,omitempty"`
@@ -180,17 +170,6 @@ type NodeGame struct {
 	EndedAt   int64         `json:"endedAt,omitempty"`
 	CreatedAt int64         `json:"createdAt,omitempty"`
 	Env       *Environment  `json:"arena,omitempty"`
-	Players   []Player      `json:"players,omitempty"`
+	Players   []*Player     `json:"players,omitempty"`
 	Status    string        `json:"status,omitempty"`
-}
-
-// NodeGameInfo is the format ingested by the node api to update a game via http
-type NodeGameInfo struct {
-	WinnerID     string   `json:"winner_id,omitempty"`
-	LoserID      string   `json:"loser_id,omitempty"`
-	WinnerPoints int16    `json:"winnerpoints,omitempty"`
-	LoserPoints  int16    `json:"loserpoints,omitempty"`
-	VideoWinner  string   `json:"video_winner,omitempty"`
-	VideoLoser   string   `json:"video_loser,omitempty"`
-	Game         NodeGame `json:"game,omitempty"`
 }
