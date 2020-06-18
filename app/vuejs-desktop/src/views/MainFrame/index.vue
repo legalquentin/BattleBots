@@ -20,24 +20,13 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
+import HelpModal from '../../components/Modals/HelpModal.vue';
 
-@Component
+@Component({ components: { HelpModal } })
 export default class MainFrame extends Vue {
 
     openLoginRegisterModal = false;
-    helpModal = true;
-    energy = 100;
-    mounted(): void {
-        setInterval(() => {
-            if (this.energy === 0) {
-                this.energy = 100;
-            }
-            if (this.helpModal) {
-                this.energy -= 5;
-            }
-        }, 1000);
-    }
-
+    
     passThrough(): void {
         if (localStorage.getItem('jwt')) {
             this.$router.push({ name: 'CreateGameFrame' });
