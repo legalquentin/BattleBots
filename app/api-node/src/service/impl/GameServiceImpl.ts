@@ -250,7 +250,6 @@ export class GameServiceImpl implements GameService {
                 await gameResourceAsm.AddArenaResource(game, resource);
             }
             let gameUsers = await game.gameUsers;
-
             if (!gameUsers){
                 gameUsers = [];
             }
@@ -261,8 +260,6 @@ export class GameServiceImpl implements GameService {
                 if (!list){
                     list = [];
                 }
-                console.log(list);
-                console.log(player);
                 for (let bot of list){
                     await userResourceAsm.AddBotResource(bot, player);
                 }
