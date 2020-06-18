@@ -8,10 +8,9 @@ import { SendResource } from "../../../lib/ReturnExtended";
 import { IStreamResource } from "../../resources/IStreamResource";
 import IConfig from "../IConfig";
 import * as fs from "fs"
-import * as AWS from "aws-sdk";
 import * as path from "path";
 import { uuid } from "uuidv4";
-
+var AWS = require("aws-sdk");
 
 @Singleton
 export class StreamsServiceImpl implements StreamsService {
@@ -22,14 +21,19 @@ export class StreamsServiceImpl implements StreamsService {
     @Inject
     private config: IConfig;
 
-    private s3: AWS.S3;
+    private s3: any;
 
     constructor(){
-        console.log(process.env)
-        this.s3 = new AWS.S3({
-            accessKeyId: process.env.AWS_ACCESS_KEY_ID, //  this.config.getAccessKeyId(),
-            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY //this.config.getSecretAccessKey()
+        AWS.config.getCredentials((err) => {
+            if (err) console.log(err.stack);
+            // credentials not loaded
+            else {
+              console.log("Access key:", AWS.config.credentials.accessKeyId);
+            }
         });
+
+        console.log(process.env)
+        this.s3 = new AWS.S3();
 
         this.s3.listBuckets((err, data) => {
             if (err){
