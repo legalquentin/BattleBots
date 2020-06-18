@@ -181,7 +181,7 @@ func Daemon() {
 		tnow := time.Now()
 		for key, game := range baseGameInstances {
 			fmt.Println(key, len(game.Players), game.CreatedAt.Sub(tnow).Minutes())
-			if tnow.Sub(game.CreatedAt).Minutes() > float64(GameDuration) {
+			if tnow.Sub(game.CreatedAt).Seconds() > float64(GameDuration) {
 				// log.Println(prefixWarn, "DELETING game [", game.Name, "] reached 5 minutes")
 				finishGameAPI(game, key)
 				closePlayerConn(game)
