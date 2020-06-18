@@ -65,7 +65,7 @@ export class StreamsServiceImpl implements StreamsService {
                 console.log(params.Bucket);
                 console.log(params.Key);
                 this.s3.upload(params, async (err, data) => {
-                    console.log(err);
+                    console.log("ERROR", err);
                     if (err){
                         const response: HttpResponseModel<IStreamResource> = {
                             message: err.message,
@@ -74,15 +74,16 @@ export class StreamsServiceImpl implements StreamsService {
 
                         return resolve(response);
                     }
+                    console.log(data);
                     stream.s3Url = params.Key;
                     fs.unlinkSync(resolve_path);
                     const ret: any = await this.saveOrUpdate(stream);
+                    console.log(ret)
                     const response: HttpResponseModel<IStreamResource> = {
                         httpCode: 200,
                         message: "stream updated",
                         data: ret.data
                     };
-
                     resolve(response);
                 });
             }
