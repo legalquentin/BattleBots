@@ -250,7 +250,6 @@ export class GameServiceImpl implements GameService {
                 await gameResourceAsm.AddArenaResource(game, resource);
             }
             let gameUsers = await game.gameUsers;
-
             if (!gameUsers){
                 gameUsers = [];
             }

@@ -48,10 +48,10 @@ export class BotsRepository extends Repository<RobotsEntity> {
     public async search(gameId: number, userId: number){
         const result = await this.manager.query(`
             SELECT r.id as id, 
-                   r.bot_ip as botIp, 
+                   r.bot_ip as bot_ip, 
                    r.armor as armor, 
                    r.damage as damage, 
-                   r.fire_rate as fireRate, 
+                   r.fire_rate as fire_rate, 
                    r.running as running, 
                    r.speed as speed, 
                    r.taken as taken,
@@ -70,23 +70,21 @@ export class BotsRepository extends Repository<RobotsEntity> {
             AND
             g.id = ${gameId}
         `);
-        console.log(result);
         const entities = [];
         for (let item of result){
             const bot = new RobotsEntity();
             
             bot.id = item.id;
-            bot.botIp = item.botIp;
+            bot.botIp = item.bot_ip;
             bot.armor = item.armor;
             bot.damage = item.damage;
-            bot.fireRate = item.fireRate;
+            bot.fireRate = item.fire_rate;
             bot.running = item.running;
             bot.speed = item.speed;
             bot.name = item.name;
             bot.taken = item.taken;
-            entities.push(bot);
+             entities.push(bot);
         }
-        console.log(entities);
         return (entities);
     }
 

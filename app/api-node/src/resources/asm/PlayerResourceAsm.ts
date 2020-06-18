@@ -6,7 +6,6 @@ import { RobotsUserEntity } from "../../database/entities/RobotsUserEntity";
 
 export class PlayerResourceAsm {
     async toResource(user: UserEntity){
-        const botResourceAsm = Container.get(BotResourceAsm);
         const resource : IPlayerResource = {
             email: user.email,
             pseudo: user.pseudo,
@@ -14,14 +13,6 @@ export class PlayerResourceAsm {
             roles: user.roles,
             bots: []
         };
-        const robotsUser = await user.robotsUser;
-        if (robotsUser){
-            for (let botUser of robotsUser){
-                const bot = botUser.robot;
-
-                resource.bots.push(await botResourceAsm.toResource(bot));
-            }
-        }
         return (resource);
     }
 
