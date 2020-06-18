@@ -8,16 +8,15 @@ import { SendResource } from "../../../lib/ReturnExtended";
 import { IStreamResource } from "../../resources/IStreamResource";
 import IConfig from "../IConfig";
 import * as fs from "fs"
+import * as AWS from "aws-sdk"
 import * as path from "path";
 import { uuid } from "uuidv4";
 
-var AWS = require('aws-sdk'); 
-AWS.config = new AWS.Config();
-AWS.config.accessKeyId = process.env.AWS_ACCESS_KEY_ID;
-AWS.config.secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
-AWS.config.region = "eu-central-1";
-
-var s3 = new AWS.S3();
+var s3 = new AWS.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: "eu-central-1"
+});
 
 @Singleton
 export class StreamsServiceImpl implements StreamsService {
@@ -29,18 +28,7 @@ export class StreamsServiceImpl implements StreamsService {
     private config: IConfig;
 
 
-    constructor(){
-
-
-        s3.listBuckets((err, data) => {
-            if (err){
-                console.log(err.message);
-            }
-            else {
-                console.log(data);
-            }
-        })
-    }
+    constructor(){}
 
     public getVideoLink(stream: StreamsEntity) {
         var params = { 
@@ -68,27 +56,27 @@ export class StreamsServiceImpl implements StreamsService {
                 console.log(params.Bucket);
                 console.log(params.Key);
                 s3.upload(params, async (err, data) => {
-                    console.log("enter");
-                    console.log(err);
                     if (err){
+                        console.log("MOTHERFUCKING ERROR", err);
                         const response: HttpResponseModel<IStreamResource> = {
                             message: err.message,
                             httpCode: 400
                         };
 
                         return resolve(response);
-                    }
-                    console.log("here");
-                    stream.s3Url = params.Key;
-                    fs.unlinkSync(resolve_path);
-                    const ret: any = await this.saveOrUpdate(stream);
-                    const response: HttpResponseModel<IStreamResource> = {
-                        httpCode: 200,
-                        message: "stream updated",
-                        data: ret.data
-                    };
+                    } else {
+                        console.log("MOTHERFUCKING SUCCESS", err);
+                        stream.s3Url = params.Key;
+                        fs.unlinkSync(resolve_path);
+                        const ret: any = await this.saveOrUpdate(stream);
+                        const response: HttpResponseModel<IStreamResource> = {
+                            httpCode: 200,
+                            message: "stream updated",
+                            data: ret.data
+                        };
 
-                    resolve(response);
+                        resolve(response);
+                    }
                 });
             }
             else {
