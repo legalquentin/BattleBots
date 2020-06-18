@@ -46,7 +46,7 @@ export class BotsRepository extends Repository<RobotsEntity> {
     }
 
     public search(gameId: number, userId: number){
-        
+        return (null);
     }
 
     public async linkBotToStream(botId: number, streamId: number) {
