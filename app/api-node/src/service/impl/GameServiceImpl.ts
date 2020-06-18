@@ -74,36 +74,36 @@ export class GameServiceImpl implements GameService {
             }
             const entity = await gameResourceAsm.toEntity(game);
             const players = game.players;
-
-            const promise = () => (new Promise(async (resolve, reject) => {
-                if (players){
-                    let params = [];
-                    for (let player of players){
-                        const streamEntity = new StreamsEntity();
-                        const resolve_path = `${player.stream}`;
-                        const o = path.parse(resolve_path);
+            if (game.status == EGameStatus.ENDED){
+                const promise = () => (new Promise(async (resolve, reject) => {
+                    if (players){
+                        let params = [];
+                        for (let player of players){
+                            const streamEntity = new StreamsEntity();
+                            const resolve_path = `${player.stream}`;
+                            const o = path.parse(resolve_path);
     
-                        streamEntity.s3Url = player.stream;
-                        streamEntity.kinesisUrl = "kinesis.com";
-                        streamEntity.encodage = "ffmpeg";
-                        streamEntity.duration = 1;
-                        streamEntity.running = 1;
-                        streamEntity.private = 1;
-                        await this.streamService.upload(streamEntity, {
-                            Key: `${uuid()}${o.ext}`,
-                            Bucket: this.config.getBucket(),
-                            Body: fs.createReadStream(resolve_path)
-                        }, (param) => {
-                            console.log(param);
-                            params.push(param);
-                            if (players.length == params.length){
-                                resolve(params);
-                            }
-                        });
+                            streamEntity.s3Url = player.stream;
+                            streamEntity.kinesisUrl = "kinesis.com";
+                            streamEntity.encodage = "ffmpeg";
+                            streamEntity.duration = 1;
+                            streamEntity.running = 1;
+                            streamEntity.private = 1;
+                            this.streamService.upload(streamEntity, {
+                                Key: `${uuid()}${o.ext}`,
+                                Bucket: this.config.getBucket(),
+                                Body: fs.createReadStream(resolve_path)
+                            }, (param) => {
+                                params.push(param);
+                                if (players.length == params.length){
+                                    resolve(params);
+                                }
+                            });
+                        }
                     }
-                }
-            }));
-            await promise();
+                }));
+                await promise();
+            }
             const saved = await this.serviceFactory.getGameRepository().saveOrUpdate(entity);
             const resource = await gameResourceAsm.toResource(saved);
             game.id = saved.id;

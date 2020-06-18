@@ -50,7 +50,7 @@ export class StreamsServiceImpl implements StreamsService {
         return (url);
     }
 
-    public async upload(stream: StreamsEntity, params: any, callback: any){
+    public upload(stream: StreamsEntity, params: any, callback: any){
         const resolve_path = `${stream.s3Url}`;
         this.s3.upload(params, async (err, data) => {
             console.log("ERROR", err);

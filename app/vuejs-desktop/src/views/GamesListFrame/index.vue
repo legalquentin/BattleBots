@@ -44,6 +44,8 @@ export default class GamesListFrame extends AVue {
       }
       console.error(error);
     })
+
+    document.body.className = "";
   }
 
   private async joinGame(gameId: number) {
