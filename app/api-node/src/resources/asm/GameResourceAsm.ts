@@ -32,6 +32,7 @@ export class GameResourceAsm {
         if (game.players){
             entity.gameUsers = [];
 
+            console.log(entity.gameUsers);
             for (let player of game.players){
                 const gameUser = new GameUserEntity();
                 const user = await playerResourceAsm.toEntity(player);
@@ -42,6 +43,7 @@ export class GameResourceAsm {
                 entity.gameUsers.push(gameUser);
             }
         }
+        /*
         if (game.streams){
             entity.streams = [];
 
@@ -51,6 +53,7 @@ export class GameResourceAsm {
                 entity.streams.push(entityStream);
             }
         }
+        */
         entity.sessions = sessions;
         return (entity);
     }
@@ -94,7 +97,7 @@ export class GameResourceAsm {
             for (let stream of entitiesStreams){
                 streams.push(await streamResourceAsm.toResource(stream));
             }
-            resource.streams = streams;
+            //resource.streams = streams;
         }
         return (resource);
     } 

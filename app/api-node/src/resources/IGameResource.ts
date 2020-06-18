@@ -8,7 +8,7 @@ export class IGameResource {
     name: string;
     arena?: IArenaResource;
     players?: Array<IPlayerResource>;
-    streams?: Array<IStreamResource>;
+    //streams?: Array<IStreamResource>;
     status: EGameStatus;
     createdAt?: number;
     startedAt?: number;
