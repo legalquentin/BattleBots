@@ -30,11 +30,11 @@ type Player struct {
 	ID    string `json:"id,omitempty"`
 	Token string `json:"token,omitempty"`
 	// botAttr  BotAttr
-	BotSpecs   *Bot    `json:"botSpecs,omitempty"`
-	BotContext Context `json:"botContext,omitempty"`
-	Stream     string  `json:"stream,omitempty"`
-	GameID     string  `json:"gameID"`
-	Mutex      sync.Mutex
+	BotSpecs   *Bot       `json:"botSpecs,omitempty"`
+	BotContext Context    `json:"botContext,omitempty"`
+	Stream     string     `json:"stream,omitempty"`
+	GameID     string     `json:"gameID"`
+	Mutex      sync.Mutex `json:"-"`
 }
 
 // Context hold game data on a specific bot while running
@@ -64,14 +64,14 @@ type BotAttr struct {
 // think about the attributes that shouldn't be changed (ip, id, basestats)
 type Bot struct {
 	// technical stuff
-	ID               int16  `json:"id,omitempty"`
-	Address          string `json:"address,omitempty"`
-	Running          bool   `json:"running,omitempty"`
-	Taken            bool   `json:"taken,omitempty"`
-	SocketBotCam     *websocket.Conn
-	SocketClientCam  *websocket.Conn
-	SocketBotCtrl    *websocket.Conn
-	SocketClientCtrl *websocket.Conn
+	ID               int16           `json:"id,omitempty"`
+	Address          string          `json:"address,omitempty"`
+	Running          bool            `json:"running,omitempty"`
+	Taken            bool            `json:"taken,omitempty"`
+	SocketBotCam     *websocket.Conn `json:"-"`
+	SocketClientCam  *websocket.Conn `json:"-"`
+	SocketBotCtrl    *websocket.Conn `json:"-"`
+	SocketClientCtrl *websocket.Conn `json:"-"`
 
 	// game relative stuff
 	Name         string `json:"name,omitempty"`
@@ -159,18 +159,6 @@ type Data struct {
 	Value int16 `json:"dv,omitempty"`
 }
 
-// NodePlayer to match with node data struct
-type NodePlayer struct {
-	ID int16 `json:"id,omitempty"`
-}
-
-// NodeBots to match with node data struct
-type NodeBots struct {
-	ID   int16      `json:"id,omitempty"`
-	IP   string     `json:"botIp,omitempty"`
-	User NodePlayer `json:"gameProfile,omitempty"`
-}
-
 // NodeGame useful for converting ts to epoch
 type NodeGame struct {
 	ID        int16         `json:"id,omitempty"`
@@ -182,17 +170,6 @@ type NodeGame struct {
 	EndedAt   int64         `json:"endedAt,omitempty"`
 	CreatedAt int64         `json:"createdAt,omitempty"`
 	Env       *Environment  `json:"arena,omitempty"`
-	Bots      []NodeBots    `json:"bots,omitempty"`
+	Players   []*Player     `json:"players,omitempty"`
 	Status    string        `json:"status,omitempty"`
-}
-
-// NodeGameInfo is the format ingested by the node api to update a game via http
-type NodeGameInfo struct {
-	WinnerID     string   `json:"winner_id,omitempty"`
-	LoserID      string   `json:"loser_id,omitempty"`
-	WinnerPoints int16    `json:"winnerpoints,omitempty"`
-	LoserPoints  int16    `json:"loserpoints,omitempty"`
-	VideoWinner  string   `json:"video_winner,omitempty"`
-	VideoLoser   string   `json:"video_loser,omitempty"`
-	Game         NodeGame `json:"game,omitempty"`
 }

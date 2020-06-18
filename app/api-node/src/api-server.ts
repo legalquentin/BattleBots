@@ -41,7 +41,9 @@ export abstract class ApiServer {
             schemes: [this.serviceConfig.getApiScheme()]
         });
         this.app.use("*", function (req, res, next) {
-            if (!res.headersSent) { res.render("App/index.html"); }
+            if (!res.headersSent) {
+                // res.render("App/index.html"); 
+            }
             next();
         });
     }

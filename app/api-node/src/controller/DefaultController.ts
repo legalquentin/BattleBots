@@ -12,7 +12,7 @@ class DefaultController
     @Path('/') 
     @GET public serveRoute(@ContextResponse res)
     {
-        res.render("App/index.html");
+        // res.render("App/index.html");
         return Return.NoResponse;
     }
 

@@ -2,30 +2,33 @@
     <SuiContainer>
         <SuiGrid>
             <SuiGridRow :columns="3" verticalAlign="middle">
-                
+
                 <SuiGridColumn style="margin-top: 20px" textAlign="left" :width="5">
                     <h3 is="sui-header">
                         <sui-icon name="list alternate outline" style="color: #3b5998" />
                         <sui-header-content>Liste des parties</sui-header-content>
-                      </h3>
+                    </h3>
                 </SuiGridColumn>
                 <SuiGridColumn style="margin-top: 20px" textAlign="center" :width="6">
                     <RouterLink :to="{ name: 'CreateGameFrame' }">
-                        <SuiButton circular color="facebook">Ajouter une nouvelle partie</SuiButton>
+                        <SuiButton circular style="background-color: #3b5998; color: whitesmoke">Ajouter une nouvelle
+                            partie</SuiButton>
                     </RouterLink>
                 </SuiGridColumn>
                 <SuiGridColumn style="margin-top: 20px" textAlign="right" :width="5">
                     <RouterLink :to="{ name: 'CreateGameFrame' }">
-                        <SuiButton size="mini" @click="$router.back()" basic left icon label-position="right" icon="arrow up">Menu principal</SuiButton>
+                        <SuiButton size="mini" @click="$router.back()" basic left icon label-position="right"
+                            icon="arrow up">Menu principal</SuiButton>
                     </RouterLink>
-                    
-                    <SuiButton size="mini" @click="disconnectModal = true" basic left icon color="red" icon="lock"></SuiButton>
+
+                    <SuiButton size="mini" @click="disconnectModal = true" basic left icon color="red" icon="lock">
+                    </SuiButton>
                 </SuiGridColumn>
             </SuiGridRow>
         </SuiGrid>
         <sui-modal basic inverted v-model="disconnectModal">
             <sui-modal-header style="text-align: center; ">Se déconnecter ?</sui-modal-header>
-            
+
             <sui-modal-actions style="text-align: center; margin-left: -10px">
                 <div is="sui-button-group">
                     <sui-button color="red" @click.native="disconnect()">
@@ -35,61 +38,64 @@
                     <sui-button @click.native="disconnectModal = false">
                         Annuler
                     </sui-button>
-                    
-                    
-                  </div>
-              
-              
+
+
+                </div>
+
+
             </sui-modal-actions>
-          </sui-modal>
+        </sui-modal>
         <SuiDivider></SuiDivider>
         <SuiGrid>
             <SuiGridRow>
                 <SuiGridColumn>
-                    <SuiSegments v-if="gamesList && gamesList.length" >
-                        
+                    <SuiSegments v-if="gamesList && gamesList.length">
+
                         <SuiSegment v-for="game in gamesList" style="position: relative">
-                            <SuiLabel style="position: absolute; left: -15px; top: 17px" ribbon basic :color="game.status === 'CREATED' ? '' : ''">Partie ouverte
+                            <SuiLabel style="position: absolute; left: -15px; top: 17px" ribbon basic>
+                                <span v-if="game.status === 'CREATED'">Partie ouverte</span>
+                                <span v-else>Partie terminée</span>
                                 <sui-label-detail>
                                     <SuiIcon v-if="game.status === 'CREATED'" name="check" color="green" />
                                     <SuiIcon v-else name="close" color="red" />
                                 </sui-label-detail>
-                            </SuiLabel> 
+                            </SuiLabel>
                             <SuiGrid verticalAlign="middle">
                                 <SuiGridRow :columns="3">
                                     <SuiGridColumn textAlign="left" :width="4">
-                                        
+
                                     </SuiGridColumn>
                                     <SuiGridColumn textAlign="left" :width="7" class="game-name">
                                         <SuiLabel basic>Nom de la partie
                                             <sui-label-detail>{{ game.name }}</sui-label-detail>
-                                        </SuiLabel> 
+                                        </SuiLabel>
                                     </SuiGridColumn>
-
-                                    
 
                                     <SuiGridColumn textAlign="right" :width="5">
                                         <SuiButtonGroup>
-                                            <SuiButton size="tiny" :color="game.status === 'CREATED' ? 'green' : 'red'" :disabled="game.status !== 'CREATED'" @click="joinGame(game.id)">
-                                                {{ game.status === 'CREATED' ? 'Rejoindre' : 'Partie fermée' }}
+                                            <SuiButton v-if="game.status === 'CREATED'" size="tiny" :color="game.status === 'CREATED' ? 'green' : 'red'"
+                                                @click="joinGame(game.id)">
+                                                Rejoindre
                                             </SuiButton>
-                                            <SuiButton size="tiny" basic color="green" icon="trash alternate outline" @click="deleteGame(game.id)" style="color: grey !important"></SuiButton>
+                                            <SuiButton size="tiny" basic color="green" icon="trash alternate outline"
+                                                @click="deleteGame(game.id)" style="color: grey !important"></SuiButton>
                                         </SuiButtonGroup>
-                                        
+
                                     </SuiGridColumn>
                                 </SuiGridRow>
                             </SuiGrid>
                         </SuiSegment>
                     </SuiSegments>
                     <SuiSegment style="position: relative; min-height: 50px" v-else>
-                                    <h4 is="sui-header" style="position: absolute; left: 38%">
-                                        <sui-icon name="meh outline" color="red" />
-                                        <sui-header-content>Pas encore de partie</sui-header-content>
-                                      </h4>
-                        
+                        <h4 is="sui-header" style="position: absolute; left: 38%">
+                            <sui-icon name="meh outline" color="red" />
+                            <sui-header-content>Pas encore de partie</sui-header-content>
+                        </h4>
+
                     </SuiSegment>
                 </SuiGridColumn>
             </SuiGridRow>
         </SuiGrid>
     </SuiContainer>
+    <EndOfGameModal :isOpen="false"/>
 </div>

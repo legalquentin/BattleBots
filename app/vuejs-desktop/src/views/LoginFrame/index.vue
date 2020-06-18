@@ -34,6 +34,7 @@ export default class LoginFrame extends Vue {
             const profile = await axios.get('http://hardwar.ddns.net/api/users/profile', { headers:  { Authorization }});
 
             localStorage.setItem('userId', _.get(profile, 'data.data.id'));
+            this.connectionManager.setToken(Authorization);
             this.$router.replace({ name: 'GamesListFrame' });
         } catch (error) {
             alert("Nom de compte ou mot de passe incorrect");

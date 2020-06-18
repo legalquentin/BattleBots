@@ -49,3 +49,7 @@ npm run test:coverage
 
 The coverage report will be saved under ```./reports/coverage``` folder.
 
+
+## How to run on port 80 as non root user
+
+https://serverfault.com/questions/112795/how-to-run-a-server-on-port-80-as-a-normal-user-on-linux

@@ -56,6 +56,9 @@ export default class MainFrame extends Vue {
         this.openLoginRegisterModal = true;
     }
 
+    rediff() {
+        this.$router.push({ name: 'EndOfGameFrame' });
+    }
 };
 
 </script>

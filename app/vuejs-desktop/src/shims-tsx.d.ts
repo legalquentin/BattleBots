@@ -30,3 +30,11 @@ declare global {
     cancelIdleCallback: ((handle: RequestIdleCallbackHandle) => void);
   }
 }
+
+import ConnectionManager from './utils/ConnectionManager';
+
+declare module "vue/types/vue" {
+  interface Vue {
+    connectionManager: ConnectionManager;
+  }
+}

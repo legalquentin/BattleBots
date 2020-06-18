@@ -11,21 +11,20 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import _ from 'lodash';
+
+import AVue from '../AVue';
 
 import IGame from '../../types/IGame';
 
-abstract class AVue extends Vue {
-  protected abstract displayed(): void;
+import EndOfGameModal from '../../components/Modals/EndOfGameModal.vue';
 
-  @Watch('$route.name', {immediate: true})
-  private routed(): void {
-    this.displayed();
-  };
-};
 
-@Component
+
+@Component({
+  components: { EndOfGameModal }
+})
 export default class GamesListFrame extends AVue {
   private gamesList: IGame[] = [];
   private disconnectModal: boolean = false;
@@ -35,17 +34,15 @@ export default class GamesListFrame extends AVue {
     if (!_.size(jwt)) {
       this.$router.push({ name: 'MainFrame' });
     }
-
-    try {
-      const result = await axios.get('http://hardwar.ddns.net/api/games', {
-        headers: {
-          Authorization: `Bearer ${jwt}`
-        }
-      });
-      this.gamesList = _.get(result, 'data.data', null);
-    } catch (error) {
-        console.error(error);
-    }
+    
+    this.connectionManager.getGameList().then((response: any) => {
+      this.gamesList = response;
+    }).catch((error: AxiosError|string) => {
+      // if (error === "LoginFrame") {
+        // return this.$router.push({ name: 'LoginFrame' });
+      // }
+      console.error(error);
+    })
   }
 
   private async joinGame(gameId: number) {

@@ -26,8 +26,8 @@ export class StreamsServiceImpl implements StreamsService {
 
     constructor(){
         this.s3 = new AWS.S3({
-            accessKeyId: process.env.AWS_ACCESS_KEY_ID, //  this.config.getAccessKeyId(),
-            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY //this.config.getSecretAccessKey()
+            accessKeyId: process.env.AWS_ACCESS_KEY_ID,// .getAccessKeyId(),
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
         });
 
         this.s3.listBuckets((err, data) => {
@@ -51,7 +51,6 @@ export class StreamsServiceImpl implements StreamsService {
     }
 
     public async watchDirectory(stream: IStreamResource){
-        console.log("enter");
         return new Promise((resolve, reject) => {
             const resolve_path = `${stream.s3Url}`;
             console.log(resolve_path);
@@ -66,8 +65,7 @@ export class StreamsServiceImpl implements StreamsService {
                 console.log(params.Bucket);
                 console.log(params.Key);
                 this.s3.upload(params, async (err, data) => {
-                    console.log("enter");
-                    console.log(err);
+                    console.log("ERROR", err);
                     if (err){
                         const response: HttpResponseModel<IStreamResource> = {
                             message: err.message,
@@ -76,25 +74,25 @@ export class StreamsServiceImpl implements StreamsService {
 
                         return resolve(response);
                     }
-                    console.log("here");
+                    console.log(data);
                     stream.s3Url = params.Key;
                     fs.unlinkSync(resolve_path);
                     const ret: any = await this.saveOrUpdate(stream);
+                    console.log(ret)
                     const response: HttpResponseModel<IStreamResource> = {
                         httpCode: 200,
                         message: "stream updated",
                         data: ret.data
                     };
-
                     resolve(response);
                 });
             }
             else {
-                console.log("file not found, has it been deleted ?")
                 const response: HttpResponseModel<IStreamResource> = {
                     httpCode: 400,
                     message: "File not found"
                 };
+
                 resolve(response);
             }
         });
