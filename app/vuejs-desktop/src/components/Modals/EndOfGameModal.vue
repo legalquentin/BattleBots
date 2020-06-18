@@ -7,7 +7,7 @@
         <sui-button  color="facebook" @click.native="disconnect()" label-position="left" icon="redo">Nouvelle partie</sui-button>
         <sui-button  color="blue" @click.native="disconnect()" label-position="right" icon="chart pie">Détails</sui-button>
       </div>
-      <sui-button color="grey" style="margin-left: 50px" @click.native="disconnect()">Retourner au menu principal</sui-button>
+      <sui-button color="grey" style="margin-left: 50px" @click.native="$router.push({ name: 'GamesListFrame' })">Retourner au menu principal</sui-button>
     </sui-modal-actions>
   </SuiModal>
 </template>

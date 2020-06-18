@@ -1,34 +1,31 @@
 <SuiContainer class="root" style="padding-top: 15px; height: 100vh">
-    <SuiButton style="position: absolute; width: 100%; right: -3px; top: 0px; border-radius: 0px; opacity: 0.5; z-index: 999999; color: black" size="mini" @click="openExternal()" color="yellow">Pour les testeurs : en cas de problème de connexion, essayez de cliquer ici et d'accepter le certificat (solution temporaire)</SuiButton>
+    <SuiButton style="position: absolute; width: 100%; right: -3px; bottom: 0px; border-radius: 0px; opacity: 0.2; z-index: 999999; color: black" size="mini" @click="openExternal()" color="yellow">Débloquer certificat</SuiButton>
     <SuiGrid verticalAlign="middle" style="width: 701px !important; margin-left: auto; margin-right: auto">
         <SuiGridRow :columns="3">
                 
-            <SuiGridColumn style="margin-top: 20px" textAlign="left" :width="7">
+            <SuiGridColumn style="max-height: 40px; overflow: hidden" textAlign="left" :width="6">
                 <h3 is="sui-header">
                     <sui-icon name="gamepad" color="violet" />
                     <sui-header-content>Partie en cours : {{ gameInfos.game.name }}</sui-header-content>
                   </h3>
             </SuiGridColumn>
-            <SuiGridColumn style="margin-top: 20px" textAlign="right" :width="6">
-                <!-- <RouterLink :to="{ name: 'CreateGameFrame' }"> -->
-                    <SuiButton size="mini" @click="helpModal = true" color="violet" left icon label-position="right" icon="question mark">Comment jouer</SuiButton>
-                    
-                <!-- </RouterLink> -->
+            <SuiGridColumn textAlign="right" :width="4">
+                <sui-statistic size="tiny">
+                    <sui-statistic-value>{{ elapsedTime }}</sui-statistic-value>
+                    <sui-statistic-label>secondes écoulées</sui-statistic-label>
+                  </sui-statistic>
             </SuiGridColumn>
-            <SuiGridColumn style="margin-top: 20px" textAlign="right" :width="3">
-                <!-- <RouterLink :to="{ name: 'CreateGameFrame' }"> -->
-                    
-                    <SuiButton size="mini" @click="$router.back()" basic left icon label-position="right" icon="arrow up">Retour</SuiButton>
-                    
-                <!-- </RouterLink> -->
+            <SuiGridColumn textAlign="right" :width="5">
+                <sui-statistic size="tiny">
+                    <sui-statistic-value>{{ remainingTime }}</sui-statistic-value>
+                    <sui-statistic-label>secondes restantes</sui-statistic-label>
+                  </sui-statistic>
             </SuiGridColumn>
+            
         </SuiGridRow>
     </SuiGrid>
-
-    
-
-    <SuiDivider style="width: 670px !important; margin-left: auto; margin-right: auto"></SuiDivider>
-    <SuiGrid verticalAlign="middle" style="height: calc(100vh - 100px);">
+    <SuiDivider style="width: 670px; margin: 10px auto" />
+    <SuiGrid verticalAlign="middle" style="height: calc(100vh - 100px);margin-top: -5px">
         <SuiGridRow textAlign="left" :columns="10" v-if="true" style="padding-top: 0px; padding-bottom: 0px">
             <!-- <SuiGridColumn>
                 Toolbar
@@ -141,22 +138,16 @@
 
             <!-- </SuiGridColumn> -->
         </SuiGridRow>
-        <SuiGridRow :columns="3" style="width: 701px !important; margin: 0 auto">
-            <SuiGridColumn :width="7">
-                <sui-progress color="yellow" indicating :percent="botContext.energy" label="ENERGIE"/>
+        
+        <SuiGridRow :columns="2" style="width: 701px !important; margin: 0 auto; padding-top: 0px">
+            <SuiDivider style="width: 670px; margin: 10px auto; margin-top: 0px; margin-bottom: 15px" />
+            <SuiGridColumn>
+                <sui-progress progress state="active" color="yellow" indicating :percent="botContext.energy" label="ENERGIE"/>
             </SuiGridColumn>
-            <SuiGridColumn :width="4" textAlign="right">
-                <sui-statistic size="tiny">
-                    <sui-statistic-value>{{ elapsedTime }}</sui-statistic-value>
-                    <sui-statistic-label>secondes écoulées</sui-statistic-label>
-                  </sui-statistic>
+            <SuiGridColumn>
+                <sui-progress progress state="active" color="red" :percent="botContext.energy" label="CHALEUR"/>
             </SuiGridColumn>
-            <SuiGridColumn :width="5" textAlign="right">
-                <sui-statistic size="tiny">
-                    <sui-statistic-value>{{ remainingTime }}</sui-statistic-value>
-                    <sui-statistic-label>secondes restantes</sui-statistic-label>
-                  </sui-statistic>
-            </SuiGridColumn>
+            
         </SuiGridRow>
     </SuiGrid>
     <EndOfGameModal :isOpen="isEndOfGame" />
