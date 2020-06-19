@@ -90,6 +90,11 @@ export class GameServiceImpl implements GameService {
                 playersResource = [];
             }
             for (let player of playersResource){
+                const playerEntity = await playerResourceAsm.toEntity(player);
+
+                await this.serviceFactory.getBotUserRepository().deleteByUser(playerEntity.id);
+            }
+            for (let player of playersResource){
                 const robotEntity = await botResourceAsm.toEntity(player.botSpecs);
                 await this.serviceFactory.getBotsRepository().save(robotEntity);
                 const playerEntity = await playerResourceAsm.toEntity(player);
@@ -379,8 +384,6 @@ export class GameServiceImpl implements GameService {
             if (!gameUsers){
                 gameUsers = [];
             }
-            console.log(sessions);
-            console.log(gameUsers);
             for (let gameUser of gameUsers){
                 const player: IPlayerResource = await gameResourceAsm.AddGamesUsersInGameResource(gameUser, resource);
                 let list: Array<RobotsEntity> = await this.serviceFactory.getBotsRepository().search(id, player.id);

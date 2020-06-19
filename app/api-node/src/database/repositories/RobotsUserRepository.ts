@@ -34,7 +34,7 @@ export class RobotsUserRepository extends Repository<RobotsUserEntity>{
 
     public async deleteByUser(userId: number){
         try {
-            await this.createQueryBuilder("robotUser").delete().where("robotUser.user_id = :id", {
+            await this.createQueryBuilder().delete().where("user_id = :id", {
                 "id": userId
             }).execute();
 
