@@ -175,7 +175,7 @@ export class GameRepository extends Repository<GameEntity> {
                 console.log("DEBUG-4")
 
                 if (game.id){
-                    await manager.update(GameRepository, game.id, game);
+                    await manager.update(GameEntity, game.id, game);
                     return (game);
                 }
                 else {
