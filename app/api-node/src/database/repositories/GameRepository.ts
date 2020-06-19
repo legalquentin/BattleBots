@@ -113,7 +113,9 @@ export class GameRepository extends Repository<GameEntity> {
 
     public async saveOrUpdate(game: GameEntity): Promise<GameEntity>
     {
-        return getManager(connectionName()).transaction(async (manager : EntityManager) => {
+        const manager = getManager(connectionName());
+
+       // return getManager(connectionName()).transaction(async (manager : EntityManager) => {
             try {
                 console.log("initialize");
                 const botGames =  await game.robots;
@@ -185,9 +187,10 @@ export class GameRepository extends Repository<GameEntity> {
                 }
             }
             catch (e){
-                console.log(e)
+                console.log(e);
+                console.log(e);
                 throw e;
             }
-        });
+      //  });
     }
 }
