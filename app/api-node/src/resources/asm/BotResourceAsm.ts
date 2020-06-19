@@ -54,6 +54,7 @@ export class BotResourceAsm {
             resource.games = gameResources;
         }
                 */
+               /*
         if (robot.streams){
             const streams = await robot.streams;
             const resources = [];
@@ -63,6 +64,7 @@ export class BotResourceAsm {
             }
             resource.streams = resources;
         }
+        */
         return (resource);
     }
 
