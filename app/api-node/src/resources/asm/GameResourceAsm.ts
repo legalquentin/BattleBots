@@ -41,7 +41,7 @@ export class GameResourceAsm {
                 gameUsers.push(gameUser);
             }
             entity.gameUsers = gameUsers;
-            console.log(entity.gameUsers);
+            console.log(await entity.gameUsers);
         }
         /*
         if (game.streams){
