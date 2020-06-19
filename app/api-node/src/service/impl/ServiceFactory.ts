@@ -11,6 +11,7 @@ import { BotArenaRepository } from "../../database/repositories/BotArenaReposito
 import { BotGameRepository } from "../../database/repositories/BotGameRepository";
 import { UserGameRepository } from "../../database/repositories/UserGameRepository";
 import { RobotsUserRepository } from "../../database/repositories/RobotsUserRepository";
+import { SessionRepository } from "../../database/repositories/SessionRepository";
 
 @Singleton
 export default class ServiceFactory implements IServiceFactory {
@@ -47,6 +48,9 @@ export default class ServiceFactory implements IServiceFactory {
 
     @Inject
     private userGameRepository: UserGameRepository;
+
+    @Inject
+    private sessionRepository: SessionRepository;
 
     public getUserRepository() : UserRepository {
         return (this.userRepository);
@@ -90,6 +94,10 @@ export default class ServiceFactory implements IServiceFactory {
 
     public getBotUserRepository(): RobotsUserRepository {
         return (this.botUserRepository);
+    }
+
+    public getSessionRepository(): SessionRepository {
+        return (this.sessionRepository);
     }
 
 }

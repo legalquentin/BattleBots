@@ -9,6 +9,7 @@ import { BotArenaRepository } from "../database/repositories/BotArenaRepository"
 import { BotGameRepository } from "../database/repositories/BotGameRepository";
 import { RobotsUserRepository } from "../database/repositories/RobotsUserRepository";
 import { UserGameRepository } from "../database/repositories/UserGameRepository";
+import { SessionRepository } from "../database/repositories/SessionRepository";
 
 
 export default abstract class IServiceFactory {
@@ -23,4 +24,5 @@ export default abstract class IServiceFactory {
     public abstract getBotGameRepository(): BotGameRepository;
     public abstract getBotUserRepository(): RobotsUserRepository;
     public abstract getUserGameRepository(): UserGameRepository;
+    public abstract getSessionRepository(): SessionRepository;
 }
