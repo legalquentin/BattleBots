@@ -2617,12 +2617,12 @@
 			"IContextBotResource": {
 				"description": "",
 				"properties": {
-					"botEnergy": {
+					"energy": {
 						"type": "number",
 						"format": "double",
 						"description": ""
 					},
-					"botHeat": {
+					"heat": {
 						"type": "number",
 						"format": "double",
 						"description": ""
@@ -2642,8 +2642,8 @@
 				},
 				"type": "object",
 				"required": [
-					"botEnergy",
-					"botHeat"
+					"energy",
+					"heat"
 				]
 			},
 			"IPlayerResource": {

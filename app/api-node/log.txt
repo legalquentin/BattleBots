@@ -170,3 +170,27 @@ Error {"diagnosticText":"src/resources/IGameInfoResource.ts(1,1): error TS6133: 
 Error {"diagnosticText":"src/controller/UserController.ts(29,13): error TS6133: 'playerService' is declared but its value is never read.\n","diagnosticCodes":[6133]}
 Error {"diagnosticText":"src/migration/1592487490190-user_bot.ts(2,1): error TS6133: 'BotsRepository' is declared but its value is never read.\nsrc/migration/1592487490190-user_bot.ts(3,1): error TS6133: 'RobotsUserRepository' is declared but its value is never read.\nsrc/migration/1592487490190-user_bot.ts(4,1): error TS6133: 'RobotsUserEntity' is declared but its value is never read.\n","diagnosticCodes":[6133,6133,6133]}
 Error {"diagnosticText":"src/resources/IGameResource.ts(3,1): error TS6133: 'IStreamResource' is declared but its value is never read.\n","diagnosticCodes":[6133]}
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined
+log - preRequest - error - Cannot read property 'save' of undefined

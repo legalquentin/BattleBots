@@ -6,22 +6,21 @@ import { hashSync } from "bcrypt";
 import IConfig from '../src/service/IConfig';
 import { Container } from "typescript-ioc";
 import IServiceFactory from '../src/service/IServiceFactory';
-import { HttpApiServer } from '../src/http-api-server';
+import { ApiServerFactory } from '../src/api-server-factory';
 
-const client: request.RequestAPI<request.Request, request.CoreOptions, request.RequiredUriUrl>
-    = request.defaults({ baseUrl: `http://localhost:${80}` });
-
+let client: request.RequestAPI<request.Request, request.CoreOptions, request.RequiredUriUrl> = null;
 let apiServer = null;
-let config = null;
 let serviceFactory : IServiceFactory = null;
 
 describe('API Testing', async () => {
 
     before(async () => {
-        apiServer = new HttpApiServer();
+        const factory = new ApiServerFactory();
 
+        apiServer = factory.getServer();
         await apiServer.start();
-        config = Container.get(IConfig);
+        const config: IConfig = Container.get(IConfig);
+        client = request.defaults({ baseUrl: `${config.getApiScheme()}://${config.getApiAddress()}:${config.getApiPort()}` });
         serviceFactory = Container.get(IServiceFactory);
     });
 
@@ -55,7 +54,7 @@ describe('API Testing', async () => {
                     throw err;
                 }
                 else {
-                    expect(response.statusCode).to.equal(404);
+                    expect(response.statusCode).to.equal(403);
                 }
                 done();
             });
@@ -67,6 +66,7 @@ describe('API Testing', async () => {
         let callbackFind2 = null;
 
         before(() => {
+            const config : IConfig = Container.get(IConfig);
             const o = {
                 id: 1,
                 firstname: "Thomas",
@@ -85,6 +85,7 @@ describe('API Testing', async () => {
         });
 
         it('should insert and retrieve user', (done) => {
+            const config : IConfig = Container.get(IConfig);
             client.post('/api/users', {
                 headers: {
                     "Content-Type": "application/json"
@@ -95,7 +96,6 @@ describe('API Testing', async () => {
                     "pseudo": "simoes_t",
                     "email": "simoes_t@etna-alternance.net",
                     "password": "azerty123",
-                    "confirmation": "azerty123",
                     "address": "7 rue des ulysses"
                 })
             }, (err, response, body) => {
@@ -141,6 +141,7 @@ describe('API Testing', async () => {
         let callFindOne = null;
 
         before(() => {
+            const config : IConfig = Container.get(IConfig);
             const o = {
                 id: 1,
                 firstname: "Thomas",
@@ -177,10 +178,10 @@ describe('API Testing', async () => {
                     "pseudo": "simoes_t",
                     "email": "simoes_t@etna-alternance.net",
                     "password": "azerty123",
-                    "confirmation": "azerty123",
                     "address": "7 rue des ulysses"
                 })
             }, (err, response, body) => {
+                const config : IConfig = Container.get(IConfig);
                 expect(response.statusCode).to.equal(201);
                 callbackFind2 = sinon.stub(serviceFactory.getUserRepository(), "findOne");
                 callbackFind2.resolves({

@@ -1689,11 +1689,11 @@ components:
         IContextBotResource:
             description: ""
             properties:
-                botEnergy:
+                energy:
                     type: number
                     format: double
                     description: ""
-                botHeat:
+                heat:
                     type: number
                     format: double
                     description: ""
@@ -1707,8 +1707,8 @@ components:
                     $ref: '#/components/schemas/IStreamResource'
             type: object
             required:
-                - botEnergy
-                - botHeat
+                - energy
+                - heat
         IPlayerResource:
             description: ""
             properties:
