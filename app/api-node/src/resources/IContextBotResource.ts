@@ -4,8 +4,8 @@ import IUserResource from "./IUserResource";
 import { IStreamResource } from "./IStreamResource";
 
 export class IContextBotResource {
-    botEnergy: number;
-    botHeat: number;
+    energy: number;
+    heat: number;
     bot?: IBotsResource;
     game?: IGameResource;
     user?: IUserResource;

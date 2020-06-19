@@ -10,8 +10,8 @@ import { Singleton } from "typescript-ioc";
 export class SessionResourceAsm {
     toResource(session: SessionEntity){
         const resource: IContextBotResource = {
-            botEnergy: session.botEnergy,
-            botHeat: session.botHeat
+            energy: session.botEnergy,
+            heat: session.botHeat
         };
 
         return (resource);
@@ -20,8 +20,8 @@ export class SessionResourceAsm {
     toEntity(session: IContextBotResource){
         const entity = new SessionEntity();
 
-        entity.botEnergy = session.botEnergy;
-        entity.botHeat = session.botHeat;
+        entity.botEnergy = session.energy;
+        entity.botHeat = session.heat;
         if (session.user){
             const userEntity = new UserEntity();
 

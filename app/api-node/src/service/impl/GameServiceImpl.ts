@@ -124,8 +124,8 @@ export class GameServiceImpl implements GameService {
                             session.bot = robotEntity;
                             session.stream = streamEntity;
                             if (player.botContext){
-                                session.botEnergy = player.botContext.botEnergy;
-                                session.botHeat = player.botContext.botHeat;
+                                session.botEnergy = player.botContext.energy;
+                                session.botHeat = player.botContext.heat;
                             }
                             streamEntity.robot = robotEntity;
                             streams.push(streamEntity);
@@ -386,9 +386,12 @@ export class GameServiceImpl implements GameService {
                 await gameResourceAsm.AddArenaResource(game, resource);
             }
             let gameUsers = await game.gameUsers;
-            const sessions = await game.sessions;
+            let sessions = await game.sessions;
             if (!gameUsers){
                 gameUsers = [];
+            }
+            if (!sessions){
+                sessions = [];
             }
             console.log(gameUsers);
             console.log(sessions);
@@ -397,11 +400,9 @@ export class GameServiceImpl implements GameService {
                 let list: Array<RobotsEntity> = await this.serviceFactory.getBotsRepository().search(id, player.id);
 
                 //TOFIX: refacto in more readable code 
-                if (sessions && sessions.length){
-                    for (let session of sessions){
-                        if (session.player && session.player.id == gameUser.user.id && session.game.id == gameUser.game.id){
-                            player.botContext = sessionResourceAsm.toResource(session);
-                        }
+                for (let session of sessions){
+                    if (session.player && session.player.id == gameUser.user.id && session.game.id == gameUser.game.id){
+                        player.botContext = sessionResourceAsm.toResource(session);
                     }
                 }
                 if (!list){
