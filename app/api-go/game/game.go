@@ -153,11 +153,15 @@ func finishGameAPI(game Game, id string) {
 func closePlayerConn(game Game) {
 	for _, player := range game.Players {
 		player.Mutex.Lock()
-		player.BotSpecs.SocketClientCam.Close()
-		player.BotSpecs.SocketClientCtrl.WriteJSON(Data{Type: TypeDisconnect, Value: 0})
-		player.BotSpecs.SocketClientCtrl.Close()
-		player.BotSpecs.SocketBotCam.Close()
-		player.BotSpecs.SocketBotCtrl.Close()
+		if player.BotSpecs.SocketBotCam != nil {
+			player.BotSpecs.SocketClientCam.Close()
+			player.BotSpecs.SocketClientCtrl.WriteJSON(Data{Type: TypeDisconnect, Value: 0})
+			player.BotSpecs.SocketBotCam.Close()
+		}
+		if player.BotSpecs.SocketClientCtrl != nil {
+			player.BotSpecs.SocketClientCtrl.Close()
+			player.BotSpecs.SocketBotCtrl.Close()
+		}
 		player.Mutex.Unlock()
 	}
 	for _, b := range game.Env.Bots {
