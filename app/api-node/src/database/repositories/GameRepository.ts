@@ -165,16 +165,16 @@ export class GameRepository extends Repository<GameEntity> {
                 for (let session of sessions) {
                     session.game = game
                     console.log("SAVING SESSION", session)
-                    await manager.getCustomRepository(SessionRepository).save(session);
-                    console.log("SESSION SAVED", session)
+                    const r = await manager.getCustomRepository(SessionRepository).save(session);
+                    console.log("SESSION SAVED", r)
                 }
             }
             if (streams && streams.length) {
                 for (let stream of streams) {
                     stream.id = null;
                     console.log("SAVING STREAM", stream)
-                    await manager.getCustomRepository(StreamsRepository).save(stream);
-                    console.log("STREAM SAVED", stream)
+                    const r = await manager.getCustomRepository(StreamsRepository).save(stream);
+                    console.log("STREAM SAVED", r)
                 }
             }
             // if (game.id) {
@@ -182,9 +182,8 @@ export class GameRepository extends Repository<GameEntity> {
             // }
             // else {
                 console.log("SAVING GAME", game)
-                game.
-                await manager.save(game);
-                console.log("GAME SAVED", game)
+                const r = await manager.save(game);
+                console.log("GAME SAVED", r)
             // }
             return (game);
         }
