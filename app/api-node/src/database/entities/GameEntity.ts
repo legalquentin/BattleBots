@@ -45,7 +45,8 @@ export class GameEntity  {
     public robots?: Array<RobotGameEntity>;
 
     @OneToMany(type => StreamsEntity, streams => streams.game, {
-        lazy: true
+        lazy: true,
+        onDelete: 'CASCADE'
     })
     public streams?: Array<StreamsEntity>;
 
@@ -53,12 +54,14 @@ export class GameEntity  {
     public info: GameInfoEntity
 
     @OneToMany(type => GameUserEntity, gameUser => gameUser.game, {
-        lazy: true
+        lazy: true,
+        onDelete: 'CASCADE'
     })
     public gameUsers?: Array<GameUserEntity>;
 
     @OneToMany(type => SessionEntity, session => session.game, {
-        lazy: true
+        lazy: true,
+        onDelete: 'CASCADE'
     })
     public sessions?: Array<SessionEntity>;
 }

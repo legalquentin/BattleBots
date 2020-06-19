@@ -234,13 +234,6 @@ export class GameServiceImpl implements GameService {
                     message: "game deleted",
                     httpCode: 200
                 };
-
-                for (let stream of await game.streams) {
-                    await this.serviceFactory.getStreamsRepository().delete(stream);
-                }
-                for (let ug of await game.gameUsers){
-                    await this.serviceFactory.getUserGameRepository().delete(ug)
-                }
                 await this.serviceFactory.getGameRepository().deleteGame(game);
                 await this.battleWorkerService.deleteGame(game.id)
                 return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));
