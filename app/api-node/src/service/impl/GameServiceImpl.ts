@@ -361,6 +361,7 @@ export class GameServiceImpl implements GameService {
             const userResourceAsm = Container.get(UserResourceAsm);
             const sessionResourceAsm = Container.get(SessionResourceAsm);
 
+            console.log(game);
             if (!game){
                 const response : HttpResponseModel<IGameResource> = {
                     httpCode: 404,
@@ -370,6 +371,7 @@ export class GameServiceImpl implements GameService {
                 return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));        
             }
             const resource = await gameResourceAsm.toResource(game);
+            console.log(resource);
             if (await this.serviceFactory.getStreamsRepository().hasStream(id)){
                 await gameResourceAsm.AddStreamResouce(game, resource);
             }
@@ -384,6 +386,8 @@ export class GameServiceImpl implements GameService {
             if (!gameUsers){
                 gameUsers = [];
             }
+            console.log(gameUsers);
+            console.log(sessions);
             for (let gameUser of gameUsers){
                 const player: IPlayerResource = await gameResourceAsm.AddGamesUsersInGameResource(gameUser, resource);
                 let list: Array<RobotsEntity> = await this.serviceFactory.getBotsRepository().search(id, player.id);
@@ -391,7 +395,7 @@ export class GameServiceImpl implements GameService {
                 //TOFIX: refacto in more readable code 
                 if (sessions && sessions.length){
                     for (let session of sessions){
-                        if (session.player.id == gameUser.user.id && session.game.id == gameUser.game.id){
+                        if (session.player && session.player.id == gameUser.user.id && session.game.id == gameUser.game.id){
                             player.botContext = sessionResourceAsm.toResource(session);
                         }
                     }
