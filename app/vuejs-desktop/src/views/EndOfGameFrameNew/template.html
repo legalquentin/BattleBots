@@ -1,0 +1,100 @@
+<div>
+    <SuiContainer>
+        <SuiGrid>
+            <SuiGridRow :columns="3" verticalAlign="middle">
+
+                <SuiGridColumn style="margin-top: 20px" textAlign="left" :width="6">
+                    <h3 is="sui-header">
+                        <sui-icon name="game" style="color: #3b5998" />
+                        <sui-header-content>Informations sur la partie</sui-header-content>
+                    </h3>
+                </SuiGridColumn>
+                <SuiGridColumn style="margin-top: 20px" textAlign="center" :width="5">
+                    <!-- <RouterLink :to="{ name: 'CreateGameFrame' }">
+                        <SuiButton circular color="facebook">Nouvelle partie</SuiButton>
+                    </RouterLink> -->
+                </SuiGridColumn>
+                <SuiGridColumn style="margin-top: 20px" textAlign="right" :width="5">
+                    <RouterLink :to="{ name: 'CreateGameFrame' }">
+                        <SuiButton size="mini" @click="$router.back()" basic left icon label-position="right"
+                            icon="arrow up">Liste des parties</SuiButton>
+                    </RouterLink>
+
+                    <SuiButton size="mini" @click="disconnectModal = true" basic left icon color="red" icon="lock">
+                    </SuiButton>
+                </SuiGridColumn>
+            </SuiGridRow>
+        </SuiGrid>
+        <sui-modal basic inverted v-model="disconnectModal">
+            <sui-modal-header style="text-align: center; ">Se déconnecter ?</sui-modal-header>
+
+            <sui-modal-actions style="text-align: center; margin-left: -10px">
+                <div is="sui-button-group">
+                    <sui-button color="red" @click.native="disconnect()">
+                        Confirmer
+                    </sui-button>
+                    <sui-button-or text="ou" />
+                    <sui-button @click.native="disconnectModal = false">
+                        Annuler
+                    </sui-button>
+                </div>
+            </sui-modal-actions>
+        </sui-modal>
+        <SuiDivider></SuiDivider>
+        <SuiGrid style="margin-top: 60px">
+            <SuiGridRow>
+                <SuiGridColumn>
+                    <SuiHeader>Informations génerales</SuiHeader>
+                </SuiGridColumn>
+            </SuiGridRow>
+        </SuiGrid>
+        <SuiSegment raised stacked>
+            <SuiGrid celled="internally">
+                
+                <SuiGridRow :columns="3" verticalAlign="middle" style="margin-top: 6px">
+                    <SuiGridColumn :width="6">
+                        <sui-statistic size="tiny">
+                            <sui-statistic-value style="color: purple">TEST</sui-statistic-value>
+                            <sui-statistic-label>NOM PARTIE</sui-statistic-label>
+                        </sui-statistic>
+                    </SuiGridColumn>
+
+                    <SuiGridColumn :width="10">
+                        <SuiGrid celled="internally">
+                            <SuiGridRow :columns="2"  textAlign="center">
+                                <SuiGridColumn>
+                                    <sui-statistic size="mini">
+                                        <sui-statistic-value style="color: blue">1</sui-statistic-value>
+                                        <sui-statistic-label>nombre joueurs</sui-statistic-label>
+                                    </sui-statistic>
+                                </SuiGridColumn>
+                                <SuiGridColumn>
+                                    <sui-statistic size="mini">
+                                        <sui-statistic-value style="color: blue">-</sui-statistic-value>
+                                        <sui-statistic-label>date création</sui-statistic-label>
+                                    </sui-statistic>
+                                </SuiGridColumn>
+                            </SuiGridRow>
+                        </SuiGrid>
+
+
+
+
+
+
+                    </SuiGridColumn>
+                </SuiGridRow>
+
+            </SuiGrid>
+        </SuiSegment>
+        <SuiGrid>
+            <SuiGridRow style="margin-top: 60px">
+                <SuiGridColumn>
+                    <SuiButton color="blue" circular style="background-color: #3b5998" label-position="right" icon="video" @click.native="replayModal = true">Revoir la partie</SuiButton>
+                </SuiGridColumn>
+            </SuiGridRow>
+        </SuiGrid>
+    </SuiContainer>
+
+    <ReplayModal :isOpen.sync="replayModal" />
+</div>

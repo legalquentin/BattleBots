@@ -8,7 +8,7 @@ import RegisterFrame from '@/views/RegisterFrame/index.vue';
 import LoginFrame from '@/views/LoginFrame/index.vue';
 import GamesListFrame from '@/views/GamesListFrame/index.vue';
 import CreateGameFrame from '@/views/CreateGameFrame/index.vue';
-import EndOfGameFrame from '@/views/EndOfGameFrame/index.vue';
+import EndOfGameFrameNew from '@/views/EndOfGameFrameNew/index.vue';
 
 Vue.use(VueRouter)
 
@@ -67,7 +67,7 @@ const routes = [
   {
     path: '/EndOfGameFrame',
     name: 'EndOfGameFrame',
-    component: EndOfGameFrame,
+    component: EndOfGameFrameNew,
   }
 ];
 

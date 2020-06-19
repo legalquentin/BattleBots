@@ -154,14 +154,14 @@ export default class GameFrame extends Vue {
   private handleKeyEvents() {
     const allowed = Object.keys(this.keys);
     window.addEventListener("keydown", e => {
-      if (allowed.includes(e.code) && this.keys[e.code] == false) {
+      if (allowed.includes(e.code) && this.keys[e.code] == false && this.botContext.thermal) {
         this.keys[e.code] = true;
         this.socketService.send(e.keyCode, true);
       }
     });
 
     window.addEventListener("keyup", e => {
-      if (allowed.includes(e.code) && this.keys[e.code] == true) {
+      if (allowed.includes(e.code) && this.keys[e.code] == true && this.botContext.thermal) {
         this.keys[e.code] = false;
         this.socketService.send(e.keyCode, false);
       }
