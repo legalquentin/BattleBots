@@ -118,8 +118,6 @@ export class GameRepository extends Repository<GameEntity> {
                 const botGames =  game.robots;
                 const streams =  game.streams;
                 const sessions = game.sessions;
-                const botUsers = game.gameUsers;
-                console.log(botUsers)
                 let savedBotUsers = await game.gameUsers;
                 if (!savedBotUsers){
                     savedBotUsers = [];
@@ -144,8 +142,8 @@ export class GameRepository extends Repository<GameEntity> {
                         await manager.getCustomRepository(BotGameRepository).save(botGame);
                     }
                 }
-                if (botUsers && botUsers.length){
-                    for (let botUser of botUsers){
+                if (savedBotUsers && savedBotUsers.length){
+                    for (let botUser of savedBotUsers){
                         await manager.getCustomRepository(RobotsUserRepository).save(botUser);
                     }   
                 }
