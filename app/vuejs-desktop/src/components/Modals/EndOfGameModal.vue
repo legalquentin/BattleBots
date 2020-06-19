@@ -5,7 +5,7 @@
     <sui-modal-actions style="text-align: center;">
       <div is="sui-button-group">
         <sui-button color="facebook" @click.native="$router.push({ name: 'CreateGameFrame' })" label-position="left" icon="redo">Nouvelle partie</sui-button>
-        <sui-button color="blue" @click.native="$router.push({ name: 'EndOfGameFrame' })" label-position="right" icon="chart pie">Détails</sui-button>
+        <sui-button color="blue" @click.native="$router.push({ name: 'EndOfGameFrame', params: { gameId } })" label-position="right" icon="chart pie">Détails</sui-button>
       </div>
       <sui-button color="grey" style="margin-left: 50px" @click.native="$router.push({ name: 'GamesListFrame' })">Retourner au menu principal</sui-button>
     </sui-modal-actions>
@@ -21,7 +21,9 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 @Component
 export default class EndOfGameModal extends Vue {
   @Prop({ default: false }) isOpen?: boolean;
-
-  mounted() {}
+  @Prop({ default: 0 }) gameId: number = 0;
+  mounted() {
+    console.log(this.gameId)
+  }
 }
 </script>

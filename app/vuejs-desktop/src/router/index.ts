@@ -68,6 +68,7 @@ const routes = [
     path: '/EndOfGameFrame',
     name: 'EndOfGameFrame',
     component: EndOfGameFrameNew,
+    props: true,
   }
 ];
 
