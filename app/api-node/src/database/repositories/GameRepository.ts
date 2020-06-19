@@ -137,7 +137,10 @@ export class GameRepository extends Repository<GameEntity> {
                     }
                 }
                 */
-
+                console.log(botGames);
+                console.log(streams);
+                console.log(sessions);
+                console.log(userGames);
                 if (game.id){
                     await manager.update(GameEntity, game.id, game);
                 }
@@ -158,13 +161,7 @@ export class GameRepository extends Repository<GameEntity> {
                 }
                 console.log("DEBUG-3")
 
-                /*
-                if (savedBotUsers && savedBotUsers.length){
-                    for (let botUser of savedBotUsers){
-                        await manager.getCustomRepository(RobotsUserRepository).save(botUser);
-                    }   
-                }
-                */
+
                if (userGames && userGames.length){
                    for (let userGame of userGames){
                        await manager.getCustomRepository(UserGameRepository).save(userGame);
