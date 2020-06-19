@@ -29,9 +29,8 @@ export class GameResourceAsm {
             entity.created_at = new Date(game.createdAt);
         }
         if (game.players){
-            await entity.gameUsers;
+            let gameUsers = [];
 
-            entity.gameUsers = [];
             for (let player of game.players){
                 const gameUser = new GameUserEntity();
                 const user = await playerResourceAsm.toEntity(player);
@@ -39,8 +38,10 @@ export class GameResourceAsm {
                 gameUser.user = user;
 
                 sessions.push(sessionResourceAsm.toEntity(player.botContext));
-                entity.gameUsers.push(gameUser);
+                gameUsers.push(gameUser);
             }
+            entity.gameUsers = gameUsers;
+            console.log(gameUsers);
         }
         /*
         if (game.streams){
