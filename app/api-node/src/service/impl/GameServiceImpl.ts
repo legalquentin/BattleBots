@@ -235,10 +235,10 @@ export class GameServiceImpl implements GameService {
                     httpCode: 200
                 };
 
-                for (let stream of game.streams) {
+                for (let stream of await game.streams) {
                     await this.serviceFactory.getStreamsRepository().delete(stream);
                 }
-                for (let ug of game.gameUsers){
+                for (let ug of await game.gameUsers){
                     await this.serviceFactory.getUserGameRepository().delete(ug)
                 }
                 await this.serviceFactory.getGameRepository().deleteGame(game);
