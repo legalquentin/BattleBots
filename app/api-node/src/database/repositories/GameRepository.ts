@@ -156,19 +156,22 @@ export class GameRepository extends Repository<GameEntity> {
             if (userGames && userGames.length) {
                 for (let userGame of userGames) {
                     await manager.getCustomRepository(UserGameRepository).save(userGame);
+                    console.log("USERGAME SAVED", userGame)
                 }
             }
 
             if (sessions && sessions.length) {
                 for (let session of sessions) {
+                    session.game = game
                     await manager.getCustomRepository(SessionRepository).save(session);
+                    console.log("SESSION SAVED", session)
                 }
             }
-
             if (streams && streams.length) {
                 for (let stream of streams) {
                     stream.id = null;
                     await manager.getCustomRepository(StreamsRepository).save(stream);
+                    console.log("STREAM SAVED", stream)
                 }
             }
             // if (game.id) {
@@ -176,6 +179,7 @@ export class GameRepository extends Repository<GameEntity> {
             // }
             // else {
                 await manager.save(game);
+                console.log("GAME SAVED", game)
             // }
             return (game);
         }
