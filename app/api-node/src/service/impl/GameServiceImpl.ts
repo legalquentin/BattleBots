@@ -105,30 +105,38 @@ export class GameServiceImpl implements GameService {
                 await promise();
             }
             console.log(entity);
-            console.log(entity.gameUsers)
             const saved = await this.serviceFactory.getGameRepository().saveOrUpdate(entity);
             const resource = await gameResourceAsm.toResource(saved);
 
             game.id = saved.id;
-            const r = await this.battleWorkerService.startGoWorker(game);
-            console.log(r);
-            if (!r || !r.token || !r.game) {
-                const response: HttpResponseModel<IGameResource> = {
-                    httpCode: 500,
-                    message: JSON.stringify(r)
+            if (game.status == EGameStatus.CREATED){
+                const r = await this.battleWorkerService.startGoWorker(game);
+                console.log(r);
+                if (!r || !r.token || !r.game) {
+                    const response: HttpResponseModel<IGameResource> = {
+                        httpCode: 500,
+                        message: JSON.stringify(r)
+                    };
+                    console.log("ERROR, DELETING THE GAME")
+                    await this.deleteOne(game.id);
+                    return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));
+                }
+                resource.token = r.token;
+                resource.secret = r.secret;
+                const response : HttpResponseModel<IGameResource> = {
+                    httpCode: httpCode,
+                    message: "game create",
+                    data: resource
                 };
-                console.log("ERROR, DELETING THE GAME")
-                await this.deleteOne(game.id);
-                return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));
-            }
-            resource.token = r.token;
-            resource.secret = r.secret;
-            const response : HttpResponseModel<IGameResource> = {
-                httpCode: httpCode,
-                message: "game create",
-                data: resource
-            };
-            return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));        
+                return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));   
+            } else {
+                const response : HttpResponseModel<IGameResource> = {
+                    httpCode: httpCode,
+                    message: "game updated",
+                    data: resource
+                };
+                return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));   
+            }     
         }
         catch (e){
             console.log(e.message);
