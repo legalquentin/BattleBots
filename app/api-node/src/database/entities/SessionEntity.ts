@@ -18,28 +18,36 @@ export class SessionEntity {
         name: "player_id",
         referencedColumnName: "id"
     })
-    @ManyToOne(type => UserEntity, user => user.sessions)
+    @ManyToOne(type => UserEntity, user => user.sessions, {
+        eager: true
+    })
     player: UserEntity;
 
     @JoinColumn({
         name: "bot_id",
         referencedColumnName: "id"
     })
-    @ManyToOne(type => RobotsEntity, robot => robot.sessions)
+    @ManyToOne(type => RobotsEntity, robot => robot.sessions, {
+        eager: true
+    })
     bot: RobotsEntity;
 
     @JoinColumn({
         name: "stream_id",
         referencedColumnName: "id"
     })
-    @ManyToOne(type => StreamsEntity, stream => stream.sessions)
+    @ManyToOne(type => StreamsEntity, stream => stream.sessions, {
+        eager: true
+    })
     stream: StreamsEntity;
 
     @JoinColumn({
         name: "game_id",
         referencedColumnName: "id"
     })
-    @ManyToOne(type => GameEntity, game => game.sessions)
+    @ManyToOne(type => GameEntity, game => game.sessions, {
+        eager: true
+    })
     game: GameEntity;
 
     @Column({

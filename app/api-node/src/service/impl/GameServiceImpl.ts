@@ -123,6 +123,10 @@ export class GameServiceImpl implements GameService {
                             session.player = await playerResourceAsm.toEntity(player);
                             session.bot = robotEntity;
                             session.stream = streamEntity;
+                            if (player.botContext){
+                                session.botEnergy = player.botContext.botEnergy;
+                                session.botHeat = player.botContext.botHeat;
+                            }
                             streamEntity.robot = robotEntity;
                             streams.push(streamEntity);
                             sessions.push(session);

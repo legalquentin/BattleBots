@@ -41,6 +41,7 @@ export class GameRepository extends Repository<GameEntity> {
             leftJoinAndSelect("arena.robotArena", "robotArena").
             leftJoinAndSelect("robotArena.robot", "robot", "robot.id = bot_user.id").
             leftJoinAndSelect("bot_user.streams", "streams_2").
+            leftJoinAndSelect("game.sessions", "sessions").
             getMany());
     }
 
@@ -58,6 +59,7 @@ export class GameRepository extends Repository<GameEntity> {
             leftJoinAndSelect("arena.robotArena", "robotArena").
             leftJoinAndSelect("robotArena.robot", "robot", "robot.id = bot.id").
             leftJoinAndSelect("bot_user.streams", "streams_2").
+            leftJoinAndSelect("game.sessions", "sessions").
             where("game.id = :game_id", {
                 "game_id": id
             }).
