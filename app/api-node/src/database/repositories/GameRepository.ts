@@ -155,6 +155,7 @@ export class GameRepository extends Repository<GameEntity> {
 
             if (userGames && userGames.length) {
                 for (let userGame of userGames) {
+                    console.log("SAVING USERGAME", userGame)
                     await manager.getCustomRepository(UserGameRepository).save(userGame);
                     console.log("USERGAME SAVED", userGame)
                 }
@@ -163,6 +164,7 @@ export class GameRepository extends Repository<GameEntity> {
             if (sessions && sessions.length) {
                 for (let session of sessions) {
                     session.game = game
+                    console.log("SAVING SESSION", session)
                     await manager.getCustomRepository(SessionRepository).save(session);
                     console.log("SESSION SAVED", session)
                 }
@@ -170,6 +172,7 @@ export class GameRepository extends Repository<GameEntity> {
             if (streams && streams.length) {
                 for (let stream of streams) {
                     stream.id = null;
+                    console.log("SAVING STREAM", stream)
                     await manager.getCustomRepository(StreamsRepository).save(stream);
                     console.log("STREAM SAVED", stream)
                 }
@@ -178,13 +181,13 @@ export class GameRepository extends Repository<GameEntity> {
             //     await manager.update(GameEntity, game.id, game);
             // }
             // else {
+                console.log("SAVING GAME", game)
                 await manager.save(game);
                 console.log("GAME SAVED", game)
             // }
             return (game);
         }
         catch (e) {
-            console.log(e);
             console.log(e);
             throw e;
         }
