@@ -6,6 +6,7 @@ import { GameRepository } from "./GameRepository";
 import { UserRepository } from "./UserRepository";
 import { EntityError } from "../../../lib/EntityError";
 import { EEntityStatus } from "../../../lib/EEntityStatus";
+import { GameEntity } from "../entities/GameEntity";
 
 @Singleton
 @EntityRepository(GameUserEntity)
@@ -32,15 +33,16 @@ export class UserGameRepository extends Repository<GameUserEntity> {
         }
     }
 
-    public async deleteByGame(gameId: number){
+    public async deleteByGame(game: GameEntity){
         try {
-            await this.createQueryBuilder("userGame").delete().where("userGame.game_id = :id", {
-                id: gameId
+            await this.createQueryBuilder().delete().where("game_id = :id", {
+                id: game.id
             }).execute();
         
             return (true);
         }
         catch (e){
+            console.log(e.message)
             return (false);
         }
     }

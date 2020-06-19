@@ -10,6 +10,10 @@ import { BotGameRepository } from "./BotGameRepository";
 import { BotsRepository } from "./BotsRepository";
 import { SessionRepository } from "./SessionRepository";
 import { UserGameRepository } from "./UserGameRepository";
+import { SessionEntity } from "../entities/SessionEntity";
+import { StreamsEntity } from "../entities/StreamsEntity";
+import { GameUserEntity } from "../entities/GameUserEntity";
+import { RobotGameEntity } from "../entities/RobotGameEntity";
 
 @EntityRepository(GameEntity)
 @Singleton
@@ -111,98 +115,71 @@ export class GameRepository extends Repository<GameEntity> {
         return (game);
     }
 
-    public async saveOrUpdate(game: GameEntity): Promise<GameEntity> {
-        const manager = getManager(connectionName());
+    public async AddSessionInGame(manager: EntityManager, game: GameEntity, sessions: Array<SessionEntity>){
+        await manager.getCustomRepository(SessionRepository).deleteAllByGame(game);
 
-        // return getManager(connectionName()).transaction(async (manager : EntityManager) => {
-        try {
-            console.log("initialize");
-            const botGames = await game.robots;
-            const streams = await game.streams;
-            const sessions = await game.sessions;
-            const userGames = await game.gameUsers;
-
-            console.log("USERGAME", userGames);
-            await manager.getCustomRepository(SessionRepository).deleteAllByGame(game);
-            await manager.getCustomRepository(BotGameRepository).deleteAllBotGame(game);
-            await manager.getCustomRepository(StreamsRepository).deleteByGame(game);
-            await manager.getCustomRepository(UserGameRepository).deleteByGame(game.id);
-            console.log("DEBUG-2");
-
-            /*
-            if (savedBotUsers){
-                for (let savedBotUser of savedBotUsers){
-                    await manager.getCustomRepository(RobotsUserRepository).delete(savedBotUser);
-                }
+        if (sessions && sessions.length) {
+            for (let session of sessions) {
+                session.game = game;
+                console.log("SAVING SESSION", session)
+                const ret = await manager.getCustomRepository(SessionRepository).save(session);
+                console.log("SESSION SAVED", ret)
             }
-            */
-    
-            console.log("SAVING GAME", game)
-            const r = await manager.save(game);
-            console.log("GAME SAVED", r)
-
-
-            console.log("update");
-            if (botGames && botGames.length) {
-                for (let botGame of botGames) {
-                    botGame.game = r;
-                    if (!botGame.bot.id) {
-                        await manager.getCustomRepository(BotsRepository).save(botGame.bot);
-                    }
-                    else {
-                        await manager.getCustomRepository(BotsRepository).save(botGame.bot);
-                        // await manager.getCustomRepository(BotsRepository).update(botGame.bot.id, botGame.bot);
-                    }
-                    await manager.getCustomRepository(BotGameRepository).save(botGame);
-                }
-            }
-            console.log("DEBUG-3")
-
-
-            let usergamearr = []
-            if (userGames && userGames.length) {
-                for (let userGame of userGames) {
-                    userGame.game = r;
-                    console.log("SAVING USERGAME", userGame)
-                    usergamearr.push(await manager.getCustomRepository(UserGameRepository).save(userGame));
-                    // console.log("USERGAME SAVED", res)
-                }
-            }
-
-            if (sessions && sessions.length) {
-                for (let session of sessions) {
-                    session.game = r;
-                    console.log("SAVING SESSION", session)
-                    const ret = await manager.getCustomRepository(SessionRepository).save(session);
-                    console.log("SESSION SAVED", ret)
-                }
-            }
-            if (streams && streams.length) {
-                for (let stream of streams) {
-                    stream.id = null;
-                    stream.game = r;
-                    console.log("SAVING STREAM", stream)
-                    const ret = await manager.getCustomRepository(StreamsRepository).save(stream);
-                    console.log("STREAM SAVED", ret)
-                }
-            }
-            return (r);
         }
-        catch (e) {
-            console.log("ERROR !!!!");
-            console.log(e);
-            throw e;
+    }
+
+    public async AddStreamInGame(manager: EntityManager, game: GameEntity, streams: Array<StreamsEntity>){
+        await manager.getCustomRepository(StreamsRepository).deleteByGame(game);
+        
+        if (streams && streams.length) {
+            for (let stream of streams) {
+                stream.id = null;
+                stream.game = game;
+                console.log("SAVING STREAM", stream)
+                const ret = await manager.getCustomRepository(StreamsRepository).save(stream);
+                console.log("STREAM SAVED", ret)
+            }
         }
-        //  });
+    }
+
+    public async AddBotGame(manager: EntityManager, game: GameEntity, botGames: Array<RobotGameEntity>){
+        await manager.getCustomRepository(BotGameRepository).deleteAllBotGame(game);
+
+        if (botGames && botGames.length) {
+            for (let botGame of botGames) {
+                botGame.game = game;
+                await manager.getCustomRepository(BotsRepository).save(botGame.bot);
+                await manager.getCustomRepository(BotGameRepository).save(botGame);
+            }
+        }
+    }
+
+    public async AddUserGame(manager: EntityManager, game: GameEntity, userGames: Array<GameUserEntity>){
+        await manager.getCustomRepository(UserGameRepository).deleteByGame(game);
+
+        if (userGames && userGames.length) {
+            for (let userGame of userGames) {
+                userGame.game = game;
+                console.log("SAVING USERGAME", userGame)
+                await manager.getCustomRepository(UserGameRepository).save(userGame);
+            }
+        }
+    }
+
+    public async saveOrUpdate(manager: EntityManager, game: GameEntity): Promise<GameEntity> {
+        console.log("SAVING GAME", game)
+        const r = await manager.save(game);
+        console.log("GAME SAVED", r);
+        return (r);
     }
 
     public async deleteGame(game: GameEntity){
-        const manager = this.manager;
+        const manager = getManager(connectionName());
 
         await manager.getCustomRepository(SessionRepository).deleteAllByGame(game);
         await manager.getCustomRepository(BotGameRepository).deleteAllBotGame(game);
         await manager.getCustomRepository(StreamsRepository).deleteByGame(game);
-        await manager.getCustomRepository(UserGameRepository).deleteByGame(game.id);
+        await manager.getCustomRepository(UserGameRepository).deleteByGame(game);
         await manager.delete(GameEntity, game.id);
     }
 }
