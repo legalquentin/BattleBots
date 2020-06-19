@@ -25,12 +25,16 @@ export default class EndOfGameFrame extends Vue {
   disconnectModal: boolean = false;
   
   replayModal: Boolean = false;
+  s3Url: string = "";
 
   mounted() {
     
     console.log("EndOfGameFrame > mounted", this.gameId);
-    this.connectionManager.getGameResult(this.gameId).then((response: AxiosResponse) => console.log(response)).catch((err: AxiosError) => console.error(err));
-    var player = new jsmpeg('https://qlg-demo-bucket.s3.eu-central-1.amazonaws.com/a14f5f9f-cf0c-4400-95e3-ba645adf5b48.ts?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAWN2ZPWNZAA5KB57X%2F20200618%2Feu-central-1%2Fs3%2Faws4_request&X-Amz-Date=20200618T125647Z&X-Amz-Expires=7200&X-Amz-Signature=590dade779a64bc000339249e226f5d5a5c649b45f3914f6fce3485b2fa26f37&X-Amz-SignedHeaders=host', {canvas: this.videoCanvas, seekable: true});
+    this.connectionManager.getGameResult(this.gameId).then((response: AxiosResponse) => {
+        this.s3Url = response.data.data.players[0].botSpecs.streams[0].s3Url;      
+        console.log(this.s3Url)
+    }).catch((err: AxiosError) => console.error(err));
+    
   }
 };
 </script>
