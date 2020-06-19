@@ -23,7 +23,7 @@ export class UserGameRepository extends Repository<GameUserEntity> {
         try {
             await this.createQueryBuilder("userGame").delete().where("userGame.user_id = :id", {
                 id: playerId
-            });
+            }).execute();
         
             return (true);
         }
@@ -36,7 +36,7 @@ export class UserGameRepository extends Repository<GameUserEntity> {
         try {
             await this.createQueryBuilder("userGame").delete().where("userGame.game_id = :id", {
                 id: gameId
-            });
+            }).execute();
         
             return (true);
         }

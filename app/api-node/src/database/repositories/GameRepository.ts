@@ -10,6 +10,7 @@ import { BotGameRepository } from "./BotGameRepository";
 import { BotsRepository } from "./BotsRepository";
 import { RobotsUserRepository } from "./RobotsUserRepository";
 import { SessionRepository } from "./SessionRepository";
+import { UserGameRepository } from "./UserGameRepository";
 
 @EntityRepository(GameEntity)
 @Singleton
@@ -118,19 +119,19 @@ export class GameRepository extends Repository<GameEntity> {
                 const botGames =  game.robots;
                 const streams =  game.streams;
                 const sessions = game.sessions;
-                let savedBotUsers = await game.gameUsers;
-                if (!savedBotUsers){
-                    savedBotUsers = [];
-                }
-                console.log(savedBotUsers);
+                const userGames = await game.gameUsers;
+
                 await manager.getCustomRepository(SessionRepository).deleteAllByGame(game.id);
                 await manager.getCustomRepository(BotGameRepository).deleteAllBotGame(game);
                 await manager.getCustomRepository(StreamsRepository).deleteByGame(game);
+                await manager.getCustomRepository(UserGameRepository).deleteByGame(game.id);
+                /*
                 if (savedBotUsers){
                     for (let savedBotUser of savedBotUsers){
                         await manager.getCustomRepository(RobotsUserRepository).delete(savedBotUser);
                     }
                 }
+                */
                 if (botGames && botGames.length){
                     for (let botGame of botGames){
                         if (!botGame.bot.id){
@@ -142,11 +143,18 @@ export class GameRepository extends Repository<GameEntity> {
                         await manager.getCustomRepository(BotGameRepository).save(botGame);
                     }
                 }
+                /*
                 if (savedBotUsers && savedBotUsers.length){
                     for (let botUser of savedBotUsers){
                         await manager.getCustomRepository(RobotsUserRepository).save(botUser);
                     }   
                 }
+                */
+               if (userGames && userGames.length){
+                   for (let userGame of userGames){
+                       await manager.getCustomRepository(UserGameRepository).save(userGame);
+                   }
+               }
                 if (sessions && sessions.length){
                     for (let session of sessions){
                         await manager.getCustomRepository(SessionRepository).save(session);
