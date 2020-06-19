@@ -4,6 +4,7 @@ import { Singleton/*, Container */ } from "typescript-ioc";
 //import { GameProfileResourceAsm } from "./GameProfileResourceAsm";
 import { ArenaEntity } from "../../database/entities/ArenaEntity";
 import { RobotsArenaEntity } from "../../database/entities/RobotsArenaEntity";
+import { IStreamResource } from "../IStreamResource";
 //import { StreamsResourceAsm } from "./StreamsResourceAsm";
 //import { UserResourceAsm } from "./UserResourceAsm";
 /*
@@ -75,6 +76,11 @@ export class BotResourceAsm {
             resources.push(await this.toResource(robot));
         }   
         return (resources);
+    }
+
+    public async addStreamResource(resource: IBotsResource, streams: Array<IStreamResource>){
+        resource.streams = streams;
+        return (resource);
     }
 
     public async toEntity(bot: IBotsResource) {

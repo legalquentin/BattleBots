@@ -24,6 +24,12 @@ export class StreamsRepository extends Repository<StreamsEntity> {
         return (entities && entities.length > 0);
     }
 
+    public async getByBotId(botId: number){
+        return (await this.createQueryBuilder("stream").where("stream.robot_id = :id", {
+            "id": botId
+        }).getMany());
+    }
+
     public async deleteByBot(botId: number){
         return this.createQueryBuilder().delete().from(StreamsEntity).where("robot_id = :id", {
             "id": botId

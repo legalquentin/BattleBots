@@ -25,6 +25,7 @@ import { RobotGameEntity } from "../../database/entities/RobotGameEntity";
 import { SessionEntity } from "../../database/entities/SessionEntity";
 import { GameUserEntity } from "../../database/entities/GameUserEntity";
 import { RobotsUserEntity } from "../../database/entities/RobotsUserEntity";
+import { StreamsResourceAsm } from "../../resources/asm/StreamsResourceAsm";
 
 @Singleton
 export class GameServiceImpl implements GameService {
@@ -358,6 +359,8 @@ export class GameServiceImpl implements GameService {
             const gameResourceAsm = Container.get(GameResourceAsm);
             const userResourceAsm = Container.get(UserResourceAsm);
             const sessionResourceAsm = Container.get(SessionResourceAsm);
+            const streamResourceAsm = Container.get(StreamsResourceAsm);
+            const botResourceAsm = Container.get(BotResourceAsm);
 
             if (!game){
                 const response : HttpResponseModel<IGameResource> = {
@@ -386,14 +389,12 @@ export class GameServiceImpl implements GameService {
                 sessions = [];
             }
             for (let gameUser of gameUsers){
-                console.log(gameUser);
                 gameUser.game = game;
                 const player: IPlayerResource = await gameResourceAsm.AddGamesUsersInGameResource(gameUser, resource);
                 let list: Array<RobotsEntity> = await this.serviceFactory.getBotsRepository().search(gameUser.game.id, gameUser.user.id);
                 let sessions = await this.serviceFactory.getSessionRepository().search(gameUser.game.id, gameUser.user.id);
 
-                console.log(sessions);
-                if (!sessions){
+                 if (!sessions){
                     sessions = [];
                 }
                 if (sessions.length > 0){
@@ -402,8 +403,20 @@ export class GameServiceImpl implements GameService {
                 if (!list){
                     list = [];
                 }
-                if (list.length){
-                    await userResourceAsm.AddBotResource(list[0], player);
+                const streamResources = [];
+                const botResources = [];
+                for (let item of list){
+                    const streams = await this.serviceFactory.getStreamsRepository().getByBotId(item.id);
+                    const botResource = await botResourceAsm.toResource(item);
+
+                    for (let stream of streams){
+                        streamResources.push(await streamResourceAsm.toResource(stream));
+                    }
+                    botResources.push(botResource);
+                    botResourceAsm.addStreamResource(botResource, streamResources);
+                }
+                if (botResources.length){
+                    await userResourceAsm.AddBotResource(botResources, player);
                 }
             }
             const response : HttpResponseModel<IGameResource> = {
