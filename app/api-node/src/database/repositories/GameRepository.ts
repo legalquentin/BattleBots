@@ -162,11 +162,12 @@ export class GameRepository extends Repository<GameEntity> {
             console.log("DEBUG-3")
 
 
+            let usergamearr = []
             if (userGames && userGames.length) {
                 for (let userGame of userGames) {
                     console.log("SAVING USERGAME", userGame)
-                    const res = await manager.getCustomRepository(UserGameRepository).save(userGame);
-                    console.log("USERGAME SAVED", res)
+                    usergamearr.push(await manager.getCustomRepository(UserGameRepository).save(userGame));
+                    // console.log("USERGAME SAVED", res)
                 }
             }
 
