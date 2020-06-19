@@ -100,8 +100,12 @@ export default class ConnectionManager extends Vue {
 
     }
 
-    public joinGame(gameId): Promise<AxiosResponse> {
+    public joinGame(gameId: number): Promise<AxiosResponse> {
         return this.axios.put(`games/join/${gameId}`);
+    }
+
+    public getGameResult(gameId: number): Promise<AxiosResponse> {
+        return this.axios.get(`games/${gameId}`);
     }
 
     private refreshToken(): AxiosPromise {

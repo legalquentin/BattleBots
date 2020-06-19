@@ -19,7 +19,7 @@ type keyOpt = {
 export default class GameFrame extends Vue {
   @Ref("videoCanvas") private videoCanvas?: HTMLCanvasElement;
   @Prop() private gameInfos: any;
-  @Prop() private gameId: any;
+  @Prop() public gameId: any;
 
   private playerId: number | null = Number(localStorage.getItem("userId"));
 
