@@ -379,6 +379,8 @@ export class GameServiceImpl implements GameService {
             if (!gameUsers){
                 gameUsers = [];
             }
+            console.log(sessions);
+            console.log(gameUsers);
             for (let gameUser of gameUsers){
                 const player: IPlayerResource = await gameResourceAsm.AddGamesUsersInGameResource(gameUser, resource);
                 let list: Array<RobotsEntity> = await this.serviceFactory.getBotsRepository().search(id, player.id);
