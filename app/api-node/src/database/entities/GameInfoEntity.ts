@@ -45,6 +45,8 @@ export class GameInfoEntity extends AbstractEntity{
         name: "game_id",
         referencedColumnName: "id"
     })
-    @OneToOne(type => GameEntity, game => game.info)
+    @OneToOne(type => GameEntity, game => game.info, {
+        onDelete: 'CASCADE'
+    })
     game: GameEntity;
 }
