@@ -401,6 +401,7 @@ export class GameServiceImpl implements GameService {
 
                 //TOFIX: refacto in more readable code 
                 for (let session of sessions){
+                    console.log(session);
                     if (session.player && session.player.id == gameUser.user.id && session.game.id == gameUser.game.id){
                         player.botContext = sessionResourceAsm.toResource(session);
                     }
