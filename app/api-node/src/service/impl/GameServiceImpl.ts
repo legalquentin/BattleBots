@@ -407,6 +407,13 @@ export class GameServiceImpl implements GameService {
                 const botResources = [];
                 for (let item of list){
                     const streams = await this.serviceFactory.getStreamsRepository().getByBotId(item.id);
+
+                    for (let stream of streams){
+                        const url = this.streamService.getVideoLink(stream);
+
+                        stream.s3Url = url;
+                    }
+
                     const botResource = await botResourceAsm.toResource(item);
 
                     for (let stream of streams){
