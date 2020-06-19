@@ -16,7 +16,7 @@ export class SessionRepository extends Repository<SessionEntity> {
 
     async deleteAllByGame(game: GameEntity){
         try {
-            await this.createQueryBuilder("session").delete().where("session.game_id = :id", {
+            await this.createQueryBuilder().delete().where("game_id = :id", {
                 id: game.id
             }).execute();
         

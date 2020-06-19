@@ -61,9 +61,17 @@ export class BotGameRepository extends Repository<RobotGameEntity> {
     }
     
 
-    public deleteAllBotGame(game: GameEntity){
-        return (this.createQueryBuilder().delete().from(RobotGameEntity).where("game_id = :id", {
-            "id": game.id
-        }).execute());
+    public async deleteAllBotGame(game: GameEntity){
+        try {
+            await (this.createQueryBuilder().delete().where("game_id = :id", {
+                "id": game.id
+            }).execute());
+
+            return (true);
+        }
+        catch (e){
+            console.log(e.message);
+            return (false);
+        }
     }
 }
