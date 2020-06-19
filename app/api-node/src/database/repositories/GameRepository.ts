@@ -137,6 +137,15 @@ export class GameRepository extends Repository<GameEntity> {
             }
             */
 
+           // if (game.id) {
+            //     await manager.update(GameEntity, game.id, game);
+            // }
+            // else {
+                console.log("SAVING GAME", game)
+                const r = await manager.save(game);
+                console.log("GAME SAVED", r)
+            // }
+
             console.log("update");
             if (botGames && botGames.length) {
                 for (let botGame of botGames) {
@@ -177,14 +186,6 @@ export class GameRepository extends Repository<GameEntity> {
                     console.log("STREAM SAVED", r)
                 }
             }
-            // if (game.id) {
-            //     await manager.update(GameEntity, game.id, game);
-            // }
-            // else {
-                console.log("SAVING GAME", game)
-                const r = await manager.save(game);
-                console.log("GAME SAVED", r)
-            // }
             return (game);
         }
         catch (e) {
