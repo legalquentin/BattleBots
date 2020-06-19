@@ -122,10 +122,13 @@ export class GameServiceImpl implements GameService {
 
                 await promise();
             }
-            const playersResource = game.players;
+            let playersResource = game.players;
             const bots = [];
             const userGames = [];
-            
+           
+            if (!playersResource){
+                playersResource = [];
+            }
             for (let playerResource of playersResource){
                 const botGame = new RobotGameEntity();
                 const userGame = new GameUserEntity();
