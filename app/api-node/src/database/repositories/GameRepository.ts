@@ -136,15 +136,10 @@ export class GameRepository extends Repository<GameEntity> {
                 }
             }
             */
-            let r = game;
-            if (game.id) {
-                 await manager.update(GameEntity, game.id, game);
-            }
-            else {
-                console.log("SAVING GAME", game)
-                r = await manager.save(game);
-                console.log("GAME SAVED", r)
-            }
+    
+            console.log("SAVING GAME", game)
+            const r = await manager.save(game);
+            console.log("GAME SAVED", r)
 
 
             console.log("update");
@@ -198,5 +193,15 @@ export class GameRepository extends Repository<GameEntity> {
             throw e;
         }
         //  });
+    }
+
+    public async deleteGame(game: GameEntity){
+        const manager = this.manager;
+
+        await manager.getCustomRepository(SessionRepository).deleteAllByGame(game);
+        await manager.getCustomRepository(BotGameRepository).deleteAllBotGame(game);
+        await manager.getCustomRepository(StreamsRepository).deleteByGame(game);
+        await manager.getCustomRepository(UserGameRepository).deleteByGame(game.id);
+        await manager.delete(GameEntity, game.id);
     }
 }
