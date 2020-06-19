@@ -119,8 +119,12 @@ export class GameRepository extends Repository<GameEntity> {
                 const streams =  game.streams;
                 const sessions = game.sessions;
                 const botUsers = game.gameUsers;
-                const savedBotUsers = await game.gameUsers;
-
+                console.log(botUsers)
+                let savedBotUsers = await game.gameUsers;
+                if (!savedBotUsers){
+                    savedBotUsers = [];
+                }
+                console.log(savedBotUsers);
                 await manager.getCustomRepository(SessionRepository).deleteAllByGame(game.id);
                 await manager.getCustomRepository(BotGameRepository).deleteAllBotGame(game);
                 await manager.getCustomRepository(StreamsRepository).deleteByGame(game);
