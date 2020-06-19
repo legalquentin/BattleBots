@@ -235,6 +235,12 @@ export class GameServiceImpl implements GameService {
                     httpCode: 200
                 };
 
+                for (let stream of game.streams) {
+                    await this.serviceFactory.getStreamsRepository().delete(stream);
+                }
+                for (let ug of game.gameUsers){
+                    await this.serviceFactory.getUserGameRepository().delete(ug)
+                }
                 await this.serviceFactory.getGameRepository().deleteGame(game);
                 await this.battleWorkerService.deleteGame(game.id)
                 return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));
@@ -248,7 +254,8 @@ export class GameServiceImpl implements GameService {
                 return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));
             }
         }
-        catch (e){
+        catch (e) {
+            console.log(e);
             const response: HttpResponseModel<IGameResource> = {
                 message: e.message,
                 httpCode: 400
