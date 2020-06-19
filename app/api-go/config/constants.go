@@ -13,7 +13,7 @@ var Config = Configuration{
 	Bots: []game.Bot{{
 		ID:           1,
 		Address:      "192.168.1.66",
-		Running:      true,
+		Running:      1,
 		Taken:        false,
 		Name:         "Rocinante",
 		BaseSpeed:    100,

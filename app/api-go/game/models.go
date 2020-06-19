@@ -66,7 +66,7 @@ type Bot struct {
 	// technical stuff
 	ID               int16           `json:"id,omitempty"`
 	Address          string          `json:"address,omitempty"`
-	Running          bool            `json:"running,omitempty"`
+	Running          int16           `json:"running,omitempty"`
 	Taken            bool            `json:"taken,omitempty"`
 	SocketBotCam     *websocket.Conn `json:"-"`
 	SocketClientCam  *websocket.Conn `json:"-"`
