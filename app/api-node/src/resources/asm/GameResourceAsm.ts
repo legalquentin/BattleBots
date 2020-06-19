@@ -41,6 +41,7 @@ export class GameResourceAsm {
         /*
         if (game.streams){
             entity.streams = [];
+            const streams = await game.streams;
 
             for (let stream of game.streams){
                 const entityStream = await streamResourceAsm.toEntity(stream);

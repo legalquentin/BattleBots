@@ -1,6 +1,6 @@
 import { RobotsEntity } from "../../database/entities/RobotsEntity";
 import { IBotsResource } from "../IBotsResource";
-import { Singleton, Container, Inject } from "typescript-ioc";
+import { Singleton, Container } from "typescript-ioc";
 //import { GameProfileResourceAsm } from "./GameProfileResourceAsm";
 import { ArenaEntity } from "../../database/entities/ArenaEntity";
 import { RobotsArenaEntity } from "../../database/entities/RobotsArenaEntity";
@@ -22,8 +22,8 @@ export class BotResourceAsm {
     private gameResourceAsm: GameResourceAsm;
     */
    
-    @Inject
-    private streamResourceAsm: StreamsResourceAsm;
+   // @Inject
+    //private streamResourceAsm: StreamsResourceAsm;
 
 
     public async toResource(robot: RobotsEntity) {
@@ -89,6 +89,7 @@ export class BotResourceAsm {
         robot.running = bot.running;
         robot.name = bot.name;
 
+        /*
         if (bot.streams){
             const streams = bot.streams;
             const streamEntities = [];
@@ -98,6 +99,7 @@ export class BotResourceAsm {
             }
             robot.streams = streamEntities;
         }
+        */
         /*
         if (bot.games){
             const games = bot.games;
