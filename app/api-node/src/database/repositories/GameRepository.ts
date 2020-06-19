@@ -115,11 +115,13 @@ export class GameRepository extends Repository<GameEntity> {
     {
         return getManager(connectionName()).transaction(async (manager : EntityManager) => {
             try {
-                const botGames =  game.robots;
-                const streams =  game.streams;
-                const sessions = game.sessions;
+                console.log("initialize");
+                const botGames =  await game.robots;
+                const streams =  await game.streams;
+                const sessions = await game.sessions;
                 const userGames = await game.gameUsers;
 
+                console.log("manage");
                 await manager.getCustomRepository(SessionRepository).deleteAllByGame(game);
                 await manager.getCustomRepository(BotGameRepository).deleteAllBotGame(game);
                 await manager.getCustomRepository(StreamsRepository).deleteByGame(game);
@@ -131,6 +133,7 @@ export class GameRepository extends Repository<GameEntity> {
                     }
                 }
                 */
+               console.log("update");
                 if (botGames && botGames.length){
                     for (let botGame of botGames){
                         if (!botGame.bot.id){
