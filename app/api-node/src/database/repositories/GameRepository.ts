@@ -191,7 +191,7 @@ export class GameRepository extends Repository<GameEntity> {
                     console.log("STREAM SAVED", ret)
                 }
             }
-            return (game);
+            return (r);
         }
         catch (e) {
             console.log(e);
