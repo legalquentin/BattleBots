@@ -24,9 +24,11 @@ export class StreamsRepository extends Repository<StreamsEntity> {
         return (entities && entities.length > 0);
     }
 
-    public async getByBotId(botId: number){
+    public async search(botId: number, gameId: number, playerId: number){
         return (await this.createQueryBuilder("stream").where("stream.robot_id = :id", {
             "id": botId
+        }).andWhere("stream.game_id = :gameId", {
+            "gameId": gameId
         }).getMany());
     }
 
