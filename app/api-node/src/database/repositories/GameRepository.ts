@@ -169,11 +169,11 @@ export class GameRepository extends Repository<GameEntity> {
                     }
                 }
                 if (game.id){
-                    await manager.getCustomRepository(GameRepository).update(game.id, game);
+                    await manager.update(GameRepository, game.id, game);
                     return (game);
                 }
                 else {
-                    const saved = await manager.getCustomRepository(GameRepository).save(game);
+                    const saved = await manager.save(game);
             
                     return (saved);
                 }
