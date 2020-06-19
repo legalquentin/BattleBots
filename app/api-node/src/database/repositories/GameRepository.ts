@@ -144,7 +144,8 @@ export class GameRepository extends Repository<GameEntity> {
                         await manager.getCustomRepository(BotsRepository).save(botGame.bot);
                     }
                     else {
-                        await manager.getCustomRepository(BotsRepository).update(botGame.bot.id, botGame.bot);
+                        await manager.getCustomRepository(BotsRepository).save(botGame.bot);
+                        // await manager.getCustomRepository(BotsRepository).update(botGame.bot.id, botGame.bot);
                     }
                     await manager.getCustomRepository(BotGameRepository).save(botGame);
                 }
@@ -170,12 +171,12 @@ export class GameRepository extends Repository<GameEntity> {
                     await manager.getCustomRepository(StreamsRepository).save(stream);
                 }
             }
-            if (game.id) {
-                await manager.update(GameEntity, game.id, game);
-            }
-            else {
+            // if (game.id) {
+            //     await manager.update(GameEntity, game.id, game);
+            // }
+            // else {
                 await manager.save(game);
-            }
+            // }
             return (game);
         }
         catch (e) {
