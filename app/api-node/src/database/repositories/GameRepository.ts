@@ -122,7 +122,7 @@ export class GameRepository extends Repository<GameEntity> {
             const sessions = await game.sessions;
             const userGames = await game.gameUsers;
 
-            console.log("manage");
+            console.log("USERGAME", userGames);
             await manager.getCustomRepository(SessionRepository).deleteAllByGame(game);
             await manager.getCustomRepository(BotGameRepository).deleteAllBotGame(game);
             await manager.getCustomRepository(StreamsRepository).deleteByGame(game);
@@ -156,8 +156,8 @@ export class GameRepository extends Repository<GameEntity> {
             if (userGames && userGames.length) {
                 for (let userGame of userGames) {
                     console.log("SAVING USERGAME", userGame)
-                    await manager.getCustomRepository(UserGameRepository).save(userGame);
-                    console.log("USERGAME SAVED", userGame)
+                    const res = await manager.getCustomRepository(UserGameRepository).save(userGame);
+                    console.log("USERGAME SAVED", res)
                 }
             }
 
@@ -182,6 +182,7 @@ export class GameRepository extends Repository<GameEntity> {
             // }
             // else {
                 console.log("SAVING GAME", game)
+                game.
                 await manager.save(game);
                 console.log("GAME SAVED", game)
             // }
