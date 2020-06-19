@@ -137,16 +137,7 @@ export class GameRepository extends Repository<GameEntity> {
                     }
                 }
                 */
-                console.log(botGames);
-                console.log(streams);
-                console.log(sessions);
-                console.log(userGames);
-                if (game.id){
-                    await manager.update(GameEntity, game.id, game);
-                }
-                else {
-                    await manager.save(game);
-                }
+
                console.log("update");
                 if (botGames && botGames.length){
                     for (let botGame of botGames){
@@ -167,18 +158,25 @@ export class GameRepository extends Repository<GameEntity> {
                        await manager.getCustomRepository(UserGameRepository).save(userGame);
                    }
                }
+               /*
                 if (sessions && sessions.length){
                     for (let session of sessions){
                         await manager.getCustomRepository(SessionRepository).save(session);
                     }
                 }
+                */
                 if (streams && streams.length){
                     for (let stream of streams){
                         stream.id = null;
                         await manager.getCustomRepository(StreamsRepository).save(stream);
                     }
                 }
-                console.log("DEBUG-4")
+                if (game.id){
+                    await manager.update(GameEntity, game.id, game);
+                }
+                else {
+                    await manager.save(game);
+                }
                 return (game);
             }
             catch (e){

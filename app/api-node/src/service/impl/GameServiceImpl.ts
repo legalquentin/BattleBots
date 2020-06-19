@@ -95,13 +95,6 @@ export class GameServiceImpl implements GameService {
                                 Body: fs.createReadStream(resolve_path)
                             }, async (param) => {
                                 params.push(param);
-                                const sessions = await entity.sessions;
-
-                                for (let session of sessions){
-                                    if (session.player.id == player.id && param.code == 200){
-                                        session.stream = param.ret;
-                                    }
-                                }
                                 if (players.length == params.length){
                                     resolve(params);
                                 }

@@ -5,16 +5,13 @@ import { StreamsResourceAsm } from "./StreamsResourceAsm";
 import { ArenaResourceAsm } from "./ArenaResourceAsm";
 import { GameUserEntity } from "../../database/entities/GameUserEntity";
 import { PlayerResourceAsm } from "./PlayerResourceAsm";
-import { SessionResourceAsm } from "./SessionResourceAsm";
 
 @Singleton
 export class GameResourceAsm {
 
     public async toEntity(game: IGameResource){
         const playerResourceAsm = Container.get(PlayerResourceAsm);
-        const sessionResourceAsm = Container.get(SessionResourceAsm);
         const entity = new GameEntity();
-        const sessions = [];
 
         entity.id = game.id;
         entity.game_name = game.name;
@@ -36,15 +33,10 @@ export class GameResourceAsm {
                 const user = await playerResourceAsm.toEntity(player);
                 gameUser.game = entity;
                 gameUser.user = user;
-                player.botContext.user = player;
-                player.botContext.game = game;
-                const sessionEntity = sessionResourceAsm.toEntity(player.botContext);
 
-                sessions.push(sessionEntity);
                 gameUsers.push(gameUser);
             }
             entity.gameUsers = gameUsers;
-            console.log(await entity.gameUsers);
         }
         /*
         if (game.streams){
@@ -57,7 +49,6 @@ export class GameResourceAsm {
             }
         }
         */
-        entity.sessions = sessions;
         return (entity);
     }
 
