@@ -93,8 +93,15 @@ export class GameServiceImpl implements GameService {
                                 Key: `${uuid()}${o.ext}`,
                                 Bucket: this.config.getBucket(),
                                 Body: fs.createReadStream(resolve_path)
-                            }, (param) => {
+                            }, async (param) => {
                                 params.push(param);
+                                const sessions = await entity.sessions;
+
+                                for (let session of sessions){
+                                    if (session.player.id == player.id && param.code == 200){
+                                        session.stream = param.ret;
+                                    }
+                                }
                                 if (players.length == params.length){
                                     resolve(params);
                                 }

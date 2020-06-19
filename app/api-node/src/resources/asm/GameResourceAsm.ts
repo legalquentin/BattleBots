@@ -36,8 +36,11 @@ export class GameResourceAsm {
                 const user = await playerResourceAsm.toEntity(player);
                 gameUser.game = entity;
                 gameUser.user = user;
+                player.botContext.user = player;
+                player.botContext.game = game;
+                const sessionEntity = sessionResourceAsm.toEntity(player.botContext);
 
-                sessions.push(sessionResourceAsm.toEntity(player.botContext));
+                sessions.push(sessionEntity);
                 gameUsers.push(gameUser);
             }
             entity.gameUsers = gameUsers;
