@@ -185,6 +185,7 @@ export class GameRepository extends Repository<GameEntity> {
                 }
             }
             catch (e){
+                console.log(e)
                 throw e;
             }
         });
