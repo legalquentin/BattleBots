@@ -396,7 +396,9 @@ export class GameServiceImpl implements GameService {
                 if (!sessions){
                     sessions = [];
                 }
-                player.botContext = sessionResourceAsm.toResource(sessions[0]);
+                if (sessions.length > 0){
+                    player.botContext = sessionResourceAsm.toResource(sessions[0]);
+                }
                 if (!list){
                     list = [];
                 }
