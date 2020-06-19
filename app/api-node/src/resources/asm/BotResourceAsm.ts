@@ -89,6 +89,7 @@ export class BotResourceAsm {
         robot.running = bot.running;
         robot.name = bot.name;
 
+        /*
         if (bot.streams){
             const streams = bot.streams;
             const streamEntities = [];
@@ -98,6 +99,7 @@ export class BotResourceAsm {
             }
             robot.streams = streamEntities;
         }
+        */
         /*
         if (bot.games){
             const games = bot.games;

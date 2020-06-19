@@ -24,6 +24,7 @@ import { BotResourceAsm } from "../../resources/asm/BotResourceAsm";
 import { RobotGameEntity } from "../../database/entities/RobotGameEntity";
 import { SessionEntity } from "../../database/entities/SessionEntity";
 import { GameUserEntity } from "../../database/entities/GameUserEntity";
+import { RobotsUserEntity } from "../../database/entities/RobotsUserEntity";
 
 @Singleton
 export class GameServiceImpl implements GameService {
@@ -85,6 +86,16 @@ export class GameServiceImpl implements GameService {
             const players = game.players;
             const streams = [];
             const sessions = [];
+            for (let player of players){
+                const robotEntity = await botResourceAsm.toEntity(player.botSpecs);
+                await this.serviceFactory.getBotsRepository().save(robotEntity);
+                const playerEntity = await playerResourceAsm.toEntity(player);
+                const botUser = new RobotsUserEntity();    
+            
+                botUser.user = playerEntity;
+                botUser.robot = robotEntity;
+                await this.serviceFactory.getBotUserRepository().save(botUser);
+            }
             if (game.status == EGameStatus.ENDED){
                 const promise = () => (new Promise(async (resolve, reject) => {
                     if (players){
@@ -101,9 +112,11 @@ export class GameServiceImpl implements GameService {
                             streamEntity.duration = 1;
                             streamEntity.running = 1;
                             streamEntity.private = 1;
+                            const robotEntity = await botResourceAsm.toEntity(player.botSpecs);
                             session.player = await playerResourceAsm.toEntity(player);
-                            session.bot = await botResourceAsm.toEntity(player.botSpecs);
+                            session.bot = robotEntity;
                             session.stream = streamEntity;
+                            streamEntity.robot = robotEntity;
                             streams.push(streamEntity);
                             sessions.push(session);
                             this.streamService.upload(streamEntity, {
