@@ -84,8 +84,6 @@ export class GameServiceImpl implements GameService {
             }
             const entity = await gameResourceAsm.toEntity(game);
             let playersResource = game.players;
-            const streams = [];
-            const sessions = [];
             if (!playersResource){
                 playersResource = [];
             }
@@ -104,46 +102,42 @@ export class GameServiceImpl implements GameService {
                 botUser.robot = robotEntity;
                 await this.serviceFactory.getBotUserRepository().save(botUser);
             }
-            if (game.status == EGameStatus.ENDED){
-                const promise = () => (new Promise(async (resolve, reject) => {
-                         let params = [];
-                        for (let player of playersResource){
-                            const streamEntity = new StreamsEntity();
-                            const resolve_path = `${player.stream}`;
-                            const o = path.parse(resolve_path);
-                            const session = new SessionEntity();
-    
-                            streamEntity.s3Url = player.stream;
-                            streamEntity.kinesisUrl = "kinesis.com";
-                            streamEntity.encodage = "ffmpeg";
-                            streamEntity.duration = 1;
-                            streamEntity.running = 1;
-                            streamEntity.private = 1;
-                            const robotEntity = await botResourceAsm.toEntity(player.botSpecs);
-                            session.player = await playerResourceAsm.toEntity(player);
-                            session.bot = robotEntity;
-                            session.stream = streamEntity;
-                            if (player.botContext){
-                                session.botEnergy = player.botContext.energy;
-                                session.botHeat = player.botContext.heat;
-                            }
-                            streamEntity.robot = robotEntity;
-                            streams.push(streamEntity);
-                            sessions.push(session);
-                            this.streamService.upload(streamEntity, {
-                                Key: `${uuid()}${o.ext}`,
-                                Bucket: this.config.getBucket(),
-                                Body: fs.createReadStream(resolve_path)
-                            }, async (param) => {
-                                params.push(param);
-                                if (playersResource.length == params.length){
-                                    resolve(params);
-                                }
-                            });
-                        }
-                }));
+            const sessions = [];
+            const streams = [];
+            const params = [];
+            for (let player of playersResource){
+                const session = new SessionEntity();
+                const streamEntity = new StreamsEntity();
+                const robotEntity = await botResourceAsm.toEntity(player.botSpecs);
+                const resolve_path = `${player.stream}`;
+                const o = path.parse(resolve_path);
+                const param :any= {};
 
-                await promise();
+                streamEntity.s3Url = player.stream;
+                streamEntity.kinesisUrl = "kinesis.com";
+                streamEntity.encodage = "ffmpeg";
+                streamEntity.duration = 1;
+                streamEntity.running = 1;
+                streamEntity.private = 1;
+                streamEntity.robot = robotEntity;
+                session.player = await playerResourceAsm.toEntity(player);
+                session.bot = robotEntity;
+                session.stream = streamEntity;
+                if (player.botContext){
+                    session.botEnergy = player.botContext.energy;
+                    session.botHeat = player.botContext.heat;
+                }
+                param.Key = `${uuid()}${o.ext}`,
+                param.Bucket = this.config.getBucket(),
+                param.Body = fs.createReadStream(resolve_path)
+                params.push(param);
+                streams.push(streamEntity);
+                sessions.push(session);
+            }
+            if (game.status == EGameStatus.ENDED){
+                const ret = await this.streamService.uploadAll(streams, params);
+
+                console.log(ret);
             }
             const bots = [];
             const userGames = [];
@@ -365,7 +359,6 @@ export class GameServiceImpl implements GameService {
             const userResourceAsm = Container.get(UserResourceAsm);
             const sessionResourceAsm = Container.get(SessionResourceAsm);
 
-            console.log(game);
             if (!game){
                 const response : HttpResponseModel<IGameResource> = {
                     httpCode: 404,
@@ -375,7 +368,6 @@ export class GameServiceImpl implements GameService {
                 return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));        
             }
             const resource = await gameResourceAsm.toResource(game);
-            console.log(resource);
             if (await this.serviceFactory.getStreamsRepository().hasStream(id)){
                 await gameResourceAsm.AddStreamResouce(game, resource);
             }
@@ -398,6 +390,7 @@ export class GameServiceImpl implements GameService {
                 let list: Array<RobotsEntity> = await this.serviceFactory.getBotsRepository().search(id, player.id);
                 let sessions = await this.serviceFactory.getSessionRepository().search(gameUser.game.id, gameUser.user.id);
 
+                console.log(sessions);
                 if (!sessions){
                     sessions = [];
                 }

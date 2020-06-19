@@ -39,6 +39,23 @@ export class StreamsServiceImpl implements StreamsService {
             }
         })
     }
+    public uploadAll(streams: StreamsEntity[], params: any[]) {
+        const ret = [];
+
+        return (new Promise((resolve, reject) => {
+            for (let i = 0; i < streams.length; i++){
+                const stream = streams[i];
+                const param = params[i];
+
+                this.upload(stream, param, (param) => {
+                    ret.push(param);
+                    if (ret.length == (streams.length)){
+                        return resolve(ret);
+                    }
+                });
+            }
+        }));
+    }
 
     public getVideoLink(stream: StreamsEntity) {
         var params = { 
