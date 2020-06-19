@@ -83,10 +83,13 @@ export class GameServiceImpl implements GameService {
                 game.endedAt = new Date().getTime();
             }
             const entity = await gameResourceAsm.toEntity(game);
-            const players = game.players;
+            let playersResource = game.players;
             const streams = [];
             const sessions = [];
-            for (let player of players){
+            if (!playersResource){
+                playersResource = [];
+            }
+            for (let player of playersResource){
                 const robotEntity = await botResourceAsm.toEntity(player.botSpecs);
                 await this.serviceFactory.getBotsRepository().save(robotEntity);
                 const playerEntity = await playerResourceAsm.toEntity(player);
@@ -98,9 +101,8 @@ export class GameServiceImpl implements GameService {
             }
             if (game.status == EGameStatus.ENDED){
                 const promise = () => (new Promise(async (resolve, reject) => {
-                    if (players){
-                        let params = [];
-                        for (let player of players){
+                         let params = [];
+                        for (let player of playersResource){
                             const streamEntity = new StreamsEntity();
                             const resolve_path = `${player.stream}`;
                             const o = path.parse(resolve_path);
@@ -125,23 +127,18 @@ export class GameServiceImpl implements GameService {
                                 Body: fs.createReadStream(resolve_path)
                             }, async (param) => {
                                 params.push(param);
-                                if (players.length == params.length){
+                                if (playersResource.length == params.length){
                                     resolve(params);
                                 }
                             });
                         }
-                    }
                 }));
 
                 await promise();
             }
-            let playersResource = game.players;
             const bots = [];
             const userGames = [];
-           
-            if (!playersResource){
-                playersResource = [];
-            }
+
             for (let playerResource of playersResource){
                 const botGame = new RobotGameEntity();
                 const userGame = new GameUserEntity();
