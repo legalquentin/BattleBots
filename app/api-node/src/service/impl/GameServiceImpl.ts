@@ -106,7 +106,10 @@ export class GameServiceImpl implements GameService {
             }
             console.log(entity);
             const saved = await this.serviceFactory.getGameRepository().saveOrUpdate(entity);
+            console.log("DEBUG-5")
             const resource = await gameResourceAsm.toResource(saved);
+            console.log("DEBUG-6")
+
             game.id = saved.id;
             const r = await this.battleWorkerService.startGoWorker(game);
             console.log(r);
