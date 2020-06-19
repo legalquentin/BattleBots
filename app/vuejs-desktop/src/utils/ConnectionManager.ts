@@ -15,7 +15,6 @@ export default class ConnectionManager extends Vue {
 
     constructor() {
         super();
-        console.log('quentin', process.env);
         const jwt: string | null = this.getJwt();
         if (jwt) {
             this.config.headers.Authorization = `Bearer ${jwt}`;
@@ -40,14 +39,12 @@ export default class ConnectionManager extends Vue {
             const errMessage: number = error.response.status;
             if (this.hasRefreshToken) {
                 this.hasRefreshToken = false;
-                console.log("test")
 
                 return reject("LoginFrame");
             }
             if (errMessage === 403 && this.getJwt()) {
                 this.refreshToken().then((response: AxiosResponse) => {
                     const jwt = _get(response, 'data.data.data');
-                    console.log('->', response);
                     if (!_size(jwt)) {
                         throw 'No JWT token exception';
                     }
@@ -99,9 +96,7 @@ export default class ConnectionManager extends Vue {
 
 
     public getGameList(): Promise<AxiosResponse> {
-        console.log(process.env)
         return this.axios.get('games');
-        // return new Promise((resolve)=>{resolve()})
     }
 
     public createGame(name: string): Promise<AxiosResponse> {

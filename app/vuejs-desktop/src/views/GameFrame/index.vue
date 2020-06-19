@@ -54,7 +54,6 @@ export default class GameFrame extends Vue {
       alert("Something goes wrong. Please try login again...");
       this.$router.replace({ name: "LoginFrame" });
     }
-    console.log("test", this.gameInfos);
     this.createdAt = moment(this.gameInfos.game.createdAt);
 
     this.cameraUrl = `${process.env.VUE_APP_WS_CAM_URL}?gameid=${
@@ -102,13 +101,6 @@ export default class GameFrame extends Vue {
   }
 
   private onGameMessage(message: any) {
-    // switch(message.dt) {
-    //   case 1:
-    //     console.log('gros connard', message.dv);
-    //     this.botContext.energy = message.dv === undefined ? 0 : message.dv;
-    //     break;
-    // }
-    // console.log(message);
     
     if (message.dt === 1) {
       this.botContext.energy = !message.dv ? 0 : message.dv;
@@ -121,22 +113,8 @@ export default class GameFrame extends Vue {
     }
  
     if (message.dt === -1) {
-      //  && message.dv === 0
-      console.log("ticked");
       this.isEndOfGame = true;
-      // this.deleteGame(this.gameId);
-
-      // this.$router.back();
     }
-
-    // return;
-    // const player: any = _.find(
-    //   message.players,
-    //   (player: any) => Number(player.id) === this.playerId
-    // );
-    // this.botContext = player.botContext;
-    // let createdAt: string = message.createdAt;
-    // this.createdAt = moment(createdAt);
   }
 
   private cam() {

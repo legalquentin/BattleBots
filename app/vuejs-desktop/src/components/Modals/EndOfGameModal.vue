@@ -23,7 +23,6 @@ export default class EndOfGameModal extends Vue {
   @Prop({ default: false }) isOpen?: boolean;
   @Prop({ default: 0 }) gameId: number = 0;
   mounted() {
-    console.log(this.gameId)
   }
 }
 </script>

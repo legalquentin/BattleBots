@@ -29,7 +29,6 @@ export default class SocketService {
 
     public send(data: number, press: boolean) {
         if (this.isOpen(this.socket)) {
-            console.log('send input', data.toString(), press);
             this.socket.send(JSON.stringify({ c: data.toString(), p: press }));
         }
     }

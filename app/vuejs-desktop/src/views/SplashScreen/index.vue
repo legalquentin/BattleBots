@@ -40,7 +40,6 @@ export default class SplashScreenView extends Vue {
     private changeSplashTimeout: any;
 
     skip() {
-        console.log("-------")
         this.currentSplashDatas = this.splashes[this.splashIndex];
         if (this.changeSplashTimeout) {
             clearTimeout(this.changeSplashTimeout);
@@ -62,7 +61,6 @@ export default class SplashScreenView extends Vue {
         if (this.splashIndex >= this.splashes.length) {
             return this.postPone();
         }
-        console.log("ok")
         // will reactivly display the current splash component
         // until setTimeout resolved
         this.currentSplashDatas = _.set(

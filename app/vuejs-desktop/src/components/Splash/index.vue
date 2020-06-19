@@ -10,11 +10,6 @@ import _ from 'lodash';
 export default class SplashComponent extends Vue {
     @Prop() sequence;
 
-    // For debug purposes
-    // @Watch('sequence') onSequenceChange() {
-    //     console.log('change sequence', this.sequence);
-    // }
-
     get currentImg() {
         if (!this.sequence) {
             return;
