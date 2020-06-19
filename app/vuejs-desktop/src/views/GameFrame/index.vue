@@ -57,7 +57,7 @@ export default class GameFrame extends Vue {
     console.log("test", this.gameInfos);
     this.createdAt = moment(this.gameInfos.game.createdAt);
 
-    this.cameraUrl = `wss://hardwar.ddns.net/api/bots/wscam?gameid=${
+    this.cameraUrl = `${process.env.VUE_APP_WS_CAM_URL}?gameid=${
       this.gameId
     }&playerid=${this.playerId}&token=${
       _.find(
@@ -65,7 +65,7 @@ export default class GameFrame extends Vue {
         (player: any) => Number(player.id) === this.playerId
       ).token
     }`;
-    this.controlUrl = `wss://hardwar.ddns.net/api/bots/ws?gameid=${
+    this.controlUrl = `${process.env.VUE_APP_WS_CTRL_URL}?gameid=${
       this.gameId
     }&playerid=${this.playerId}&token=${
       _.find(

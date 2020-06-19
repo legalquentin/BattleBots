@@ -82,10 +82,17 @@
                                             </SuiButton>
                                             
                                         </SuiButtonGroup>
-                                        <SuiButton v-else size="tiny" color="blue"
-                                                @click="joinGame(game.id)">
-                                                Infos sur la partie
-                                        </SuiButton>
+                                        <SuiButtonGroup v-else>
+                                            
+                                            <SuiButton size="tiny" color="blue" style="min-width: 104px"
+                                                @click="$router.push({ name: 'EndOfGameFrame' })">
+                                                Détails
+                                            </SuiButton>
+                                            <SuiButton size="tiny" basic color="blue" icon="trash alternate outline"
+                                                @click="deleteGame(game.id)" style="color: grey !important">
+                                            </SuiButton>
+                                        </SuiButtonGroup>
+                                        
 
                                     </SuiGridColumn>
                                 </SuiGridRow>

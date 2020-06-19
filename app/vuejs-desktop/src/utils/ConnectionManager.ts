@@ -6,9 +6,9 @@ import _get from 'lodash/get';
 @Component
 export default class ConnectionManager extends Vue {
     private config: AxiosRequestConfig = {
-        baseURL: 'http://hardwar.ddns.net/api',
+        baseURL: process.env.VUE_APP_API_URL,
         timeout: 10000,
-        headers: { 'X-Custom-Header': 'foobar' }
+        headers: {  }
     };
     private axios: AxiosInstance;
 
@@ -88,6 +88,7 @@ export default class ConnectionManager extends Vue {
     }
 
     public getGameList(): Promise<AxiosResponse> {
+        console.log(process.env)
         return this.axios.get('games');
         // return new Promise((resolve)=>{resolve()})
     }
