@@ -235,7 +235,7 @@ export class GameServiceImpl implements GameService {
                     httpCode: 200
                 };
 
-                await this.serviceFactory.getGameRepository().delete(game.id);
+                await this.serviceFactory.getGameRepository().deleteGame(game);
                 await this.battleWorkerService.deleteGame(game.id)
                 return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));
             }
