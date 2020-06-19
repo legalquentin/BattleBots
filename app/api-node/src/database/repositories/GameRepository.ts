@@ -127,7 +127,7 @@ export class GameRepository extends Repository<GameEntity> {
             await manager.getCustomRepository(BotGameRepository).deleteAllBotGame(game);
             await manager.getCustomRepository(StreamsRepository).deleteByGame(game);
             await manager.getCustomRepository(UserGameRepository).deleteByGame(game.id);
-            console.log("DEBUG-2")
+            console.log("DEBUG-2");
 
             /*
             if (savedBotUsers){
@@ -136,19 +136,21 @@ export class GameRepository extends Repository<GameEntity> {
                 }
             }
             */
-
-           // if (game.id) {
-            //     await manager.update(GameEntity, game.id, game);
-            // }
-            // else {
+            let r = game;
+            if (game.id) {
+                 await manager.update(GameEntity, game.id, game);
+            }
+            else {
                 console.log("SAVING GAME", game)
-                const r = await manager.save(game);
+                r = await manager.save(game);
                 console.log("GAME SAVED", r)
-            // }
+            }
+
 
             console.log("update");
             if (botGames && botGames.length) {
                 for (let botGame of botGames) {
+                    botGame.game = r;
                     if (!botGame.bot.id) {
                         await manager.getCustomRepository(BotsRepository).save(botGame.bot);
                     }
@@ -165,6 +167,7 @@ export class GameRepository extends Repository<GameEntity> {
             let usergamearr = []
             if (userGames && userGames.length) {
                 for (let userGame of userGames) {
+                    userGame.game = r;
                     console.log("SAVING USERGAME", userGame)
                     usergamearr.push(await manager.getCustomRepository(UserGameRepository).save(userGame));
                     // console.log("USERGAME SAVED", res)
@@ -173,18 +176,19 @@ export class GameRepository extends Repository<GameEntity> {
 
             if (sessions && sessions.length) {
                 for (let session of sessions) {
-                    session.game = game
+                    session.game = r;
                     console.log("SAVING SESSION", session)
-                    const r = await manager.getCustomRepository(SessionRepository).save(session);
-                    console.log("SESSION SAVED", r)
+                    const ret = await manager.getCustomRepository(SessionRepository).save(session);
+                    console.log("SESSION SAVED", ret)
                 }
             }
             if (streams && streams.length) {
                 for (let stream of streams) {
                     stream.id = null;
+                    stream.game = r;
                     console.log("SAVING STREAM", stream)
-                    const r = await manager.getCustomRepository(StreamsRepository).save(stream);
-                    console.log("STREAM SAVED", r)
+                    const ret = await manager.getCustomRepository(StreamsRepository).save(stream);
+                    console.log("STREAM SAVED", ret)
                 }
             }
             return (game);
