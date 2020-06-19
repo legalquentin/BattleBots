@@ -17,13 +17,13 @@ export class GameRepository extends Repository<GameEntity> {
     manager: EntityManager;
     metadata: EntityMetadata;
 
-    constructor(){
+    constructor() {
         super();
         this.manager = getManager(connectionName());
         this.metadata = getConnection(connectionName()).getMetadata(GameEntity);
     }
 
-    public list(){
+    public list() {
         return (this.
             createQueryBuilder("game").
             leftJoinAndSelect("game.gameUsers", "gameUser").
@@ -40,7 +40,7 @@ export class GameRepository extends Repository<GameEntity> {
             getMany());
     }
 
-    public getOne(id: number){
+    public getOne(id: number) {
         return (this.
             createQueryBuilder("game").
             leftJoinAndSelect("game.gameUsers", "gameUser").
@@ -60,25 +60,25 @@ export class GameRepository extends Repository<GameEntity> {
             getOne());
     }
 
-    public async linkStreamToGame(streamId: number, gameId: number){
+    public async linkStreamToGame(streamId: number, gameId: number) {
         const streamRepository = Container.get(StreamsRepository);
         const gameRepository = Container.get(GameRepository);
         const stream = await streamRepository.findOne(streamId);
 
-        if (!stream){
+        if (!stream) {
             throw new EntityError(EEntityStatus.NOT_FOUND, "stream not found");
         }
         const game = await gameRepository.createQueryBuilder("games").leftJoinAndSelect("games.streams", "streams").where("games.id = :id", {
             "id": gameId
         }).getOne();
 
-        if (!game){
+        if (!game) {
             throw new EntityError(EEntityStatus.NOT_FOUND, "game not found");
         }
         const streams = await game.streams;
-        if (streams){
-            for (let s of streams){
-                if (s.id === stream.id){
+        if (streams) {
+            for (let s of streams) {
+                if (s.id === stream.id) {
                     throw new EntityError(EEntityStatus.INTERNAL_ERROR, "already join");
                 }
             }
@@ -86,7 +86,7 @@ export class GameRepository extends Repository<GameEntity> {
             stream.game = game;
             game.streams = streams;
         }
-        else{
+        else {
             stream.game = game;
             game.streams = [stream];
         }
@@ -94,16 +94,16 @@ export class GameRepository extends Repository<GameEntity> {
         return (game);
     }
 
-    async linkArenaToGame(arenaId: number, gameId: number){
+    async linkArenaToGame(arenaId: number, gameId: number) {
         const arenaRepository = Container.get(ArenaRepository);
         const arena = await arenaRepository.findOne(arenaId);
 
-        if (!arena){
+        if (!arena) {
             throw new EntityError(EEntityStatus.NOT_FOUND, "arena not found");
         }
         const game = await this.findOne(gameId);
         console.log(game);
-        if (!game){
+        if (!game) {
             throw new EntityError(EEntityStatus.NOT_FOUND, "game not found");
         }
         game.arena = arena;
@@ -111,79 +111,78 @@ export class GameRepository extends Repository<GameEntity> {
         return (game);
     }
 
-    public async saveOrUpdate(game: GameEntity): Promise<GameEntity>
-    {
+    public async saveOrUpdate(game: GameEntity): Promise<GameEntity> {
         const manager = getManager(connectionName());
 
-       // return getManager(connectionName()).transaction(async (manager : EntityManager) => {
-            try {
-                console.log("initialize");
-                const botGames =  await game.robots;
-                const streams =  await game.streams;
-                const sessions = await game.sessions;
-                const userGames = await game.gameUsers;
+        // return getManager(connectionName()).transaction(async (manager : EntityManager) => {
+        try {
+            console.log("initialize");
+            const botGames = await game.robots;
+            const streams = await game.streams;
+            const sessions = await game.sessions;
+            const userGames = await game.gameUsers;
 
-                console.log("manage");
-                await manager.getCustomRepository(SessionRepository).deleteAllByGame(game);
-                await manager.getCustomRepository(BotGameRepository).deleteAllBotGame(game);
-                await manager.getCustomRepository(StreamsRepository).deleteByGame(game);
-                await manager.getCustomRepository(UserGameRepository).deleteByGame(game.id);
-                console.log("DEBUG-2")
+            console.log("manage");
+            await manager.getCustomRepository(SessionRepository).deleteAllByGame(game);
+            await manager.getCustomRepository(BotGameRepository).deleteAllBotGame(game);
+            await manager.getCustomRepository(StreamsRepository).deleteByGame(game);
+            await manager.getCustomRepository(UserGameRepository).deleteByGame(game.id);
+            console.log("DEBUG-2")
 
-                /*
-                if (savedBotUsers){
-                    for (let savedBotUser of savedBotUsers){
-                        await manager.getCustomRepository(RobotsUserRepository).delete(savedBotUser);
-                    }
+            /*
+            if (savedBotUsers){
+                for (let savedBotUser of savedBotUsers){
+                    await manager.getCustomRepository(RobotsUserRepository).delete(savedBotUser);
                 }
-                */
-
-               console.log("update");
-                if (botGames && botGames.length){
-                    for (let botGame of botGames){
-                        if (!botGame.bot.id){
-                            await manager.getCustomRepository(BotsRepository).save(botGame.bot);
-                        }
-                        else{
-                            await manager.getCustomRepository(BotsRepository).update(botGame.bot.id, botGame.bot);
-                        }
-                        await manager.getCustomRepository(BotGameRepository).save(botGame);
-                    }
-                }
-                console.log("DEBUG-3")
-
-
-               if (userGames && userGames.length){
-                   for (let userGame of userGames){
-                       await manager.getCustomRepository(UserGameRepository).save(userGame);
-                   }
-               }
-               /*
-                if (sessions && sessions.length){
-                    for (let session of sessions){
-                        await manager.getCustomRepository(SessionRepository).save(session);
-                    }
-                }
-                */
-                if (streams && streams.length){
-                    for (let stream of streams){
-                        stream.id = null;
-                        await manager.getCustomRepository(StreamsRepository).save(stream);
-                    }
-                }
-                if (game.id){
-                    await manager.update(GameEntity, game.id, game);
-                }
-                else {
-                    await manager.save(game);
-                }
-                return (game);
             }
-            catch (e){
-                console.log(e);
-                console.log(e);
-                throw e;
+            */
+
+            console.log("update");
+            if (botGames && botGames.length) {
+                for (let botGame of botGames) {
+                    if (!botGame.bot.id) {
+                        await manager.getCustomRepository(BotsRepository).save(botGame.bot);
+                    }
+                    else {
+                        await manager.getCustomRepository(BotsRepository).update(botGame.bot.id, botGame.bot);
+                    }
+                    await manager.getCustomRepository(BotGameRepository).save(botGame);
+                }
             }
-      //  });
+            console.log("DEBUG-3")
+
+
+            if (userGames && userGames.length) {
+                for (let userGame of userGames) {
+                    await manager.getCustomRepository(UserGameRepository).save(userGame);
+                }
+            }
+
+            if (sessions && sessions.length) {
+                for (let session of sessions) {
+                    await manager.getCustomRepository(SessionRepository).save(session);
+                }
+            }
+
+            if (streams && streams.length) {
+                for (let stream of streams) {
+                    stream.id = null;
+                    await manager.getCustomRepository(StreamsRepository).save(stream);
+                }
+            }
+            if (game.id) {
+                await manager.update(GameEntity, game.id, game);
+            }
+            else {
+                await manager.save(game);
+            }
+            return (game);
+        }
+        catch (e) {
+            console.log(e);
+            console.log(e);
+            throw e;
+        }
+        //  });
     }
 }
