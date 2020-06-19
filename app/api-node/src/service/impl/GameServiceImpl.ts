@@ -105,7 +105,7 @@ export class GameServiceImpl implements GameService {
                 await promise();
             }
             console.log(entity);
-            console.log(entity.gameUsers.entries())
+            console.log(entity.gameUsers)
             const saved = await this.serviceFactory.getGameRepository().saveOrUpdate(entity);
             const resource = await gameResourceAsm.toResource(saved);
 
