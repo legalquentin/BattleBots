@@ -79,10 +79,10 @@ export class Session1592498810566 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
-        await queryRunner.dropForeignKey("player", "fk_session_player_id");
-        await queryRunner.dropForeignKey("robots", "fk_session_robots_id");
-        await queryRunner.dropForeignKey("streams", "fk_session_stream_id");
-        await queryRunner.dropForeignKey("game", "fk_session_game_id");
+        await queryRunner.dropForeignKey("session", "fk_session_player_id");
+        await queryRunner.dropForeignKey("session", "fk_session_robots_id");
+        await queryRunner.dropForeignKey("session", "fk_session_stream_id");
+        await queryRunner.dropForeignKey("session", "fk_session_game_id");
         await queryRunner.dropTable("session");
     }
 
