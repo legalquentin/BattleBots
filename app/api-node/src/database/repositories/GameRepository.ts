@@ -137,6 +137,13 @@ export class GameRepository extends Repository<GameEntity> {
                     }
                 }
                 */
+
+                if (game.id){
+                    await manager.update(GameEntity, game.id, game);
+                }
+                else {
+                    await manager.save(game);
+                }
                console.log("update");
                 if (botGames && botGames.length){
                     for (let botGame of botGames){
@@ -175,16 +182,7 @@ export class GameRepository extends Repository<GameEntity> {
                     }
                 }
                 console.log("DEBUG-4")
-
-                if (game.id){
-                    await manager.update(GameEntity, game.id, game);
-                    return (game);
-                }
-                else {
-                    const saved = await manager.save(game);
-            
-                    return (saved);
-                }
+                return (game);
             }
             catch (e){
                 console.log(e);
