@@ -411,6 +411,7 @@ export class GameServiceImpl implements GameService {
             return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));            
         }
         catch (e){
+            console.log(e);
             const response: HttpResponseModel<IGameResource> = {
                 httpCode: 400,
                 message: e.message
