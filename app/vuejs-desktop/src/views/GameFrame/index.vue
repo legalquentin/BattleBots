@@ -171,26 +171,6 @@ export default class GameFrame extends Vue {
   public openExternal() {
     shell.openExternal("https://hardwar.ddns.net");
   }
-
-  private async deleteGame(gameId: number) {
-    const jwt: string | null = localStorage.getItem("jwt");
-    if (!_.size(jwt)) {
-      this.$router.push({ name: "MainFrame" });
-    }
-
-    try {
-      const result = await axios.delete(
-        `http://hardwar.ddns.net/api/games/${gameId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${jwt}`
-          }
-        }
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  }
 }
 </script>
 

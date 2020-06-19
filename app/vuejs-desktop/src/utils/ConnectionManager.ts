@@ -5,12 +5,11 @@ import _get from 'lodash/get';
 
 @Component
 export default class ConnectionManager extends Vue {
-    
+
     private config: AxiosRequestConfig = {
-        //baseURL: process.env.VUE_APP_API_URL,
-        baseURL: "http://hardwar.ddns.net/api",
+        baseURL: process.env.VUE_APP_API_URL,
         timeout: 10000,
-        headers: {  }
+        headers: {}
     };
     private axios: AxiosInstance;
 
@@ -82,13 +81,22 @@ export default class ConnectionManager extends Vue {
         return jwt;
     }
 
-    public login(): void {
-
+    public login(data: any): Promise<AxiosResponse> {
+        return this.axios.post('users/login', data);
     }
 
-    public register(): void {
-
+    public register(fields: any): Promise<AxiosResponse> {
+        return this.axios.post('users', fields);
     }
+
+    public profile(jwt: string): Promise<AxiosResponse> {
+        localStorage.setItem('jwt', jwt);
+        const Authorization = `Bearer ${jwt}`;
+        this.axios.defaults.headers.Authorization = Authorization;
+        return this.axios.get('users/profile');
+    }
+
+
 
     public getGameList(): Promise<AxiosResponse> {
         console.log(process.env)
@@ -96,8 +104,15 @@ export default class ConnectionManager extends Vue {
         // return new Promise((resolve)=>{resolve()})
     }
 
-    public createGame(): void {
+    public createGame(name: string): Promise<AxiosResponse> {
+        return this.axios.post(
+            "games",
+            { name: name },
+        );
+    }
 
+    public delete(gameId: number): Promise<AxiosResponse> {
+        return this.axios.delete(`games/${gameId}`);
     }
 
     public joinGame(gameId: number): Promise<AxiosResponse> {

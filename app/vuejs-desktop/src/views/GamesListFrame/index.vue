@@ -54,17 +54,17 @@ export default class GamesListFrame extends AVue {
       this.$router.push({ name: 'MainFrame' });
     }
 
-    try {
-      const result = await axios.put(`http://hardwar.ddns.net/api/games/join/${gameId}`, {}, {
-        headers: {
-          Authorization: `Bearer ${jwt}`
-        }
-      });
-      
-      this.$router.push({ name: 'GameFrame', params: { gameInfos: result.data.data, gameId } as any });
-    } catch (error) {
+    this.connectionManager
+      .joinGame(gameId)
+      .then((response: AxiosResponse) => {
+        this.$router.push({
+          name: "GameFrame",
+          params: { gameInfos: response.data.data, gameId } as any
+        });
+      })
+      .catch((error: AxiosError) => {
         console.error(error);
-    }
+      })
   }
 
   private async deleteGame(gameId: number) {
@@ -73,17 +73,13 @@ export default class GamesListFrame extends AVue {
       this.$router.push({ name: 'MainFrame' });
     }
 
-    try {
-      const result = await axios.delete(`http://hardwar.ddns.net/api/games/${gameId}`, {
-        headers: {
-          Authorization: `Bearer ${jwt}`
-        }
-      });
-      
-      this.gamesList = _.filter(this.gamesList, (game: IGame) => game.id !== gameId);
-    } catch (error) {
-        console.error(error);
-    }
+    this.connectionManager.delete(gameId)
+      .then((response: AxiosResponse) => {
+        this.gamesList = _.filter(this.gamesList, (game: IGame) => game.id !== gameId);
+      }).catch((err: AxiosError) => {
+        console.error(err);
+      })
+    ;
   }
 
   disconnect() {

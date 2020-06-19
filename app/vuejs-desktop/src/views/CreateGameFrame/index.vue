@@ -3,7 +3,7 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import _ from "lodash";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 
 @Component
 export default class CreateGameFrame extends Vue {
@@ -15,16 +15,11 @@ export default class CreateGameFrame extends Vue {
       this.$router.push({ name: "MainFrame" });
     }
     this.gameCreateLoading = true;
-    const result = await axios.post(
-      "http://hardwar.ddns.net/api/games",
-      { name: this.name },
-      {
-        headers: {
-          Authorization: `Bearer ${jwt}`
-        }
-      }
-    );
-  console.log(',',result)
+    
+  
+  try {
+    const result = await this.connectionManager.createGame(this.name);
+
     const gameId: number = result.data.data.id;
     this.connectionManager
       .joinGame(gameId)
@@ -35,14 +30,22 @@ export default class CreateGameFrame extends Vue {
         });
       })
       .catch(() => {
-        alert(
-          "Une erreur fatale s'est produite lors de la création de la partie :/ Merci de remonter le problème aux développeurs"
-        );
-        this.$router.back();
+        throw "error";
       })
       .finally(() => {
         this.gameCreateLoading = false;
       });
+  } catch (err) {
+    this.gameCreateLoading = false;
+    alert(
+          "Une erreur fatale s'est produite lors de la création de la partie :/ Merci de remonter le problème aux développeurs"
+        );
+    this.$router.back();
+  }
+  
+
+  
+    
   }
 }
 </script>
