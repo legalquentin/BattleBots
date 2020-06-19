@@ -5,6 +5,7 @@ import _get from 'lodash/get';
 
 @Component
 export default class ConnectionManager extends Vue {
+    
     private config: AxiosRequestConfig = {
         //baseURL: process.env.VUE_APP_API_URL,
         baseURL: "http://hardwar.ddns.net/api",
@@ -15,6 +16,7 @@ export default class ConnectionManager extends Vue {
 
     constructor() {
         super();
+        console.log('quentin', process.env);
         const jwt: string | null = this.getJwt();
         if (jwt) {
             this.config.headers.Authorization = `Bearer ${jwt}`;
