@@ -33,7 +33,7 @@ export class StreamsRepository extends Repository<StreamsEntity> {
     public async deleteByGame(game: GameEntity){
         return (this.createQueryBuilder().delete().from(StreamsEntity).where("game_id = :id", {
             "id": game.id
-        }));
+        })).execute();
     }
 
     public async saveOrUpdate(stream: StreamsEntity): Promise<StreamsEntity> {

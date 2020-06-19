@@ -1,6 +1,7 @@
 import { Repository, EntityManager, EntityMetadata, getManager, getConnection, EntityRepository } from "typeorm";
 import { SessionEntity } from "../entities/SessionEntity";
 import { connectionName } from "../../service/util/connectionName";
+import { GameEntity } from "../entities/GameEntity";
 
 @EntityRepository(SessionEntity)
 export class SessionRepository extends Repository<SessionEntity> {
@@ -13,11 +14,11 @@ export class SessionRepository extends Repository<SessionEntity> {
         this.metadata = getConnection(connectionName()).getMetadata(SessionEntity);
     }
 
-    async deleteAllByGame(gameId: number){
+    async deleteAllByGame(game: GameEntity){
         try {
             await this.createQueryBuilder("session").delete().where("session.game_id = :id", {
-                id: gameId
-            });
+                id: game.id
+            }).execute();
         
             return (true);
         }
