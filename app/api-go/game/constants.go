@@ -21,7 +21,7 @@ var AvailableBots = []Bot{}
 
 // Appartement Todo: put this in a config file too ?
 var Appartement = Environment{
-	3, "martin's appartement", AvailableBots, true,
+	1, "martin's appartement", AvailableBots, true,
 }
 
 // GameDuration in seconds
