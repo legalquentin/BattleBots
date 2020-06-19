@@ -22,8 +22,8 @@ export class BotResourceAsm {
     private gameResourceAsm: GameResourceAsm;
     */
    
-    @Inject
-    private streamResourceAsm: StreamsResourceAsm;
+   // @Inject
+    //private streamResourceAsm: StreamsResourceAsm;
 
 
     public async toResource(robot: RobotsEntity) {
