@@ -1,6 +1,6 @@
 import { RobotsEntity } from "../../database/entities/RobotsEntity";
 import { IBotsResource } from "../IBotsResource";
-import { Singleton, Container, Inject } from "typescript-ioc";
+import { Singleton, Container } from "typescript-ioc";
 //import { GameProfileResourceAsm } from "./GameProfileResourceAsm";
 import { ArenaEntity } from "../../database/entities/ArenaEntity";
 import { RobotsArenaEntity } from "../../database/entities/RobotsArenaEntity";
