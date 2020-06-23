@@ -46,7 +46,7 @@ export abstract class ApiServer {
         });
         this.app.use("*", function (req, res, next) {
             if (!res.headersSent) {
-                // res.render("App/index.html"); 
+              //  res.render("App/index.html"); 
             }
             next();
         });

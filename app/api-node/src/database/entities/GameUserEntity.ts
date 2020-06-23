@@ -11,6 +11,7 @@ export class GameUserEntity  {
         referencedColumnName: "id"
     })
     @ManyToOne(type => UserEntity, user => user.gameUsers, {
+        eager: true,
         primary: true
     })
     user: UserEntity;
@@ -20,6 +21,7 @@ export class GameUserEntity  {
         referencedColumnName: "id"
     })
     @ManyToOne(type => GameEntity, game => game.gameUsers, {
+        eager: true,
         primary: true
     })
     game: GameEntity;
