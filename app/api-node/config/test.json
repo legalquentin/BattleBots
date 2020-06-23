@@ -17,5 +17,6 @@
     "bucket": "qlg-demo-bucket",
     "url_expire": 7200,
     "accessKeyId": "AKIAWN2ZPWNZF3NV7B2A",
-    "secretAccessKey": "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"
+    "secretAccessKey": "WswshldIDGsJj0tvBC+iHAKcoB45T8VYQbOb3o3x",
+    "log_file": "/Users/simoes_t/Documents/ETNA3/BattleBots/info.log"
 }

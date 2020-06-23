@@ -24,6 +24,11 @@ export default class Config extends IConfig{
         this.expireUrl = config.get('url_expire');
         this.accessKeyId = config.get('accessKeyId');
         this.secretAccessKey = config.get('secretAccessKey');
+        this.logFile = config.get('log_file');
+    }
+
+    getLogFile(): string {
+        return (this.logFile);
     }
 
     getAccessKeyId(): string {

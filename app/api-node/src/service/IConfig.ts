@@ -16,6 +16,7 @@ export default abstract class IConfig {
     protected expireUrl: string;
     protected accessKeyId: string;
     protected secretAccessKey: string;
+    protected logFile: string;
 
     abstract genSalt(): string;
     abstract getSecret(): string;
@@ -38,4 +39,6 @@ export default abstract class IConfig {
 
     abstract getAccessKeyId(): string;
     abstract getSecretAccessKey(): string;
+
+    abstract getLogFile(): string;
 };

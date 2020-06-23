@@ -9,6 +9,7 @@ import { UserRepository } from './database/repositories/UserRepository';
 import { Strategy, StrategyOptions, ExtractJwt } from 'passport-jwt';
 import { connectionName } from "./service/util/connectionName"; 
 import * as moment from "moment";
+import * as fs from "fs";
 
 export abstract class ApiServer {
     public PORT: number; // +process.env.PORT || 8080;
@@ -118,7 +119,11 @@ export abstract class ApiServer {
         this.app.set('views', __dirname + '/public');
         this.app.use(cors());
         if (process.env.NODE_ENV !== "test") {
-            this.app.use(morgan('combined'));
+            const stream = fs.createWriteStream(this.serviceConfig.getLogFile());
+
+            this.app.use(morgan("combined", {
+                stream
+            }));
         }
         this.configureAuthenticator();
     }
