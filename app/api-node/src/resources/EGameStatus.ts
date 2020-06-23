@@ -2,5 +2,6 @@ export enum EGameStatus {
     CREATED = "CREATED",
     STARTED = "STARTED",
     STOPPED = "STOPPED",
-    ENDED = "ENDED"
+    ENDED = "ENDED",
+    DELETED = "DELETED"
 };
