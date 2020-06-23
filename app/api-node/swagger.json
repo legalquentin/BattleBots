@@ -1750,6 +1750,56 @@
 				]
 			}
 		},
+		"/api/sessions/game/{gameId}": {
+			"get": {
+				"operationId": "SessionFindByGameId",
+				"responses": {
+					"200": {
+						"description": "sessions list",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelISessionResource"
+								}
+							}
+						}
+					},
+					"204": {
+						"description": "No content"
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json;charset=UTF-8": {
+								"schema": {
+									"$ref": "#/components/schemas/HttpResponseModelISessionResource"
+								}
+							}
+						}
+					}
+				},
+				"description": "",
+				"security": [
+					{
+						"Bearer": [
+							"ROLE_USER"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "",
+						"in": "path",
+						"name": "gameId",
+						"required": true,
+						"schema": {
+							"type": "number",
+							"format": "double"
+						}
+					}
+				]
+			}
+		},
 		"/api/streams/": {
 			"get": {
 				"operationId": "StreamsContollerList",
@@ -2928,6 +2978,40 @@
 							"$ref": "#/components/schemas/IContextBotResource"
 						},
 						"description": ""
+					}
+				},
+				"type": "object"
+			},
+			"ISessionResource": {
+				"description": "",
+				"properties": {
+					"game": {
+						"$ref": "#/components/schemas/IGameResource"
+					},
+					"list": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/IContextBotResource"
+						},
+						"description": ""
+					}
+				},
+				"type": "object"
+			},
+			"HttpResponseModelISessionResource": {
+				"description": "",
+				"properties": {
+					"message": {
+						"type": "string",
+						"description": ""
+					},
+					"httpCode": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"data": {
+						"$ref": "#/components/schemas/ISessionResource"
 					}
 				},
 				"type": "object"

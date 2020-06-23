@@ -119,9 +119,13 @@ export abstract class ApiServer {
         this.app.set('views', __dirname + '/public');
         this.app.use(cors());
         if (process.env.NODE_ENV !== "test") {
-            const stream = fs.createWriteStream(this.serviceConfig.getLogFile());
+            //const readStream = fs.createReadStream(this.serviceConfig.getLogFile());
+            const stream = fs.createWriteStream(this.serviceConfig.getLogFile(), {
+                flags: 'a+'
+            });
 
-            this.app.use(morgan("combined", {
+           // readStream.pipe(stream);
+            this.app.use(morgan(":method :url :status - :response-time ms - :remote-addr - :date[iso]", {
                 stream
             }));
         }

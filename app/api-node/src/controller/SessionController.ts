@@ -6,6 +6,7 @@ import { SessionService } from "../service/SessionService";
 import { Inject } from "typescript-ioc";
 import { Produces, Response } from "typescript-rest-swagger";
 import HttpResponseModel from "../resources/HttpResponseModel";
+import { ISessionResource } from "../resources/ISessionResource";
 
 @Path("/api/sessions")
 @PreProcessor(preRequest)
@@ -43,6 +44,16 @@ export class SessionController {
     @Response<HttpResponseModel<IContextBotResource>>(400)
     public async getOne(@PathParam("id") id: number){
         return (await this.sessionService.findOne(id));
+    }
+
+    @GET
+    @Path("/game/:gameId")
+    @Security("ROLE_USER", "Bearer")
+    @Produces("application/json;charset=UTF-8")
+    @Response<HttpResponseModel<ISessionResource>>(200, "sessions list")
+    @Response<HttpResponseModel<ISessionResource>>(404)
+    public async findByGameId(@PathParam("gameId") gameId: number){
+        return (await this.sessionService.findByGameId(gameId));
     }
 
     @PUT

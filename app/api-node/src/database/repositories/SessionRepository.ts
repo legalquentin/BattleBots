@@ -34,4 +34,12 @@ export class SessionRepository extends Repository<SessionEntity> {
             "playerId": playerId
         })).getMany());
     }
+
+    async findByGameId(gameId: number){
+        const list = await this.createQueryBuilder().where("game_id = :id", {
+            "id": gameId
+        }).getMany();
+
+        return (list);
+    }
 }

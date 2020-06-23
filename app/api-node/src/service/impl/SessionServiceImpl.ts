@@ -4,6 +4,7 @@ import  HttpResponseModel  from "../../resources/HttpResponseModel";
 import { SessionRepository } from "../../database/repositories/SessionRepository";
 import { Inject } from "typescript-ioc";
 import { SessionResourceAsm } from "../../resources/asm/SessionResourceAsm";
+import { ISessionResource } from "../../resources/ISessionResource";
 
 export class SessionServiceImpl implements SessionService {
 
@@ -83,5 +84,27 @@ export class SessionServiceImpl implements SessionService {
 
         return (response);
     }
+
+    public async findByGameId(id: number) {
+        const sessions = await this.sessionRepository.findByGameId(id);
+        
+        if (sessions.length){
+            const resources = await this.sessionResourceAsm.toSessionResources(sessions);
+            const response: HttpResponseModel<ISessionResource> = {
+                httpCode: 200,
+                data: resources,
+                message: "List sessions"
+            };
+
+            return (response);
+        }
+        const response: HttpResponseModel<ISessionResource> = {
+            httpCode: 404,
+            message: "session not found"
+        };
+
+        return (response);
+    }
+
 
 }

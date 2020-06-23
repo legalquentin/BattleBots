@@ -7,4 +7,5 @@ export abstract class SessionService {
     public abstract list(): Promise<HttpResponseModel<Array<IContextBotResource>>>;
     public abstract findOne(id: number): Promise<HttpResponseModel<IContextBotResource>>;
     public abstract delete(id: number);
+    public abstract findByGameId(id: number);
 }
