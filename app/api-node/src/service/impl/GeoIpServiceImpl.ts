@@ -6,16 +6,12 @@ import axios from "axios";
 import IConfig from "../IConfig";
 import { GeoIpResourceRaw } from "../../resources/GeoIpResourceRaw";
 import { GeoIpResourceAsm } from "../../resources/asm/GeoIpResourceAsm";
-import { UserRepository } from "../../database/repositories/UserRepository";
 
 @Singleton
 export class GeoIpServiceImpl implements GeoIpService{
 
     @Inject
     repository: GeoIpRepository;
-
-    @Inject
-    userRepostory: UserRepository;
 
     @Inject
     config: IConfig;
@@ -27,17 +23,26 @@ export class GeoIpServiceImpl implements GeoIpService{
         
     }
 
+
+    public async findByIp(ip: string): Promise<GeoIpEntity> {
+        const geoip = await this.repository.findOne({
+            where: {
+                ip
+            }
+        });
+
+        return (geoip);
+    }
+
     public async delete(id: number) {
         return (await this.repository.delete(id));
     }
 
-    public async getInfo(logId: number, currentIp: string): Promise<GeoIpEntity> {
-        const user = await this.userRepostory.findOne(logId);
+    public async getInfo(currentIp: string): Promise<GeoIpEntity> {
 	    const response = await axios.get(`${this.config.getGeoIpService()}=${currentIp}`);
         const geoipresourceRaw = response.data as GeoIpResourceRaw;
         const geoipresource = geoipresourceRaw.data;
 	    const entity = this.geoipresourceAsm.toEntity(geoipresource);
-	    entity.user = user;
 	    entity.ip = currentIp;
 	    const saved = await this.save(entity);
 	    return (saved);

@@ -18,12 +18,8 @@ export class geoip1591705594611 implements MigrationInterface {
                 {
                     "name": "ip",
                     "type": "varchar",
+                    "isUnique": true,
                     "isNullable": false
-                },
-                {
-                    "name": "user_id",
-                    "type": "integer",
-                    "isNullable": true
                 },
                 {
                     "name": "latitude",
@@ -65,16 +61,9 @@ export class geoip1591705594611 implements MigrationInterface {
                 }
             ]
         }));
-        await queryRunner.createForeignKey("geoip", new TableForeignKey({
-            name: "fk_geoip_user",
-            columnNames: ["user_id"],
-            referencedTableName: "users",
-            referencedColumnNames: ["id"]
-        }));
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
-        await queryRunner.dropForeignKey("geoip", "fk_geoip_user");
         await queryRunner.dropTable("geoip");
     }
 

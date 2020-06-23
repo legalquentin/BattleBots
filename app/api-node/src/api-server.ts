@@ -8,8 +8,8 @@ import IConfig from './service/IConfig';
 import { UserRepository } from './database/repositories/UserRepository';
 import { Strategy, StrategyOptions, ExtractJwt } from 'passport-jwt';
 import { connectionName } from "./service/util/connectionName"; 
-import * as moment from "moment";
 import * as fs from "fs";
+import { ConnectedUserRepository } from './database/repositories/ConnectedUserRepository';
 
 export abstract class ApiServer {
     public PORT: number; // +process.env.PORT || 8080;
@@ -23,6 +23,9 @@ export abstract class ApiServer {
    
     @Inject
     protected userRepository: UserRepository;
+
+    @Inject
+    protected connectedUsers: ConnectedUserRepository;
 
     constructor() {
         this.app = express();
@@ -139,24 +142,27 @@ export abstract class ApiServer {
             secretOrKey: Buffer.from(JWT_SECRET)
         };
         const strategy = new Strategy(jwtConfig, async (payload: any, done: (err: any, user: any, info: any) => void) => {
-            const user = await this.userRepository.findOne(payload.sub);
+            const user = await this.userRepository.findOne(parseInt(payload.sub, 10));
+
             if (!user){
-                done(null, null, 403);
+
+                done(null, null, 401);
             }
             else {
-                const creationTime = moment(payload.creationTime);
-                const exp = creationTime.add({
-                    "seconds": parseInt(this.serviceConfig.getExpirationTime())
-                });
-                if (moment().isAfter(exp)){
-                    return done(null, null, 403);
-                }
-                const o2 = {
-                    id: user.id,
-                    roles: user.roles
-                };
+                const connectedUserLatest = await this.connectedUsers.getLatested(parseInt(payload.sub, 10));
 
-                done(null, o2, null);
+                if (connectedUserLatest != null && 
+                    connectedUserLatest.endConnected.getTime() > new Date().getTime()){
+                    const o2 = {
+                        id: user.id,
+                        roles: user.roles
+                    };
+    
+                    done(null, o2, null);
+                }
+                else {
+                    done(null, null, 403);
+                }
             }
         });
         const authenticator = new PassportAuthenticator(strategy, {

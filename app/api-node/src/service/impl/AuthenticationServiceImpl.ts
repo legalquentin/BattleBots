@@ -8,15 +8,31 @@ import ITokenHttp from "../../resources/ITokenHttp";
 import HttpResponseModel from "../../resources/HttpResponseModel";
 import { SendResource } from "../../../lib/ReturnExtended";
 import * as moment from "moment";
+import { ConnectedUserService } from "../ConnectedUserService";
+import IUserResource from "../../resources/IUserResource";
 
 @Singleton
 export class AuthenticationServiceImpl implements AuthenticationService {
+
 
     @Inject
     private factory: IServiceFactory;
 
     @Inject
     private config: IConfig;
+
+    @Inject
+    connectedUsers: ConnectedUserService;
+
+    public async logout(userId: number) {
+        await this.connectedUsers.logout(userId);
+        const response: HttpResponseModel<IUserResource> = {
+            httpCode: 200,
+            message: "logout user"
+        };
+
+        return (response);
+    }
 
     /**
      * The user have 5 minutes for refresh the token
@@ -41,6 +57,7 @@ export class AuthenticationServiceImpl implements AuthenticationService {
             const data = sign(o, this.config.getSecret(), {
                 algorithm: "HS512"
             });
+            this.connectedUsers.refreshLogin(parseInt(o.sub, 10));
             const response : HttpResponseModel<ITokenHttp> = {
                 httpCode: 200,
                 data: {
@@ -89,6 +106,7 @@ export class AuthenticationServiceImpl implements AuthenticationService {
                         message: "Authentication successfull"
                     };
 
+                    await this.connectedUsers.login(user.id);
                     return Promise.resolve(new SendResource<HttpResponseModel<ITokenHttp>>("UserController", response.httpCode, response));
                 }
             }

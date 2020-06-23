@@ -7,6 +7,8 @@ import { GameInfoEntity } from './GameInfoEntity';
 import { RobotsUserEntity } from './RobotsUserEntity';
 import { GameUserEntity } from './GameUserEntity';
 import { SessionEntity } from './SessionEntity';
+import { ConnectedUserEntity } from './ConnectedUserEntity';
+import { GeoIpUserEntity } from './GeoipUserEntity';
 
 @Entity({ name: 'users' })
 export default class UserEntity extends AbstractEntity {
@@ -37,10 +39,6 @@ export default class UserEntity extends AbstractEntity {
     })
     public logs?: Array<LogEntity>;
 
-    @OneToMany(type => GeoIpEntity, geoip => geoip.user, {
-        lazy: true
-    })
-    public geoips?: Array<GeoIpEntity>;
 
     @OneToMany(type => RobotsUserEntity, robotUserEntity => robotUserEntity.user, {
         lazy: true
@@ -66,4 +64,15 @@ export default class UserEntity extends AbstractEntity {
         lazy: true
     })
     public sessions?: Array<SessionEntity>;
+
+    @OneToMany(type => ConnectedUserEntity, conn => conn.user, {
+        lazy: true
+    })
+    public connectedUsers?: Array<ConnectedUserEntity>;
+
+    @OneToMany(type => GeoIpUserEntity, geoip => geoip.user, {
+        lazy: true
+    })
+    public geoips?: Array<GeoIpUserEntity>;
+
 }

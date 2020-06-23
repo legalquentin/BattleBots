@@ -12,6 +12,7 @@ import HttpResponseModel from "../../resources/HttpResponseModel";
 import { SendResource } from "../../../lib/ReturnExtended";
 import IGameProfileResource from "../../resources/IGameProfileResource";
 import { ERolesStatus } from "../../resources/ERolesStatus";
+import { ConnectedUserService } from "../ConnectedUserService";
 
 @Singleton
 export class UserServiceImpl implements UserService {
@@ -21,6 +22,9 @@ export class UserServiceImpl implements UserService {
 
     @Inject
     config: IConfig;
+
+    @Inject
+    connectedUsers: ConnectedUserService;
 
     public async saveOrUpdate(user: IUserResource){
         const userResourceAsm = Container.get(UserResourceAsm);

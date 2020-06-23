@@ -25,6 +25,11 @@ export default class Config extends IConfig{
         this.accessKeyId = config.get('accessKeyId');
         this.secretAccessKey = config.get('secretAccessKey');
         this.logFile = config.get('log_file');
+        this.localAddress = config.get('local_address');
+    }
+
+    getLocalAddress(): string {
+        return (this.localAddress);
     }
 
     getLogFile(): string {
@@ -98,4 +103,5 @@ export default class Config extends IConfig{
     getExpirationTime(): string {
         return (this.expirationTime);
     }
+
 };

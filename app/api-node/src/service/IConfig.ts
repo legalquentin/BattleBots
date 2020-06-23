@@ -17,6 +17,7 @@ export default abstract class IConfig {
     protected accessKeyId: string;
     protected secretAccessKey: string;
     protected logFile: string;
+    protected localAddress: string;
 
     abstract genSalt(): string;
     abstract getSecret(): string;
@@ -41,4 +42,6 @@ export default abstract class IConfig {
     abstract getSecretAccessKey(): string;
 
     abstract getLogFile(): string;
+
+    abstract getLocalAddress(): string;
 };

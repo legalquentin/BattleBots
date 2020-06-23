@@ -6,5 +6,6 @@ export abstract class GeoIpService {
     public abstract list(): Promise<Array<GeoIpEntity>>;
     public abstract findOne(id: number): Promise<GeoIpEntity>;
     public abstract delete(id: number);
-    public abstract getInfo(logId: number, currentIp: string): Promise<GeoIpEntity>;
+    public abstract getInfo(currentIp: string): Promise<GeoIpEntity>;
+    public abstract findByIp(ip : string): Promise<GeoIpEntity>;
 }

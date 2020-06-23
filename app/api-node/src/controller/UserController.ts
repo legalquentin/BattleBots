@@ -1,6 +1,6 @@
 'use strict';
 
-import { Path, POST, GET, PathParam, Security, ContextRequest, PreProcessor, PostProcessor, DELETE } from "typescript-rest";
+import { Path, POST, GET, PathParam, Security, ContextRequest, PreProcessor, PostProcessor, DELETE, PUT } from "typescript-rest";
 import IUserResource from "../resources/IUserResource";
 import IUserHttpModel from "../resources/IUserHttpModel";
 import IResourceId from "../resources/IResourceId";
@@ -16,6 +16,9 @@ import { AuthenticationService } from "../service/AuthenticationService";
 import IGameProfileResource from "../resources/IGameProfileResource";
 import { preRequest } from "../service/interceptors/preRequest/preRequest";
 import { postRequest } from "../service/interceptors/postRequest/postRequest";
+import { ConnectedUserService } from "../service/ConnectedUserService";
+import * as express from "express";
+import IConfig from "../service/IConfig";
 
 @Path('/api/users')
 @PreProcessor(preRequest)
@@ -25,13 +28,14 @@ export class UserController {
     @Inject
     private userService: UserService;
 
-    /*
     @Inject
-    private playerService: PlayerService;
-    */
+    private connectedUsers: ConnectedUserService;
 
     @Inject
     private authService: AuthenticationService;
+
+    @Inject
+    private config: IConfig;
 
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
@@ -39,7 +43,10 @@ export class UserController {
     @Response<HttpResponseModel<ITokenHttp>>(404, "user not found")
     @Path('/login')
     @POST 
-    public async loginRoute(user: IUserHttpModel): Promise<SendResource<HttpResponseModel<ITokenHttp>>> {
+    public async loginRoute(user: IUserHttpModel, req: express.Request): Promise<SendResource<HttpResponseModel<ITokenHttp>>> {
+        if (this.config.getLocalAddress() !== req.socket.remoteAddress){
+            await this.linkPosition(req);
+        }
         return this.authService.authenticate(user.username, user.password);
     }
 
@@ -49,8 +56,32 @@ export class UserController {
     @Response<HttpResponseModel<ITokenHttp>>(404, "user not found")
     @Path('/login/up')
     @POST 
-    public async loginUp(token: ITokenHttp): Promise<SendResource<HttpResponseModel<ITokenHttp>>> {
+    public async loginUp(token: ITokenHttp, req: express.Request): Promise<SendResource<HttpResponseModel<ITokenHttp>>> {
+        if (this.config.getLocalAddress() !== req.socket.remoteAddress){
+            await this.linkPosition(req);
+        }
         return this.authService.refresh(token.data);
+    }
+
+    @Consumes("application/json;charset=UTF-8")
+    @Produces("application/json;charset=UTF-8")
+    @Security("ROLE_USER", "Bearer")
+    @Response<HttpResponseModel<ITokenHttp>>(200, "logout user")
+    @Path('/logout')
+    @POST 
+    public async logout(@ContextRequest req: Express.Request): Promise<SendResource<HttpResponseModel<ITokenHttp>>> {
+        return this.authService.logout(req.user.id);
+    }
+
+    @Consumes("application/json;charset=UTF-8")
+    @Produces("application/json;charset=UTF-8")
+    @Security("ROLE_USER", "Bearer")
+    @Response<HttpResponseModel<ITokenHttp>>(200, "position updated")
+    @Response<HttpResponseModel<ITokenHttp>>(400, "request from localhost")
+    @Path('/update-position/users')
+    @PUT
+    public async linkPosition(@ContextRequest req: express.Request){
+        return (this.connectedUsers.linkPosition(req.user.id, req.socket.remoteAddress));
     }
 
     @Produces("application/json;charset=UTF-8")
@@ -63,20 +94,6 @@ export class UserController {
     public async register(user: IUserResource): Promise<SendResource<HttpResponseModel<IResourceId>>> {
         return this.userService.saveOrUpdate(user);
     }
-
-    /*
-    @Path("/:id/player")
-    @POST
-    @Security("ROLE_USER", "Bearer")
-    @Consumes("application/json;charset=UTF-8")
-    @Produces("application/json;charset=UTF-8")
-    @Response<HttpResponseModel<IResourceId>>(201, "Player created")
-    @Response<HttpResponseModel<IResourceId>>(409, "Player already exist")
-    @Response<HttpResponseModel<IResourceId>>(400)
-    public async registerPlayer(player: IGameProfileResource, @PathParam("id") id: number): Promise<SendResource<HttpResponseModel<IResourceId>>> {
-        return this.playerService.register(player, id);
-    }
-    */
 
     @Path('/profile/:id')
     @Security("ROLE_USER", "Bearer")
@@ -112,33 +129,24 @@ export class UserController {
         return this.userService.findAll();
     }
 
-    /*
-
-    @Path('/:userId/players')
+    @Path('/connected/users')
     @Security("ROLE_USER", "Bearer")
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
-    @Response<HttpResponseModel<IUserResource[]>>(200, "User list")
-    @Response<HttpResponseModel<IUserResource[]>>(400)
+    @Response<HttpResponseModel<IUserResource[]>>(200, "Get connected users")
+    @Response<HttpResponseModel<IUserResource[]>>(400, "Bad request")
     @GET
-    public async players(@PathParam("userId")userId: number): Promise<SendResource<HttpResponseModel<IGameProfileResource[]>>> {
-        return (this.playerService.search(userId));
+    public async getConnectedUsers(): Promise<SendResource<HttpResponseModel<IUserResource[]>>> {
+        return (this.connectedUsers.getConnected());
     }
-    */
 
-    /*
-    @Path('/player/:playerId')
-    @Security("ROLE_USER", "Bearer")
-    @Consumes("application/json;charset=UTF-8")
-    @Produces("application/json;charset=UTF-8")
-    @Response<HttpResponseModel<IUserResource[]>>(200, "Player deleted")
-    @Response<HttpResponseModel<IUserResource[]>>(404, "Player not found")
-    @Response<HttpResponseModel<IUserResource[]>>(400)
-    @DELETE
-    public async deletePlayer(@PathParam("playerId")playerId:  number){
-        return (this.playerService.deleteOne(playerId));
+    public trackCurrentPosition(){
+
     }
-    */
+
+    public trackAllPositions(){
+
+    }
 
     @Path('/:userId')
     @Security("ROLE_USER", "Bearer")
@@ -151,4 +159,5 @@ export class UserController {
     public async deleteUser(@PathParam("userId")userId: number): Promise<SendResource<HttpResponseModel<IGameProfileResource[]>>> {
         return this.userService.deleteOne(userId);
     }
+
 }

@@ -1,6 +1,8 @@
-import { Column, JoinColumn, Entity, ManyToOne } from "typeorm";
+import { Column, JoinColumn, Entity, ManyToOne, OneToMany } from "typeorm";
 import { AbstractEntity } from "./AbstractEntity";
 import UserEntity from "./UserEntity";
+import { ConnectedUserGeoipEntity } from "./ConnectedUserGeoipEntity";
+import { GeoIpUserEntity } from "./GeoipUserEntity";
 
 @Entity({
     name: "geoip"
@@ -31,4 +33,14 @@ export class GeoIpEntity extends AbstractEntity {
 
     @Column()
     public timezone: string;
+
+    @OneToMany(type => ConnectedUserGeoipEntity, conn => conn.geoip, {
+        lazy: true
+    })
+    public connectedUserGeoIp: Array<ConnectedUserGeoipEntity>;
+
+    @OneToMany(type => GeoIpUserEntity, geoip => geoip.geoip, {
+        lazy: true
+    })
+    public geoips?: Array<GeoIpUserEntity>;
 }
