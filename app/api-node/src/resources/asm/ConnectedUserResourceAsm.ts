@@ -1,6 +1,5 @@
 import { Inject } from "typescript-ioc";
 import { UserResourceAsm } from "./UserResourceAsm";
-import UserEntity from "../../database/entities/UserEntity";
 import { ConnectedUserResource } from "../ConnectedUserResource";
 import { ConnectedUserEntity } from "../../database/entities/ConnectedUserEntity";
 

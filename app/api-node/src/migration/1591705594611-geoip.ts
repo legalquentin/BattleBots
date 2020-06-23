@@ -1,4 +1,4 @@
-import {MigrationInterface, QueryRunner, Table, TableForeignKey} from "typeorm";
+import {MigrationInterface, QueryRunner, Table } from "typeorm";
 
 export class geoip1591705594611 implements MigrationInterface {
 

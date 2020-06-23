@@ -2,7 +2,6 @@ import { Column, Entity, OneToMany } from 'typeorm';
 import { AbstractEntity } from './AbstractEntity';
 import { LogEntity } from './LogEntity';
 import { ERolesStatus } from '../../resources/ERolesStatus';
-import { GeoIpEntity } from './GeoIpEntity';
 import { GameInfoEntity } from './GameInfoEntity';
 import { RobotsUserEntity } from './RobotsUserEntity';
 import { GameUserEntity } from './GameUserEntity';
