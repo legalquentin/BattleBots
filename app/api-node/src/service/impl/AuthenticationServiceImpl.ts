@@ -57,7 +57,9 @@ export class AuthenticationServiceImpl implements AuthenticationService {
             const data = sign(o, this.config.getSecret(), {
                 algorithm: "HS512"
             });
-            this.connectedUsers.refreshLogin(parseInt(o.sub, 10));
+            if (process.env.NODE_ENV != "test"){
+                this.connectedUsers.refreshLogin(parseInt(o.sub, 10));
+            }
             const response : HttpResponseModel<ITokenHttp> = {
                 httpCode: 200,
                 data: {
@@ -106,7 +108,9 @@ export class AuthenticationServiceImpl implements AuthenticationService {
                         message: "Authentication successfull"
                     };
 
-                    await this.connectedUsers.login(user.id);
+                    if (process.env.NODE_ENV != "test"){
+                        await this.connectedUsers.login(user.id);
+                    }
                     return Promise.resolve(new SendResource<HttpResponseModel<ITokenHttp>>("UserController", response.httpCode, response));
                 }
             }

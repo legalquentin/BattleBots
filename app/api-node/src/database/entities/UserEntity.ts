@@ -7,7 +7,7 @@ import { RobotsUserEntity } from './RobotsUserEntity';
 import { GameUserEntity } from './GameUserEntity';
 import { SessionEntity } from './SessionEntity';
 import { ConnectedUserEntity } from './ConnectedUserEntity';
-import { GeoIpUserEntity } from './GeoipUserEntity';
+import { GeoIpUserEntity } from './GeoIpUserEntity';
 
 @Entity({ name: 'users' })
 export default class UserEntity extends AbstractEntity {

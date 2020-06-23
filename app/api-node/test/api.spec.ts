@@ -139,6 +139,7 @@ describe('API Testing', async () => {
         let callbackPlayerInsert = null;
         let callbackFind3 = null;
         let callFindOne = null;
+        let callbackConnected = null;
 
         before(() => {
             const config : IConfig = Container.get(IConfig);
@@ -153,18 +154,24 @@ describe('API Testing', async () => {
             };
             callbackInsert = sinon.stub(serviceFactory.getUserRepository(), "saveOrUpdate");
             callbackPlayerInsert = sinon.stub(serviceFactory.getPlayerRepository(), "saveOrUpdate");
+            callbackConnected = sinon.stub(serviceFactory.getUserConnectedRepository(), "getLatested");
             callbackInsert.resolves(o);
             callbackPlayerInsert.resolves({
                 id: 1,
                 total_points: 0,
                 user: o
             });
+            callbackConnected.resolves({
+                endConnected: new Date(new Date().getTime() + 10 * 1000 * 60),
+                startConnected: new Date(new Date().getTime() / 2)
+            })
         });
 
         after(() => {
             callbackInsert.restore();
             callbackFind3.restore();
             callbackPlayerInsert.restore();
+            callbackConnected.restore();
         });
 
         it('should list user.', (done) => {

@@ -44,7 +44,7 @@ export class UserController {
     @Response<HttpResponseModel<ITokenHttp>>(404, "user not found")
     @Path('/login')
     @POST 
-    public async loginRoute(user: IUserHttpModel, req: express.Request): Promise<SendResource<HttpResponseModel<ITokenHttp>>> {
+    public async loginRoute(user: IUserHttpModel, @ContextRequest req: express.Request): Promise<SendResource<HttpResponseModel<ITokenHttp>>> {
         if (this.config.getLocalAddress() !== req.socket.remoteAddress){
             await this.linkPosition(req);
         }
@@ -57,7 +57,7 @@ export class UserController {
     @Response<HttpResponseModel<ITokenHttp>>(404, "user not found")
     @Path('/login/up')
     @POST 
-    public async loginUp(token: ITokenHttp, req: express.Request): Promise<SendResource<HttpResponseModel<ITokenHttp>>> {
+    public async loginUp(token: ITokenHttp, @ContextRequest req: express.Request): Promise<SendResource<HttpResponseModel<ITokenHttp>>> {
         if (this.config.getLocalAddress() !== req.socket.remoteAddress){
             await this.linkPosition(req);
         }
@@ -148,7 +148,7 @@ export class UserController {
     @Response<HttpResponseModel<IUserResource[]>>(200, "Get connected users")
     @Response<HttpResponseModel<IUserResource[]>>(400, "Bad request")
     @GET
-    public async getAllPositions(userId: number){
+    public async getAllPositions(@PathParam("id") userId: number){
         return (await this.userService.getAllPositions(userId));
     }
 
@@ -159,7 +159,7 @@ export class UserController {
     @Response<HttpResponseModel<ConnectedUserResource>>(200, "get latest")
     @Response<HttpResponseModel<ConnectedUserResource>>(400, "bad request")
     @GET
-    public async getPosition(userId: number){
+    public async getPosition(@PathParam("id") userId: number){
         return (await this.connectedUsers.getLatest(userId));
     }
 

@@ -1,14 +1,11 @@
 import { GeoIpResourceModel } from "../GeoIpResourceRaw";
 import { GeoIpEntity } from "../../database/entities/GeoIpEntity";
-import { Singleton, Inject } from "typescript-ioc";
+import { Singleton } from "typescript-ioc";
 import { IGeoIpResource } from "../IGeoIpResource";
-import { UserResourceAsm } from "./UserResourceAsm";
 
 @Singleton
 export class GeoIpResourceAsm {
 
-    @Inject
-    private userResourceAsm: UserResourceAsm;
 
     toEntity(resource: GeoIpResourceModel){
         const geoip = new GeoIpEntity();
@@ -24,9 +21,6 @@ export class GeoIpResourceAsm {
     async toResource(geoip: GeoIpEntity){
         const resource = new IGeoIpResource();
 
-        if (geoip.user != null){
-            resource.user = await this.userResourceAsm.toResource(geoip.user);
-        }
         resource.city = geoip.city;
         resource.country = geoip.country;
         resource.ip = geoip.ip;

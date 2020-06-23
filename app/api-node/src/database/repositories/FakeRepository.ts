@@ -9,4 +9,8 @@ export class FakeRepository extends Repository<any> {
     saveOrUpdate(fake: any){
         return (fake);
     }
+
+    async getLatested(fake: any){
+        return (fake);
+    }
 }

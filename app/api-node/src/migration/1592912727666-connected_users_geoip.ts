@@ -8,13 +8,13 @@ export class connectedUsersGeoip1592912727666 implements MigrationInterface {
             columns: [
                 {
                     name: "connected_user_id",
-                    type: "integer",
+                    type: "int",
                     isNullable: false,
                     isPrimary: true
                 },
                 {
                     name: "geoip_id",
-                    type: "integer",
+                    type: "int",
                     isNullable: false,
                     isPrimary: true
                 },

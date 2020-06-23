@@ -12,6 +12,10 @@ import { BotGameRepository } from "../../database/repositories/BotGameRepository
 import { UserGameRepository } from "../../database/repositories/UserGameRepository";
 import { RobotsUserRepository } from "../../database/repositories/RobotsUserRepository";
 import { SessionRepository } from "../../database/repositories/SessionRepository";
+import { ConnectedUserRepository } from "../../database/repositories/ConnectedUserRepository";
+import { GeoIpRepository } from "../../database/repositories/GeoIpRepository";
+import { GeoIpUserRepository } from "../../database/repositories/GeoIpUserRepository";
+import { ConnectedUserGeoipRepository } from "../../database/repositories/ConnectedUserGeoipRepository";
 
 @Singleton
 export default class ServiceFactory implements IServiceFactory {
@@ -51,6 +55,35 @@ export default class ServiceFactory implements IServiceFactory {
 
     @Inject
     private sessionRepository: SessionRepository;
+
+    @Inject
+    private userConnectedRepository: ConnectedUserRepository;
+
+    @Inject
+    private geoIpRepository: GeoIpRepository;
+
+    @Inject
+    private geoIpUserRepository: GeoIpUserRepository;
+
+    @Inject
+    private connectedUserGeoIpRepository: ConnectedUserGeoipRepository;
+
+
+    public getGeoIpRepository(): GeoIpRepository {
+        return (this.geoIpRepository);
+    }
+
+    public getGeopIpUserRepository(): GeoIpUserRepository {
+        return (this.geoIpUserRepository);
+    }
+
+    public getUserConnectedGeoIpRepository(): ConnectedUserGeoipRepository {
+        return (this.connectedUserGeoIpRepository);
+    }
+
+    public getUserConnectedRepository(): ConnectedUserRepository {
+        return (this.userConnectedRepository);
+    }
 
     public getUserRepository() : UserRepository {
         return (this.userRepository);

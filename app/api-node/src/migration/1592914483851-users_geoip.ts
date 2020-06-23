@@ -8,13 +8,13 @@ export class usersGeoip1592914483851 implements MigrationInterface {
             columns: [
                 {
                     name: "user_id",
-                    type: "integer",
+                    type: "int",
                     isNullable: false,
                     isPrimary: true
                 },
                 {
                     name: "geoip_id",
-                    type: "integer",
+                    type: "int",
                     isNullable: false,
                     isPrimary: true
                 },
@@ -33,13 +33,13 @@ export class usersGeoip1592914483851 implements MigrationInterface {
                 }
             ]
         }));
-        await queryRunner.createForeignKey("connected_users_geoip", new TableForeignKey({
+        await queryRunner.createForeignKey("users_geoip", new TableForeignKey({
             name: "fk_users_geoip_id",
             columnNames: ["user_id"],
             referencedTableName: "users",
             referencedColumnNames: ["id"]
         }));
-        await queryRunner.createForeignKey("connected_users_geoip", new TableForeignKey({
+        await queryRunner.createForeignKey("users_geoip", new TableForeignKey({
             name: "fk_users_geoip_geoip_id",
             columnNames: ["geoip_id"],
             referencedTableName: "geoip",

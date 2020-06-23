@@ -1324,6 +1324,44 @@ paths:
                         schema:
                             $ref: '#/components/schemas/ITokenHttp'
                 required: true
+    /api/users/logout:
+        post:
+            operationId: UserLogout
+            responses:
+                '200':
+                    description: 'logout user'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelITokenHttp'
+            description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
+    /api/users/update-position/users:
+        put:
+            operationId: UserLinkPosition
+            responses:
+                '200':
+                    description: 'position updated'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelITokenHttp'
+                '204':
+                    description: 'No content'
+                '400':
+                    description: 'request from localhost'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelITokenHttp'
+            description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
     /api/users/:
         post:
             operationId: UserRegister
@@ -1430,6 +1468,91 @@ paths:
                 -
                     Bearer:
                         - ROLE_USER
+    /api/users/connected/users:
+        get:
+            operationId: UserGetConnectedUsers
+            responses:
+                '200':
+                    description: 'Get connected users'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIUserResourceArray'
+                '400':
+                    description: 'Bad request'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIUserResourceArray'
+            description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
+    '/api/users/users/{id}/position':
+        get:
+            operationId: UserGetAllPositions
+            responses:
+                '200':
+                    description: 'Get connected users'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIUserResourceArray'
+                '204':
+                    description: 'No content'
+                '400':
+                    description: 'Bad request'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelIUserResourceArray'
+            description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
+            parameters:
+                -
+                    description: ""
+                    in: path
+                    name: id
+                    required: true
+                    schema:
+                        type: number
+                        format: double
+    '/api/users/connected/users/{id}/position':
+        get:
+            operationId: UserGetPosition
+            responses:
+                '200':
+                    description: 'get latest'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelConnectedUserResource'
+                '204':
+                    description: 'No content'
+                '400':
+                    description: 'bad request'
+                    content:
+                        application/json;charset=UTF-8:
+                            schema:
+                                $ref: '#/components/schemas/HttpResponseModelConnectedUserResource'
+            description: ""
+            security:
+                -
+                    Bearer:
+                        - ROLE_USER
+            parameters:
+                -
+                    description: ""
+                    in: path
+                    name: id
+                    required: true
+                    schema:
+                        type: number
+                        format: double
     '/api/users/{userId}':
         delete:
             operationId: UserDeleteUser
@@ -1607,6 +1730,7 @@ components:
                         - STARTED
                         - STOPPED
                         - ENDED
+                        - DELETED
                     type: string
                     description: ""
                 createdAt:
@@ -1673,11 +1797,42 @@ components:
                     items:
                         $ref: '#/components/schemas/IBotsResource'
                     description: ""
+                geoips:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/IGeoIpResource'
+                    description: ""
             type: object
             required:
                 - pseudo
                 - email
                 - roles
+        IGeoIpResource:
+            description: ""
+            properties:
+                user:
+                    $ref: '#/components/schemas/IUserResource'
+                longitude:
+                    type: number
+                    format: double
+                    description: ""
+                latitude:
+                    type: number
+                    format: double
+                    description: ""
+                ip:
+                    type: string
+                    description: ""
+                country:
+                    type: string
+                    description: ""
+                city:
+                    type: string
+                    description: ""
+                timezone:
+                    type: string
+                    description: ""
+            type: object
         IStreamResource:
             description: ""
             properties:
@@ -2074,4 +2229,35 @@ components:
                     items:
                         $ref: '#/components/schemas/IUserResource'
                     description: ""
+            type: object
+        ConnectedUserResource:
+            description: ""
+            properties:
+                id:
+                    type: number
+                    format: double
+                    description: ""
+                user:
+                    $ref: '#/components/schemas/IUserResource'
+                from:
+                    type: string
+                    format: date-time
+                    description: ""
+                end:
+                    type: string
+                    format: date-time
+                    description: ""
+            type: object
+        HttpResponseModelConnectedUserResource:
+            description: ""
+            properties:
+                message:
+                    type: string
+                    description: ""
+                httpCode:
+                    type: number
+                    format: double
+                    description: ""
+                data:
+                    $ref: '#/components/schemas/ConnectedUserResource'
             type: object

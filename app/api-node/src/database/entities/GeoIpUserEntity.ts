@@ -1,6 +1,8 @@
 import { Entity, JoinColumn, Column, ManyToOne, BeforeInsert, BeforeUpdate } from "typeorm";
 import { GeoIpEntity } from "./GeoIpEntity";
+//import { GeoIpEntity } from "./GeoIpEntity";
 import UserEntity from "./UserEntity";
+
 
 @Entity({
     name: "users_geoip"
@@ -15,9 +17,8 @@ export class GeoIpUserEntity {
         eager: true,
         primary: true
     })
-    geoip: GeoIpEntity;
-
-
+    public geoip: GeoIpEntity;
+    
     @JoinColumn({
         name: "user_id",
         referencedColumnName: "id"
@@ -26,7 +27,7 @@ export class GeoIpUserEntity {
         eager: true,
         primary: true
     })
-    user: UserEntity;
+    public user: UserEntity;
     
     @Column({ name: 'created_at' })
     public createdAt?: Date;
