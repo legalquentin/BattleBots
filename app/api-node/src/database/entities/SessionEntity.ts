@@ -3,6 +3,7 @@ import UserEntity from "./UserEntity";
 import { RobotsEntity } from "./RobotsEntity";
 import { StreamsEntity } from "./StreamsEntity";
 import { GameEntity } from "./GameEntity";
+import { ConnectedUserEntity } from "./ConnectedUserEntity";
 
 @Entity({
     name: "session"
@@ -40,6 +41,15 @@ export class SessionEntity {
         eager: true
     })
     stream: StreamsEntity;
+
+    @JoinColumn({
+        name: "connected_id",
+        referencedColumnName: "id"
+    })
+    @ManyToOne(type => ConnectedUserEntity, conn => conn.sessions, {
+        eager: true
+    })
+    connected: ConnectedUserEntity;
 
     @JoinColumn({
         name: "game_id",

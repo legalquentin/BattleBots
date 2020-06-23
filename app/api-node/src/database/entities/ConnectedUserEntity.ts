@@ -2,6 +2,7 @@ import { AbstractEntity } from "./AbstractEntity";
 import UserEntity from "./UserEntity";
 import { JoinColumn, ManyToOne, Column, Entity, OneToMany } from "typeorm";
 import { ConnectedUserGeoipEntity } from "./ConnectedUserGeoipEntity";
+import { SessionEntity } from "./SessionEntity";
 
 @Entity({
     name: "connected_users"
@@ -25,6 +26,11 @@ export class ConnectedUserEntity extends AbstractEntity {
         name: "end_connected"
     })
     public endConnected: Date;
+
+    @OneToMany(type => SessionEntity, sess => sess.connected,  {
+        lazy: true
+    })
+    public sessions: Array<SessionEntity>;
 
     @OneToMany(type => ConnectedUserGeoipEntity, conn => conn.connectedUser, {
         lazy: true

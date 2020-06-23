@@ -10,6 +10,7 @@ import { GameResourceAsm } from "./GameResourceAsm";
 import { BotResourceAsm } from "./BotResourceAsm";
 import { UserResourceAsm } from "./UserResourceAsm";
 import { StreamsResourceAsm } from "./StreamsResourceAsm";
+import { ConnectedUserEntity } from "../../database/entities/ConnectedUserEntity";
 
 @Singleton
 export class SessionResourceAsm {
@@ -88,6 +89,12 @@ export class SessionResourceAsm {
 
             stream.id = session.stream.id;
             entity.stream = stream;
+        }
+        if (session.connected){
+            const conn = new ConnectedUserEntity();
+
+            conn.id = session.connected.id;
+            entity.connected = conn;
         }
         return (entity);
     }

@@ -2905,6 +2905,30 @@
 					"encodage"
 				]
 			},
+			"ConnectedUserResource": {
+				"description": "",
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double",
+						"description": ""
+					},
+					"user": {
+						"$ref": "#/components/schemas/IUserResource"
+					},
+					"from": {
+						"type": "string",
+						"format": "date-time",
+						"description": ""
+					},
+					"end": {
+						"type": "string",
+						"format": "date-time",
+						"description": ""
+					}
+				},
+				"type": "object"
+			},
 			"IContextBotResource": {
 				"description": "",
 				"properties": {
@@ -2929,6 +2953,9 @@
 					},
 					"stream": {
 						"$ref": "#/components/schemas/IStreamResource"
+					},
+					"connected": {
+						"$ref": "#/components/schemas/ConnectedUserResource"
 					}
 				},
 				"type": "object",
@@ -3391,30 +3418,6 @@
 						"items": {
 							"$ref": "#/components/schemas/IUserResource"
 						},
-						"description": ""
-					}
-				},
-				"type": "object"
-			},
-			"ConnectedUserResource": {
-				"description": "",
-				"properties": {
-					"id": {
-						"type": "number",
-						"format": "double",
-						"description": ""
-					},
-					"user": {
-						"$ref": "#/components/schemas/IUserResource"
-					},
-					"from": {
-						"type": "string",
-						"format": "date-time",
-						"description": ""
-					},
-					"end": {
-						"type": "string",
-						"format": "date-time",
 						"description": ""
 					}
 				},

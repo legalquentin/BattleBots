@@ -5,6 +5,8 @@ import { SessionRepository } from "../../database/repositories/SessionRepository
 import { Inject } from "typescript-ioc";
 import { SessionResourceAsm } from "../../resources/asm/SessionResourceAsm";
 import { ISessionResource } from "../../resources/ISessionResource";
+import IServiceFactory from "../IServiceFactory";
+import { SessionEntity } from "../../database/entities/SessionEntity";
 
 export class SessionServiceImpl implements SessionService {
 
@@ -13,9 +15,14 @@ export class SessionServiceImpl implements SessionService {
 
     @Inject
     sessionResourceAsm: SessionResourceAsm;
+
+    @Inject
+    serviceFactory: IServiceFactory;
     
     public async save(context: IContextBotResource): Promise<HttpResponseModel<IContextBotResource>> {
-        const entity = this.sessionResourceAsm.toEntity(context);
+        const entity : SessionEntity = this.sessionResourceAsm.toEntity(context);
+        const conn = await this.serviceFactory.getUserConnectedRepository().getLatested(entity.player.id);
+        entity.connected = conn;
         const saved = await this.sessionRepository.save(entity);
         const resource = this.sessionResourceAsm.toResource(saved);
         const response: HttpResponseModel<IContextBotResource> = {
@@ -29,6 +36,8 @@ export class SessionServiceImpl implements SessionService {
 
     public async update(context: IContextBotResource): Promise<HttpResponseModel<IContextBotResource>> {
         const entity = this.sessionResourceAsm.toEntity(context);
+        const conn = await this.serviceFactory.getUserConnectedRepository().getLatested(entity.player.id);
+        entity.connected = conn;
         await this.sessionRepository.update(entity.id, entity);
         const response: HttpResponseModel<IContextBotResource> = {
             httpCode: 200,

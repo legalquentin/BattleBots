@@ -1,6 +1,6 @@
 import {MigrationInterface, QueryRunner, Table, TableForeignKey} from "typeorm";
 
-export class Session1592498810566 implements MigrationInterface {
+export class Session1593498810566 implements MigrationInterface {
 
    
     public async up(queryRunner: QueryRunner): Promise<any> {
@@ -37,6 +37,11 @@ export class Session1592498810566 implements MigrationInterface {
                     isNullable: false
                 },
                 {
+                    name: "connected_id",
+                    type: "int",
+                    isNullable: false
+                },
+                {
                     name: "bot_energy",
                     type: "int",
                     isNullable: true
@@ -47,7 +52,14 @@ export class Session1592498810566 implements MigrationInterface {
                     isNullable: true
                 }
             ]
-        }))
+        }));
+
+        await queryRunner.createForeignKey("session", new TableForeignKey({
+            name: "fk_session_connected_id",
+            columnNames: ["connected_id"],
+            referencedTableName: "connected_users",
+            referencedColumnNames: ["id"]
+        }));
 
         await queryRunner.createForeignKey("session", new TableForeignKey({
             name: "fk_session_game_id",
@@ -83,6 +95,7 @@ export class Session1592498810566 implements MigrationInterface {
         await queryRunner.dropForeignKey("session", "fk_session_robots_id");
         await queryRunner.dropForeignKey("session", "fk_session_stream_id");
         await queryRunner.dropForeignKey("session", "fk_session_game_id");
+        await queryRunner.dropForeignKey("session", "fk_session_connected_id");
         await queryRunner.dropTable("session");
     }
 

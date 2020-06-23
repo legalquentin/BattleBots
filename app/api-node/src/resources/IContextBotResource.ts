@@ -2,6 +2,7 @@ import { IBotsResource } from "./IBotsResource";
 import { IGameResource } from "./IGameResource";
 import IUserResource from "./IUserResource";
 import { IStreamResource } from "./IStreamResource";
+import { ConnectedUserResource } from "./ConnectedUserResource";
 
 export class IContextBotResource {
     energy: number;
@@ -10,4 +11,5 @@ export class IContextBotResource {
     game?: IGameResource;
     user?: IUserResource;
     stream?: IStreamResource;
+    connected?: ConnectedUserResource;
 }
