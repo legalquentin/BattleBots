@@ -12,9 +12,10 @@ import { GeoIpUserRepository } from "../../database/repositories/GeoIpUserReposi
 import { GeoIpUserEntity } from "../../database/entities/GeoipUserEntity";
 import { ConnectedUserGeoipRepository } from "../../database/repositories/ConnectedUserGeoipRepository";
 import { ConnectedUserGeoipEntity } from "../../database/entities/ConnectedUserGeoipEntity";
+import { ConnectedUserResource } from "../../resources/ConnectedUserResource";
+import { ConnectedUserResourceAsm } from "../../resources/asm/ConnectedUserResourceAsm";
 
 export class ConnectedUserServiceImpl extends ConnectedUserService {
-
 
     @Inject
     connectedUserRepository: ConnectedUserRepository;
@@ -36,6 +37,9 @@ export class ConnectedUserServiceImpl extends ConnectedUserService {
 
     @Inject
     geoIpConnectedUserRepository: ConnectedUserGeoipRepository;
+
+    @Inject
+    connectedUserAsm: ConnectedUserResourceAsm;
 
     constructor(){
         super();
@@ -181,5 +185,26 @@ export class ConnectedUserServiceImpl extends ConnectedUserService {
         connectedUser.endConnected = new Date(endTime + step);
         await this.connectedUserRepository.update(connectedUser.id, connectedUser);
         return (true)
+    }
+
+    async getLatest(userId: number) {
+        try {
+            const conn = await this.connectedUserRepository.getLatested(userId);
+            const response: HttpResponseModel<ConnectedUserResource> = {
+                data: await this.connectedUserAsm.toResource(conn),
+                httpCode: 200,
+                message: "get latest"
+            };
+
+            return (response);
+        }
+        catch (e){
+            const response: HttpResponseModel<ConnectedUserResource> = {
+                httpCode: 400,
+                message: "bad request"
+            };
+
+            return (response);
+        }
     }
 }

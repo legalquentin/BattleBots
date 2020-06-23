@@ -13,6 +13,7 @@ import { SendResource } from "../../../lib/ReturnExtended";
 import IGameProfileResource from "../../resources/IGameProfileResource";
 import { ERolesStatus } from "../../resources/ERolesStatus";
 import { ConnectedUserService } from "../ConnectedUserService";
+import { GeoIpResourceAsm } from "../../resources/asm/GeoIpResourceAsm";
 
 @Singleton
 export class UserServiceImpl implements UserService {
@@ -60,6 +61,42 @@ export class UserServiceImpl implements UserService {
 
             return Promise.resolve(new SendResource<HttpResponseModel<IResourceId>>("UserController", response.httpCode, response));
         }           
+    }
+
+    public async getAllPositions(id: number) {
+        const userResourceAsm = Container.get(UserResourceAsm);
+        const geoipResourceAsm = Container.get(GeoIpResourceAsm);
+        try {
+            const user = await this.factory.getUserRepository().getAllPositions(id);
+            if (!user){
+                const response: HttpResponseModel<IUserResource> = {
+                    httpCode: 404,
+                    message: "no user"
+                };
+
+                return (response);
+            }
+            const resource = await userResourceAsm.toResource(user);
+            const geoip_users= await user.geoips;
+            const geoips = geoip_users.map(geoip_user => geoip_user.geoip);
+            const geoip_resources = await geoipResourceAsm.toResources(geoips);
+            userResourceAsm.addGeoIpResource(geoip_resources, resource);
+            const response: HttpResponseModel<IUserResource> = {
+                httpCode: 200,
+                message: "details position user",
+                data: resource
+            };
+        
+            return (response);
+        }
+        catch (e){
+            const response: HttpResponseModel<IUserResource> = {
+                httpCode: 400,
+                message: "bad request"
+            };
+
+            return (response);
+        }
     }
 
     public async findAll(){

@@ -5,6 +5,7 @@ import { Singleton, Container } from "typescript-ioc";
 import { UserGameProfileResourceAsm } from "./UserGameProfileResourceAsm";
 import { IPlayerResource } from "../IPlayerResource";
 import { IBotsResource } from "../IBotsResource";
+import { IGeoIpResource } from "../IGeoIpResource";
 
 @Singleton
 export class UserResourceAsm {
@@ -45,5 +46,14 @@ export class UserResourceAsm {
 
         entity.roles = ERolesStatus.ROLE_ADMIN;
         return (entity);
+    }
+
+    addGeoIpResource(geoips: Array<IGeoIpResource>, user: IUserResource){
+        user.geoips = [];
+
+        for (let geoip of geoips){
+            user.geoips.push(geoip);
+        }
+        return (user);
     }
 }

@@ -19,6 +19,7 @@ import { postRequest } from "../service/interceptors/postRequest/postRequest";
 import { ConnectedUserService } from "../service/ConnectedUserService";
 import * as express from "express";
 import IConfig from "../service/IConfig";
+import { ConnectedUserResource } from "../resources/ConnectedUserResource";
 
 @Path('/api/users')
 @PreProcessor(preRequest)
@@ -140,12 +141,26 @@ export class UserController {
         return (this.connectedUsers.getConnected());
     }
 
-    public trackCurrentPosition(){
-
+    @Path('/users/:id/position')
+    @Security("ROLE_USER", "Bearer")
+    @Consumes("application/json;charset=UTF-8")
+    @Produces("application/json;charset=UTF-8")
+    @Response<HttpResponseModel<IUserResource[]>>(200, "Get connected users")
+    @Response<HttpResponseModel<IUserResource[]>>(400, "Bad request")
+    @GET
+    public async getAllPositions(userId: number){
+        return (await this.userService.getAllPositions(userId));
     }
 
-    public trackAllPositions(){
-
+    @Path('/connected/users/:id/position')
+    @Security("ROLE_USER", "Bearer")
+    @Consumes("application/json;charset=UTF-8")
+    @Produces("application/json;charset=UTF-8")
+    @Response<HttpResponseModel<ConnectedUserResource>>(200, "get latest")
+    @Response<HttpResponseModel<ConnectedUserResource>>(400, "bad request")
+    @GET
+    public async getPosition(userId: number){
+        return (await this.connectedUsers.getLatest(userId));
     }
 
     @Path('/:userId')

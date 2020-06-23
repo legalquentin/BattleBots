@@ -32,4 +32,20 @@ export class UserRepository extends Repository<UserEntity> {
             throw e;
         } 
     }
+
+    public async getAllPositions(userId: number){
+        const list = await this.
+        createQueryBuilder("user").
+        leftJoinAndSelect("user.geoips", "geoips").
+        leftJoinAndSelect("geoips.geoip", "geoip").
+        where("user.id = :id", {
+            "id": userId
+        }).
+        getMany();
+
+        if (list && list.length){
+            return (list[0]);
+        }
+        return (null);
+    }
 }

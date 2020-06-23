@@ -7,4 +7,5 @@ export abstract class ConnectedUserService {
     abstract getDisconnected();
     abstract getAll();
     abstract linkPosition(userId: number, ipAddress: string);
+    abstract getLatest(userId: number);
 }
