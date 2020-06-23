@@ -74,13 +74,13 @@ export class GameServiceImpl implements GameService {
 
         try {
             const httpCode = game.id ? 200 : 201;
-            if (game.status == EGameStatus.CREATED){
+            if (game.status == EGameStatus.CREATED && !game.createdAt){
                 game.createdAt = new Date().getTime();
             }
-            else if (game.status == EGameStatus.STARTED){
+            else if (game.status == EGameStatus.STARTED && !game.startedAt){
                 game.startedAt = new Date().getTime();
             }
-            else if (game.status == EGameStatus.ENDED){
+            else if (game.status == EGameStatus.ENDED && !game.endedAt){
                 game.endedAt = new Date().getTime();
             }
             const entity = await gameResourceAsm.toEntity(game);
