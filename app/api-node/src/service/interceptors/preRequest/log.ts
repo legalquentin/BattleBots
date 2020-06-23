@@ -35,6 +35,6 @@ export async function preRequestLog(req: express.Request){
         };
     }
     catch (e){
-         fs.appendFileSync(`./log.txt`, `log - preRequest - error - ${e.message}\n`);
+        fs.appendFileSync(`./log.txt`, `log - preRequest - error - ${e.message}\n`);
     }
 }

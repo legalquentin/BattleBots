@@ -16,6 +16,6 @@ export async function preRequestGeoIp(req: any){
         }
     }
     catch (e){
-            fs.appendFileSync(`./log.txt`, `log - preRequest - error - ${e.message}\n`);
+        fs.appendFileSync(`./log.txt`, `log - preRequest - error - ${e.message}\n`);
     }
 }
