@@ -166,12 +166,7 @@ export class GameServiceImpl implements GameService {
             await this.serviceFactory.getBotUserRepository().deleteUsers(idList);
             const botUsers = await this.mapAsBotUsers(playersResource);
             await this.serviceFactory.getBotUserRepository().saveAll(botUsers);
-            const tmp = await this.mapPlayerResources(playersResource);
-            const sessions = tmp.sessions;
-            const streams = tmp.streams;
-            const params = tmp.params;
-            const bots = tmp.bots;
-            const userGames = tmp.userGames;
+            const { sessions, streams, params, bots, userGames } = await this.mapPlayerResources(playersResource);
             let saved = null;
             await this.serviceFactory.getGameRepository().manager.transaction(async (manager) => {
                 saved = await this.serviceFactory.getGameRepository().saveOrUpdate(manager, entity);
