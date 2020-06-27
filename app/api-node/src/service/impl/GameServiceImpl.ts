@@ -145,7 +145,7 @@ export class GameServiceImpl implements GameService {
     }
 
     public async saveOrUpdate(game: IGameResource) {
-        game.status = game.status ?? EGameStatus.CREATED;
+        game.status = game.status ? game.status : EGameStatus.CREATED;
         try {
             const httpCode = game.id ? 200 : 201;
             if (game.status == EGameStatus.CREATED && !game.createdAt){
@@ -186,7 +186,7 @@ export class GameServiceImpl implements GameService {
             if (game.status == EGameStatus.ENDED){
                 await this.streamService.uploadAll(streams, params);
             }
-            else if (game.status == EGameStatus.CREATED){
+            if (game.status == EGameStatus.CREATED){
                 const r = await this.battleWorkerService.startGoWorker(game);
                 console.log(r);
                 if (!r || !r.token || !r.game) {
