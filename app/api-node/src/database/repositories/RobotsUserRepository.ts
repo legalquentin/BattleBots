@@ -33,11 +33,25 @@ export class RobotsUserRepository extends Repository<RobotsUserEntity>{
     }
 
     public async saveAll(robotsUser: Array<RobotsUserEntity>){
-        robotsUser.map(async (robotUser) => await this.save(robotUser));
+        return new Promise((resolve, reject) => {
+            robotsUser.map(async (robotUser, index) => {
+                await this.save(robotUser)
+                if (index == robotsUser.length - 1){
+                    resolve();
+                }
+            });
+        });
     }
 
     public deleteUsers(idList: Array<number>){
-        idList.map(async (id) => await this.deleteByUser(id));
+        return new Promise((resolve, reject) => {
+            idList.map(async (id, index) => {
+                await this.deleteByUser(id);
+                if (index == idList.length - 1){
+                    resolve();
+                }
+            });
+        });
     }
 
     public async deleteByUser(userId: number){
