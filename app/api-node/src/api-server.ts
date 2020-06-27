@@ -123,7 +123,7 @@ export abstract class ApiServer {
         this.app.use(cors());
         if (process.env.NODE_ENV !== "test") {
             //const readStream = fs.createReadStream(this.serviceConfig.getLogFile());
-            const stream = fs.createWriteStream(this.serviceConfig.getLogFile(), {
+            const stream = fs.createWriteStream(`${__dirname}/${this.serviceConfig.getLogFile()}`, {
                 flags: 'a+'
             });
 

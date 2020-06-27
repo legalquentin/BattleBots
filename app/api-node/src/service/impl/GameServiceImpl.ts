@@ -1,5 +1,5 @@
 import { GameService } from "../GameService";
-import { Inject, Singleton, Container } from "typescript-ioc";
+import { Inject, Singleton } from "typescript-ioc";
 import IServiceFactory from "../IServiceFactory";
 import { EGameStatus } from "../../resources/EGameStatus";
 import { EntityError } from "../../../lib/EntityError";
@@ -42,6 +42,24 @@ export class GameServiceImpl implements GameService {
     @Inject
     private streamService: StreamsService;
 
+    @Inject
+    private gameResourceAsm: GameResourceAsm;
+
+    @Inject
+    private playerResourceAsm: PlayerResourceAsm;
+
+    @Inject
+    private botResourceAsm: BotResourceAsm;
+
+    @Inject
+    private userResourceAsm: UserResourceAsm;
+
+    @Inject
+    private sessionResourceAsm: SessionResourceAsm;
+
+    @Inject
+    private streamResourceAsm: StreamsResourceAsm;
+
     public async updateByWorker(game: IGameResource) {
         if (!game.id){
             const response: HttpResponseModel<IGameResource> = {
@@ -52,13 +70,12 @@ export class GameServiceImpl implements GameService {
 
             return new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response);
         }
-        const gameResourceAsm = Container.get(GameResourceAsm);
-        const entity = await gameResourceAsm.toEntity(game);
+        const entity = await this.gameResourceAsm.toEntity(game);
         const manager = this.serviceFactory.getGameRepository().manager;
         const updated = await this.serviceFactory.getGameRepository().saveOrUpdate(manager, entity);
         const response : HttpResponseModel<IGameResource> = {
             httpCode: 200,
-            data: await gameResourceAsm.toResource(updated),
+            data: await this.gameResourceAsm.toResource(updated),
             message: "game updated"
         };
         return new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response);
@@ -68,10 +85,6 @@ export class GameServiceImpl implements GameService {
         if (!game.status){
             game.status = EGameStatus.CREATED;
         }
-        const gameResourceAsm = Container.get(GameResourceAsm);
-        const playerResourceAsm = Container.get(PlayerResourceAsm);
-        const botResourceAsm = Container.get(BotResourceAsm);
-
         try {
             const httpCode = game.id ? 200 : 201;
             if (game.status == EGameStatus.CREATED && !game.createdAt){
@@ -83,20 +96,20 @@ export class GameServiceImpl implements GameService {
             else if (game.status == EGameStatus.ENDED && !game.endedAt){
                 game.endedAt = new Date().getTime();
             }
-            const entity = await gameResourceAsm.toEntity(game);
+            const entity = await this.gameResourceAsm.toEntity(game);
             let playersResource = game.players;
             if (!playersResource){
                 playersResource = [];
             }
             for (let player of playersResource){
-                const playerEntity = await playerResourceAsm.toEntity(player);
+                const playerEntity = await this.playerResourceAsm.toEntity(player);
 
                 await this.serviceFactory.getBotUserRepository().deleteByUser(playerEntity.id);
             }
             for (let player of playersResource){
-                const robotEntity = await botResourceAsm.toEntity(player.botSpecs);
+                const robotEntity = await this.botResourceAsm.toEntity(player.botSpecs);
                 await this.serviceFactory.getBotsRepository().save(robotEntity);
-                const playerEntity = await playerResourceAsm.toEntity(player);
+                const playerEntity = await this.playerResourceAsm.toEntity(player);
                 const botUser = new RobotsUserEntity();    
             
                 botUser.user = playerEntity;
@@ -109,7 +122,7 @@ export class GameServiceImpl implements GameService {
             for (let player of playersResource){
                 const session = new SessionEntity();
                 const streamEntity = new StreamsEntity();
-                const robotEntity = await botResourceAsm.toEntity(player.botSpecs);
+                const robotEntity = await this.botResourceAsm.toEntity(player.botSpecs);
                 const resolve_path = `${player.stream}`;
                 const o = path.parse(resolve_path);
                 const param :any= {};
@@ -121,7 +134,7 @@ export class GameServiceImpl implements GameService {
                 streamEntity.running = 1;
                 streamEntity.private = 1;
                 streamEntity.robot = robotEntity;
-                session.player = await playerResourceAsm.toEntity(player);
+                session.player = await this.playerResourceAsm.toEntity(player);
                 session.bot = robotEntity;
                 session.stream = streamEntity;
                 if (player.botContext){
@@ -147,40 +160,22 @@ export class GameServiceImpl implements GameService {
                 const botGame = new RobotGameEntity();
                 const userGame = new GameUserEntity();
 
-                botGame.bot = await botResourceAsm.toEntity(playerResource.botSpecs);
-                userGame.user = await playerResourceAsm.toEntity(playerResource);
+                botGame.bot = await this.botResourceAsm.toEntity(playerResource.botSpecs);
+                userGame.user = await this.playerResourceAsm.toEntity(playerResource);
                 userGames.push(userGame);
                 bots.push(botGame);
             }
-            const manager = this.serviceFactory.getGameRepository().manager;
-            const saved = await this.serviceFactory.getGameRepository().saveOrUpdate(manager, entity);
-            try {
+            let saved = null;
+            await this.serviceFactory.getGameRepository().manager.transaction(async (manager) => {
+                saved = await this.serviceFactory.getGameRepository().saveOrUpdate(manager, entity);
+                    
                 await this.serviceFactory.getGameRepository().AddBotGame(manager, saved, bots);
-            }
-            catch (e){
-                console.log(e.message);
-            }
-            try {
                 await this.serviceFactory.getGameRepository().AddStreamInGame(manager, saved, streams);
-            }
-            catch (e){
-                console.log(e.message);
-            }
-            try {
                 await this.serviceFactory.getGameRepository().AddSessionInGame(manager, saved, sessions);
-            }
-            catch (e){
-                console.log(e.message);
-            }
-            try {
                 await this.serviceFactory.getGameRepository().AddUserGame(manager, saved, userGames);
-            }
-            catch (e){
-                console.log(e.message);
-            }
-            const resource = await gameResourceAsm.toResource(saved);
-
+            });
             game.id = saved.id;
+            const resource = await this.gameResourceAsm.toResource(saved);
             if (game.status == EGameStatus.CREATED){
                 const r = await this.battleWorkerService.startGoWorker(game);
                 console.log(r);
@@ -228,14 +223,13 @@ export class GameServiceImpl implements GameService {
     public async linkArenaToGame(arenaId: number, gameId: number) {
         try {
             const game = await this.serviceFactory.getGameRepository().linkArenaToGame(arenaId, gameId);
-            const gameResourceAsm = Container.get(GameResourceAsm);
             const response = {
                 httpCode: 200,
-                data: await gameResourceAsm.toGameResource(game),
+                data: await this.gameResourceAsm.toGameResource(game),
                 message: `link arena ${arenaId} to game ${gameId}`
             };
 
-            await gameResourceAsm.AddArenaResource(game, response.data);
+            await this.gameResourceAsm.AddArenaResource(game, response.data);
             return (Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response)));
         }
         catch (e){
@@ -254,15 +248,14 @@ export class GameServiceImpl implements GameService {
 
     public async linkStreamToGame(streamId: number, gameId: number) {
         try {
-            const gameResourceAsm = Container.get(GameResourceAsm);
             const game  = await this.serviceFactory.getGameRepository().linkStreamToGame(streamId, gameId);
             const response = {
                 message: `link stream ${streamId} to game ${gameId}`,
                 httpCode: 200,
-                data: await gameResourceAsm.toResource(game)
+                data: await this.gameResourceAsm.toResource(game)
             };
 
-            await gameResourceAsm.AddStreamResouce(game, response.data);
+            await this.gameResourceAsm.AddStreamResouce(game, response.data);
             return (Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response)));
         }
         catch (e){
@@ -277,12 +270,11 @@ export class GameServiceImpl implements GameService {
 
     public async linkUserToGame(userId: number, gameId: number){
         try {
-            const gameResourceAsm = Container.get(GameResourceAsm);
             const userGame  = await this.serviceFactory.getUserGameRepository().linkUserToGame(gameId, userId);
             const response = {
                 message: `link user ${userId} to game ${gameId}`,
                 httpCode: 200,
-                data: await gameResourceAsm.toResource(userGame.game)
+                data: await this.gameResourceAsm.toResource(userGame.game)
             };
 
             return (Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response)));
@@ -332,10 +324,9 @@ export class GameServiceImpl implements GameService {
     }
 
     public async findAll(): Promise<SendResource<HttpResponseModel<Array<IGameResource>>>> {
-        const gameResourceAsm = Container.get(GameResourceAsm);
         try {
             const list = await this.serviceFactory.getGameRepository().list();
-            const resources = await gameResourceAsm.toResources(list);
+            const resources = await this.gameResourceAsm.toResources(list);
             const response : HttpResponseModel<Array<IGameResource>> = {
                 httpCode: 200,
                 message: "game list",
@@ -357,11 +348,6 @@ export class GameServiceImpl implements GameService {
     public async findOne(id: number){
         try {
             const game = await this.serviceFactory.getGameRepository().getOne(id);
-            const gameResourceAsm = Container.get(GameResourceAsm);
-            const userResourceAsm = Container.get(UserResourceAsm);
-            const sessionResourceAsm = Container.get(SessionResourceAsm);
-            const streamResourceAsm = Container.get(StreamsResourceAsm);
-            const botResourceAsm = Container.get(BotResourceAsm);
 
             if (!game){
                 const response : HttpResponseModel<IGameResource> = {
@@ -371,15 +357,15 @@ export class GameServiceImpl implements GameService {
         
                 return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));        
             }
-            const resource = await gameResourceAsm.toResource(game);
+            const resource = await this.gameResourceAsm.toResource(game);
             if (await this.serviceFactory.getStreamsRepository().hasStream(id)){
-                await gameResourceAsm.AddStreamResouce(game, resource);
+                await this.gameResourceAsm.AddStreamResouce(game, resource);
             }
             if ((await game.arena)! && !(await this.serviceFactory.getBotsRepository().hasBotsByArena((await game.arena).id))){
                 game.arena.robotArena = [];
             }
             if (await this.serviceFactory.getArenaRepository().hasArena(id)){
-                await gameResourceAsm.AddArenaResource(game, resource);
+                await this.gameResourceAsm.AddArenaResource(game, resource);
             }
             let gameUsers = await game.gameUsers;
             let sessions = await game.sessions;
@@ -391,7 +377,7 @@ export class GameServiceImpl implements GameService {
             }
             for (let gameUser of gameUsers){
                 gameUser.game = game;
-                const player: IPlayerResource = await gameResourceAsm.AddGamesUsersInGameResource(gameUser, resource);
+                const player: IPlayerResource = await this.gameResourceAsm.AddGamesUsersInGameResource(gameUser, resource);
                 let list: Array<RobotsEntity> = await this.serviceFactory.getBotsRepository().search(gameUser.game.id, gameUser.user.id);
                 let sessions = await this.serviceFactory.getSessionRepository().search(gameUser.game.id, gameUser.user.id);
 
@@ -399,7 +385,7 @@ export class GameServiceImpl implements GameService {
                     sessions = [];
                 }
                 if (sessions.length > 0){
-                    player.botContext = sessionResourceAsm.toResource(sessions[0]);
+                    player.botContext = this.sessionResourceAsm.toResource(sessions[0]);
                 }
                 if (!list){
                     list = [];
@@ -414,17 +400,15 @@ export class GameServiceImpl implements GameService {
 
                         stream.s3Url = url;
                     }
-
-                    const botResource = await botResourceAsm.toResource(item);
-
+                    const botResource = await this.botResourceAsm.toResource(item);
                     for (let stream of streams){
-                        streamResources.push(await streamResourceAsm.toResource(stream));
+                        streamResources.push(await this.streamResourceAsm.toResource(stream));
                     }
                     botResources.push(botResource);
-                    botResourceAsm.addStreamResource(botResource, streamResources);
+                    this.botResourceAsm.addStreamResource(botResource, streamResources);
                 }
                 if (botResources.length){
-                    await userResourceAsm.AddBotResource(botResources, player);
+                    await this.userResourceAsm.AddBotResource(botResources, player);
                 }
             }
             const response : HttpResponseModel<IGameResource> = {
@@ -448,8 +432,7 @@ export class GameServiceImpl implements GameService {
     public async linkBotToGame(botId: number, gameId: number){
         try {
             const game = await this.serviceFactory.getBotGameRepository().linkBotToGame(botId, gameId);
-            const gameResourceAsm = Container.get(GameResourceAsm);
-            const resource = await gameResourceAsm.toResource(game);
+            const resource = await this.gameResourceAsm.toResource(game);
             const response: HttpResponseModel<IGameResource> = {
                 httpCode: 200,
                 message: `link bot ${botId} to game ${gameId}`,
