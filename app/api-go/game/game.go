@@ -76,7 +76,7 @@ func GetGameInstance(id string) Game {
 }
 
 func updateGameAPI(game NodeGame) {
-	url := "http://hardwar.ddns.net/api/games/worker_end"
+	url := "http://battlebots.ddns.net/api/games/worker_end"
 	fmt.Println(prefixLog, url)
 
 	requestByte, _ := json.Marshal(game)
