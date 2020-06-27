@@ -147,7 +147,7 @@ export default class GameFrame extends Vue {
   }
 
   public openExternal() {
-    shell.openExternal("https://hardwar.ddns.net");
+    shell.openExternal("https://battlebots.ddns.net");
   }
 }
 </script>

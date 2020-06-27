@@ -178,7 +178,7 @@ export default class Home extends Vue
       this.videoCanvas = this.$refs.videoCanvas as HTMLCanvasElement;
       this.videoCanvas2DContext = this.videoCanvas.getContext('2d');
     
-      // const joinWorkerUri = 'https://hardwar.ddns.net/api/game/join';
+      // const joinWorkerUri = 'https://battlebots.ddns.net/api/game/join';
       // const axios = Axios.create({ headers: { 'Content-Type': 'application/json'} ,
       //   httpsAgent: new https.Agent({ rejectUnauthorized: false })
       // })
@@ -200,8 +200,8 @@ export default class Home extends Vue
       
       const token = "qpsm8m4rvjxjr5h0rsz6";
 
-      const addr_cam = 'wss://hardwar.ddns.net/api/bots/wscam?gameid='+this.ref.gameid+'&playerid=1&token='+token;
-      const addr_ctrl = 'wss://hardwar.ddns.net/api/bots/ws?gameid='+this.ref.gameid+'&playerid=1&token='+token;
+      const addr_cam = 'wss://battlebots.ddns.net/api/bots/wscam?gameid='+this.ref.gameid+'&playerid=1&token='+token;
+      const addr_ctrl = 'wss://battlebots.ddns.net/api/bots/ws?gameid='+this.ref.gameid+'&playerid=1&token='+token;
       
       this.cam(addr_cam);
       this.socket.start(addr_ctrl).onerror = (event) => {
@@ -232,7 +232,7 @@ export default class Home extends Vue
     if (this.ref.gameid == '') {
       return
     }
-      const terminate = 'http://hardwar.ddns.net/api/games/' + this.ref.gameid;
+      const terminate = 'http://battlebots.ddns.net/api/games/' + this.ref.gameid;
       const axios = Axios.create({ headers: { 'Content-Type': 'application/json'} ,
         httpsAgent: new https.Agent({ rejectUnauthorized: false })
       })

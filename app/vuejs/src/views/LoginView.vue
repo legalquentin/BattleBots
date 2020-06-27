@@ -40,7 +40,7 @@ export default class LoginView extends Vue
     private loginClick(): void
     {
         const axios: AxiosInstance = Axios.create({ headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'charset' : 'utf-8' } });
-        axios.post('http://hardwar.ddns.net/users/register', this.nov(this.loginForm))
+        axios.post('http://battlebots.ddns.net/users/register', this.nov(this.loginForm))
             .then(rep => console.log(rep));
     }
 }

@@ -53,7 +53,7 @@ export default class RoomView extends Vue
     }
 
     private createGameButtonClick(): void {
-        this.http.post(`http://hardwar.ddns.net/api/games`, { name: this.gameName })
+        this.http.post(`http://battlebots.ddns.net/api/games`, { name: this.gameName })
             .then(rep => {
                 console.log(rep)
                 this.$router.push({ name: '@player_view', params: { gameData: rep.data } })
