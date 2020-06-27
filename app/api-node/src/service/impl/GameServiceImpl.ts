@@ -26,7 +26,6 @@ import { SessionEntity } from "../../database/entities/SessionEntity";
 import { GameUserEntity } from "../../database/entities/GameUserEntity";
 import { RobotsUserEntity } from "../../database/entities/RobotsUserEntity";
 import { StreamsResourceAsm } from "../../resources/asm/StreamsResourceAsm";
-import { HttpApiServer } from "../../http-api-server";
 
 @Singleton
 export class GameServiceImpl implements GameService {
