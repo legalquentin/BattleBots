@@ -32,6 +32,14 @@ export class RobotsUserRepository extends Repository<RobotsUserEntity>{
         }
     }
 
+    public async saveAll(robotsUser: Array<RobotsUserEntity>){
+        robotsUser.map(async (robotUser) => await this.save(robotUser));
+    }
+
+    public deleteUsers(idList: Array<number>){
+        idList.map(async (id) => await this.deleteByUser(id));
+    }
+
     public async deleteByUser(userId: number){
         try {
             await this.createQueryBuilder().delete().where("user_id = :id", {
