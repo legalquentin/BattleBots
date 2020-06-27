@@ -12,7 +12,7 @@ var Config = Configuration{
 	KeyPath: "/home/pi/BattleBots/app/api-go/",
 	Bots: []game.Bot{{
 		ID:           1,
-		Address:      "192.168.1.66",
+		Address:      "192.168.1.94",
 		Running:      1,
 		Taken:        false,
 		Name:         "Rocinante",
