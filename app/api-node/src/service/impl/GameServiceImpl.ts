@@ -170,9 +170,6 @@ export class GameServiceImpl implements GameService {
             const sessions = tmp.sessions;
             const streams = tmp.streams;
             const params = tmp.params;
-            if (game.status == EGameStatus.ENDED){
-                await this.streamService.uploadAll(streams, params);
-            }
             const bots = tmp.bots;
             const userGames = tmp.userGames;
             let saved = null;
@@ -186,7 +183,10 @@ export class GameServiceImpl implements GameService {
             });
             game.id = saved.id;
             const resource = await this.gameResourceAsm.toResource(saved);
-            if (game.status == EGameStatus.CREATED){
+            if (game.status == EGameStatus.ENDED){
+                await this.streamService.uploadAll(streams, params);
+            }
+            else if (game.status == EGameStatus.CREATED){
                 const r = await this.battleWorkerService.startGoWorker(game);
                 console.log(r);
                 if (!r || !r.token || !r.game) {
