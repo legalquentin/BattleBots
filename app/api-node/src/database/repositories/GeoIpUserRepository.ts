@@ -1,5 +1,5 @@
 import { Repository, EntityRepository, EntityMetadata, EntityManager, getManager, getConnection } from "typeorm";
-import { GeoIpUserEntity } from "../entities/GeoipUserEntity";
+import { GeoIpUserEntity } from "../entities/GeoIpUserEntity";
 import { Singleton } from "typescript-ioc";
 import { connectionName } from "../../service/util/connectionName";
 
