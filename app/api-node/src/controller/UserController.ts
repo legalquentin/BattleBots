@@ -12,7 +12,6 @@ import { Inject } from "typescript-ioc";
 import { Consumes, Produces, Response } from "typescript-rest-swagger";
 import { UserService } from "../service/UserService";
 import { AuthenticationService } from "../service/AuthenticationService";
-//import { PlayerService } from "../service/PlayerService";
 import IGameProfileResource from "../resources/IGameProfileResource";
 import { preRequest } from "../service/interceptors/preRequest/preRequest";
 import { postRequest } from "../service/interceptors/postRequest/postRequest";
@@ -20,6 +19,7 @@ import { ConnectedUserService } from "../service/ConnectedUserService";
 import * as express from "express";
 import IConfig from "../service/IConfig";
 import { ConnectedUserResource } from "../resources/ConnectedUserResource";
+import { decode } from "jsonwebtoken";
 
 @Path('/api/users')
 @PreProcessor(preRequest)
@@ -45,10 +45,14 @@ export class UserController {
     @Path('/login')
     @POST 
     public async loginRoute(user: IUserHttpModel, @ContextRequest req: express.Request): Promise<SendResource<HttpResponseModel<ITokenHttp>>> {
+        const ret:  SendResource<HttpResponseModel<ITokenHttp>> = await this.authService.authenticate(user.username, user.password)
         if (this.config.getLocalAddress() !== req.socket.remoteAddress){
-            await this.linkPosition(req);
+            const data = ret.body.data;
+            const id = this.getId(data);
+
+            await this.linkPosition(id, req);
         }
-        return this.authService.authenticate(user.username, user.password);
+        return (ret);
     }
 
     @Consumes("application/json;charset=UTF-8")
@@ -58,10 +62,21 @@ export class UserController {
     @Path('/login/up')
     @POST 
     public async loginUp(token: ITokenHttp, @ContextRequest req: express.Request): Promise<SendResource<HttpResponseModel<ITokenHttp>>> {
+        const ret : SendResource<HttpResponseModel<ITokenHttp>> = await this.authService.refresh(token.data);
         if (this.config.getLocalAddress() !== req.socket.remoteAddress){
-            await this.linkPosition(req);
+            const data = ret.body.data;
+            const id = this.getId(data);
+
+            await this.linkPosition(id, req);     
         }
-        return this.authService.refresh(token.data);
+        return (ret);
+    }
+
+    public getId(token: ITokenHttp){
+        const data = token.data;
+        const o: any = decode(data);
+
+        return (o.sub);
     }
 
     @Consumes("application/json;charset=UTF-8")
@@ -81,8 +96,8 @@ export class UserController {
     @Response<HttpResponseModel<ITokenHttp>>(400, "request from localhost")
     @Path('/update-position/users')
     @PUT
-    public async linkPosition(@ContextRequest req: express.Request){
-        return (this.connectedUsers.linkPosition(req.user.id, req.socket.remoteAddress));
+    public async linkPosition(id: number, @ContextRequest req: express.Request){
+        return (this.connectedUsers.linkPosition(id, req.socket.remoteAddress));
     }
 
     @Produces("application/json;charset=UTF-8")
