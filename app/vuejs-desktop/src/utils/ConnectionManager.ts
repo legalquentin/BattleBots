@@ -7,7 +7,7 @@ import _get from 'lodash/get';
 export default class ConnectionManager extends Vue {
 
     private config: AxiosRequestConfig = {
-        baseURL: process.env.VUE_APP_API_URL,
+        baseURL: "http://battlebots.ddns.net/api", //process.env.VUE_APP_API_URL,
         timeout: 10000,
         headers: {}
     };
