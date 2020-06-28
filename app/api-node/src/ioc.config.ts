@@ -47,6 +47,8 @@ import { SessionServiceImpl } from './service/impl/SessionServiceImpl';
 import { ConnectedUserRepository } from './database/repositories/ConnectedUserRepository';
 import { ConnectedUserGeoipRepository } from './database/repositories/ConnectedUserGeoipRepository';
 import { GeoIpUserRepository } from './database/repositories/GeoIpUserRepository';
+import { ConnectedUserService } from './service/ConnectedUserService';
+import { ConnectedUserServiceImpl } from './service/impl/ConnectedUserServiceImpl';
 
 const iocConfig =  {
         env: {
@@ -210,6 +212,11 @@ const iocConfig =  {
                     bind: GeoIpUserRepository,
                     to: FakeRepository,
                     scope: Scope.Singleton
+                },
+                {
+                    bind: ConnectedUserService,
+                    to: ConnectedUserServiceImpl,
+                    scope: Scope.Singleton
                 }
             ],
             "production": [
@@ -372,6 +379,11 @@ const iocConfig =  {
                     bind: GeoIpUserRepository,
                     to: GeoIpUserRepository,
                     scope: Scope.Singleton
+                },
+                {
+                    bind: ConnectedUserService,
+                    to: ConnectedUserServiceImpl,
+                    scope: Scope.Singleton
                 }
         ],
         "development": [
@@ -533,6 +545,11 @@ const iocConfig =  {
             {
                 bind: GeoIpUserRepository,
                 to: GeoIpUserRepository,
+                scope: Scope.Singleton
+            },
+            {
+                bind: ConnectedUserService,
+                to: ConnectedUserServiceImpl,
                 scope: Scope.Singleton
             }
         ]

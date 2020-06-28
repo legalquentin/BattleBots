@@ -2150,7 +2150,18 @@
 							"ROLE_USER"
 						]
 					}
-				]
+				],
+				"requestBody": {
+					"content": {
+						"application/json;charset=UTF-8": {
+							"schema": {
+								"type": "number",
+								"format": "double"
+							}
+						}
+					},
+					"required": true
+				}
 			}
 		},
 		"/api/users/": {
