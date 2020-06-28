@@ -7,8 +7,7 @@ import { connectionName } from "../src/service/util/connectionName";
 import { ApiServerFactory } from './api-server-factory';
 
 export async function start(): Promise<ApiServer> {
-    // const mongoConnector = new MongoConnector();
-    // TODO : Create config files (db settings and entities declarations)
+
     return new Promise((resolve, reject) => {
         createConnection(connectionName()).then(async (connection: Connection) => {
             const factory = new ApiServerFactory();

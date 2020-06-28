@@ -1,7 +1,0 @@
-POST 	Login -> Recoit un nom de compte et un mot de passe. Renvoi un JWT
-POST 	Register -> Recoit nom de compte, mot de passe, e-mail etc. 
-GET	Profile -> Recoit (ou non) userId. Si userId (/profile/:userid) on retourne les données de l'user, sinon celle de l'utilisateur dans le JWT
-GET	Users -> retourne la liste des utilisateurs et les infos (pour le moment le minimum)
-
-POST	Game -> Créer ue partie. Représentée par un table Game et liée à l'utilisateur JWT
-POST 	JoinGame -> (/game/join/:gameId) Ajoute un utilisateur à une game existante

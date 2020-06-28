@@ -34,7 +34,7 @@ export abstract class ApiServer {
         Container.environment(connectionName());
         Container.configure(iocConfig);
         this.config();
-        Server.loadServices(this.app, 'controller/**/*.ts', __dirname);
+        Server.loadServices(this.app, 'controller/**/*.{ts,js}', __dirname);
         Server.swagger(this.app, { 
             swaggerUiOptions: {
                 customSiteTitle: 'BattleBots'
@@ -46,7 +46,7 @@ export abstract class ApiServer {
         });
         this.app.use("*", function (req, res, next) {
             if (!res.headersSent) {
-              //  res.render("App/index.html"); 
+                res.render("App/index.html"); 
             }
             next();
         });
