@@ -89,7 +89,7 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 			return
 		}
 		// // write a message to the bot [conn]
-		log.Println(prefixLog, "Message from bot", websocket.TextMessage)
+		// log.Println(prefixLog, "Message from bot", websocket.TextMessage)
 		// if err := conn.WriteMessage(websocket.TextMessage, p); err != nil {
 		// 	log.Println(prefixWarn, err)
 		// 	return
