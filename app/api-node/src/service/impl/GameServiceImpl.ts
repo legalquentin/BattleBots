@@ -147,6 +147,7 @@ export class GameServiceImpl implements GameService {
     public async saveOrUpdate(game: IGameResource) {
         game.status = game.status ? game.status : EGameStatus.CREATED;
         try {
+            console.log("DEBUG - 1")
             const httpCode = game.id ? 200 : 201;
             if (game.status == EGameStatus.CREATED && !game.createdAt){
                 game.createdAt = new Date().getTime();
@@ -157,17 +158,21 @@ export class GameServiceImpl implements GameService {
             else if (game.status == EGameStatus.ENDED && !game.endedAt){
                 game.endedAt = new Date().getTime();
             }
+
+            console.log("DEBUG - 2")
             const entity = await this.gameResourceAsm.toEntity(game);
             let playersResource = game.players;
             if (!playersResource){
                 playersResource = [];
             }
+            console.log("DEBUG - 3")
             const idList = playersResource.map(p => p.id);
             await this.serviceFactory.getBotUserRepository().deleteUsers(idList);
             const botUsers = await this.mapAsBotUsers(playersResource);
             await this.serviceFactory.getBotUserRepository().saveAll(botUsers);
             const { sessions, streams, params, bots, userGames } = await this.mapPlayerResources(playersResource);
             let saved = null;
+            console.log("DEBUG - 4")
             await this.serviceFactory.getGameRepository().manager.transaction(async (manager) => {
                 saved = await this.serviceFactory.getGameRepository().saveOrUpdate(manager, entity);
                     
@@ -176,13 +181,17 @@ export class GameServiceImpl implements GameService {
                 await this.serviceFactory.getGameRepository().AddSessionInGame(manager, saved, sessions);
                 await this.serviceFactory.getGameRepository().AddUserGame(manager, saved, userGames);
             });
+            console.log("DEBUG - 5")
             game.id = saved.id;
             const resource = await this.gameResourceAsm.toResource(saved);
             if (game.status == EGameStatus.ENDED){
                 await this.streamService.uploadAll(streams, params);
             }
+            console.log("DEBUG - 6", game)
             if (game.status == EGameStatus.CREATED){
+                console.log("DEBUG - 7")
                 const r = await this.battleWorkerService.startGoWorker(game);
+                console.log(r)
                 console.log(r);
                 if (!r || !r.token || !r.game) {
                     const response: HttpResponseModel<IGameResource> = {
@@ -215,7 +224,6 @@ export class GameServiceImpl implements GameService {
                 httpCode: 400,
                 message: "Bad Request"
             };
-
             return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));
         }
     }
