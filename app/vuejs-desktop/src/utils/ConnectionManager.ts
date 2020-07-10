@@ -42,6 +42,7 @@ export default class ConnectionManager extends Vue {
 
                 return reject("LoginFrame");
             }
+            // Todo 401
             if (errMessage === 403 && this.getJwt()) {
                 this.refreshToken().then((response: AxiosResponse) => {
                     const jwt = _get(response, 'data.data.data');

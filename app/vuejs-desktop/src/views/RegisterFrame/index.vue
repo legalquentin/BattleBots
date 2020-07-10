@@ -18,6 +18,7 @@ export default class RegisterFrame extends Vue {
         email: '',
         address: '',
         password: '',
+        password2: '',
     };
     
     async register(): Promise<void> {

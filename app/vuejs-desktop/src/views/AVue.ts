@@ -1,5 +1,6 @@
 import { Vue, Watch } from 'vue-property-decorator';
 
+// AbstractVue
 export default abstract class AVue extends Vue {
     protected abstract displayed(): void;
   
