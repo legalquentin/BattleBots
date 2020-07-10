@@ -168,8 +168,11 @@ export class GameServiceImpl implements GameService {
             console.log("DEBUG - 3")
             const idList = playersResource.map(p => p.id);
             await this.serviceFactory.getBotUserRepository().deleteUsers(idList);
+            console.log("DEBUG 3'")
             const botUsers = await this.mapAsBotUsers(playersResource);
+            console.log("DEBUG 3''")
             await this.serviceFactory.getBotUserRepository().saveAll(botUsers);
+            console.log("DEBUG 3'''") 
             const { sessions, streams, params, bots, userGames } = await this.mapPlayerResources(playersResource);
             let saved = null;
             console.log("DEBUG - 4")
