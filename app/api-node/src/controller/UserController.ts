@@ -64,10 +64,12 @@ export class UserController {
     public async loginUp(token: ITokenHttp, @ContextRequest req: express.Request): Promise<SendResource<HttpResponseModel<ITokenHttp>>> {
         const ret : SendResource<HttpResponseModel<ITokenHttp>> = await this.authService.refresh(token.data);
         if (this.config.getLocalAddress() !== req.socket.remoteAddress){
-            const data = ret.body.data;
-            const id = this.getId(data);
-
-            await this.linkPosition(id, req);     
+            if (ret && ret.body){
+                const data = ret.body.data;
+                const id = this.getId(data);
+    
+                await this.linkPosition(id, req);     
+            }
         }
         return (ret);
     }
