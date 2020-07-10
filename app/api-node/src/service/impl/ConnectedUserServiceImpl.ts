@@ -9,7 +9,7 @@ import HttpResponseModel from "../../resources/HttpResponseModel";
 import IUserResource from "../../resources/IUserResource";
 import { GeoIpService } from "../GeoIpService";
 import { GeoIpUserRepository } from "../../database/repositories/GeoIpUserRepository";
-import { GeoIpUserEntity } from "../../database/entities/GeoipUserEntity";
+import { GeoIpUserEntity } from "../../database/entities/GeoIpUserEntity";
 import { ConnectedUserGeoipRepository } from "../../database/repositories/ConnectedUserGeoipRepository";
 import { ConnectedUserGeoipEntity } from "../../database/entities/ConnectedUserGeoipEntity";
 import { ConnectedUserResource } from "../../resources/ConnectedUserResource";
