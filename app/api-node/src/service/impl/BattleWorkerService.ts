@@ -72,7 +72,7 @@ export default class BattleWorkerService implements IBattleWorkerService {
                     url: `https://${addr}:${port}/api/game/create`
                 }, (err, res, body) => {
                     console.log("###### Game Created #######");
-                    rslv({ game: body, token: game.token });
+                    rslv({ game: body, token: game.token, err: err, res: res});
                 });
             });
             return p;
