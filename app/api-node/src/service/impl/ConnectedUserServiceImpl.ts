@@ -56,6 +56,11 @@ export class ConnectedUserServiceImpl extends ConnectedUserService {
             return (response);
         }
         const geoip = await this.geoIpService.findByIp(ipAddress);
+        if (geoip == null)
+        {
+            console.log("geoip is null");
+            return;
+        }
         const connectedUserLatest = await this.connectedUserRepository.getLatested(user.id);
         let flagGeoIpUser = false;
 

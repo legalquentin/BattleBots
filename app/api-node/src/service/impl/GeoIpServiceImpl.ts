@@ -40,6 +40,9 @@ export class GeoIpServiceImpl implements GeoIpService{
 
     public async getInfo(currentIp: string): Promise<GeoIpEntity> {
 	    const response = await axios.get(`${this.config.getGeoIpService()}=${currentIp}`);
+        if (response.status != 200){
+            return null;
+        }
         const geoipresourceRaw = response.data as GeoIpResourceRaw;
         const geoipresource = geoipresourceRaw.data;
 	    const entity = this.geoipresourceAsm.toEntity(geoipresource);
