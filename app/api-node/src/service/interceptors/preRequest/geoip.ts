@@ -15,10 +15,11 @@ export async function preRequestGeoIp(req: any){
             if (geoip == null){
                 geoip = await geoIpService.getInfo(req.socket.remoteAddress);
             }
-            await geoIpService.save(geoip);
+            console.log(geoip);
         }
     }
     catch (e){
+        console.log(e.message);
         fs.appendFileSync(`./log.txt`, `log - preRequest - error - ${e.message}\n`);
     }
 }
