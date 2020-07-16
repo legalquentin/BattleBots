@@ -59,7 +59,12 @@ export class ConnectedUserServiceImpl extends ConnectedUserService {
         if (geoip == null)
         {
             console.log("geoip is null");
-            return;
+            const response : HttpResponseModel<IUserResource> = {
+                httpCode: 400,
+                message: "geoip empty"
+            };
+
+            return (response);
         }
         const connectedUserLatest = await this.connectedUserRepository.getLatested(user.id);
         let flagGeoIpUser = false;
