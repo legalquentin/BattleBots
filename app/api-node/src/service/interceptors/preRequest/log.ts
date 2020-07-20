@@ -19,7 +19,7 @@ export async function preRequestLog(req: express.Request){
     }
     if (req.user){
         try {
-            const user = await userRepository.findOne(req.user.id);
+            const user = await userRepository.findOne(req.user['id']);
 
             log.user = user;
         }

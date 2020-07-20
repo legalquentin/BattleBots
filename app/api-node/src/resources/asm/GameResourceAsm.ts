@@ -118,6 +118,7 @@ export class GameResourceAsm {
 
         for (let game of games){
             const resource = await this.toResource(game);
+
             resources.push(resource);
         }
         return (resources);

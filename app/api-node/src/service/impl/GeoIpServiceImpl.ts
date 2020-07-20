@@ -6,6 +6,7 @@ import axios from "axios";
 import IConfig from "../IConfig";
 import { GeoIpResourceRaw } from "../../resources/GeoIpResourceRaw";
 import { GeoIpResourceAsm } from "../../resources/asm/GeoIpResourceAsm";
+import { checkIp, Address } from "check-ip";
 
 @Singleton
 export class GeoIpServiceImpl implements GeoIpService{
@@ -39,10 +40,14 @@ export class GeoIpServiceImpl implements GeoIpService{
     }
 
     public async getInfo(currentIp: string): Promise<GeoIpEntity> {
-        console.log(currentIp);
-        const response = await axios.get(`${this.config.getGeoIpService()}=${currentIp}`);
-        console.log(response);
-        console.log(response.data);
+        const address: Address = checkIp(currentIp);
+        let response = null;
+        if (address.isPublicIp){
+            response = await axios.get(`${this.config.getGeoIpService()}/lookat?ip=${currentIp}`);
+        }
+        else {
+            response = await axios.get(`${this.config.getGeoIpService()}/lookup`);
+        }
         if (response.status !== 200){
             return null;
         }

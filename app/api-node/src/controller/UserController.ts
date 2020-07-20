@@ -90,7 +90,7 @@ export class UserController {
     @Path('/logout')
     @POST 
     public async logout(@ContextRequest req: Express.Request): Promise<SendResource<HttpResponseModel<ITokenHttp>>> {
-        return this.authService.logout(req.user.id);
+        return this.authService.logout(req.user['id']);
     }
 
     @Consumes("application/json;charset=UTF-8")

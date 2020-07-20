@@ -16,6 +16,10 @@
     "skipLibCheck": false,
     "sourceMap": true,
     "strictNullChecks": false,
+    "typeRoots": [
+      "local/@types",
+      "node_modules/@types"
+    ]
   },
   "include": [
     "src/**/*.ts",

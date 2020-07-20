@@ -158,7 +158,6 @@ export class GameServiceImpl implements GameService {
             else if (game.status == EGameStatus.ENDED && !game.endedAt){
                 game.endedAt = new Date().getTime();
             }
-
             console.log("DEBUG - 2")
             const entity = await this.gameResourceAsm.toEntity(game);
             let playersResource = game.players;

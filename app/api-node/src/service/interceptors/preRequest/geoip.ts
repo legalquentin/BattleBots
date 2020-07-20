@@ -15,7 +15,6 @@ export async function preRequestGeoIp(req: any){
             if (geoip == null){
                 geoip = await geoIpService.getInfo(req.socket.remoteAddress);
             }
-            console.log(geoip);
         }
     }
     catch (e){
