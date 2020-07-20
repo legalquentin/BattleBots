@@ -222,6 +222,7 @@ export class GameServiceImpl implements GameService {
             }     
         }
         catch (e){
+            console.log(e.message);
             const response: HttpResponseModel<IGameResource> = {
                 httpCode: 400,
                 message: "Bad Request"
