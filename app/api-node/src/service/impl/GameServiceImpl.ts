@@ -28,6 +28,8 @@ import { RobotsUserEntity } from "../../database/entities/RobotsUserEntity";
 import { StreamsResourceAsm } from "../../resources/asm/StreamsResourceAsm";
 import UserEntity from "../../database/entities/UserEntity";
 import { ConnectedUserEntity } from "../../database/entities/ConnectedUserEntity";
+import { notEqual } from "assert";
+import { Not } from "typeorm";
 
 @Singleton
 export class GameServiceImpl implements GameService {
@@ -327,7 +329,9 @@ export class GameServiceImpl implements GameService {
 
     public async findAll(): Promise<SendResource<HttpResponseModel<Array<IGameResource>>>> {
         try {
-            const list = await this.serviceFactory.getGameRepository().list();
+            const list = await this.serviceFactory.getGameRepository().find({
+                game_status: Not(EGameStatus.DELETED)
+            });
             const resources = await this.gameResourceAsm.toResources(list);
             const response : HttpResponseModel<Array<IGameResource>> = {
                 httpCode: 200,
