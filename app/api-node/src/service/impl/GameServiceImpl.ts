@@ -61,27 +61,6 @@ export class GameServiceImpl implements GameService {
     @Inject
     private streamResourceAsm: StreamsResourceAsm;
 
-    public async updateByWorker(game: IGameResource) {
-        if (!game.id){
-            const response: HttpResponseModel<IGameResource> = {
-                httpCode: 400,
-                data: null,
-                message: "ERROR"
-            };
-
-            return new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response);
-        }
-        const entity = await this.gameResourceAsm.toEntity(game);
-        const manager = this.serviceFactory.getGameRepository().manager;
-        const updated = await this.serviceFactory.getGameRepository().saveOrUpdate(manager, entity);
-        const response : HttpResponseModel<IGameResource> = {
-            httpCode: 200,
-            data: await this.gameResourceAsm.toResource(updated),
-            message: "game updated"
-        };
-        return new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response);
-    }
-
     private async mapPlayerResources(playerResources: Array<IPlayerResource>){
         const userGames = [];
         const bots = [];
