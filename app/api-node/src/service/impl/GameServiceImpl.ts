@@ -79,7 +79,7 @@ export class GameServiceImpl implements GameService {
             const botUser = new RobotsUserEntity();    
             const robotEntity : RobotsEntity = await this.botResourceAsm.toEntity(playerResource.botSpecs);
             const playerEntity : UserEntity = await this.playerResourceAsm.toEntity(playerResource);
-            const connected: ConnectedUserEntity = await this.serviceFactory.getUserConnectedRepository().getLatested(userGame.user.id);
+            const connected: ConnectedUserEntity = await this.serviceFactory.getUserConnectedRepository().getLatested(playerEntity.id);
             const resolve_path = `${playerResource.stream}`;
             const o = path.parse(resolve_path);
             const param :any= {};
