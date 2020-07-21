@@ -173,6 +173,7 @@ export class GameServiceImpl implements GameService {
                 await this.serviceFactory.getGameRepository().AddSessionInGame(manager, sessions);
             });
             console.log("DEBUG - 5");
+            console.log(saved);
             game.id = saved.id;
             const resource = await this.gameResourceAsm.toResource(saved);
             if (game.status == EGameStatus.ENDED){
