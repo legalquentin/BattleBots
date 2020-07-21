@@ -181,9 +181,11 @@ export class ConnectedUserServiceImpl extends ConnectedUserService {
     
     async refreshLogin(userId: number) {
         const connectedUser = await this.connectedUserRepository.getLatested(userId);
-        const endTime = connectedUser.endConnected.getTime();
-        const step = parseInt(this.config.getExpirationTime(), 10) * 1000;
+        console.log(connectedUser);
+        const endTime = connectedUser.endConnected.getTime() * 1000;
+        const step = parseInt(this.config.getExpirationTime(), 10);
         connectedUser.endConnected = new Date(endTime + step);
+        console.log(connectedUser);
         await this.connectedUserRepository.update(connectedUser.id, connectedUser);
         return (true)
     }
