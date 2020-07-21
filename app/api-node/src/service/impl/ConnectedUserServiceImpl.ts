@@ -50,7 +50,6 @@ export class ConnectedUserServiceImpl extends ConnectedUserService {
         const geoip = await this.geoIpService.findByIp(ipAddress);
         if (geoip == null)
         {
-            console.log("geoip is null");
             const response : HttpResponseModel<IUserResource> = {
                 httpCode: 400,
                 message: "geoip empty"
