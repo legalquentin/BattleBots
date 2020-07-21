@@ -122,6 +122,7 @@ export class GameServiceImpl implements GameService {
         game.status = game.status ? game.status : EGameStatus.CREATED;
         try {
             console.log("DEBUG - 1");
+            console.log(game);
             const httpCode = game.id ? 200 : 201;
             if (game.status == EGameStatus.CREATED && !game.createdAt){
                 game.createdAt = new Date().getTime();
