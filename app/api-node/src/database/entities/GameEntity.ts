@@ -3,7 +3,6 @@ import { ArenaEntity } from "./ArenaEntity";
 import { RobotGameEntity } from "./RobotGameEntity";
 import { StreamsEntity } from "./StreamsEntity";
 import { EGameStatus } from "../../resources/EGameStatus";
-import { GameInfoEntity } from "./GameInfoEntity";
 import { GameUserEntity } from "./GameUserEntity";
 import { SessionEntity } from "./SessionEntity";
 
@@ -48,9 +47,6 @@ export class GameEntity  {
         lazy: true
     })
     public streams?: Array<StreamsEntity>;
-
-    @OneToOne(type => GameInfoEntity, gameInfoEntity => gameInfoEntity.game)
-    public info: GameInfoEntity
 
     @OneToMany(type => GameUserEntity, gameUser => gameUser.game, {
         lazy: true

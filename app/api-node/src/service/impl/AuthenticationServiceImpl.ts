@@ -38,7 +38,7 @@ export class AuthenticationServiceImpl implements AuthenticationService {
      * The user have 5 minutes for refresh the token
      * 
      */
-    public refresh(token: string) {
+    public async refresh(token: string) {
         try {
             const o: any = decode(token);
             const creationTime = moment(o.creationTime);
@@ -58,7 +58,7 @@ export class AuthenticationServiceImpl implements AuthenticationService {
                 algorithm: "HS512"
             });
             if (process.env.NODE_ENV != "test"){
-                this.connectedUsers.refreshLogin(parseInt(o.sub, 10));
+                await this.connectedUsers.refreshLogin(parseInt(o.sub, 10));
             }
             const response : HttpResponseModel<ITokenHttp> = {
                 httpCode: 200,

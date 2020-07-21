@@ -2,7 +2,6 @@ import { Column, Entity, OneToMany } from 'typeorm';
 import { AbstractEntity } from './AbstractEntity';
 import { LogEntity } from './LogEntity';
 import { ERolesStatus } from '../../resources/ERolesStatus';
-import { GameInfoEntity } from './GameInfoEntity';
 import { RobotsUserEntity } from './RobotsUserEntity';
 import { GameUserEntity } from './GameUserEntity';
 import { SessionEntity } from './SessionEntity';
@@ -38,21 +37,10 @@ export default class UserEntity extends AbstractEntity {
     })
     public logs?: Array<LogEntity>;
 
-
     @OneToMany(type => RobotsUserEntity, robotUserEntity => robotUserEntity.user, {
         lazy: true
     })
     public robotsUser?: Array<RobotsUserEntity>;
-
-    @OneToMany(type => GameInfoEntity, gameInfoEntity => gameInfoEntity.winner, {
-        lazy: true
-    })
-    public infoWinner?: Array<GameInfoEntity>;
-
-    @OneToMany(type => GameInfoEntity, gameInfoEntity => gameInfoEntity.loser, {
-        lazy: true
-    })
-    public infoLoser?: Array<GameInfoEntity>;
 
     @OneToMany(type => GameUserEntity, gameUserEntity => gameUserEntity.user, {
         lazy: true

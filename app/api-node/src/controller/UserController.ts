@@ -17,7 +17,6 @@ import { preRequest } from "../service/interceptors/preRequest/preRequest";
 import { postRequest } from "../service/interceptors/postRequest/postRequest";
 import { ConnectedUserService } from "../service/ConnectedUserService";
 import * as express from "express";
-import IConfig from "../service/IConfig";
 import { ConnectedUserResource } from "../resources/ConnectedUserResource";
 import { decode } from "jsonwebtoken";
 
@@ -35,9 +34,6 @@ export class UserController {
     @Inject
     private authService: AuthenticationService;
 
-    @Inject
-    private config: IConfig;
-
     @Consumes("application/json;charset=UTF-8")
     @Produces("application/json;charset=UTF-8")
     @Response<HttpResponseModel<ITokenHttp>>(200, "User find")
@@ -46,14 +42,10 @@ export class UserController {
     @POST 
     public async loginRoute(user: IUserHttpModel, @ContextRequest req: express.Request): Promise<SendResource<HttpResponseModel<ITokenHttp>>> {
         const ret:  SendResource<HttpResponseModel<ITokenHttp>> = await this.authService.authenticate(user.username, user.password)
-        if (this.config.getLocalAddress() !== req.socket.remoteAddress 
-        && ret.body 
-        && ret.body.data){
-            const data = ret.body.data;
-            const id = this.getId(data);
-
-            await this.linkPosition(id, req);
-        }
+        const data = ret.body.data;
+        const id = this.getId(data);
+    
+        await this.linkPosition(id, req);
         return (ret);
     }
 
@@ -65,14 +57,10 @@ export class UserController {
     @POST 
     public async loginUp(token: ITokenHttp, @ContextRequest req: express.Request): Promise<SendResource<HttpResponseModel<ITokenHttp>>> {
         const ret : SendResource<HttpResponseModel<ITokenHttp>> = await this.authService.refresh(token.data);
-        if (this.config.getLocalAddress() !== req.socket.remoteAddress){
-            if (ret && ret.body){
-                const data = ret.body.data;
-                const id = this.getId(data);
-    
-                await this.linkPosition(id, req);     
-            }
-        }
+        const data = ret.body.data;
+        const id = this.getId(data);
+
+        await this.linkPosition(id, req);     
         return (ret);
     }
 

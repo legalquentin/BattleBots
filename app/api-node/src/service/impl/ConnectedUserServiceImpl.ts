@@ -47,14 +47,6 @@ export class ConnectedUserServiceImpl extends ConnectedUserService {
 
     async linkPosition(userId: number, ipAddress: string) {
         const user = await this.userRepository.findOne(userId);
-        if (ipAddress == this.config.getLocalAddress()){
-            const response : HttpResponseModel<IUserResource> = {
-                httpCode: 400,
-                message: "request from localhost"
-            };
-
-            return (response);
-        }
         const geoip = await this.geoIpService.findByIp(ipAddress);
         if (geoip == null)
         {
