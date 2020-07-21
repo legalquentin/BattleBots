@@ -202,6 +202,7 @@ export class ConnectedUserServiceImpl extends ConnectedUserService {
             return (response);
         }
         catch (e){
+            console.log(e.message);
             const response: HttpResponseModel<ConnectedUserResource> = {
                 httpCode: 400,
                 message: "bad request"
