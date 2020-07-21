@@ -28,7 +28,6 @@ import { RobotsUserEntity } from "../../database/entities/RobotsUserEntity";
 import { StreamsResourceAsm } from "../../resources/asm/StreamsResourceAsm";
 import UserEntity from "../../database/entities/UserEntity";
 import { ConnectedUserEntity } from "../../database/entities/ConnectedUserEntity";
-import { notEqual } from "assert";
 import { Not } from "typeorm";
 
 @Singleton
