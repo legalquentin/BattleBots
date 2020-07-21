@@ -7,7 +7,6 @@ import IConfig from "../IConfig";
 import ITokenHttp from "../../resources/ITokenHttp";
 import HttpResponseModel from "../../resources/HttpResponseModel";
 import { SendResource } from "../../../lib/ReturnExtended";
-import * as moment from "moment";
 import { ConnectedUserService } from "../ConnectedUserService";
 import IUserResource from "../../resources/IUserResource";
 
