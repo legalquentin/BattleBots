@@ -6,7 +6,7 @@ import axios from "axios";
 import IConfig from "../IConfig";
 import { GeoIpResourceRaw } from "../../resources/GeoIpResourceRaw";
 import { GeoIpResourceAsm } from "../../resources/asm/GeoIpResourceAsm";
-import { checkIp, Address } from "check-ip";
+import checkIp, { Address } from "check-ip";
 
 @Singleton
 export class GeoIpServiceImpl implements GeoIpService{
