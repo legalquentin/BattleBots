@@ -181,7 +181,7 @@ export class GameServiceImpl implements GameService {
             if (game.status == EGameStatus.CREATED){
                 console.log("DEBUG - 7");
                 const r = await this.battleWorkerService.startGoWorker(game);
-                if (!r || !r.token || !r.game) {
+                if (!r || !r.token || !r.secret) {
                     const response: HttpResponseModel<IGameResource> = {
                         httpCode: 500,
                         message: JSON.stringify(r)
