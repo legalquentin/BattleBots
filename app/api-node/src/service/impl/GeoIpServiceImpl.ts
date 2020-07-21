@@ -7,6 +7,7 @@ import IConfig from "../IConfig";
 import { GeoIpResourceRaw } from "../../resources/GeoIpResourceRaw";
 import { GeoIpResourceAsm } from "../../resources/asm/GeoIpResourceAsm";
 import * as checkIp  from "check-ip";
+import { GeoIpUserEntity } from "../../database/entities/GeoIpUserEntity";
 
 @Singleton
 export class GeoIpServiceImpl implements GeoIpService{
@@ -82,7 +83,7 @@ export class GeoIpServiceImpl implements GeoIpService{
         }
     }
     public list(): Promise<GeoIpEntity[]> {
-        return (this.repository.createQueryBuilder("geoip").leftJoinAndSelect("geoip.user", "user").getMany());
+        return (this.repository.createQueryBuilder("geoip").leftJoinAndSelect(GeoIpUserEntity, "geoip_user", "geoip_user.geoip_id = geoip.id").leftJoinAndSelect("geoip_user.user", "user").getMany());
     }
 
     public findOne(id: number): Promise<GeoIpEntity> {
