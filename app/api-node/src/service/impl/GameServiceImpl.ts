@@ -76,7 +76,8 @@ export class GameServiceImpl implements GameService {
             const userGame = new GameUserEntity();
             const session = new SessionEntity();
             const streamEntity = new StreamsEntity();
-            const botUser = new RobotsUserEntity();    
+            const botUser = new RobotsUserEntity();   
+            console.log(playerResource); 
             const robotEntity : RobotsEntity = await this.botResourceAsm.toEntity(playerResource.botSpecs);
             const playerEntity : UserEntity = await this.playerResourceAsm.toEntity(playerResource);
             const connected: ConnectedUserEntity = await this.serviceFactory.getUserConnectedRepository().getLatested(playerEntity.id);
