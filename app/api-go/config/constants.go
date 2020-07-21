@@ -11,7 +11,7 @@ var Config = Configuration{
 	Env:     "default",
 	KeyPath: "/home/pi/BattleBots/app/api-go/",
 	Bots: []game.Bot{{
-		ID:           1,
+		ID:           2,
 		Address:      "192.168.1.94",
 		Running:      1,
 		Taken:        false,

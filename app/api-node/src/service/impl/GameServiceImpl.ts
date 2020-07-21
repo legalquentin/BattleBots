@@ -85,6 +85,7 @@ export class GameServiceImpl implements GameService {
             const o = path.parse(resolve_path);
             const param :any= {};
 
+            await this.serviceFactory.getBotsRepository().save(robotEntity);
             botUser.user = playerEntity;
             botUser.robot = robotEntity;
             botGame.bot = robotEntity;
@@ -213,7 +214,7 @@ export class GameServiceImpl implements GameService {
             }     
         }
         catch (e){
-            console.log(e.message);
+            console.log(e);
             const response: HttpResponseModel<IGameResource> = {
                 httpCode: 400,
                 message: "Bad Request"
