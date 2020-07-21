@@ -17,9 +17,15 @@ export class ConnectedUserRepository extends Repository<ConnectedUserEntity> {
     }
 
     async getLatested(userId: number){
-        const list = await this.createQueryBuilder("conn").where("conn.user_id = :id", {
+        const list = await this.createQueryBuilder("conn")
+        .leftJoinAndSelect("conn.user", "user")
+        .leftJoinAndSelect("conn.connectedUserGeoIp", "connectedUserGeoIp")
+        .leftJoinAndSelect("connectedUserGeoIp.geoip", "geoip")
+        .where("conn.user_id = :id", {
             "id": userId
-        }).orderBy("conn.id", "DESC").getMany();
+        })
+        .orderBy("conn.id", "DESC")
+        .getMany();
 
         if (list.length) {
             return (list[0]);
