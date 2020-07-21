@@ -76,7 +76,7 @@ export class AuthenticationServiceImpl implements AuthenticationService {
             return (response);
         }
     }
-    
+
     public async authenticate(username: string, password: string){
         try {
             const user = await this.factory.getUserRepository().findOne({
