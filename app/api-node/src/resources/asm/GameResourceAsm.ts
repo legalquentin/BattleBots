@@ -10,7 +10,6 @@ import { PlayerResourceAsm } from "./PlayerResourceAsm";
 export class GameResourceAsm {
 
     public async toEntity(game: IGameResource){
-        const playerResourceAsm = Container.get(PlayerResourceAsm);
         const entity = new GameEntity();
 
         entity.id = game.id;
