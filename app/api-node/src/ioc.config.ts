@@ -36,9 +36,6 @@ import BattleWorkerService from './service/impl/BattleWorkerService';
 import { GeoIpRepository } from './database/repositories/GeoIpRepository';
 import { GeoIpService } from "./service/GeoIpService";
 import { GeoIpServiceImpl } from "./service/impl/GeoIpServiceImpl";
-import { GameInfoService } from './service/GameInfoService';
-import { GameInfoServiceImpl } from './service/impl/GameInfoServiceImpl';
-import { GameInfoRepository } from './database/repositories/GameInfoRepository';
 import { RobotsUserRepository } from './database/repositories/RobotsUserRepository';
 import { UserGameRepository } from './database/repositories/UserGameRepository';
 import { SessionRepository } from './database/repositories/SessionRepository';
@@ -176,16 +173,6 @@ const iocConfig =  {
                 {
                     bind: GeoIpService,
                     to: GeoIpServiceImpl,
-                    scope: Scope.Singleton
-                },
-                {
-                    bind: GameInfoRepository,
-                    to: FakeRepository,
-                    scope: Scope.Singleton
-                },
-                {
-                    bind: GameInfoService,
-                    to: GameInfoServiceImpl,
                     scope: Scope.Singleton
                 },
                 {
@@ -333,16 +320,6 @@ const iocConfig =  {
                 {
                     bind: GeoIpService,
                     to: GeoIpServiceImpl,
-                    scope: Scope.Singleton
-                },
-                {
-                    bind: GameInfoService,
-                    to: GameInfoServiceImpl,
-                    scope: Scope.Singleton
-                },
-                {
-                    bind: GameInfoRepository,
-                    to: GameInfoRepository,
                     scope: Scope.Singleton
                 },
                 {
@@ -500,16 +477,6 @@ const iocConfig =  {
             {
                 bind: GeoIpService,
                 to: GeoIpServiceImpl,
-                scope: Scope.Singleton
-            },
-            {
-                bind: GameInfoService,
-                to: GameInfoServiceImpl,
-                scope: Scope.Singleton
-            },
-            {
-                bind: GameInfoRepository,
-                to: GameInfoRepository,
                 scope: Scope.Singleton
             },
             {

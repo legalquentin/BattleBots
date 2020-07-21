@@ -6,8 +6,6 @@ import { postRequest } from "../service/interceptors/postRequest/postRequest";
 import { IGameResource } from "../resources/IGameResource";
 import HttpResponseModel from "../resources/HttpResponseModel";
 import { Produces, Response, Consumes } from "typescript-rest-swagger";
-import { IGameInfoResource } from "../resources/IGameInfoResource";
-import { GameInfoService } from "../service/GameInfoService";
 import { EGameStatus } from "../resources/EGameStatus";
 
 @Path("/api/games")
@@ -17,9 +15,6 @@ export class GameController {
 
     @Inject
     private gameService: GameService;
-
-    @Inject
-    private gameInfoService: GameInfoService;
 
     @POST
     @Path("/")
@@ -156,7 +151,6 @@ export class GameController {
         return ( this.gameService.linkArenaToGame(arenaId, gameId));
     }
 
-
     @PUT
     @Path("/join/:gameId")
     @Security("ROLE_USER", "Bearer")
@@ -168,24 +162,4 @@ export class GameController {
         return (this.gameService.joinGame(parseInt(gameId), req.user.id));
     }
 
-
-    @GET
-    @Path("/worker/info")
-    @Security("ROLE_USER", "Bearer")
-    @Produces("application/json;charset=UTF-8")
-    @Response<HttpResponseModel<IGameInfoResource[]>>(200)
-    @Response<HttpResponseModel<IGameInfoResource[]>>(400)
-    public async gameInfoList(){
-        return (this.gameInfoService.list());
-    }
-
-    @GET
-    @Path("/worker/info/:id")
-    @Security("ROLE_USER", "Bearer")
-    @Produces("application/json;charset=UTF-8")
-    @Response<HttpResponseModel<IGameInfoResource>>(200)
-    @Response<HttpResponseModel<IGameInfoResource>>(400)
-    public async gameInfoDetails(@PathParam("id") id: number){
-        return (this.gameInfoService.findOne(id));
-    }
 }

@@ -145,7 +145,6 @@ export abstract class ApiServer {
             const user = await this.userRepository.findOne(parseInt(payload.sub, 10));
 
             if (!user){
-
                 done(null, null, 401);
             }
             else {
