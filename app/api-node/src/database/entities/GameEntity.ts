@@ -1,4 +1,4 @@
-import { Entity, Column, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ArenaEntity } from "./ArenaEntity";
 import { RobotGameEntity } from "./RobotGameEntity";
 import { StreamsEntity } from "./StreamsEntity";
