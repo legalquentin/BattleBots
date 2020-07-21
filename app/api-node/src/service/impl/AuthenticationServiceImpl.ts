@@ -41,18 +41,6 @@ export class AuthenticationServiceImpl implements AuthenticationService {
     public async refresh(token: string) {
         try {
             const o: any = decode(token);
-            const creationTime = moment(o.creationTime);
-            const exp2 = creationTime.add({
-                "seconds": parseInt(this.config.getExpirationTime()) + (5 * 60)
-            });
-
-            if (moment().isAfter(exp2)){
-                const response: HttpResponseModel<ITokenHttp> = {
-                    httpCode: 400
-                };
-
-                return (response);
-            }
             o.creationTime = Date.now();
             const data = sign(o, this.config.getSecret(), {
                 algorithm: "HS512"
