@@ -86,7 +86,6 @@ export class GameServiceImpl implements GameService {
 
         for (let pr of playerResources){
             const robotEntity = await this.botResourceAsm.toEntity(pr.botSpecs);
-            await this.serviceFactory.getBotsRepository().save(robotEntity);
             const playerEntity = await this.playerResourceAsm.toEntity(pr);
             const botUser = new RobotsUserEntity();    
         
@@ -128,11 +127,12 @@ export class GameServiceImpl implements GameService {
             session.player = await this.playerResourceAsm.toEntity(playerResource);
             session.bot = robotEntity;
             session.stream = streamEntity;
+            session.connected = await this.serviceFactory.getUserConnectedRepository().getLatested(userGame.user.id);
             if (playerResource.botContext){
                 session.botEnergy = playerResource.botContext.energy;
                 session.botHeat = playerResource.botContext.heat;
             }
-            param.Key = `${uuid()}${o.ext}`,
+            param.Key = `${uuid()}.${o.ext}`,
             param.Bucket = this.config.getBucket(),
             param.Body = fs.createReadStream(resolve_path)
             params.push(param);
@@ -178,10 +178,26 @@ export class GameServiceImpl implements GameService {
             await this.serviceFactory.getGameRepository().manager.transaction(async (manager) => {
                 saved = await this.serviceFactory.getGameRepository().saveOrUpdate(manager, entity);
                     
-                await this.serviceFactory.getGameRepository().AddBotGame(manager, saved, bots);
-                await this.serviceFactory.getGameRepository().AddStreamInGame(manager, saved, streams);
-                await this.serviceFactory.getGameRepository().AddSessionInGame(manager, saved, sessions);
-                await this.serviceFactory.getGameRepository().AddUserGame(manager, saved, userGames);
+                for (let stream of streams)
+                {
+                    (stream as StreamsEntity).game = saved;
+                }
+                for (let bot of bots)
+                {
+                    (bot as RobotGameEntity).game = saved;
+                }
+                for (let userGame of userGames)
+                {
+                    (userGame as GameUserEntity).game = saved;
+                }
+                for (let session of sessions)
+                {
+                    (session as SessionEntity).game = saved;
+                }
+                await this.serviceFactory.getGameRepository().AddBotGame(manager, bots);
+                await this.serviceFactory.getGameRepository().AddStreamInGame(manager, streams);
+                await this.serviceFactory.getGameRepository().AddUserGame(manager, userGames);
+                await this.serviceFactory.getGameRepository().AddSessionInGame(manager, sessions);
             });
             console.log("DEBUG - 5")
             game.id = saved.id;

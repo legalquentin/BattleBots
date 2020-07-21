@@ -37,8 +37,9 @@ export class StreamsServiceImpl implements StreamsService {
             else {
                 console.log(data);
             }
-        })
+        });
     }
+    
     public uploadAll(streams: StreamsEntity[], params: any[]) {
         const ret = [];
 
