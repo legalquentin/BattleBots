@@ -1,5 +1,4 @@
-declare module "check-ip" {
-    interface Address {
+export interface Address {
         originalIp: string;
         boiledIp: string;
         isValid: boolean;
@@ -8,7 +7,6 @@ declare module "check-ip" {
         isMulticast: boolean;
         isRfc1918: boolean;
         isPublicIp: boolean;
-    }
-
-    function checkIp(str: string): Address
 }
+
+export function checkIp(str: string): Address;
