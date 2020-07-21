@@ -80,7 +80,7 @@ export class GameServiceImpl implements GameService {
             const resolve_path = `${playerResource.stream}`;
             const o = path.parse(resolve_path);
             const param :any= {};
-        
+
             botUser.user = playerEntity;
             botUser.robot = robotEntity;
             botGame.bot = await this.botResourceAsm.toEntity(playerResource.botSpecs);
