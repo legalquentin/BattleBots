@@ -1,4 +1,4 @@
-export interface Address {
+export declare interface Address {
         originalIp: string;
         boiledIp: string;
         isValid: boolean;
@@ -9,4 +9,4 @@ export interface Address {
         isPublicIp: boolean;
 }
 
-export function checkIp(str: string): Address;
+export declare function checkIp(str: string): Address;
