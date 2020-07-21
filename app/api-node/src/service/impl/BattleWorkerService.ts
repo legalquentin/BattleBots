@@ -73,7 +73,7 @@ export default class BattleWorkerService implements IBattleWorkerService {
                 }, (err, res, body) => {
                     console.log(body);
                     console.log("###### Game Created #######");
-                    rslv({ game: body, secret: secret, token: game.token, err: err, res: res});
+                    rslv({  secret: secret, token: game.token, err: err, res: res});
                 });
             });
             return p;
