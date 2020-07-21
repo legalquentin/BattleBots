@@ -27,6 +27,7 @@ import { GameUserEntity } from "../../database/entities/GameUserEntity";
 import { RobotsUserEntity } from "../../database/entities/RobotsUserEntity";
 import { StreamsResourceAsm } from "../../resources/asm/StreamsResourceAsm";
 import UserEntity from "../../database/entities/UserEntity";
+import { ConnectedUserEntity } from "../../database/entities/ConnectedUserEntity";
 
 @Singleton
 export class GameServiceImpl implements GameService {
@@ -77,14 +78,15 @@ export class GameServiceImpl implements GameService {
             const botUser = new RobotsUserEntity();    
             const robotEntity : RobotsEntity = await this.botResourceAsm.toEntity(playerResource.botSpecs);
             const playerEntity : UserEntity = await this.playerResourceAsm.toEntity(playerResource);
+            const connected: ConnectedUserEntity = await this.serviceFactory.getUserConnectedRepository().getLatested(userGame.user.id);
             const resolve_path = `${playerResource.stream}`;
             const o = path.parse(resolve_path);
             const param :any= {};
 
             botUser.user = playerEntity;
             botUser.robot = robotEntity;
-            botGame.bot = await this.botResourceAsm.toEntity(playerResource.botSpecs);
-            userGame.user = await this.playerResourceAsm.toEntity(playerResource);
+            botGame.bot = robotEntity;
+            userGame.user = playerEntity
             streamEntity.s3Url = playerResource.stream;
             streamEntity.kinesisUrl = "kinesis.com";
             streamEntity.encodage = "ffmpeg";
@@ -95,7 +97,7 @@ export class GameServiceImpl implements GameService {
             session.player = playerEntity;
             session.bot = robotEntity;
             session.stream = streamEntity;
-            session.connected = await this.serviceFactory.getUserConnectedRepository().getLatested(userGame.user.id);
+            session.connected = connected;
             if (playerResource.botContext){
                 session.botEnergy = playerResource.botContext.energy;
                 session.botHeat = playerResource.botContext.heat;
