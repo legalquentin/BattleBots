@@ -6,6 +6,8 @@ import axios from "axios";
 import IConfig from "../IConfig";
 import { GeoIpResourceRaw } from "../../resources/GeoIpResourceRaw";
 import { GeoIpResourceAsm } from "../../resources/asm/GeoIpResourceAsm";
+import * as checkIp  from "check-ip";
+import { GeoIpUserEntity } from "../../database/entities/GeoIpUserEntity";
 
 @Singleton
 export class GeoIpServiceImpl implements GeoIpService{
@@ -39,7 +41,18 @@ export class GeoIpServiceImpl implements GeoIpService{
     }
 
     public async getInfo(currentIp: string): Promise<GeoIpEntity> {
-	    const response = await axios.get(`${this.config.getGeoIpService()}=${currentIp}`);
+        console.log(checkIp);
+        const address = checkIp(currentIp);
+        let response = null;
+        if (address.isPublicIp){
+            response = await axios.get(`${this.config.getGeoIpService()}/lookat?ip=${currentIp}`);
+        }
+        else {
+            response = await axios.get(`${this.config.getGeoIpService()}/lookup`);
+        }
+        if (response.status !== 200){
+            return null;
+        }
         const geoipresourceRaw = response.data as GeoIpResourceRaw;
         const geoipresource = geoipresourceRaw.data;
 	    const entity = this.geoipresourceAsm.toEntity(geoipresource);
@@ -70,7 +83,7 @@ export class GeoIpServiceImpl implements GeoIpService{
         }
     }
     public list(): Promise<GeoIpEntity[]> {
-        return (this.repository.createQueryBuilder("geoip").leftJoinAndSelect("geoip.user", "user").getMany());
+        return (this.repository.createQueryBuilder("geoip").leftJoinAndSelect(GeoIpUserEntity, "geoip_user", "geoip_user.geoip_id = geoip.id").leftJoinAndSelect("geoip_user.user", "user").getMany());
     }
 
     public findOne(id: number): Promise<GeoIpEntity> {

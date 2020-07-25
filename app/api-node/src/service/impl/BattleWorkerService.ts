@@ -50,7 +50,7 @@ export default class BattleWorkerService implements IBattleWorkerService {
                     const child = cp.spawn('go', ['run', WORKER_PATH, secret], { stdio: [process.stdin, process.stdout, process.stderr] });
                     Workers.push({ gameId: game.id, process: child, url: addr + ":" + port, secret: secret, token: game.token});
                     // give 3 sec to start the worker
-                    await new Promise(resolve => setTimeout(resolve, 5000));
+                    await new Promise(resolve => setTimeout(resolve, 8000));
                 } else {
                     secret = Workers[0].secret;
                     // TODO impl a new way of using the workers
@@ -71,8 +71,10 @@ export default class BattleWorkerService implements IBattleWorkerService {
                     strictSSL: false,
                     url: `https://${addr}:${port}/api/game/create`
                 }, (err, res, body) => {
+                    console.log(err);
+                    console.log(body);
                     console.log("###### Game Created #######");
-                    rslv({ game: body, token: game.token, err: err, res: res});
+                    rslv({  secret: secret, token: game.token, err: err, res: res});
                 });
             });
             return p;

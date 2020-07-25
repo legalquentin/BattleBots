@@ -12,7 +12,7 @@
     "api_useSSL": false,
     "api_scheme": "http",
     "home_api_node": "/Users/simoes_t/Documents/ETNA3/BattleBots/app/api-node",
-    "geoip_service": "http://geoip.devcode.fr/lookat?ip",
+    "geoip_service": "http://geoip.devcode.fr",
     "s3_dir": "/home/pi/Battlebots/app/api-node/streams",
     "bucket": "qlg-demo-bucket",
     "url_expire": 7200,

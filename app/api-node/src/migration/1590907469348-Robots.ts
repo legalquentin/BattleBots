@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm";
+import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
 export class Robots1590907469348 implements MigrationInterface {
 
@@ -54,11 +54,6 @@ export class Robots1590907469348 implements MigrationInterface {
                     isNullable: false
                 },
                 {
-                    name: "player_id",
-                    type: "int",
-                    isNullable: true
-                },
-                {
                     type: "timestamp",
                     name: "created_at",
                     default: "CURRENT_TIMESTAMP",
@@ -73,17 +68,9 @@ export class Robots1590907469348 implements MigrationInterface {
                 }
             ]
         }));
-
-        await queryRunner.createForeignKey("robots", new TableForeignKey({
-            name: "fk_robots_player_id",
-            columnNames: ["player_id"],
-            referencedTableName: "player",
-            referencedColumnNames: ["id"]
-        }));
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
-        await queryRunner.dropForeignKey("robots", "fk_robots_player_id");
         await queryRunner.dropTable("robots");
     }
 

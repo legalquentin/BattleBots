@@ -10,7 +10,6 @@ import { PlayerResourceAsm } from "./PlayerResourceAsm";
 export class GameResourceAsm {
 
     public async toEntity(game: IGameResource){
-        const playerResourceAsm = Container.get(PlayerResourceAsm);
         const entity = new GameEntity();
 
         entity.id = game.id;
@@ -24,19 +23,6 @@ export class GameResourceAsm {
         }
         if (game.createdAt){
             entity.created_at = new Date(game.createdAt);
-        }
-        if (game.players){
-            let gameUsers = [];
-
-            for (let player of game.players){
-                const gameUser = new GameUserEntity();
-                const user = await playerResourceAsm.toEntity(player);
-                gameUser.game = entity;
-                gameUser.user = user;
-
-                gameUsers.push(gameUser);
-            }
-            entity.gameUsers = gameUsers;
         }
         /*
         if (game.streams){
@@ -118,6 +104,7 @@ export class GameResourceAsm {
 
         for (let game of games){
             const resource = await this.toResource(game);
+
             resources.push(resource);
         }
         return (resources);

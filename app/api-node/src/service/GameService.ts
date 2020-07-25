@@ -6,8 +6,6 @@ export abstract class GameService {
     public abstract findAll();
     public abstract saveOrUpdate(game: IGameResource);
 
-    public abstract updateByWorker(game: IGameResource);
-
     public abstract deleteOne(id: number);
 
     public abstract linkBotToGame(botId: number, gameId: number);

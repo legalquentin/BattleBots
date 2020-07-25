@@ -47,15 +47,16 @@ export class ConnectedUserServiceImpl extends ConnectedUserService {
 
     async linkPosition(userId: number, ipAddress: string) {
         const user = await this.userRepository.findOne(userId);
-        if (ipAddress == this.config.getLocalAddress()){
+        const geoip = await this.geoIpService.findByIp(ipAddress);
+        if (geoip == null)
+        {
             const response : HttpResponseModel<IUserResource> = {
                 httpCode: 400,
-                message: "request from localhost"
+                message: "geoip empty"
             };
 
             return (response);
         }
-        const geoip = await this.geoIpService.findByIp(ipAddress);
         const connectedUserLatest = await this.connectedUserRepository.getLatested(user.id);
         let flagGeoIpUser = false;
 
@@ -180,9 +181,11 @@ export class ConnectedUserServiceImpl extends ConnectedUserService {
     
     async refreshLogin(userId: number) {
         const connectedUser = await this.connectedUserRepository.getLatested(userId);
-        const endTime = connectedUser.endConnected.getTime();
-        const step = parseInt(this.config.getExpirationTime(), 10) * 1000;
+        console.log(connectedUser);
+        const endTime = connectedUser.endConnected.getTime() * 1000;
+        const step = parseInt(this.config.getExpirationTime(), 10);
         connectedUser.endConnected = new Date(endTime + step);
+        console.log(connectedUser);
         await this.connectedUserRepository.update(connectedUser.id, connectedUser);
         return (true)
     }
@@ -199,6 +202,7 @@ export class ConnectedUserServiceImpl extends ConnectedUserService {
             return (response);
         }
         catch (e){
+            console.log(e.message);
             const response: HttpResponseModel<ConnectedUserResource> = {
                 httpCode: 400,
                 message: "bad request"

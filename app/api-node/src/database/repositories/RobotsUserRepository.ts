@@ -32,7 +32,10 @@ export class RobotsUserRepository extends Repository<RobotsUserEntity>{
         }
     }
 
-    public async saveAll(robotsUser: Array<RobotsUserEntity>){
+    public async saveAll(manager: EntityManager, robotsUser: Array<RobotsUserEntity>){
+        for (let robotUser of robotsUser){
+            await this.deleteByUser(robotUser.user.id);
+        }
         return new Promise((resolve, reject) => {
             robotsUser.map(async (robotUser, index) => {
                 try {

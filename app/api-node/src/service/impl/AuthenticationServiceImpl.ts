@@ -7,7 +7,6 @@ import IConfig from "../IConfig";
 import ITokenHttp from "../../resources/ITokenHttp";
 import HttpResponseModel from "../../resources/HttpResponseModel";
 import { SendResource } from "../../../lib/ReturnExtended";
-import * as moment from "moment";
 import { ConnectedUserService } from "../ConnectedUserService";
 import IUserResource from "../../resources/IUserResource";
 
@@ -38,27 +37,15 @@ export class AuthenticationServiceImpl implements AuthenticationService {
      * The user have 5 minutes for refresh the token
      * 
      */
-    public refresh(token: string) {
+    public async refresh(token: string) {
         try {
             const o: any = decode(token);
-            const creationTime = moment(o.creationTime);
-            const exp2 = creationTime.add({
-                "seconds": parseInt(this.config.getExpirationTime()) + (5 * 60)
-            });
-
-            if (moment().isAfter(exp2)){
-                const response: HttpResponseModel<ITokenHttp> = {
-                    httpCode: 400
-                };
-
-                return (response);
-            }
             o.creationTime = Date.now();
             const data = sign(o, this.config.getSecret(), {
                 algorithm: "HS512"
             });
             if (process.env.NODE_ENV != "test"){
-                this.connectedUsers.refreshLogin(parseInt(o.sub, 10));
+                await this.connectedUsers.refreshLogin(parseInt(o.sub, 10));
             }
             const response : HttpResponseModel<ITokenHttp> = {
                 httpCode: 200,
@@ -76,7 +63,7 @@ export class AuthenticationServiceImpl implements AuthenticationService {
             return (response);
         }
     }
-    
+
     public async authenticate(username: string, password: string){
         try {
             const user = await this.factory.getUserRepository().findOne({

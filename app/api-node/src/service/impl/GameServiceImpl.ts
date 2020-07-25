@@ -26,6 +26,9 @@ import { SessionEntity } from "../../database/entities/SessionEntity";
 import { GameUserEntity } from "../../database/entities/GameUserEntity";
 import { RobotsUserEntity } from "../../database/entities/RobotsUserEntity";
 import { StreamsResourceAsm } from "../../resources/asm/StreamsResourceAsm";
+import UserEntity from "../../database/entities/UserEntity";
+import { ConnectedUserEntity } from "../../database/entities/ConnectedUserEntity";
+import { Not } from "typeorm";
 
 @Singleton
 export class GameServiceImpl implements GameService {
@@ -60,64 +63,33 @@ export class GameServiceImpl implements GameService {
     @Inject
     private streamResourceAsm: StreamsResourceAsm;
 
-    public async updateByWorker(game: IGameResource) {
-        if (!game.id){
-            const response: HttpResponseModel<IGameResource> = {
-                httpCode: 400,
-                data: null,
-                message: "ERROR"
-            };
-
-            return new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response);
-        }
-        const entity = await this.gameResourceAsm.toEntity(game);
-        const manager = this.serviceFactory.getGameRepository().manager;
-        const updated = await this.serviceFactory.getGameRepository().saveOrUpdate(manager, entity);
-        const response : HttpResponseModel<IGameResource> = {
-            httpCode: 200,
-            data: await this.gameResourceAsm.toResource(updated),
-            message: "game updated"
-        };
-        return new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response);
-    }
-
-    private async mapAsBotUsers(playerResources: Array<IPlayerResource>){
-        const botUsers = [];
-
-        for (let pr of playerResources){
-            const robotEntity = await this.botResourceAsm.toEntity(pr.botSpecs);
-            await this.serviceFactory.getBotsRepository().save(robotEntity);
-            const playerEntity = await this.playerResourceAsm.toEntity(pr);
-            const botUser = new RobotsUserEntity();    
-        
-            botUser.user = playerEntity;
-            botUser.robot = robotEntity;
-            botUsers.push(botUser);
-        }
-        return (botUsers);
-    }
-
     private async mapPlayerResources(playerResources: Array<IPlayerResource>){
         const userGames = [];
         const bots = [];
         const sessions = [];
         const streams = []
         const params = [];
+        const botUsers = [];
 
         for (let playerResource of playerResources){
             const botGame = new RobotGameEntity();
             const userGame = new GameUserEntity();
             const session = new SessionEntity();
             const streamEntity = new StreamsEntity();
-            const robotEntity = await this.botResourceAsm.toEntity(playerResource.botSpecs);
+            const botUser = new RobotsUserEntity();   
+            console.log(playerResource); 
+            const robotEntity : RobotsEntity = await this.botResourceAsm.toEntity(playerResource.botSpecs);
+            const playerEntity : UserEntity = await this.playerResourceAsm.toEntity(playerResource);
+            const connected: ConnectedUserEntity = await this.serviceFactory.getUserConnectedRepository().getLatested(playerEntity.id);
             const resolve_path = `${playerResource.stream}`;
             const o = path.parse(resolve_path);
             const param :any= {};
 
-            botGame.bot = await this.botResourceAsm.toEntity(playerResource.botSpecs);
-            userGame.user = await this.playerResourceAsm.toEntity(playerResource);
-            userGames.push(userGame);
-            bots.push(botGame);
+            await this.serviceFactory.getBotsRepository().save(robotEntity);
+            botUser.user = playerEntity;
+            botUser.robot = robotEntity;
+            botGame.bot = robotEntity;
+            userGame.user = playerEntity
             streamEntity.s3Url = playerResource.stream;
             streamEntity.kinesisUrl = "kinesis.com";
             streamEntity.encodage = "ffmpeg";
@@ -125,29 +97,34 @@ export class GameServiceImpl implements GameService {
             streamEntity.running = 1;
             streamEntity.private = 1;
             streamEntity.robot = robotEntity;
-            session.player = await this.playerResourceAsm.toEntity(playerResource);
+            session.player = playerEntity;
             session.bot = robotEntity;
             session.stream = streamEntity;
+            session.connected = connected;
             if (playerResource.botContext){
                 session.botEnergy = playerResource.botContext.energy;
                 session.botHeat = playerResource.botContext.heat;
             }
-            param.Key = `${uuid()}${o.ext}`,
+            param.Key = `${uuid()}.${o.ext}`,
             param.Bucket = this.config.getBucket(),
-            param.Body = fs.createReadStream(resolve_path)
+            param.Body = fs.createReadStream(resolve_path);
+            bots.push(botGame);
+            userGames.push(userGame);
+            botUsers.push(botUser);
             params.push(param);
             streams.push(streamEntity);
             sessions.push(session);
         }
         return {
-            userGames, bots, streams, sessions, params
+            userGames, bots, streams, sessions, params, botUsers
         };
     }
 
     public async saveOrUpdate(game: IGameResource) {
         game.status = game.status ? game.status : EGameStatus.CREATED;
         try {
-            console.log("DEBUG - 1")
+            console.log("DEBUG - 1");
+            console.log(game);
             const httpCode = game.id ? 200 : 201;
             if (game.status == EGameStatus.CREATED && !game.createdAt){
                 game.createdAt = new Date().getTime();
@@ -158,45 +135,57 @@ export class GameServiceImpl implements GameService {
             else if (game.status == EGameStatus.ENDED && !game.endedAt){
                 game.endedAt = new Date().getTime();
             }
-
-            console.log("DEBUG - 2")
+            console.log("DEBUG - 2");
             const entity = await this.gameResourceAsm.toEntity(game);
             let playersResource = game.players;
             if (!playersResource){
                 playersResource = [];
             }
-            console.log("DEBUG - 3")
+            console.log("DEBUG - 3");
             const idList = playersResource.map(p => p.id);
             await this.serviceFactory.getBotUserRepository().deleteUsers(idList);
-            console.log("DEBUG 3'")
-            const botUsers = await this.mapAsBotUsers(playersResource);
-            console.log("DEBUG 3''")
-            await this.serviceFactory.getBotUserRepository().saveAll(botUsers);
-            console.log("DEBUG 3'''") 
-            const { sessions, streams, params, bots, userGames } = await this.mapPlayerResources(playersResource);
+            console.log("DEBUG 3'");
+            console.log("DEBUG 3'''");
+            const { sessions, streams, params, bots, userGames, botUsers } = await this.mapPlayerResources(playersResource);
             let saved = null;
-            console.log("DEBUG - 4")
+            console.log("DEBUG - 4");
             await this.serviceFactory.getGameRepository().manager.transaction(async (manager) => {
                 saved = await this.serviceFactory.getGameRepository().saveOrUpdate(manager, entity);
                     
-                await this.serviceFactory.getGameRepository().AddBotGame(manager, saved, bots);
-                await this.serviceFactory.getGameRepository().AddStreamInGame(manager, saved, streams);
-                await this.serviceFactory.getGameRepository().AddSessionInGame(manager, saved, sessions);
-                await this.serviceFactory.getGameRepository().AddUserGame(manager, saved, userGames);
+                for (let stream of streams)
+                {
+                    (stream as StreamsEntity).game = saved;
+                }
+                for (let bot of bots)
+                {
+                    (bot as RobotGameEntity).game = saved;
+                }
+                for (let userGame of userGames)
+                {
+                    (userGame as GameUserEntity).game = saved;
+                }
+                for (let session of sessions)
+                {
+                    (session as SessionEntity).game = saved;
+                }
+                await this.serviceFactory.getBotUserRepository().saveAll(manager, botUsers);
+                await this.serviceFactory.getGameRepository().AddBotGame(manager, bots);
+                await this.serviceFactory.getGameRepository().AddStreamInGame(manager, streams);
+                await this.serviceFactory.getGameRepository().AddUserGame(manager, userGames);
+                await this.serviceFactory.getGameRepository().AddSessionInGame(manager, sessions);
             });
-            console.log("DEBUG - 5")
+            console.log("DEBUG - 5");
+            console.log(saved);
             game.id = saved.id;
             const resource = await this.gameResourceAsm.toResource(saved);
             if (game.status == EGameStatus.ENDED){
                 await this.streamService.uploadAll(streams, params);
             }
-            console.log("DEBUG - 6", game)
+            console.log("DEBUG - 6", game);
             if (game.status == EGameStatus.CREATED){
-                console.log("DEBUG - 7")
+                console.log("DEBUG - 7");
                 const r = await this.battleWorkerService.startGoWorker(game);
-                console.log(r)
-                console.log(r);
-                if (!r || !r.token || !r.game) {
+                if (!r || !r.token || !r.secret) {
                     const response: HttpResponseModel<IGameResource> = {
                         httpCode: 500,
                         message: JSON.stringify(r)
@@ -212,6 +201,7 @@ export class GameServiceImpl implements GameService {
                     message: "game create",
                     data: resource
                 };
+
                 return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));   
             } else {
                 const response : HttpResponseModel<IGameResource> = {
@@ -219,10 +209,12 @@ export class GameServiceImpl implements GameService {
                     message: "game updated",
                     data: resource
                 };
+
                 return Promise.resolve(new SendResource<HttpResponseModel<IGameResource>>("GameController", response.httpCode, response));   
             }     
         }
         catch (e){
+            console.log(e);
             const response: HttpResponseModel<IGameResource> = {
                 httpCode: 400,
                 message: "Bad Request"
@@ -340,7 +332,9 @@ export class GameServiceImpl implements GameService {
 
     public async findAll(): Promise<SendResource<HttpResponseModel<Array<IGameResource>>>> {
         try {
-            const list = await this.serviceFactory.getGameRepository().list();
+            const list = await this.serviceFactory.getGameRepository().find({
+                game_status: Not(EGameStatus.DELETED)
+            });
             const resources = await this.gameResourceAsm.toResources(list);
             const response : HttpResponseModel<Array<IGameResource>> = {
                 httpCode: 200,

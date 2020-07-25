@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "rm -Rv ../api-node/public/App/* && vue-cli-service build",
+    "build": "rm -Rvf ../api-node/src/public/App/* && vue-cli-service build",
     "electron:build": "vue-cli-service electron:build",
     "serve": "vue-cli-service electron:serve"
   },
