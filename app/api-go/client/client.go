@@ -67,7 +67,7 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 				// TODO: implement a cooldown between the shots
 				conn.WriteJSON(&game.TextData{Type: game.TypeAlert, Value: "Robot Firing !"})
 				// req python api to make zbar inference
-				resp := getZbar(player)
+				resp := getZbar(player.BotSpecs.Address + ":8082")
 				log.Println(prefixLog, resp)
 				if resp == "0" {
 					conn.WriteJSON(&game.TextData{Type: game.TypeWarning, Value: "Missed"})
@@ -148,8 +148,8 @@ func calcAttributes(player *game.Player, conn *websocket.Conn, bot *websocket.Co
 	player.Mutex.Unlock()
 }
 
-func getZbar(player *game.Player) string {
-	resp, err := http.Get(player.BotSpecs.Address + ":8084")
+func getZbar(address string) string {
+	resp, err := http.Get(address)
 	if err != nil {
 		print(err)
 	}
