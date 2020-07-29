@@ -8,9 +8,9 @@ type Key struct {
 
 // KeyMapStruct help convert int to var name
 type KeyMapStruct struct {
-	KEY_LEFT     int8
-	KEY_UP       int8
-	KEY_RIGHT    int8
-	KEY_DOWN     int8
-	KEY_SPACEBAR int8
+	KEY_LEFT     int
+	KEY_UP       int
+	KEY_RIGHT    int
+	KEY_DOWN     int
+	KEY_SPACEBAR int
 }
