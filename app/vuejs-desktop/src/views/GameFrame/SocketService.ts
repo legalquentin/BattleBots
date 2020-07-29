@@ -29,7 +29,7 @@ export default class SocketService {
 
     public send(data: number, press: boolean) {
         if (this.isOpen(this.socket)) {
-            this.socket.send(JSON.stringify({ c: data.toString(), p: press }));
+            this.socket.send(JSON.stringify({ c: data, p: press }));
         }
     }
 

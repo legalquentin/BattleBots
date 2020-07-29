@@ -17,7 +17,29 @@ type keyOpt = {
   [key: string]: boolean;
 };
 
-@Component({ components: { EndOfGameModal, HelpModal }})
+@Component({ components: { EndOfGameModal, HelpModal },
+notifications: {
+    showSuccessMsg: {
+      type: VueNotifications.types.success,
+      title: 'Hello there',
+      message: 'That\'s the success!'
+    },
+    showInfoMsg: {
+      type: VueNotifications.types.info,
+      title: 'Hey you',
+      message: 'Here is some info for you'
+    },
+    showWarnMsg: {
+      type: VueNotifications.types.warn,
+      title: 'Wow, man',
+      message: 'That\'s the kind of warning'
+    },
+    showErrorMsg: {
+      type: VueNotifications.types.error,
+      title: 'Wow-wow',
+      message: 'That\'s the error'
+    }
+  }})
 export default class GameFrame extends Vue {
   @Ref("videoCanvas") private videoCanvas?: HTMLCanvasElement;
   @Prop() private gameInfos: any;
@@ -40,29 +62,6 @@ export default class GameFrame extends Vue {
     Space: false
   };
 
-  private notifications = {
-      showSuccessMsg: {
-        type: VueNotifications.types.success, // or just 'success' or any other string
-        title: 'HelloWorld there',
-        message: 'That\'s the success!'
-      },
-      showInfoMsg: {
-        type: VueNotifications.types.info,
-        title: 'Hey you',
-        message: 'Here is some info for you'
-      },
-      showWarnMsg: {
-        type: VueNotifications.types.warn,
-        title: 'Wow, man',
-        message: 'That\'s the kind of warning'
-      },
-      showErrorMsg: {
-        type: VueNotifications.types.error,
-        title: 'Wow-wow',
-        message: 'That\'s the error'
-      }
-  };
-
   // Type displaying the message popup on the front
   // const TypeAlert = 10
   // const TypeInfo = 11
@@ -76,10 +75,10 @@ export default class GameFrame extends Vue {
   // const TypeWarningTimer = 23
 
   private alertMapping = {
-    10: this.notifications.showErrorMsg,
-    11: this.notifications.showInfoMsg,
-    12: this.notifications.showSuccessMsg,
-    13: this.notifications.showWarnMsg,
+    10: this.showErrorMsg,
+    11: this.showInfoMsg,
+    12: this.showSuccessMsg,
+    13: this.showWarnMsg,
   }
 
   private isGameRunning = true;
@@ -148,7 +147,8 @@ export default class GameFrame extends Vue {
     
     // types above 10 are popup messages
     if (message.dt >= 10) {
-      this.alertMapping[message.dt](message.dv)
+      console.log(message)
+      this.alertMapping[message.dt]({title: 'Battlebots', message: message.dv, timeout: 1000})
     }
 
     if (message.dt === 1) {
