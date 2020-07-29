@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"strconv"
 	"time"
 
 	"../game"
@@ -60,8 +59,7 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 
 			log.Println(prefixLog, "command sent;", r.Content, r.Press)
 			player.Mutex.Lock()
-			cmd, _ := strconv.Atoi(r.Content)
-			if cmd != Keymap.KEY_SPACEBAR {
+			if r.Content != Keymap.KEY_SPACEBAR {
 				player.BotContext.Moving = r.Press
 			} else {
 				conn.WriteJSON(&game.TextData{Type: game.TypeAlert, Value: "Robot Firing !"})
