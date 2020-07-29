@@ -5,6 +5,8 @@ import _ from "lodash";
 import moment from "moment";
 import { shell } from "electron";
 import axios from "axios";
+import VueNotifications from "vue-notifications";
+
 
 import SocketService from "./SocketService";
 
@@ -15,7 +17,29 @@ type keyOpt = {
   [key: string]: boolean;
 };
 
-@Component({ components: { EndOfGameModal, HelpModal } })
+@Component({ components: { EndOfGameModal, HelpModal }, 
+notifications: {
+    showSuccessMsg: {
+      type: VueNotifications.types.success,
+      title: 'Hello there',
+      message: 'That\'s the success!'
+    },
+    showInfoMsg: {
+      type: VueNotifications.types.info,
+      title: 'Hey you',
+      message: 'Here is some info for you'
+    },
+    showWarnMsg: {
+      type: VueNotifications.types.warn,
+      title: 'Wow, man',
+      message: 'That\'s the kind of warning'
+    },
+    showErrorMsg: {
+      type: VueNotifications.types.error,
+      title: 'Wow-wow',
+      message: 'That\'s the error'
+    }
+  }})
 export default class GameFrame extends Vue {
   @Ref("videoCanvas") private videoCanvas?: HTMLCanvasElement;
   @Prop() private gameInfos: any;
@@ -102,6 +126,8 @@ export default class GameFrame extends Vue {
 
   private onGameMessage(message: any) {
     
+    this.showInfoMsg()
+
     if (message.dt === 1) {
       this.botContext.energy = !message.dv ? 0 : message.dv;
       return;
