@@ -1,6 +1,8 @@
 package client
 
 import (
+	"TIC-GPE5/Worker/game"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
@@ -61,8 +63,18 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 			player.Mutex.Lock()
 			if r.Content != Keymap.KEY_SPACEBAR {
 				player.BotContext.Moving = r.Press
-			} else {
+			} else if r.Press {
+				// the spacebar is pressed so we fire
+				// TODO: implement a cooldown between the shots
 				conn.WriteJSON(&game.TextData{Type: game.TypeAlert, Value: "Robot Firing !"})
+				// req python api to make zbar inference
+				resp := getZbar(player)
+				log.Println(prefixLog, resp)
+				if resp == "0" {
+					conn.WriteJSON(&game.TextData{Type: game.TypeWarning, Value: "Missed"})
+				} else {
+					conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: "You hit: " + resp + " !"})
+				}
 			}
 			player.Mutex.Unlock()
 
@@ -135,4 +147,19 @@ func calcAttributes(player *game.Player, conn *websocket.Conn, bot *websocket.Co
 		}
 	}
 	player.Mutex.Unlock()
+}
+
+func getZbar(player *game.Player) string {
+	resp, err := http.Get(player.BotSpecs.Address + ":8084")
+	if err != nil {
+		print(err)
+	}
+
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		print(err)
+	}
+
+	return string(body)
 }
