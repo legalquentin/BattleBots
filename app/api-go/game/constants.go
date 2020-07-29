@@ -34,6 +34,20 @@ var RunningBots = []*Bot{}
 const TypeDisconnect = -1
 const TypeEnergy = 1
 const TypeOverheat = 2
+const TypeHealth = 3
+const TypePoints = 4
+
+// Type displaying the message popup on the front
+const TypeAlert = 10
+const TypeInfo = 11
+const TypeSuccess = 12
+const TypeWarning = 13
+
+// Type displaying the message popup on the front with a timer
+const TypeAlertTimer = 20
+const TypeInfoTimer = 21
+const TypeSuccessTimer = 22
+const TypeWarningTimer = 23
 
 type GameStatus int
 

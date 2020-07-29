@@ -159,6 +159,11 @@ type Data struct {
 	Value int16 `json:"dv,omitempty"`
 }
 
+type TextData struct {
+	Type  int16  `json:"dt,omitempty"`
+	Value string `json:"dv,omitempty"`
+}
+
 // NodeGame useful for converting ts to epoch
 type NodeGame struct {
 	ID        int16         `json:"id,omitempty"`
