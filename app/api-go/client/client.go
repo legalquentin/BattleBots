@@ -67,7 +67,7 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 				// TODO: implement a cooldown between the shots
 				conn.WriteJSON(&game.TextData{Type: game.TypeAlert, Value: "Robot Firing !"})
 				// req python api to make zbar inference
-				resp := getZbar("192.168.1.66:8082")
+				resp := getZbar("http://" + player.BotSpecs.Address + ":8082")
 				log.Println(prefixLog, resp)
 				if resp == "0" {
 					conn.WriteJSON(&game.TextData{Type: game.TypeWarning, Value: "Missed"})
