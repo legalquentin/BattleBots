@@ -153,12 +153,9 @@ func getZbar(address string) string {
 	if err != nil {
 		print(err)
 	}
-
-	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		print(err)
 	}
-
 	return string(body)
 }
