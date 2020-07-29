@@ -1,7 +1,6 @@
 package client
 
 import (
-	"TIC-GPE5/Worker/game"
 	"io/ioutil"
 	"log"
 	"net/http"
