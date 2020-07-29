@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"strconv"
 	"time"
 
 	"../utils"
@@ -39,11 +38,7 @@ func WsBotCtrl(w http.ResponseWriter, r *http.Request) {
 		if err := json.Unmarshal(message, &msg); err != nil {
 			log.Println(prefixErr, err)
 		}
-		i1, err := strconv.Atoi(msg.Content)
-		if err != nil {
-			log.Println(prefixErr, err)
-		}
-		utils.ProcessInput(i1, msg.Press)
+		utils.ProcessInput(msg.Content, msg.Press)
 		err = c.WriteMessage(mt, message)
 		if err != nil {
 			log.Println(prefixErr, err)

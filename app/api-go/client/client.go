@@ -74,7 +74,7 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 			// write a message to the bot [conn]
 			player.Mutex.Lock()
 			if player.BotContext.Energy <= 0 || player.BotContext.Heat >= 100 {
-				r = Key{"0", false}
+				r = Key{0, false}
 			}
 			player.Mutex.Unlock()
 			if err := c.WriteJSON(r); err != nil {
