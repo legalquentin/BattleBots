@@ -55,3 +55,10 @@ const StatusCreated = "CREATED"
 const StatusStarted = "STARTED"
 const StatusStopped = "STOPPED"
 const StatusEnded = "ENDED"
+
+var AllQrCodes = []QrCodes{
+	{"3", 0},
+	{"4", 0},
+	{"5", 0},
+	{"6", 0},
+}

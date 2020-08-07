@@ -14,3 +14,8 @@ type KeyMapStruct struct {
 	KEY_DOWN     int
 	KEY_SPACEBAR int
 }
+
+type QrMsgStruct struct {
+	Message string `json:"message,omitempty"`
+	Id      string `json:"id,omitempty"`
+}

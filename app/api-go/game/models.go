@@ -23,6 +23,7 @@ type Game struct {
 	CreatedAt time.Time     `json:"createdAt,omitempty"`
 	Env       *Environment  `json:"environment,omitempty"`
 	Players   []*Player     `json:"players,omitempty"`
+	QrCodes   []*QrCodes    `json:"qrcodes,omitempty"`
 }
 
 // Player is one of the entity playing in a game, it hold bot data
@@ -177,4 +178,9 @@ type NodeGame struct {
 	Env       *Environment  `json:"arena,omitempty"`
 	Players   []*Player     `json:"players,omitempty"`
 	Status    string        `json:"status,omitempty"`
+}
+
+type QrCodes struct {
+	Id       string
+	Cooldown time.Duration
 }

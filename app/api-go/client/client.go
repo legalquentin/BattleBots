@@ -63,17 +63,7 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 			if r.Content != Keymap.KEY_SPACEBAR {
 				player.BotContext.Moving = r.Press
 			} else if r.Press {
-				// the spacebar is pressed so we fire
-				// TODO: implement a cooldown between the shots
-				conn.WriteJSON(&game.TextData{Type: game.TypeAlert, Value: "Robot Firing !"})
-				// req python api to make zbar inference
-				resp := getZbar("http://" + player.BotSpecs.Address + ":8082")
-				log.Println(prefixLog, resp)
-				if resp == "0" {
-					conn.WriteJSON(&game.TextData{Type: game.TypeWarning, Value: "Missed"})
-				} else {
-					conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: "You hit: " + resp + " !"})
-				}
+				fireLaser(conn, player)
 			}
 			player.Mutex.Unlock()
 
@@ -158,4 +148,37 @@ func getZbar(address string) string {
 		log.Println(err)
 	}
 	return string(body)
+}
+
+func fireLaser(conn *websocket.Conn, player *game.Player) {
+	// the spacebar is pressed so we fire
+	// TODO: implement a cooldown between the shots
+	conn.WriteJSON(&game.TextData{Type: game.TypeAlert, Value: "Robot Firing !"})
+	// req python api to make zbar inference
+	resp := getZbar("http://" + player.BotSpecs.Address + ":8082")
+	log.Println(prefixLog, resp)
+	if resp == "0" {
+		conn.WriteJSON(&game.TextData{Type: game.TypeWarning, Value: "Missed"})
+	} else {
+		// check for QRCODE link
+		if qrMsg, ok := QrCodesLinks[resp]; ok {
+			// change other player bot attributes
+			conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: "You hit: " + qrMsg.Message + " !"})
+			return
+		}
+		msg := randQrMsg(resp, player)
+		conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: msg})
+	}
+}
+
+func randQrMsg(qrId string, player *game.Player) string {
+	gameinstance := game.GetGameInstance(player.GameID)
+	for _, qr := range gameinstance.QrCodes {
+		if qr.Id == qrId {
+			player.BotContext.Energy = player.BotContext.Energy + 100
+			qr.Cooldown = 2600
+			return "You've found an energy cache !"
+		}
+	}
+	return "You haven't found anything"
 }
