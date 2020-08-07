@@ -186,6 +186,11 @@ func Daemon() {
 						// player.BotSpecs.SocketClientCtrl.WriteJSON(&k)
 					}
 				}
+				for _, qr := range game.QrCodes {
+					if qr.Cooldown > 0 {
+						qr.Cooldown = qr.Cooldown - 100
+					}
+				}
 			}
 		}
 		time.Sleep(time.Second * 1)

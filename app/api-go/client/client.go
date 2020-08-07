@@ -174,10 +174,12 @@ func fireLaser(conn *websocket.Conn, player *game.Player) {
 func randQrMsg(qrId string, player *game.Player) string {
 	gameinstance := game.GetGameInstance(player.GameID)
 	for _, qr := range gameinstance.QrCodes {
-		if qr.Id == qrId {
+		if qr.Id == qrId && qr.Cooldown <= 0 {
 			player.BotContext.Energy = player.BotContext.Energy + 100
 			qr.Cooldown = 2600
 			return "You've found an energy cache !"
+		} else if qr.Id == qrId && qr.Cooldown > 0 {
+			return "The cache has already been looted !"
 		}
 	}
 	return "You haven't found anything"
