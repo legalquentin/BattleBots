@@ -212,7 +212,7 @@ func JoinGame(res http.ResponseWriter, req *http.Request) {
 	}
 	var flag = false
 	var p = Player{}
-	log.Println(prefixLog, "Join game: " + t.GameID + " - Player: " t.PlayerID)
+	log.Println(prefixLog, "Join game: "+t.GameID+" - Player: "+t.PlayerID)
 	if selected, ok := baseGameInstances[t.GameID]; ok {
 		// if the player already exist return it
 		for _, p := range selected.Players {
