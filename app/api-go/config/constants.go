@@ -24,7 +24,7 @@ var Config = Configuration{
 		},
 		{
 			ID:           2,
-			Address:      "192.168.1.66",
+			Address:      "192.168.1.31",
 			Running:      0,
 			Taken:        false,
 			Name:         "Razorback",
