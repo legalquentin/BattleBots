@@ -38,12 +38,48 @@ func WsBotCtrl(w http.ResponseWriter, r *http.Request) {
 		if err := json.Unmarshal(message, &msg); err != nil {
 			log.Println(prefixErr, err)
 		}
-		utils.ProcessInput(msg.Content, msg.Press)
+		ProcessInput(msg.Content, msg.Press)
 		err = c.WriteMessage(mt, message)
 		if err != nil {
 			log.Println(prefixErr, err)
 		}
 	}
+}
+
+func ProcessInput(msg int, press bool) string {
+	// speed := uint32(100)
+	var res = ""
+	e := ""
+	switch msg {
+	case 37:
+		res = "left"
+		println("left")
+		rotateLeft(speed)
+	case 38:
+		res = "up"
+		println("up")
+		forward(speed)
+	case 39:
+		res = "right"
+		println("right")
+		rotateRight(speed)
+	case 40:
+		res = "down"
+		println("down")
+		backward(speed)
+	case 32:
+		res = "space"
+		println("space")
+		// fireLaser()
+	}
+	if press {
+		e = res + "-p"
+	} else {
+		e = res + "-r"
+		stopMotor()
+	}
+	log.Println(e)
+	return e
 }
 
 func runMotor(motor int, spd uint32, direction int) {
