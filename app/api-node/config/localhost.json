@@ -2,7 +2,7 @@
     "secrets": {
         "secret": "azerty123",
         "salt": 10,
-        "expiration_time": "225"
+        "expiration_time": "2250"
     },
     "worker_address": "127.0.0.1",
     "worker_port": "443",
