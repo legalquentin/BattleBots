@@ -47,7 +47,7 @@ func WsBotCtrl(w http.ResponseWriter, r *http.Request) {
 }
 
 func ProcessInput(msg int, press bool) string {
-	// speed := uint32(100)
+	speed := uint32(100)
 	var res = ""
 	e := ""
 	switch msg {
