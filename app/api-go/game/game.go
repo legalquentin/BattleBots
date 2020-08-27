@@ -232,9 +232,10 @@ func JoinGame(res http.ResponseWriter, req *http.Request) {
 				var g = baseGameInstances[t.GameID]
 				p.Mutex.Lock()
 				g.Players = append(g.Players, &p)
-				for _, qr := range AllQrCodes {
-					g.QrCodes = append(g.QrCodes, &qr)
-				}
+				// for _, qr := range AllQrCodes {
+				// 	g.QrCodes = append(g.QrCodes, &qr)
+				// }
+				g.QrCodes = AllQrCodes
 				baseGameInstances[t.GameID] = g
 				res.Header().Set("Content-Type", "application/json")
 				json.NewEncoder(res).Encode(&g)

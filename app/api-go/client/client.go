@@ -42,6 +42,7 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 	player.BotSpecs.SocketBotCtrl = c
+	conn.WriteJSON(&game.Data{Type: game.TypeInfo, Value: player.BotSpecs.Name})
 	player.Mutex.Unlock()
 
 	var flag = true
