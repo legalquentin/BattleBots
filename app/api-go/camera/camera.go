@@ -32,7 +32,6 @@ func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	player.Mutex.Lock()
 	player.BotSpecs.SocketClientCam = conn
 
 	u := url.URL{Scheme: "ws", Host: player.BotSpecs.Address + ":8084", Path: "/"}
@@ -55,7 +54,6 @@ func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
 
 	bufferedWriter := bufio.NewWriter(file)
 	player.Stream = fileName
-	player.Mutex.Unlock()
 
 	// Read c(robot) video stream and write to conn(client)
 	defer conn.Close()

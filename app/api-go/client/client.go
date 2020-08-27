@@ -29,7 +29,6 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 	}
 	fmt.Println(prefixLog, player.ID, player.BotSpecs.Name, "logged in")
 
-	player.Mutex.Lock()
 	player.BotSpecs.SocketClientCtrl = conn
 	player.BotContext.Moving = false
 
@@ -101,8 +100,6 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 		// 	return
 		// }
 	}
-	player.Mutex.Unlock()
-
 }
 
 func doEvery(d time.Duration, f func(*game.Player, *websocket.Conn, *websocket.Conn),
