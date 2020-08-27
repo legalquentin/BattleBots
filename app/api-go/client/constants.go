@@ -19,6 +19,6 @@ var QrMsgMissed = QrMsgStruct{
 
 var QrCodesLinks = map[string]QrMsgStruct{
 	"0": QrMsgMissed,
-	"1": QrMsgStruct{"You've hit Rocinante !", "1"},
-	"2": QrMsgStruct{"You've hit Razorback !", "2"},
+	"4": QrMsgStruct{"You've hit Rocinante !", "4"},
+	"5": QrMsgStruct{"You've hit Razorback !", "5"},
 }

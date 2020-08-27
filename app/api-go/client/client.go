@@ -107,9 +107,7 @@ func doEvery(d time.Duration, f func(*game.Player, *websocket.Conn, *websocket.C
 	player *game.Player, conn *websocket.Conn, bot *websocket.Conn) {
 	log.Println(prefixLog, "do every")
 	for range time.Tick(d) {
-		player.Mutex.Lock()
 		f(player, conn, bot)
-		player.Mutex.Unlock()
 	}
 }
 
@@ -178,12 +176,10 @@ func fireLaser(conn *websocket.Conn, player *game.Player) {
 			idAsInt, _ := strconv.ParseInt(resp, 10, 16)
 			for _, p := range gameinstance.Players {
 				if p.BotSpecs.ID == int16(idAsInt) {
-					p.Mutex.Lock()
 					p.BotContext.Health = p.BotContext.Health - player.BotSpecs.BaseDamage
 					dmgAsStr := strconv.Itoa(int(player.BotSpecs.BaseDamage))
 					dmgMsg := "You've been hit by " + player.BotSpecs.Name + " for " + dmgAsStr + "health points !"
 					p.BotSpecs.SocketClientCtrl.WriteJSON(&game.TextData{Type: game.TypeAlert, Value: dmgMsg})
-					p.Mutex.Unlock()
 					msg := "You've hit " + p.BotSpecs.Name + " for " + dmgAsStr + "health points !"
 					conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: msg})
 					return
