@@ -47,7 +47,6 @@ func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
 	dir, _ := os.Getwd()
 	fileName := dir + "/streams/" + fmt.Sprintf("%v", time.Now().Unix()) + "_game-" + player.GameID + "_bot-" + fmt.Sprintf("%v", player.BotSpecs.ID) + ".ts"
 	file, err := os.OpenFile(fileName, os.O_CREATE|os.O_WRONLY, 0777)
-	player.Mutex.Unlock()
 
 	if err != nil {
 		panic(err)
@@ -56,6 +55,7 @@ func WsHandlerCam(res http.ResponseWriter, req *http.Request) {
 
 	bufferedWriter := bufio.NewWriter(file)
 	player.Stream = fileName
+	player.Mutex.Unlock()
 
 	// Read c(robot) video stream and write to conn(client)
 	defer conn.Close()
