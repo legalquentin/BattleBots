@@ -112,6 +112,7 @@ func doEvery(d time.Duration, f func(*game.Player, *websocket.Conn, *websocket.C
 }
 
 func calcAttributes(player *game.Player, conn *websocket.Conn, bot *websocket.Conn) {
+	player.Mutex.Lock()
 	if player.BotContext.Moving {
 		log.Println(prefixLog, "moving, changing energy: ", player.BotContext.Energy)
 		if player.BotContext.Energy > 0 {
@@ -136,6 +137,7 @@ func calcAttributes(player *game.Player, conn *websocket.Conn, bot *websocket.Co
 			conn.WriteJSON(&game.Data{Type: game.TypeOverheat, Value: player.BotContext.Heat})
 		}
 	}
+	player.Mutex.Unlock()
 }
 
 func getZbar(address string) string {

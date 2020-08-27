@@ -50,7 +50,7 @@ export default class BattleWorkerService implements IBattleWorkerService {
                     const child = cp.spawn('go', ['run', WORKER_PATH, secret], { stdio: [process.stdin, process.stdout, process.stderr] });
                     Workers.push({ gameId: game.id, process: child, url: addr + ":" + port, secret: secret, token: game.token});
                     // give 3 sec to start the worker
-                    await new Promise(resolve => setTimeout(resolve, 5000));
+                    await new Promise(resolve => setTimeout(resolve, 8500));
                 } else {
                     secret = Workers[0].secret;
                     // TODO impl a new way of using the workers
