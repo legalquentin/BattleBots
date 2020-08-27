@@ -57,7 +57,9 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 
 			// ignore the command if the game hasn't started
 			if !game.GetGameInstance(player.GameID).Started {
-				break
+				// break
+				conn.WriteJSON(&game.TextData{Type: game.TypeInfo, Value: "waiting for all user to join"})
+				continue
 			}
 
 			log.Println(prefixLog, "command sent;", r.Content, r.Press)
