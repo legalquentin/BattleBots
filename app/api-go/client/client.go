@@ -58,7 +58,7 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 			}
 
 			// ignore the command if the game hasn't started
-			if !game.GetGameInstance(player.GameID).Started {
+			if game.GetGameInstance(player.GameID).Started {
 				log.Println(prefixLog, "command sent;", r.Content, r.Press)
 				player.Mutex.Lock()
 				if r.Content != Keymap.KEY_SPACEBAR {
