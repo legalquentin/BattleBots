@@ -60,11 +60,6 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 			// ignore the command if the game hasn't started
 			if game.GetGameInstance(player.GameID).Started {
 				log.Println(prefixLog, "command sent;", r.Content, r.Press)
-				if flag {
-					go doEvery(100*time.Millisecond, calcAttributes, player, conn, c)
-					flag = false
-				}
-
 				player.Mutex.Lock()
 				if r.Content != Keymap.KEY_SPACEBAR {
 					log.Println(prefixLog, "arrow")
@@ -80,6 +75,10 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 				player.Mutex.Unlock()
 				if err := c.WriteJSON(r); err != nil {
 					log.Println(prefixWarn, err)
+				}
+				if flag {
+					go doEvery(100*time.Millisecond, calcAttributes, player, conn, c)
+					flag = false
 				}
 			} else {
 				log.Println(prefixLog, "game not started, can't process: ", r.Content, r.Press)
@@ -108,12 +107,13 @@ func doEvery(d time.Duration, f func(*game.Player, *websocket.Conn, *websocket.C
 	player *game.Player, conn *websocket.Conn, bot *websocket.Conn) {
 	log.Println(prefixLog, "do every")
 	for range time.Tick(d) {
+		player.Mutex.Lock()
 		f(player, conn, bot)
+		player.Mutex.Unlock()
 	}
 }
 
 func calcAttributes(player *game.Player, conn *websocket.Conn, bot *websocket.Conn) {
-	player.Mutex.Lock()
 	if player.BotContext.Moving {
 		log.Println(prefixLog, "moving, changing energy: ", player.BotContext.Energy)
 		if player.BotContext.Energy > 0 {
@@ -138,7 +138,6 @@ func calcAttributes(player *game.Player, conn *websocket.Conn, bot *websocket.Co
 			conn.WriteJSON(&game.Data{Type: game.TypeOverheat, Value: player.BotContext.Heat})
 		}
 	}
-	player.Mutex.Unlock()
 }
 
 func getZbar(address string) string {
