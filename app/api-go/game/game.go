@@ -228,7 +228,7 @@ func JoinGame(res http.ResponseWriter, req *http.Request) {
 				log.Println(prefixLog, "reserving a bot")
 				// TODO: add a real token generation
 				baseGameInstances[t.GameID].Env.Bots[idx].Taken = true
-				p = Player{t.PlayerID, tokenGenerator(), &b, Context{Moving: false, Energy: 100, Heat: 0}, "", t.GameID, sync.Mutex{}}
+				p = Player{t.PlayerID, tokenGenerator(), &b, Context{Moving: false, Energy: 100, Heat: 0, Health: b.BaseHull}, "", t.GameID, sync.Mutex{}}
 				var g = baseGameInstances[t.GameID]
 				p.Mutex.Lock()
 				g.Players = append(g.Players, &p)

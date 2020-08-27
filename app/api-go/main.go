@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"os/signal"
@@ -48,6 +49,8 @@ func getSecret() (string, error) {
 }
 
 func main() {
+
+	rand.Seed(time.Now().UnixNano())
 
 	err := config.ReadConfig()
 	if err != nil {

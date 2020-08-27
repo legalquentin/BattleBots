@@ -36,6 +36,7 @@ const TypeEnergy = 1
 const TypeOverheat = 2
 const TypeHealth = 3
 const TypePoints = 4
+const TypeCooldown = 5
 
 // Type displaying the message popup on the front
 const TypeAlert = 10

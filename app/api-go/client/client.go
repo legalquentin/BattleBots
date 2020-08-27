@@ -3,8 +3,10 @@ package client
 import (
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"net/url"
+	"strconv"
 	"time"
 
 	"../game"
@@ -153,6 +155,13 @@ func getZbar(address string) string {
 func fireLaser(conn *websocket.Conn, player *game.Player) {
 	// the spacebar is pressed so we fire
 	// TODO: implement a cooldown between the shots
+	diff := time.Now().Sub(player.BotContext.FiredAt).Seconds()
+	if int(diff) < int(player.BotSpecs.BaseFireRate) {
+		conn.WriteJSON(&game.TextData{Type: game.TypeCooldown, Value: strconv.FormatFloat(diff, 'E', -1, 64)})
+		return
+	}
+	player.BotContext.FiredAt = time.Now()
+
 	conn.WriteJSON(&game.TextData{Type: game.TypeAlert, Value: "Robot Firing !"})
 	// req python api to make zbar inference
 	resp := getZbar("http://" + player.BotSpecs.Address + ":8082")
@@ -164,6 +173,22 @@ func fireLaser(conn *websocket.Conn, player *game.Player) {
 		if qrMsg, ok := QrCodesLinks[resp]; ok {
 			// change other player bot attributes
 			conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: "You hit: " + qrMsg.Message + " !"})
+			gameinstance := game.GetGameInstance(player.GameID)
+			idAsInt, _ := strconv.ParseInt(resp, 10, 16)
+			for _, p := range gameinstance.Players {
+				if p.BotSpecs.ID == int16(idAsInt) {
+					p.Mutex.Lock()
+					p.BotContext.Health = p.BotContext.Health - player.BotSpecs.BaseDamage
+					dmgAsStr := strconv.Itoa(int(player.BotSpecs.BaseDamage))
+					dmgMsg := "You've been hit by " + player.BotSpecs.Name + " for " + dmgAsStr + "health points !"
+					p.BotSpecs.SocketClientCtrl.WriteJSON(&game.TextData{Type: game.TypeAlert, Value: dmgMsg})
+					p.Mutex.Unlock()
+					msg := "You've hit " + p.BotSpecs.Name + " for " + dmgAsStr + "health points !"
+					conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: msg})
+					return
+				}
+			}
+			conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: "something went wrong, qr code not mapped"})
 			return
 		}
 		msg := randQrMsg(resp, player)
@@ -175,12 +200,23 @@ func randQrMsg(qrId string, player *game.Player) string {
 	gameinstance := game.GetGameInstance(player.GameID)
 	for _, qr := range gameinstance.QrCodes {
 		if qr.Id == qrId && qr.Cooldown <= 0 {
-			player.BotContext.Energy = player.BotContext.Energy + 100
 			qr.Cooldown = 2600
-			return "You've found an energy cache !"
+			min := 5
+			max := 75
+			value := int16(rand.Intn(max-min) + min)
+			if rand1() {
+				player.BotContext.Energy = player.BotContext.Energy + value
+				return "You've found an energy cache !\n+" + strconv.Itoa(int(value)) + " Energy"
+			}
+			player.BotContext.Energy = player.BotContext.Energy + value
+			return "You've found a repair kit !\n+" + strconv.Itoa(int(value)) + " Health"
 		} else if qr.Id == qrId && qr.Cooldown > 0 {
 			return "The cache has already been looted !"
 		}
 	}
 	return "You haven't found anything"
+}
+
+func rand1() bool {
+	return rand.Float32() < 0.5
 }

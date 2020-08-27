@@ -40,9 +40,11 @@ type Player struct {
 
 // Context hold game data on a specific bot while running
 type Context struct {
-	Moving bool  `json:"moving,omitempty"`
-	Energy int16 `json:"energy"`
-	Heat   int16 `json:"heat"`
+	Moving  bool      `json:"moving,omitempty"`
+	Energy  int16     `json:"energy"`
+	Heat    int16     `json:"heat"`
+	Health  int8      `json:"health"`
+	FiredAt time.Time `json:"firedAt"`
 }
 
 // BotAttr hold game data on a specific bot (default multiplicators & values)

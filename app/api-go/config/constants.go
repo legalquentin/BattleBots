@@ -18,9 +18,9 @@ var Config = Configuration{
 			Taken:        false,
 			Name:         "Rocinante",
 			BaseSpeed:    100,
-			BaseDamage:   100,
+			BaseDamage:   25,
 			BaseHull:     100,
-			BaseFireRate: 100,
+			BaseFireRate: 4,
 		},
 		{
 			ID:           2,
@@ -29,9 +29,9 @@ var Config = Configuration{
 			Taken:        true,
 			Name:         "Razorback",
 			BaseSpeed:    100,
-			BaseDamage:   100,
+			BaseDamage:   35,
 			BaseHull:     100,
-			BaseFireRate: 100,
+			BaseFireRate: 5,
 		}},
 }
 
