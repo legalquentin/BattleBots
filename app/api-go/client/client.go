@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 
 	"../game"
@@ -163,7 +164,8 @@ func fireLaser(conn *websocket.Conn, player *game.Player) {
 
 	conn.WriteJSON(&game.TextData{Type: game.TypeAlert, Value: "Robot Firing !"})
 	// req python api to make zbar inference
-	resp := getZbar("http://" + player.BotSpecs.Address + ":8082")
+	response := getZbar("http://" + player.BotSpecs.Address + ":8082")
+	resp := strings.Split(response, " ")[0]
 	log.Println(prefixLog, resp)
 	if resp == "0" {
 		conn.WriteJSON(&game.TextData{Type: game.TypeWarning, Value: "Missed"})
