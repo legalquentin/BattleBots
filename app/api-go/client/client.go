@@ -171,9 +171,10 @@ func fireLaser(conn *websocket.Conn, player *game.Player) {
 		// check for QRCODE link
 		if qrMsg, ok := QrCodesLinks[resp]; ok {
 			// change other player bot attributes
-			conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: "You hit: " + qrMsg.Message + " !"})
+			conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: qrMsg.Message + " !"})
 			gameinstance := game.GetGameInstance(player.GameID)
 			idAsInt, _ := strconv.ParseInt(resp, 10, 16)
+			fmt.Println(gameinstance)
 			for _, p := range gameinstance.Players {
 				if p.BotSpecs.ID == int16(idAsInt) {
 					p.BotContext.Health = p.BotContext.Health - player.BotSpecs.BaseDamage
@@ -185,7 +186,6 @@ func fireLaser(conn *websocket.Conn, player *game.Player) {
 					return
 				}
 			}
-			conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: "something went wrong, qr code not mapped"})
 			return
 		}
 		msg := randQrMsg(resp, player)
