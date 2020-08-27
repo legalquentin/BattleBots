@@ -59,12 +59,12 @@ export class UserController {
     @POST 
     public async loginUp(token: ITokenHttp, @ContextRequest req: express.Request): Promise<SendResource<HttpResponseModel<ITokenHttp>>> {
         const ret : SendResource<HttpResponseModel<ITokenHttp>> = await this.authService.refresh(token.data);
-        if (ret.body && ret.body.data){
-            const data = ret.body.data;
-            const id = this.getId(data);
+        // if (ret.body && ret.body.data){
+            // const data = ret.body.data;
+            // const id = this.getId(data);
     
-            await this.linkPosition(id, req);   
-        }  
+            // await this.linkPosition(id, req);   
+        // }  
         return (ret);
     }
 

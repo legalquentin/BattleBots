@@ -32,8 +32,8 @@ export class ConnectedUserEntity extends AbstractEntity {
     })
     public sessions: Array<SessionEntity>;
 
-    @OneToMany(type => ConnectedUserGeoipEntity, conn => conn.connectedUser, {
-        lazy: true
-    })
-    public connectedUserGeoIp: Array<ConnectedUserGeoipEntity>;
+    // @OneToMany(type => ConnectedUserGeoipEntity, conn => conn.connectedUser, {
+    //     lazy: true
+    // })
+    // public connectedUserGeoIp: Array<ConnectedUserGeoipEntity>;
 }
