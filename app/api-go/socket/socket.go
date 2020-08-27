@@ -2,6 +2,7 @@ package socket
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -20,12 +21,13 @@ var Local = false
 // if the game/player exist, if the user token is valid, and finally init a socket;
 // return nil if an error happen
 func WsAuth(res http.ResponseWriter, req *http.Request) (player *game.Player, conn *websocket.Conn) {
-
 	var err *game.Response
 	v := req.URL.Query()
 	token := v.Get("token")
 	gameID := v.Get("gameid")
 	playerID := v.Get("playerid")
+
+	fmt.Println(prefixLog, "start wsAuth", playerID)
 
 	if len(token) == 0 || len(gameID) == 0 || len(playerID) == 0 {
 		err = &game.Response{Message: "bad request", Code: 400}
@@ -60,6 +62,8 @@ func WsAuth(res http.ResponseWriter, req *http.Request) (player *game.Player, co
 	if err != nil {
 		log.Println(prefixErr, err)
 	}
+
+	fmt.Println(prefixLog, "wsAuth validated", player.ID)
 	return player, conn
 }
 
