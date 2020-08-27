@@ -66,7 +66,7 @@ export class GameController {
 
     @GET
     @Path("/")
-    @Security("ROLE_USER", "Bearer")
+    // @Security("ROLE_USER", "Bearer")
     @Produces("application/json;charset=UTF-8")
     @Response<HttpResponseModel<IGameResource>>(200, "game list")
     @Response<HttpResponseModel<IGameResource>>(400)
