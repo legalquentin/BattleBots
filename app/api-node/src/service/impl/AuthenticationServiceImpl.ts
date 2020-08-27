@@ -110,6 +110,7 @@ export class AuthenticationServiceImpl implements AuthenticationService {
             return Promise.resolve(new SendResource<HttpResponseModel<ITokenHttp>>("UserController", response.httpCode, response));
         }
         catch (e){
+            console.log(e);
             const response : HttpResponseModel<ITokenHttp> = {
                 httpCode: 400,
                 data: null,
