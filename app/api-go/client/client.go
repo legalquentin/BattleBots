@@ -43,7 +43,6 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 	}
 	player.BotSpecs.SocketBotCtrl = c
 	conn.WriteJSON(&QrMsgStruct{Id: "test", Message: player.BotSpecs.Name})
-	player.Mutex.Unlock()
 
 	var flag = true
 
@@ -61,7 +60,7 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 			// ignore the command if the game hasn't started
 			if game.GetGameInstance(player.GameID).Started {
 				log.Println(prefixLog, "command sent;", r.Content, r.Press)
-				player.Mutex.Lock()
+				// player.Mutex.Lock()
 				if r.Content != Keymap.KEY_SPACEBAR {
 					log.Println(prefixLog, "arrow")
 					player.BotContext.Moving = r.Press
@@ -73,7 +72,7 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 				if player.BotContext.Energy <= 0 || player.BotContext.Heat >= 100 {
 					r = Key{0, false}
 				}
-				player.Mutex.Unlock()
+				// player.Mutex.Unlock()
 				if err := c.WriteJSON(r); err != nil {
 					log.Println(prefixWarn, err)
 				}
@@ -102,6 +101,8 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 		// 	return
 		// }
 	}
+	player.Mutex.Unlock()
+
 }
 
 func doEvery(d time.Duration, f func(*game.Player, *websocket.Conn, *websocket.Conn),
