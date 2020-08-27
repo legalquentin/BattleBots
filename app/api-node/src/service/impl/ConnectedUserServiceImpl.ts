@@ -7,11 +7,11 @@ import IConfig from "../IConfig";
 import { UserResourceAsm } from "../../resources/asm/UserResourceAsm";
 import HttpResponseModel from "../../resources/HttpResponseModel";
 import IUserResource from "../../resources/IUserResource";
-import { GeoIpService } from "../GeoIpService";
-import { GeoIpUserRepository } from "../../database/repositories/GeoIpUserRepository";
-import { GeoIpUserEntity } from "../../database/entities/GeoIpUserEntity";
-import { ConnectedUserGeoipRepository } from "../../database/repositories/ConnectedUserGeoipRepository";
-import { ConnectedUserGeoipEntity } from "../../database/entities/ConnectedUserGeoipEntity";
+// import { GeoIpService } from "../GeoIpService";
+// import { GeoIpUserRepository } from "../../database/repositories/GeoIpUserRepository";
+// import { GeoIpUserEntity } from "../../database/entities/GeoIpUserEntity";
+// import { ConnectedUserGeoipRepository } from "../../database/repositories/ConnectedUserGeoipRepository";
+// import { ConnectedUserGeoipEntity } from "../../database/entities/ConnectedUserGeoipEntity";
 import { ConnectedUserResource } from "../../resources/ConnectedUserResource";
 import { ConnectedUserResourceAsm } from "../../resources/asm/ConnectedUserResourceAsm";
 
@@ -29,14 +29,14 @@ export class ConnectedUserServiceImpl extends ConnectedUserService {
     @Inject
     userResourceAsm: UserResourceAsm;
 
-    @Inject
-    geoIpService: GeoIpService;
+    // @Inject
+    // geoIpService: GeoIpService;
 
-    @Inject
-    geoipUserRepository: GeoIpUserRepository;
+    // @Inject
+    // geoipUserRepository: GeoIpUserRepository;
 
-    @Inject
-    geoIpConnectedUserRepository: ConnectedUserGeoipRepository;
+    // @Inject
+    // geoIpConnectedUserRepository: ConnectedUserGeoipRepository;
 
     @Inject
     connectedUserAsm: ConnectedUserResourceAsm;
@@ -45,63 +45,63 @@ export class ConnectedUserServiceImpl extends ConnectedUserService {
         super();
     }
 
-    async linkPosition(userId: number, ipAddress: string) {
-        const user = await this.userRepository.findOne(userId);
-        const geoip = await this.geoIpService.findByIp(ipAddress);
-        if (geoip == null)
-        {
-            const response : HttpResponseModel<IUserResource> = {
-                httpCode: 400,
-                message: "geoip empty"
-            };
+    // async linkPosition(userId: number, ipAddress: string) {
+    //     const user = await this.userRepository.findOne(userId);
+    //     const geoip = await this.geoIpService.findByIp(ipAddress);
+    //     if (geoip == null)
+    //     {
+    //         const response : HttpResponseModel<IUserResource> = {
+    //             httpCode: 400,
+    //             message: "geoip empty"
+    //         };
 
-            return (response);
-        }
-        const connectedUserLatest = await this.connectedUserRepository.getLatested(user.id);
-        let flagGeoIpUser = false;
+    //         return (response);
+    //     }
+    //     const connectedUserLatest = await this.connectedUserRepository.getLatested(user.id);
+    //     let flagGeoIpUser = false;
 
-        let geoipUsers = await this.geoipUserRepository.findByUser(user.id);
-        if (!geoipUsers){
-            geoipUsers = [];
-        }
-        for (let geoipUser of geoipUsers){
-            if (geoip.ip == geoipUser.geoip.ip){
-                flagGeoIpUser = true;
-            }
-        }
-        if (!flagGeoIpUser){
-            const geoIpUser = new GeoIpUserEntity();
+    //     let geoipUsers = await this.geoipUserRepository.findByUser(user.id);
+    //     if (!geoipUsers){
+    //         geoipUsers = [];
+    //     }
+    //     for (let geoipUser of geoipUsers){
+    //         if (geoip.ip == geoipUser.geoip.ip){
+    //             flagGeoIpUser = true;
+    //         }
+    //     }
+    //     if (!flagGeoIpUser){
+    //         const geoIpUser = new GeoIpUserEntity();
 
-            geoIpUser.geoip = geoip;
-            geoIpUser.user = user;
-            await this.geoipUserRepository.save(geoIpUser);
-        }
-        if (connectedUserLatest && (connectedUserLatest.endConnected.getTime() > (new Date().getTime()))){
-            let geoipConnectedUsers = await this.geoIpConnectedUserRepository.findByConnectedUser(connectedUserLatest.id);
-            let conn = false;
-            if (!geoipConnectedUsers){
-                geoipConnectedUsers = [];
-            }
-            for (let geoipConnectedUser of geoipConnectedUsers){
-                if (geoipConnectedUser.geoip.ip == geoip.ip){
-                    conn = true;
-                }
-            }
-            if (!conn){
-                const geoipConn = new ConnectedUserGeoipEntity();
+    //         geoIpUser.geoip = geoip;
+    //         geoIpUser.user = user;
+    //         await this.geoipUserRepository.save(geoIpUser);
+    //     }
+    //     if (connectedUserLatest && (connectedUserLatest.endConnected.getTime() > (new Date().getTime()))){
+    //         let geoipConnectedUsers = await this.geoIpConnectedUserRepository.findByConnectedUser(connectedUserLatest.id);
+    //         let conn = false;
+    //         if (!geoipConnectedUsers){
+    //             geoipConnectedUsers = [];
+    //         }
+    //         for (let geoipConnectedUser of geoipConnectedUsers){
+    //             if (geoipConnectedUser.geoip.ip == geoip.ip){
+    //                 conn = true;
+    //             }
+    //         }
+    //         if (!conn){
+    //             const geoipConn = new ConnectedUserGeoipEntity();
 
-                geoipConn.geoip = geoip;
-                geoipConn.connectedUser = connectedUserLatest;
-                await this.geoIpConnectedUserRepository.save(geoipConn);
-            }
-        }
-        const response: HttpResponseModel<IUserResource> = {
-            httpCode: 200,
-            message: "position updated"
-        };
+    //             geoipConn.geoip = geoip;
+    //             geoipConn.connectedUser = connectedUserLatest;
+    //             await this.geoIpConnectedUserRepository.save(geoipConn);
+    //         }
+    //     }
+    //     const response: HttpResponseModel<IUserResource> = {
+    //         httpCode: 200,
+    //         message: "position updated"
+    //     };
 
-        return (response);
-    }
+    //     return (response);
+    // }
 
     async login(userId: number) {
         const connectedUserLatest = await this.connectedUserRepository.getLatested(userId);

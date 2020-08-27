@@ -1,7 +1,7 @@
 import { AbstractEntity } from "./AbstractEntity";
 import UserEntity from "./UserEntity";
 import { JoinColumn, ManyToOne, Column, Entity, OneToMany } from "typeorm";
-import { ConnectedUserGeoipEntity } from "./ConnectedUserGeoipEntity";
+// import { ConnectedUserGeoipEntity } from "./ConnectedUserGeoipEntity";
 import { SessionEntity } from "./SessionEntity";
 
 @Entity({

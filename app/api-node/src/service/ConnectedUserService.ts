@@ -6,6 +6,6 @@ export abstract class ConnectedUserService {
     abstract getConnected();
     abstract getDisconnected();
     abstract getAll();
-    abstract linkPosition(userId: number, ipAddress: string);
+    // abstract linkPosition(userId: number, ipAddress: string);
     abstract getLatest(userId: number);
 }

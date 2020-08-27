@@ -93,7 +93,8 @@ export class UserController {
     @Path('/update-position/users')
     @PUT
     public async linkPosition(id: number, @ContextRequest req: express.Request){
-        return (this.connectedUsers.linkPosition(id, req.socket.remoteAddress));
+        // return (this.connectedUsers.linkPosition(id, req.socket.remoteAddress));
+        return;
     }
 
     @Produces("application/json;charset=UTF-8")
