@@ -1,6 +1,7 @@
 package client
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -26,6 +27,7 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 	if player == nil {
 		return
 	}
+	fmt.Println(prefixLog, player.ID, player.BotSpecs.Name, "logged in")
 
 	player.Mutex.Lock()
 	player.BotSpecs.SocketClientCtrl = conn
@@ -57,34 +59,30 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 
 			// ignore the command if the game hasn't started
 			if !game.GetGameInstance(player.GameID).Started {
-				// break
-				conn.WriteJSON(&game.TextData{Type: game.TypeInfo, Value: "waiting for all user to join"})
-				continue
-			}
+				log.Println(prefixLog, "command sent;", r.Content, r.Press)
+				player.Mutex.Lock()
+				if r.Content != Keymap.KEY_SPACEBAR {
+					player.BotContext.Moving = r.Press
+				} else if r.Press {
+					fireLaser(conn, player)
+				}
+				player.Mutex.Unlock()
 
-			log.Println(prefixLog, "command sent;", r.Content, r.Press)
-			player.Mutex.Lock()
-			if r.Content != Keymap.KEY_SPACEBAR {
-				player.BotContext.Moving = r.Press
-			} else if r.Press {
-				fireLaser(conn, player)
-			}
-			player.Mutex.Unlock()
+				if flag {
+					go doEvery(100*time.Millisecond, calcAttributes, player, conn, c)
+					flag = false
+				}
 
-			if flag {
-				go doEvery(100*time.Millisecond, calcAttributes, player, conn, c)
-				flag = false
-			}
-
-			// write a message to the bot [conn]
-			player.Mutex.Lock()
-			if player.BotContext.Energy <= 0 || player.BotContext.Heat >= 100 {
-				r = Key{0, false}
-			}
-			player.Mutex.Unlock()
-			if err := c.WriteJSON(r); err != nil {
-				log.Println(prefixWarn, err)
-				return
+				// write a message to the bot [conn]
+				player.Mutex.Lock()
+				if player.BotContext.Energy <= 0 || player.BotContext.Heat >= 100 {
+					r = Key{0, false}
+				}
+				player.Mutex.Unlock()
+				if err := c.WriteJSON(r); err != nil {
+					log.Println(prefixWarn, err)
+					return
+				}
 			}
 		}
 	}(flag)
