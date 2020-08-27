@@ -60,29 +60,29 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 			// ignore the command if the game hasn't started
 			if game.GetGameInstance(player.GameID).Started {
 				log.Println(prefixLog, "command sent;", r.Content, r.Press)
-				player.Mutex.Lock()
-				if r.Content != Keymap.KEY_SPACEBAR {
-					player.BotContext.Moving = r.Press
-				} else if r.Press {
-					fireLaser(conn, player)
-				}
-				player.Mutex.Unlock()
-
 				if flag {
 					go doEvery(100*time.Millisecond, calcAttributes, player, conn, c)
 					flag = false
 				}
 
-				// write a message to the bot [conn]
 				player.Mutex.Lock()
+				if r.Content != Keymap.KEY_SPACEBAR {
+					log.Println(prefixLog, "arrow")
+					player.BotContext.Moving = r.Press
+				} else if r.Press {
+					log.Println(prefixLog, "space")
+					fireLaser(conn, player)
+				}
+				// write a message to the bot [conn]
 				if player.BotContext.Energy <= 0 || player.BotContext.Heat >= 100 {
 					r = Key{0, false}
 				}
 				player.Mutex.Unlock()
 				if err := c.WriteJSON(r); err != nil {
 					log.Println(prefixWarn, err)
-					return
 				}
+			} else {
+				log.Println(prefixLog, "game not started, can't process: ", r.Content, r.Press)
 			}
 		}
 	}(flag)
@@ -106,6 +106,7 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 
 func doEvery(d time.Duration, f func(*game.Player, *websocket.Conn, *websocket.Conn),
 	player *game.Player, conn *websocket.Conn, bot *websocket.Conn) {
+	log.Println(prefixLog, "do every")
 	for range time.Tick(d) {
 		f(player, conn, bot)
 	}
