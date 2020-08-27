@@ -313,6 +313,7 @@ func GetPlayer(gameID string, playerID string) *Player {
 				p.Mutex.Unlock()
 				return p
 			}
+			p.Mutex.Unlock()
 		}
 	}
 	log.Println(prefixWarn, "couldn't find player")
