@@ -142,11 +142,12 @@ export class GameServiceImpl implements GameService {
                 playersResource = [];
             }
             console.log("DEBUG - 3");
-            const idList = playersResource.map(p => p.id);
+            // const idList = playersResource.map(p => p.id);
+            // bot repository cause a bug, because of bot_ip not beeing defined..
             // await this.serviceFactory.getBotUserRepository().deleteUsers(idList);
             console.log("DEBUG 3'");
             console.log("DEBUG 3'''");
-            const { sessions, streams, params, bots, userGames, botUsers } = await this.mapPlayerResources(playersResource);
+            const { sessions, streams, params, bots, userGames } = await this.mapPlayerResources(playersResource);
             let saved = null;
             console.log("DEBUG - 4");
             await this.serviceFactory.getGameRepository().manager.transaction(async (manager) => {
@@ -168,6 +169,7 @@ export class GameServiceImpl implements GameService {
                 {
                     (session as SessionEntity).game = saved;
                 }
+                // bot repository cause a bug, because of bot_ip not beeing defined..
                 // await this.serviceFactory.getBotUserRepository().saveAll(manager, botUsers);
                 await this.serviceFactory.getGameRepository().AddBotGame(manager, bots);
                 await this.serviceFactory.getGameRepository().AddStreamInGame(manager, streams);
