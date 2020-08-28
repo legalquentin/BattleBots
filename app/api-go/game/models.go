@@ -81,7 +81,7 @@ type Bot struct {
 	BaseSpeed    int8   `json:"baseSpeed,omitempty"`
 	BaseDamage   int8   `json:"baseDamage,omitempty"`
 	BaseHull     int8   `json:"baseHull,omitempty"`
-	BaseFireRate int8   `json:"basFireRate,omitempty"`
+	BaseFireRate int8   `json:"baseFireRate,omitempty"`
 }
 
 // Environment is the physical place where battlebots are: (room 1, room2, room3)

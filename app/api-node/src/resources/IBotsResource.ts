@@ -7,10 +7,10 @@ export interface IBotsResource {
     running: number;
     taken: number;
     name: string;
-    speed: number;
-    damage: number;
-    fireRate: number;
-    armor: number;
+    baseSpeed: number;
+    baseDamage: number;
+    baseFireRate: number;
+    baseHull: number;
     streams? : Array<IStreamResource>;
     games?: Array<IGameResource>;
 }
