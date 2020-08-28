@@ -153,11 +153,13 @@ func closePlayerConn(game Game) {
 		player.Mutex.Lock()
 		if player.BotSpecs.SocketBotCam != nil {
 			player.BotSpecs.SocketClientCam.Close()
-			player.BotSpecs.SocketClientCtrl.WriteJSON(Data{Type: TypeDisconnect, Value: 0})
+			ref := *player.BotSpecs.SocketClientCtrl
+			ref.WriteJSON(Data{Type: TypeDisconnect, Value: 0})
 			player.BotSpecs.SocketBotCam.Close()
 		}
 		if player.BotSpecs.SocketClientCtrl != nil {
-			player.BotSpecs.SocketClientCtrl.Close()
+			ref := *player.BotSpecs.SocketClientCtrl
+			ref.Close()
 			player.BotSpecs.SocketBotCtrl.Close()
 		}
 		player.Mutex.Unlock()
