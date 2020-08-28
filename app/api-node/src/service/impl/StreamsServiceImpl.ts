@@ -12,7 +12,6 @@ import * as AWS from "aws-sdk";
 import * as path from "path";
 import { uuid } from "uuidv4";
 
-
 @Singleton
 export class StreamsServiceImpl implements StreamsService {
 
@@ -22,13 +21,11 @@ export class StreamsServiceImpl implements StreamsService {
     @Inject
     private config: IConfig;
 
+    
     private s3: AWS.S3;
 
     constructor(){
-        this.s3 = new AWS.S3({
-            accessKeyId: process.env.AWS_ACCESS_KEY_ID,// .getAccessKeyId(),
-            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-        });
+        this.s3 = new AWS.S3();
 
         this.s3.listBuckets((err, data) => {
             if (err){
@@ -193,7 +190,7 @@ export class StreamsServiceImpl implements StreamsService {
          if (resource){
             const response: HttpResponseModel<IStreamResource> = {
                 httpCode: 200,
-                message: "Stream finded",
+                message: "Stream found",
                 data: resource
             };
 

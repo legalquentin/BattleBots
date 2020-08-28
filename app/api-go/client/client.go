@@ -199,9 +199,9 @@ func fireLaser(conn *websocket.Conn, player *game.Player) {
 			}
 			p.Mutex.Unlock()
 		}
-		msg := randQrMsg(resp, player)
-		conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: msg})
 	}
+	msg := randQrMsg(resp, player)
+	conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: msg})
 }
 
 func randQrMsg(qrId string, player *game.Player) string {
