@@ -7,15 +7,15 @@ import { JoinColumn, Column, BeforeInsert, BeforeUpdate, Entity, ManyToOne } fro
 })
 export class ConnectedUserGeoipEntity {
 
-    @JoinColumn({
-        name: "connected_user_id",
-        referencedColumnName: "id"
-    })
-    @ManyToOne(type => ConnectedUserEntity, conn => conn.connectedUserGeoIp, {
-        primary: true,
-        eager: true
-    })
-    public connectedUser: ConnectedUserEntity;
+    // @JoinColumn({
+    //     name: "connected_user_id",
+    //     referencedColumnName: "id"
+    // })
+    // @ManyToOne(type => ConnectedUserEntity, conn => conn.connectedUserGeoIp, {
+    //     primary: true,
+    //     eager: true
+    // })
+    // public connectedUser: ConnectedUserEntity;
 
     @JoinColumn({
         name: "geoip_id",
