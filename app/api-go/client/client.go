@@ -181,7 +181,6 @@ func fireLaser(conn *websocket.Conn, player *game.Player) {
 			for _, p := range gameinstance.Players {
 				fmt.Println(p)
 				if p.BotSpecs.ID == int16(idAsInt) {
-					p.Mutex.Lock()
 					p.BotContext.Health = p.BotContext.Health - player.BotSpecs.BaseDamage
 					dmgAsStr := strconv.Itoa(int(player.BotSpecs.BaseDamage))
 					dmgMsg := "You've been hit by " + player.BotSpecs.Name + " for " + dmgAsStr + "health points !"
@@ -196,7 +195,6 @@ func fireLaser(conn *websocket.Conn, player *game.Player) {
 
 					msg := "You've hit " + p.BotSpecs.Name + " for " + dmgAsStr + "health points !"
 					conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: msg})
-					p.Mutex.Unlock()
 					return
 				}
 			}
