@@ -824,14 +824,7 @@
 						}
 					}
 				},
-				"description": "",
-				"security": [
-					{
-						"Bearer": [
-							"ROLE_USER"
-						]
-					}
-				]
+				"description": ""
 			},
 			"put": {
 				"operationId": "GameUpdate",
@@ -1377,94 +1370,6 @@
 						"required": true,
 						"schema": {
 							"type": "string"
-						}
-					}
-				]
-			}
-		},
-		"/api/games/worker/info": {
-			"get": {
-				"operationId": "GameGameInfoList",
-				"responses": {
-					"200": {
-						"description": "",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIGameInfoResourceArray"
-								}
-							}
-						}
-					},
-					"204": {
-						"description": "No content"
-					},
-					"400": {
-						"description": "",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIGameInfoResourceArray"
-								}
-							}
-						}
-					}
-				},
-				"description": "",
-				"security": [
-					{
-						"Bearer": [
-							"ROLE_USER"
-						]
-					}
-				]
-			}
-		},
-		"/api/games/worker/info/{id}": {
-			"get": {
-				"operationId": "GameGameInfoDetails",
-				"responses": {
-					"200": {
-						"description": "",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIGameInfoResource"
-								}
-							}
-						}
-					},
-					"204": {
-						"description": "No content"
-					},
-					"400": {
-						"description": "",
-						"content": {
-							"application/json;charset=UTF-8": {
-								"schema": {
-									"$ref": "#/components/schemas/HttpResponseModelIGameInfoResource"
-								}
-							}
-						}
-					}
-				},
-				"description": "",
-				"security": [
-					{
-						"Bearer": [
-							"ROLE_USER"
-						]
-					}
-				],
-				"parameters": [
-					{
-						"description": "",
-						"in": "path",
-						"name": "id",
-						"required": true,
-						"schema": {
-							"type": "number",
-							"format": "double"
 						}
 					}
 				]
@@ -2927,6 +2832,13 @@
 					"user": {
 						"$ref": "#/components/schemas/IUserResource"
 					},
+					"geoips": {
+						"type": "array",
+						"items": {
+							"$ref": "#/components/schemas/IGeoIpResource"
+						},
+						"description": ""
+					},
 					"from": {
 						"type": "string",
 						"format": "date-time",
@@ -3135,88 +3047,6 @@
 					},
 					"data": {
 						"$ref": "#/components/schemas/IGameResource"
-					}
-				},
-				"type": "object"
-			},
-			"IGameInfoResource": {
-				"description": "",
-				"properties": {
-					"winner_id": {
-						"type": "number",
-						"format": "double",
-						"description": ""
-					},
-					"loser_id": {
-						"type": "number",
-						"format": "double",
-						"description": ""
-					},
-					"winnerpoints": {
-						"type": "number",
-						"format": "double",
-						"description": ""
-					},
-					"loserpoints": {
-						"type": "number",
-						"format": "double",
-						"description": ""
-					},
-					"video_winner": {
-						"type": "string",
-						"description": ""
-					},
-					"video_loser": {
-						"type": "string",
-						"description": ""
-					},
-					"game": {
-						"$ref": "#/components/schemas/IGameResource"
-					},
-					"id": {
-						"type": "number",
-						"format": "double",
-						"description": ""
-					}
-				},
-				"type": "object"
-			},
-			"HttpResponseModelIGameInfoResourceArray": {
-				"description": "",
-				"properties": {
-					"message": {
-						"type": "string",
-						"description": ""
-					},
-					"httpCode": {
-						"type": "number",
-						"format": "double",
-						"description": ""
-					},
-					"data": {
-						"type": "array",
-						"items": {
-							"$ref": "#/components/schemas/IGameInfoResource"
-						},
-						"description": ""
-					}
-				},
-				"type": "object"
-			},
-			"HttpResponseModelIGameInfoResource": {
-				"description": "",
-				"properties": {
-					"message": {
-						"type": "string",
-						"description": ""
-					},
-					"httpCode": {
-						"type": "number",
-						"format": "double",
-						"description": ""
-					},
-					"data": {
-						"$ref": "#/components/schemas/IGameInfoResource"
 					}
 				},
 				"type": "object"

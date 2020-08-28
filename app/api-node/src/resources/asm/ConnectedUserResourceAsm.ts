@@ -16,11 +16,11 @@ export class ConnectedUserResourceAsm {
         const resource = new ConnectedUserResource();
 
         resource.user = await this.userResourceAsm.toResource(conn.user);
-        const tab = await conn.connectedUserGeoIp;
-        resource.geoips = [];
-        for (let item of tab){
-            resource.geoips.push(await this.geoipResourceAsm.toResource(item.geoip));
-        }
+        // const tab = await conn.connectedUserGeoIp;
+        // resource.geoips = [];
+        // for (let item of tab){
+        //     resource.geoips.push(await this.geoipResourceAsm.toResource(item.geoip));
+        // }
         resource.end = conn.endConnected;
         resource.from = conn.startConnected;
         resource.id = conn.id;
