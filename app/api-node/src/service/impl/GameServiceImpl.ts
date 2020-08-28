@@ -179,7 +179,9 @@ export class GameServiceImpl implements GameService {
             game.id = saved.id;
             const resource = await this.gameResourceAsm.toResource(saved);
             if (game.status == EGameStatus.ENDED){
-                await this.streamService.uploadAll(streams, params);
+                this.streamService.uploadAll(streams, params).catch(e => {
+                    console.log(e);
+                });
             }
             console.log("DEBUG - 6", game);
             if (game.status == EGameStatus.CREATED){
@@ -406,7 +408,6 @@ export class GameServiceImpl implements GameService {
 
                     for (let stream of streams){
                         const url = this.streamService.getVideoLink(stream);
-
                         stream.s3Url = url;
                     }
                     const botResource = await this.botResourceAsm.toResource(item);
