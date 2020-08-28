@@ -1,85 +1,18 @@
 <template>
-  <div id="app" style="min-height: 100%">
-    <!--<div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/coco">Coco l'asticot</router-link>
-    </div>
-    -->
-    
-    <router-view/>
+  <div id="app">
+    <router-view />
   </div>
 </template>
 
 <style lang="less">
 
-// When using <transition name>, we have weird unknow render bug. Need more efforts
-
-// .fade-enter-active, .fade-leave-active {
-//   transition-property: opacity;
-//   transition-duration: .30s;
-// }
-
-// .fade-enter-active {
-//   transition-delay: .30s;
-// }
-
-// .fade-enter, .fade-leave-active {
-//   opacity: 0
-// }
-
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+body {
+  box-sizing: border-box;
 }
 
-
-body
-{
-  background-color: whitesmoke !important;
-  &.game {
-      overflow-y: hidden;
-  }
+img[alt="www.000webhost.com"] {
+  visibility: hidden;
 }
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
-}
-
-.mini.button .arrow.up {
-  color: red;
-  background-color: transparent !important;
-}
-
-.mini.button.register-jump-button .random {
-  color: #a333c8;
-  background-color: transparent !important;
-}
-
-.mini.button.login-jump-button .random {
-  color: #f2711c;
-  background-color: transparent !important;
-}
-
 
 .ui.progress .bar {
   min-width: 0em !important;
@@ -88,9 +21,99 @@ body
 .bar {
   min-width: 0em !important;
 }
+
+#app {
+  height: 100%;
+  user-select: none;
+
+  /*****************
+   * Global Panels *
+   *****************/
+
+  #abstract-panel .body::-webkit-scrollbar-thumb {
+    background-color: white;
+  }
+
+  #abstract-panel .body::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  .huge-segment {
+    background-color: rgb(66, 66, 66);
+    color: white;
+    margin-bottom: 0px;
+    .sub.header {
+      font-size: 16px;
+    }
+  }
+
+  .footer .button {
+    margin-right: 10px;
+  }
+
+  .body .row {
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+
+  .rating {
+    ::before {
+      content: "\f1e2";
+    }
+
+    .active::before {
+      color: #c0392b;
+    }
+    .icon {
+      font-family: Icons;
+    }
+  }
+
+  .card {
+    overflow: hidden;
+  }
+
+  .card .image {
+    object-fit: cover;
+    height: 90px;
+    min-width: 280px;
+  }
+
+  input,
+  .card {
+    // background-color: grey;
+    border-radius: 5px;
+    opacity: 0.6;
+    box-shadow: 0 1px 3px 0 transparent, 0 0 0 1px transparent;
+    transition: opacity linear 200ms;
+  }
+
+  .button {
+    opacity: 0.6;
+    transition: opacity linear 200ms;
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  input:hover,
+  .card:hover,
+  .card.selected,
+  input:focus {
+    background-color: #f1f2f6;
+    opacity: 1;
+  }
+
+  .logo img {
+    color: red;
+    visibility: visible;
+    transition: visibility linear 2s;
+  }
+
+  @media (max-height: 540px) {
+    .logo img {
+      visibility: hidden;
+    }
+  }
+}
 </style>
-
-
-<script lang="ts">
-require('electron').webFrame.setZoomFactor(1.2);
-</script>

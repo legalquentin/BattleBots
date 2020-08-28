@@ -1,80 +1,27 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-
-import SplashView from '@/views/SplashScreen/index.vue';
-import MainFrame from '@/views/MainFrame/index.vue';
-import GameFrame from '@/views/GameFrame/index.vue';
-import RegisterFrame from '@/views/RegisterFrame/index.vue';
-import LoginFrame from '@/views/LoginFrame/index.vue';
-import GamesListFrame from '@/views/GamesListFrame/index.vue';
-import CreateGameFrame from '@/views/CreateGameFrame/index.vue';
-import EndOfGameFrameNew from '@/views/EndOfGameFrameNew/index.vue';
+import Vue, { Component } from 'vue'
+import VueRouter, { RouteConfig, Route } from 'vue-router'
+import Home from '../views/__1.vue'
+import { Dictionary } from 'vue-router/types/router';
 
 Vue.use(VueRouter)
 
-const routes = [
-  /**
-   * General
-   */
-  {
-    path: '/',
-    name: 'splash',
-    component: SplashView,
-  },
+const routes: RouteConfig[] = [
+  { path: '/', component: () => import('../views/Launcher/Launcher.vue'), children: [
+    { path: '', name: 'HomePanel', component: () => import('../views/Launcher/components/HomePanel.vue') },
+    { path: 'create-game-panel', name: 'CreateGamePanel', component: () => import('../views/Launcher/components/CreateGamePanel.vue') },
+    { path: 'list-games-panel', name: 'ListGamesPanel', component: () => import('../views/Launcher/components/ListGamesPanel.vue') },
+    { path: 'replay-panel', name: 'ReplayPanel', component: () => import('../views/Launcher/components/ReplayPanel.vue') },
+    { path: 'stats-panel', name: 'StatsPanel', component: () => import('../views/Launcher/components/StatsPanel.vue') },
 
-  {
-    path: '/MainFrame',
-    name: 'MainFrame',
-    component: MainFrame,
-  },
-  {
-    path: '/GameFrame',
-    name: 'GameFrame',
-    component: GameFrame,
-    props: true,
-  },
-  
-  /**
-   * Authentication & User management
-   */
-  {
-    path: '/RegisterFrame',
-    name: 'RegisterFrame',
-    component: RegisterFrame,
-  },
+    { path: 'register-panel', name: 'RegisterPanel', component: () => import('../views/Launcher/components/RegisterPanel.vue') },
+    { path: 'login-panel', name: 'LoginPanel', component: () => import('../views/Launcher/components/LoginPanel.vue') },
+  ] },
 
-  {
-    path: '/LoginFrame',
-    name: 'LoginFrame',
-    component: LoginFrame,
-  },
-
-  /**
-   * Game management
-   */
-  {
-    path: '/GamesListFrame',
-    name: 'GamesListFrame',
-    component: GamesListFrame,
-  },
-
-  {
-    path: '/CreateGameFrame',
-    name: 'CreateGameFrame',
-    component: CreateGameFrame,
-  },
-
-  {
-    path: '/EndOfGameFrame',
-    name: 'EndOfGameFrame',
-    component: EndOfGameFrameNew,
-    props: true,
-  }
+  { path: '/fight', name: 'FightFrame', component: () => import('../views/Fight/Fight.vue') }
 ];
 
+
 const router = new VueRouter({
-  mode: 'hash',
-  base: process.env.BASE_URL,
   routes
 })
 

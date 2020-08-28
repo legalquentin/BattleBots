@@ -1,43 +1,29 @@
-// import Vue from 'vue'
-// @ts-ignore
+import { Vue } from 'vue-property-decorator'
 import App from './App.vue'
 import router from './router'
+
 import SuiVue from 'semantic-ui-vue';
-import 'semantic-ui-css/semantic.min.css';
-import ConnectionManager from './utils/ConnectionManager';
-import { Vue } from 'vue-property-decorator';
-import VueNotifications from 'vue-notifications'
-import iziToast from 'izitoast'// https://github.com/dolce/iziToast
-import 'izitoast/dist/css/iziToast.min.css'
+import $global, { Global } from './Global';
+/* ... */
+
+import ApiComponent from './network/ApiComponent';
+import WebsocketComponent from './network/WebsocketComponent';
+
+// vue proto overrides. See ./shims-tsx.d.ts for types declarations
+Vue.prototype.$global = $global;
+Vue.prototype.$api = new ApiComponent();
+Vue.prototype.$ws = new WebsocketComponent();
 
 Vue.use(SuiVue);
+import 'semantic-ui-css/semantic.min.css';
+
 Vue.config.productionTip = false
 
-function toast ({title, message, type, timeout, cb}) {
-  if (type === VueNotifications.types.warn) type = 'warning'
-  return iziToast[type]({title, message, timeout})
-}
-
-const options = {
-  success: toast,
-  error: toast,
-  info: toast,
-  warn: toast
-}
-
-Vue.use(VueNotifications, options)
-
-if (module.hot) {
-  module.hot.accept(function () {
-    window.location.reload();
-  });
-}
-
-require('v8-compile-cache');
-
-Vue.prototype.connectionManager = new ConnectionManager();
-
-new Vue({
+const vue = new Vue({
   router,
   render: h => h(App)
-}).$mount('#app')
+})
+
+// vue.$global = $global;
+
+vue.$mount('#app')

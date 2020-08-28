@@ -1,4 +1,6 @@
 import Vue, { VNode } from 'vue'
+import ApiComponent from './network/ApiComponent';
+import WebsocketManager from './network/WebsocketComponent';
 
 declare global {
   namespace JSX {
@@ -12,29 +14,15 @@ declare global {
   }
 }
 
-type RequestIdleCallbackHandle = any;
-type RequestIdleCallbackOptions = {
-  timeout: number;
-};
-type RequestIdleCallbackDeadline = {
-  readonly didTimeout: boolean;
-  timeRemaining: (() => number);
-};
-
-declare global {
-  interface Window {
-    requestIdleCallback: ((
-      callback: ((deadline: RequestIdleCallbackDeadline) => void),
-      opts?: RequestIdleCallbackOptions,
-    ) => RequestIdleCallbackHandle);
-    cancelIdleCallback: ((handle: RequestIdleCallbackHandle) => void);
-  }
-}
-
-import ConnectionManager from './utils/ConnectionManager';
-
-declare module "vue/types/vue" {
+declare module 'vue/types/vue' {
+  import { Vue } from 'vue-property-decorator'
+  import { Global as G} from './Global';
+  import ApiComponent from './network/ApiComponent';
+  import WebsocketComponent from './network/WebsocketComponent';
+  // 3. Declare augmentation for Vue
   interface Vue {
-    connectionManager: ConnectionManager;
+    $global: G,
+    $api: ApiComponent,
+    $ws: WebsocketComponent,
   }
 }
