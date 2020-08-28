@@ -44,7 +44,7 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 		return
 	}
 	player.BotSpecs.SocketBotCtrl = c
-	conn.WriteJSON(&QrMsgStruct{Id: "test", Message: player.BotSpecs.Name})
+	// conn.WriteJSON(&QrMsgStruct{Id: -1, Message: player.BotSpecs.Name})
 
 	var flag = true
 
@@ -169,43 +169,35 @@ func fireLaser(conn *websocket.Conn, player *game.Player) {
 	response := getZbar("http://" + player.BotSpecs.Address + ":8082")
 	resp := strings.Split(response, " ")[0]
 	log.Println(prefixLog, resp)
-	if resp == "0" {
-		conn.WriteJSON(&game.TextData{Type: game.TypeWarning, Value: "Missed"})
-	} else {
-		// check for QRCODE link
-		if qrMsg, ok := QrCodesLinks[resp]; ok {
-			// change other player bot attributes
-			conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: qrMsg.Message + " !"})
-			gameinstance := game.GetGameInstance(player.GameID)
-			idAsInt, _ := strconv.ParseInt(resp, 10, 16)
-			for _, p := range gameinstance.Players {
-				log.Println(prefixLog, "DEBUG", int16(idAsInt), p.BotSpecs.ID)
-				// p.Mutex.Lock()
-				if p.BotSpecs.ID == int16(idAsInt) {
-					log.Println(prefixLog, "write message to target")
-					// player.Mutex.Lock()
-					// p.BotContext.Health = p.BotContext.Health - player.BotSpecs.BaseDamage
-					// dmgAsStr := strconv.Itoa(int(player.BotSpecs.BaseDamage))
-					// dmgMsg := "You've been hit by " + player.BotSpecs.Name + " for " + dmgAsStr + "health points !"
-					// player.Mutex.Unlock()
-					// // log.Println(prefixLog, p.BotSpecs.SocketClientCtrl.RemoteAddr().String())
-					// if err := p.BotSpecs.SocketClientCtrl.WriteJSON(&game.TextData{Type: game.TypeAlert, Value: dmgMsg}); err != nil {
-					// 	log.Println(prefixWarn, err)
-					// }
-					// if err := p.BotSpecs.SocketClientCtrl.WriteJSON(&game.Data{Type: game.TypeHealth, Value: int16(p.BotContext.Health)}); err != nil {
-					// 	log.Println(prefixWarn, err)
-					// }
-
-					// msg := "You've hit " + p.BotSpecs.Name + " for " + dmgAsStr + "health points !"
-					log.Println(prefixLog, "send success message to sender")
-					// conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: msg})
-					// p.Mutex.Unlock()
-					return
+	if qrMsg, ok := QrCodesLinks[resp]; ok {
+		// change other player bot attributes
+		conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: qrMsg.Message + " !"})
+		gameinstance := game.GetGameInstance(player.GameID)
+		for _, p := range gameinstance.Players {
+			log.Println(prefixLog, "DEBUG", resp, p.BotSpecs.ID)
+			p.Mutex.Lock()
+			if p.BotSpecs.ID == qrMsg.Id {
+				log.Println(prefixLog, "write message to target")
+				player.Mutex.Lock()
+				p.BotContext.Health = p.BotContext.Health - player.BotSpecs.BaseDamage
+				dmgAsStr := strconv.Itoa(int(player.BotSpecs.BaseDamage))
+				dmgMsg := "You've been hit by " + player.BotSpecs.Name + " for " + dmgAsStr + "health points !"
+				player.Mutex.Unlock()
+				// log.Println(prefixLog, p.BotSpecs.SocketClientCtrl.RemoteAddr().String())
+				if err := p.BotSpecs.SocketClientCtrl.WriteJSON(&game.TextData{Type: game.TypeAlert, Value: dmgMsg}); err != nil {
+					log.Println(prefixWarn, err)
 				}
-				p.Mutex.Unlock()
+				if err := p.BotSpecs.SocketClientCtrl.WriteJSON(&game.Data{Type: game.TypeHealth, Value: int16(p.BotContext.Health)}); err != nil {
+					log.Println(prefixWarn, err)
+				}
 
+				msg := "You've hit " + p.BotSpecs.Name + " for " + dmgAsStr + "health points !"
+				log.Println(prefixLog, "send success message to sender")
+				conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: msg})
+				p.Mutex.Unlock()
+				return
 			}
-			return
+			p.Mutex.Unlock()
 		}
 		msg := randQrMsg(resp, player)
 		conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: msg})

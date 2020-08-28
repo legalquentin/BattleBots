@@ -17,5 +17,5 @@ type KeyMapStruct struct {
 
 type QrMsgStruct struct {
 	Message string `json:"message,omitempty"`
-	Id      string `json:"id,omitempty"`
+	Id      int16  `json:"id,omitempty"`
 }

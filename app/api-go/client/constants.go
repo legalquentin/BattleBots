@@ -14,11 +14,11 @@ var Keymap = KeyMapStruct{
 
 var QrMsgMissed = QrMsgStruct{
 	Message: "You missed !",
-	Id:      "0",
+	Id:      0,
 }
 
 var QrCodesLinks = map[string]QrMsgStruct{
 	"0": QrMsgMissed,
-	"4": QrMsgStruct{"You've hit Rocinante !", "4"},
-	"5": QrMsgStruct{"You've hit Razorback !", "5"},
+	"4": QrMsgStruct{"You've hit Rocinante !", 1},
+	"5": QrMsgStruct{"You've hit Razorback !", 2},
 }
