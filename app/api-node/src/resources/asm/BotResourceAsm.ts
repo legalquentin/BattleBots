@@ -91,7 +91,7 @@ export class BotResourceAsm {
         robot.address = bot.address;
         robot.damage = bot.damage;
         robot.armor = bot.armor;
-        robot.taken = bot.taken;
+        robot.taken = -1; //bot.taken;
         robot.speed = bot.speed;
         robot.fireRate = bot.fireRate;
         robot.running = bot.running;
