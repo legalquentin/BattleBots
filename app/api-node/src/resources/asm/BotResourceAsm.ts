@@ -33,11 +33,11 @@ export class BotResourceAsm {
         const resource : IBotsResource = {
             id: robot.id,
             address: robot.address,
-            damage: robot.damage,
-            armor: robot.armor,
+            baseDamage: robot.damage,
+            baseHull: robot.armor,
             taken: robot.taken,
-            speed: robot.speed,
-            fireRate: robot.fireRate,
+            baseSpeed: robot.speed,
+            baseFireRate: robot.fireRate,
             running: robot.running,
             name: robot.name
         };
