@@ -2535,7 +2535,7 @@
 						"format": "double",
 						"description": ""
 					},
-					"botIp": {
+					"address": {
 						"type": "string",
 						"description": ""
 					},
@@ -2591,7 +2591,7 @@
 				"type": "object",
 				"required": [
 					"id",
-					"botIp",
+					"address",
 					"running",
 					"taken",
 					"name",

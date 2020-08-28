@@ -1604,7 +1604,7 @@ components:
                     type: number
                     format: double
                     description: ""
-                botIp:
+                address:
                     type: string
                     description: ""
                 running:
@@ -1647,7 +1647,7 @@ components:
             type: object
             required:
                 - id
-                - botIp
+                - address
                 - running
                 - taken
                 - name

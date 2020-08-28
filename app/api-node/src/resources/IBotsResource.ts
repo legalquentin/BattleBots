@@ -3,7 +3,7 @@ import { IGameResource } from "./IGameResource";
 
 export interface IBotsResource {
     id: number;
-    botIp: string;
+    address: string;
     running: number;
     taken: number;
     name: string;

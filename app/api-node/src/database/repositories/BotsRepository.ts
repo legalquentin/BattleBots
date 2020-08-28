@@ -75,7 +75,7 @@ export class BotsRepository extends Repository<RobotsEntity> {
             const bot = new RobotsEntity();
             
             bot.id = item.id;
-            bot.botIp = item.bot_ip;
+            bot.address = item.bot_ip;
             bot.armor = item.armor;
             bot.damage = item.damage;
             bot.fireRate = item.fire_rate;

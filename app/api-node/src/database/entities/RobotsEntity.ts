@@ -12,7 +12,7 @@ import { SessionEntity } from "./SessionEntity";
 export class RobotsEntity extends AbstractEntity {
 
     @Column({name: "bot_ip"})
-    public botIp: string;
+    public address: string;
 
     @Column({name: "running"})
     public running: number;

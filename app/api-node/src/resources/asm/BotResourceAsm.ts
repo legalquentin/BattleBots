@@ -32,7 +32,7 @@ export class BotResourceAsm {
         //const streamResourceAsm = Container.get(StreamsResourceAsm);
         const resource : IBotsResource = {
             id: robot.id,
-            botIp: robot.botIp,
+            address: robot.address,
             damage: robot.damage,
             armor: robot.armor,
             taken: robot.taken,
@@ -88,7 +88,7 @@ export class BotResourceAsm {
        // const userResourceAsm = Container.get(UserResourceAsm);
 
         robot.id = bot.id;
-        robot.botIp = bot.botIp;
+        robot.address = bot.address;
         robot.damage = bot.damage;
         robot.armor = bot.armor;
         robot.taken = bot.taken;
