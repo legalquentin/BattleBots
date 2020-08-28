@@ -187,10 +187,7 @@ func fireLaser(conn *websocket.Conn, player *game.Player) {
 				if err := p.BotSpecs.SocketClientCtrl.WriteJSON(&game.TextData{Type: game.TypeAlert, Value: dmgMsg}); err != nil {
 					log.Println(prefixWarn, err)
 				}
-				if err := p.BotSpecs.SocketClientCtrl.WriteJSON(&game.Data{Type: game.TypeHealth, Value: int16(p.BotContext.Health)}); err != nil {
-					log.Println(prefixWarn, err)
-				}
-
+				sendAllAttributes(p.BotSpecs.SocketClientCtrl, p)
 				msg := "You've hit " + p.BotSpecs.Name + " for " + dmgAsStr + "health points !"
 				log.Println(prefixLog, "send success message to sender")
 				conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: msg})
@@ -200,8 +197,11 @@ func fireLaser(conn *websocket.Conn, player *game.Player) {
 			p.Mutex.Unlock()
 		}
 	}
+	player.Mutex.Lock()
 	msg := randQrMsg(resp, player)
 	conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: msg})
+	sendAllAttributes(conn, player)
+	player.Mutex.Unlock()
 }
 
 func randQrMsg(qrId string, player *game.Player) string {
@@ -216,7 +216,7 @@ func randQrMsg(qrId string, player *game.Player) string {
 				player.BotContext.Energy = player.BotContext.Energy + value
 				return "You've found an energy cache !\n+" + strconv.Itoa(int(value)) + " Energy"
 			}
-			player.BotContext.Energy = player.BotContext.Energy + value
+			player.BotContext.Health = player.BotContext.Health + int8(value)
 			return "You've found a repair kit !\n+" + strconv.Itoa(int(value)) + " Health"
 		} else if qr.Id == qrId && qr.Cooldown > 0 {
 			return "The cache has already been looted !"
@@ -227,4 +227,10 @@ func randQrMsg(qrId string, player *game.Player) string {
 
 func rand1() bool {
 	return rand.Float32() < 0.5
+}
+
+func sendAllAttributes(c *websocket.Conn, player *game.Player) {
+	c.WriteJSON(&game.Data{Type: game.TypeEnergy, Value: player.BotContext.Energy})
+	c.WriteJSON(&game.Data{Type: game.TypeOverheat, Value: player.BotContext.Heat})
+	c.WriteJSON(&game.Data{Type: game.TypeHealth, Value: int16(player.BotContext.Health)})
 }
