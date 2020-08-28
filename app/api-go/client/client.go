@@ -30,7 +30,7 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 	}
 	fmt.Println(prefixLog, player.ID, player.BotSpecs.Name, "logged in")
 
-	player.BotSpecs.SocketClientCtrl = conn
+	player.BotSpecs.SocketClientCtrl = &conn
 	player.BotContext.Moving = false
 
 	u := url.URL{Scheme: "ws", Host: player.BotSpecs.Address + ":8888", Path: "/wsctrl"}
@@ -137,7 +137,6 @@ func calcAttributes(player *game.Player, conn *websocket.Conn, bot *websocket.Co
 			conn.WriteJSON(&game.Data{Type: game.TypeOverheat, Value: player.BotContext.Heat})
 		}
 	}
-	conn.WriteJSON(&game.Data{Type: game.TypeHealth, Value: int16(player.BotContext.Health)})
 	player.Mutex.Unlock()
 }
 
@@ -178,18 +177,22 @@ func fireLaser(conn *websocket.Conn, player *game.Player) {
 			gameinstance := game.GetGameInstance(player.GameID)
 			idAsInt, _ := strconv.ParseInt(resp, 10, 16)
 			for _, p := range gameinstance.Players {
-				fmt.Println(p)
+				// fmt.Println(p.BotSpecs)
 				if p.BotSpecs.ID == int16(idAsInt) {
+					p.Mutex.Lock()
 					p.BotContext.Health = p.BotContext.Health - player.BotSpecs.BaseDamage
 					dmgAsStr := strconv.Itoa(int(player.BotSpecs.BaseDamage))
 					dmgMsg := "You've been hit by " + player.BotSpecs.Name + " for " + dmgAsStr + "health points !"
-					p.Mutex.Lock()
-					if err := p.BotSpecs.SocketClientCtrl.WriteJSON(&game.TextData{Type: game.TypeAlert, Value: dmgMsg}); err != nil {
+					if err := *(p.BotSpecs.SocketClientCtrl).WriteJSON(&game.TextData{Type: game.TypeAlert, Value: dmgMsg}); err != nil {
 						log.Println(prefixWarn, err)
 					}
-					p.Mutex.Unlock()
+					if err := *(p.BotSpecs.SocketClientCtrl).WriteJSON(&game.Data{Type: game.TypeHealth, Value: int16(player.BotContext.Health)}); err != nil {
+						log.Println(prefixWarn, err)
+					}
+
 					msg := "You've hit " + p.BotSpecs.Name + " for " + dmgAsStr + "health points !"
 					conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: msg})
+					p.Mutex.Unlock()
 					return
 				}
 			}
