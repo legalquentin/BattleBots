@@ -137,6 +137,7 @@ func calcAttributes(player *game.Player, conn *websocket.Conn, bot *websocket.Co
 			conn.WriteJSON(&game.Data{Type: game.TypeOverheat, Value: player.BotContext.Heat})
 		}
 	}
+	conn.WriteJSON(&game.Data{Type: game.TypeHealth, Value: int16(player.BotContext.Health)})
 	player.Mutex.Unlock()
 }
 
@@ -176,7 +177,7 @@ func fireLaser(conn *websocket.Conn, player *game.Player) {
 			conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: qrMsg.Message + " !"})
 			gameinstance := game.GetGameInstance(player.GameID)
 			idAsInt, _ := strconv.ParseInt(resp, 10, 16)
-			fmt.Println(gameinstance)
+			fmt.Println(gameinstance.Players)
 			for _, p := range gameinstance.Players {
 				if p.BotSpecs.ID == int16(idAsInt) {
 					p.BotContext.Health = p.BotContext.Health - player.BotSpecs.BaseDamage
