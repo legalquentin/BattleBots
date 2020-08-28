@@ -177,13 +177,17 @@ func fireLaser(conn *websocket.Conn, player *game.Player) {
 			conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: qrMsg.Message + " !"})
 			gameinstance := game.GetGameInstance(player.GameID)
 			idAsInt, _ := strconv.ParseInt(resp, 10, 16)
-			fmt.Println(gameinstance.Players)
 			for _, p := range gameinstance.Players {
+				fmt.Println(p)
 				if p.BotSpecs.ID == int16(idAsInt) {
 					p.BotContext.Health = p.BotContext.Health - player.BotSpecs.BaseDamage
 					dmgAsStr := strconv.Itoa(int(player.BotSpecs.BaseDamage))
 					dmgMsg := "You've been hit by " + player.BotSpecs.Name + " for " + dmgAsStr + "health points !"
-					p.BotSpecs.SocketClientCtrl.WriteJSON(&game.TextData{Type: game.TypeAlert, Value: dmgMsg})
+					p.Mutex.Lock()
+					if err := p.BotSpecs.SocketClientCtrl.WriteJSON(&game.TextData{Type: game.TypeAlert, Value: dmgMsg}); err != nil {
+						log.Println(prefixWarn, err)
+					}
+					p.Mutex.Unlock()
 					msg := "You've hit " + p.BotSpecs.Name + " for " + dmgAsStr + "health points !"
 					conn.WriteJSON(&game.TextData{Type: game.TypeSuccess, Value: msg})
 					return
