@@ -143,7 +143,7 @@ export class GameServiceImpl implements GameService {
             }
             console.log("DEBUG - 3");
             const idList = playersResource.map(p => p.id);
-            await this.serviceFactory.getBotUserRepository().deleteUsers(idList);
+            // await this.serviceFactory.getBotUserRepository().deleteUsers(idList);
             console.log("DEBUG 3'");
             console.log("DEBUG 3'''");
             const { sessions, streams, params, bots, userGames, botUsers } = await this.mapPlayerResources(playersResource);
@@ -168,7 +168,7 @@ export class GameServiceImpl implements GameService {
                 {
                     (session as SessionEntity).game = saved;
                 }
-                await this.serviceFactory.getBotUserRepository().saveAll(manager, botUsers);
+                // await this.serviceFactory.getBotUserRepository().saveAll(manager, botUsers);
                 await this.serviceFactory.getGameRepository().AddBotGame(manager, bots);
                 await this.serviceFactory.getGameRepository().AddStreamInGame(manager, streams);
                 await this.serviceFactory.getGameRepository().AddUserGame(manager, userGames);
