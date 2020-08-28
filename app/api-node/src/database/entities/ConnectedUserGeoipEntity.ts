@@ -1,4 +1,4 @@
-import { ConnectedUserEntity } from "./ConnectedUserEntity";
+// import { ConnectedUserEntity } from "./ConnectedUserEntity";
 import { GeoIpEntity } from "./GeoIpEntity";
 import { JoinColumn, Column, BeforeInsert, BeforeUpdate, Entity, ManyToOne } from "typeorm";
 
