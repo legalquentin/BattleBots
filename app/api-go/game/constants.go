@@ -58,7 +58,7 @@ const StatusStopped = "STOPPED"
 const StatusEnded = "ENDED"
 
 var AllQrCodes = []QrCodes{
-	{"3", 0},
-	{"5", 0},
+	{"1", 0},
+	{"2", 0},
 	{"6", 0},
 }
