@@ -80,7 +80,8 @@ func updateGameAPI(game NodeGame) {
 	requestByte, _ := json.Marshal(game)
 	req, err := http.NewRequest("PUT", url, bytes.NewReader(requestByte))
 	if err != nil {
-		panic(err)
+		fmt.Println(prefixErr, err.Error())
+		// panic(err)
 	}
 
 	req.Header.Set("Content-Type", "application/json")
@@ -88,7 +89,8 @@ func updateGameAPI(game NodeGame) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		panic(err)
+		fmt.Println(prefixErr, err.Error())
+		// panic(err)
 	}
 	defer resp.Body.Close()
 

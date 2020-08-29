@@ -45,7 +45,9 @@ export class StreamsServiceImpl implements StreamsService {
             for (let i = 0; i < streams.length; i++){
                 const stream = streams[i];
                 const param = params[i];
-
+                if (param == null) {
+                    return resolve(null)
+                }
                 this.upload(stream, param, (param) => {
                     ret.push(param);
                     if (ret.length == (streams.length)){

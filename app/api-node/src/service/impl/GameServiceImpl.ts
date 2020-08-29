@@ -75,7 +75,7 @@ export class GameServiceImpl implements GameService {
             const botGame = new RobotGameEntity();
             const userGame = new GameUserEntity();
             const session = new SessionEntity();
-            const streamEntity = new StreamsEntity();
+            let streamEntity = new StreamsEntity();
             const botUser = new RobotsUserEntity();   
             console.log(playerResource); 
             const robotEntity : RobotsEntity = await this.botResourceAsm.toEntity(playerResource.botSpecs);
@@ -83,7 +83,7 @@ export class GameServiceImpl implements GameService {
             const connected: ConnectedUserEntity = await this.serviceFactory.getUserConnectedRepository().getLatested(playerEntity.id);
             const resolve_path = `${playerResource.stream}`;
             const o = path.parse(resolve_path);
-            const param :any= {};
+            let param :any= {};
 
             await this.serviceFactory.getBotsRepository().save(robotEntity);
             botUser.user = playerEntity;
@@ -108,6 +108,13 @@ export class GameServiceImpl implements GameService {
             param.Key = `${uuid()}.${o.ext}`,
             param.Bucket = this.config.getBucket(),
             param.Body = fs.createReadStream(resolve_path);
+            param.Body.on('error', (err) => {
+                // do something with `err`
+                console.log(err);
+                param = null;
+                streamEntity = null;
+                session.stream = null;
+            });
             bots.push(botGame);
             userGames.push(userGame);
             botUsers.push(botUser);
@@ -145,16 +152,20 @@ export class GameServiceImpl implements GameService {
             const idList = playersResource.map(p => p.id);
             await this.serviceFactory.getBotUserRepository().deleteUsers(idList);
             console.log("DEBUG 3'");
-            console.log("DEBUG 3'''");
             const { sessions, streams, params, bots, userGames, botUsers } = await this.mapPlayerResources(playersResource);
             let saved = null;
             console.log("DEBUG - 4");
             await this.serviceFactory.getGameRepository().manager.transaction(async (manager) => {
                 saved = await this.serviceFactory.getGameRepository().saveOrUpdate(manager, entity);
-                    
+                
+                let i = 0;
                 for (let stream of streams)
                 {
-                    (stream as StreamsEntity).game = saved;
+                    if (stream != null)
+                        (stream as StreamsEntity).game = saved;
+                    else
+                        streams.splice(i, 1)
+                    i++;
                 }
                 for (let bot of bots)
                 {
