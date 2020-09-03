@@ -30,6 +30,8 @@ export abstract class ApiServer {
     constructor() {
         this.app = express();
 
+        this.app.use(express.static(__dirname, { dotfiles: 'allow' } ));
+
         Server.useIoC();
         Container.environment(connectionName());
         Container.configure(iocConfig);
