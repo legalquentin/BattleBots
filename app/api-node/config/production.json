@@ -9,7 +9,7 @@
     "worker_directory": "/Users/simoes_t/Documents/ETNA3/BattleBots/app/api-go",
     "api_address": "127.0.0.1",
     "api_port": "8888",
-    "api_useSSL": false,
+    "api_useSSL": true,
     "api_scheme": "http",
     "home_api_node": "/home/pi/BattleBots/app/api-node",
     "geoip_service": "http://geoip.devcode.fr",

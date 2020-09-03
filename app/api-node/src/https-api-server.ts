@@ -8,15 +8,17 @@ export class HttpsApiServer extends ApiServer{
 
     public runServer() {
     	return new Promise<any>((resolve, reject) => {
-            this.options = {
-                key: fs.readFileSync(`${this.serviceConfig.getHomeApiNode()}/api-ssl/key.pem`, {
-                    encoding: "utf8"
-                }),
-                cert: fs.readFileSync(`${this.serviceConfig.getHomeApiNode()}/api-ssl/cert.pem`, {
-                    encoding: "utf8"
-                })
+                    // Certificate
+            const privateKey = fs.readFileSync('/etc/letsencrypt/live/ebotfight.com/privkey.pem', 'utf8');
+            const certificate = fs.readFileSync('/etc/letsencrypt/live/ebotfight.com/cert.pem', 'utf8');
+            const ca = fs.readFileSync('/etc/letsencrypt/live/ebotfight.com/chain.pem', 'utf8');
+
+            const credentials = {
+                key: privateKey,
+                cert: certificate,
+                ca: ca
             };
-            this.httpsServer = https.createServer(this.options, this.app).listen(this.PORT, "0.0.0.0");
+            this.httpsServer = https.createServer(credentials, this.app).listen(this.PORT, "0.0.0.0");
             console.log(`The server is started on ${this.scheme}://${this.serviceConfig.getApiAddress()}:${this.PORT}`);
             resolve(true);
         });

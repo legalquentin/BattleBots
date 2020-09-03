@@ -31,24 +31,23 @@ export abstract class ApiServer {
         this.app = express();
 
         this.app.use(express.static(__dirname, { dotfiles: 'allow' } ));
-
         Server.useIoC();
         Container.environment(connectionName());
         Container.configure(iocConfig);
         this.config();
         Server.loadServices(this.app, 'controller/**/*.{ts,js}', __dirname);
-        Server.swagger(this.app, { 
-            swaggerUiOptions: {
-                customSiteTitle: 'BattleBots'
-            },
-            filePath: 'swagger.yaml',
-            endpoint: "api-docs",
-            host: "hardwar.ddns.net",
-            schemes: [this.serviceConfig.getApiScheme()]
-        });
+        // Server.swagger(this.app, { 
+        //     swaggerUiOptions: {
+        //         customSiteTitle: 'BattleBots'
+        //     },
+        //     filePath: 'swagger.yaml',
+        //     endpoint: "api-docs",
+        //     host: "hardwar.ddns.net",
+        //     schemes: [this.serviceConfig.getApiScheme()]
+        // });
         this.app.use("*", function (req, res, next) {
             if (!res.headersSent) {
-                res.render("App/index.html"); 
+                // res.render("App/index.html"); 
             }
             next();
         });
