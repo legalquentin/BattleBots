@@ -46,6 +46,9 @@ export abstract class ApiServer {
         //     schemes: [this.serviceConfig.getApiScheme()]
         // });
         this.app.use("*", function (req, res, next) {
+            if(!req.secure) {
+                return res.redirect(['https://', req.get('Host'), req.url].join(''));
+            }
             if (!res.headersSent) {
                 // res.render("App/index.html"); 
             }
