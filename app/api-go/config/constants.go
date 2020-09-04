@@ -7,7 +7,7 @@ import (
 // Config variable
 var Config = Configuration{
 	Local:   "127.0.0.1",
-	Port:    "8080",
+	Port:    "8888",
 	Env:     "default",
 	KeyPath: "/etc/letsencrypt/live/ebotfight.com/",
 	Bots: []game.Bot{
