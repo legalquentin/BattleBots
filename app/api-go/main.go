@@ -30,7 +30,7 @@ func startHTTPServer() *http.Server {
 
 	go func() {
 		kp := config.Config.KeyPath
-		if err := srv.ListenAndServeTLS(kp+"cert.pem", kp+"key.pem"); err != nil {
+		if err := srv.ListenAndServeTLS(kp+"cert.pem", kp+"privkey.pem"); err != nil {
 			log.Fatalln(prefixLog, err.Error())
 		}
 	}()
