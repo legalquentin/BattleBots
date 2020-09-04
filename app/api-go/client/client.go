@@ -55,7 +55,7 @@ func WsHandlerCtrl(res http.ResponseWriter, req *http.Request) {
 			// TODO: check if message is valid
 			var r = Key{}
 			if err := conn.ReadJSON(&r); err != nil {
-				log.Println(err)
+				log.Println(prefixErr, err)
 				break
 			}
 
@@ -149,7 +149,7 @@ func getZbar(address string) string {
 	}
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Println(err)
+		log.Println(prefixErr, err)
 	}
 	return string(body)
 }

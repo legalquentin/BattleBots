@@ -24,6 +24,7 @@ func startHTTPServer() *http.Server {
 
 	router := handlers.NewRouter()
 	handler := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Println(prefixLog, "debug")
 		handlers.PreProcessHandler(w, r, router)
 	})
 	srv := &http.Server{Addr: (":" + config.Config.Port), Handler: handler}
@@ -31,7 +32,7 @@ func startHTTPServer() *http.Server {
 	go func() {
 		kp := config.Config.KeyPath
 		if err := srv.ListenAndServeTLS(kp+"cert.pem", kp+"privkey.pem"); err != nil {
-			log.Fatalln(prefixLog, err.Error())
+			log.Fatalln(prefixErr, err.Error())
 		}
 	}()
 

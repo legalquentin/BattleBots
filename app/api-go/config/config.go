@@ -20,7 +20,7 @@ func ReadConfig() *error {
 	game.Appartement.Bots = Config.Bots
 	dir, err := os.Getwd()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(prefixWarn, err)
 	}
 	file, err := os.Open(dir + "/env/config." + env + ".json")
 	if err != nil {
