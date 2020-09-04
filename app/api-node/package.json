@@ -6,7 +6,7 @@
   "original": "https://github.com/vrudikov/typescript-rest-boilerplate.git",
   "license": "MIT",
   "scripts": {
-    "start": "yarn run swagger && cross-env NODE_OPTIONS=--max-old-space-size=800 && ts-node src/index.ts",
+    "start": "ts-node src/index.ts",
     "build:bundle": "rm -rf dist && yarn run build",
     "start:cluster": "cross-env ENV=prod && yarn && yarn run swagger && cross-env NODE_OPTIONS=--max-old-space-size=800 && cross-env NODE_ENV=production ts-node src/cluster.ts",
     "docker:build": "rm -rf dist && yarn run build && cp Dockerfile dist && cd dist && docker build -t battlebots-api .",

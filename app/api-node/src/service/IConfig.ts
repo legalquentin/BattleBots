@@ -14,8 +14,6 @@ export default abstract class IConfig {
     protected s3dir: string;
     protected bucket: string;
     protected expireUrl: string;
-    protected accessKeyId: string;
-    protected secretAccessKey: string;
     protected logFile: string;
     protected localAddress: string;
 
@@ -37,10 +35,6 @@ export default abstract class IConfig {
     abstract getS3Dir(): string;
     abstract getBucket(): string;
     abstract getExpireUrl(): string;
-
-    abstract getAccessKeyId(): string;
-    abstract getSecretAccessKey(): string;
-
     abstract getLogFile(): string;
 
     abstract getLocalAddress(): string;

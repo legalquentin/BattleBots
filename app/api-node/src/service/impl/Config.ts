@@ -22,8 +22,6 @@ export default class Config extends IConfig{
         this.s3dir = config.get('s3_dir');
         this.bucket = config.get('bucket');
         this.expireUrl = config.get('url_expire');
-        this.accessKeyId = config.get('accessKeyId');
-        this.secretAccessKey = config.get('secretAccessKey');
         this.logFile = config.get('log_file');
         this.localAddress = config.get('local_address');
     }
@@ -34,14 +32,6 @@ export default class Config extends IConfig{
 
     getLogFile(): string {
         return (this.logFile);
-    }
-
-    getAccessKeyId(): string {
-        return (this.accessKeyId);
-    }
-    
-    getSecretAccessKey(): string {
-        return (this.secretAccessKey);
     }
 
     getExpireUrl(): string {
