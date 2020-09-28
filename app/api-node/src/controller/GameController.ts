@@ -159,7 +159,7 @@ export class GameController {
     @Response<HttpResponseModel<IGameResource>>(200)
     @Response<HttpResponseModel<IGameResource>>(400)
     public async joinGame(@ContextRequest req, @PathParam("gameId") gameId: string) {
-        return (this.gameService.joinGame(parseInt(gameId), req.user.id));
+        return (this.gameService.joinGame(parseInt(gameId), req.user.id, req.user.botId));
     }
 
 }

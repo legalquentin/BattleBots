@@ -134,6 +134,7 @@ type NewGameValidation struct {
 type JoinGameValidation struct {
 	GameID   string `json:"gameID"`
 	PlayerID string `json:"playerID"`
+	BotID    int16  `json:"botID"`
 }
 
 // JoinIDs are required felds to specify on wich game instance/bot to connect

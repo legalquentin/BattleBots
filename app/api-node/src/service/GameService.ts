@@ -13,5 +13,5 @@ export abstract class GameService {
     public abstract linkArenaToGame(arenaId: number, gameId: number);
     public abstract linkUserToGame(userId: number, gameId: number);
 
-    public abstract joinGame(gameId: number, userId: number);
+    public abstract joinGame(gameId: number, userId: number, botId: number);
 }

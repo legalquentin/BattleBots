@@ -98,13 +98,14 @@ export default class BattleWorkerService implements IBattleWorkerService {
         return false;
     }
 
-    private async callWorkerJoin(gameId, playerId, worker) {
+    private async callWorkerJoin(gameId, playerId, botID, worker) {
         return await new Promise(resolve => {
             request({
                 agentOptions: { rejectUnauthorized: false },
                 body: {
-                    gameId: "" + gameId,
-                    playerId: "" + playerId,
+                    gameID: "" + gameId,
+                    playerID: "" + playerId,
+                    botID: botID
                 },
                 headers: {
                     'x-api-key': worker.secret
@@ -121,7 +122,7 @@ export default class BattleWorkerService implements IBattleWorkerService {
         });
     }
 
-    public async joinGame(battleId: number, playerId: number) {
+    public async joinGame(battleId: number, playerId: number, botId: number) {
         const gameMeta = Workers.find(item => item.gameId == battleId);
         if (!gameMeta) {
             console.log('[ERROR](JOIN)', 'lost handle on worker process... do $> pkill Worker');
@@ -131,7 +132,7 @@ export default class BattleWorkerService implements IBattleWorkerService {
                 message: `Game instance could not be found, contact an administrator`
             }));
         } else {
-            let r = await this.callWorkerJoin(battleId, playerId, gameMeta)
+            let r = await this.callWorkerJoin(battleId, playerId, botId, gameMeta)
             console.log("########################");
             console.log(r);
             return (new SendResource<HttpResponseModel<any>>("BattleController", 200, {

@@ -21,18 +21,18 @@ import (
 func CreateGame(res http.ResponseWriter, req *http.Request) {
 	decoder := json.NewDecoder(req.Body)
 	decoder.DisallowUnknownFields()
-	var t NewGameValidation
-	err := decoder.Decode(&t)
-	if err != nil || t.Name == "" || t.Token == "" {
+	var payload NewGameValidation
+	err := decoder.Decode(&payload)
+	if err != nil || payload.Name == "" || payload.Token == "" {
 		log.Println(prefixWarn, "Bad request")
 		http.Error(res, "Bad Request", 400)
 		return
 	}
 
-	id := strconv.Itoa(t.ID)
-	log.Println(prefixLog, t.ID)
+	id := strconv.Itoa(payload.ID)
+	log.Println(prefixLog, payload.ID)
 	if _, ok := baseGameInstances[id]; ok {
-		log.Println(prefixWarn, "Game '"+t.Name+"' with id '"+id+"' already exist")
+		log.Println(prefixWarn, "Game '"+payload.Name+"' with id '"+id+"' already exist")
 		http.Error(res, "Game already exist", 400)
 		return
 	}
@@ -50,8 +50,8 @@ func CreateGame(res http.ResponseWriter, req *http.Request) {
 	}
 
 	baseGameInstances[id] = Game{
-		Name:      t.Name,
-		Token:     t.Token,
+		Name:      payload.Name,
+		Token:     payload.Token,
 		Started:   false,
 		Env:       &Appartement,
 		CreatedAt: time.Now(),
@@ -205,63 +205,64 @@ func Daemon() {
 func JoinGame(res http.ResponseWriter, req *http.Request) {
 	decoder := json.NewDecoder(req.Body)
 	decoder.DisallowUnknownFields()
-	var t JoinGameValidation
-	err := decoder.Decode(&t)
-	if err != nil || t.GameID == "" || t.PlayerID == "" {
+	var payload JoinGameValidation
+	err := decoder.Decode(&payload)
+	if err != nil || payload.GameID == "" || payload.PlayerID == "" {
 		log.Println(prefixWarn, "Bad request")
 		http.Error(res, "Bad Request", 400)
 		return
 	}
 	var flag = false
 	var p = Player{}
-	log.Println(prefixLog, "Join game: "+t.GameID+" - Player: "+t.PlayerID)
-	if selected, ok := baseGameInstances[t.GameID]; ok {
+	log.Println(prefixLog, "Join game: "+payload.GameID+" - Player: "+payload.PlayerID)
+	if selected, ok := baseGameInstances[payload.GameID]; ok {
 		// if the player already exist return it
 		for _, p := range selected.Players {
-			if p.ID == t.PlayerID {
+			if p.ID == payload.PlayerID {
 				log.Println(prefixLog, "Player exist, connecting him to his bot")
 				res.Header().Set("Content-Type", "application/json")
 				json.NewEncoder(res).Encode(selected)
 				return
 			}
 		}
+		// else get a bot for the player
 		for idx, b := range selected.Env.Bots {
-			if b.Taken == false {
+			if b.Taken == false && b.ID == payload.BotID {
 				log.Println(prefixLog, "reserving a bot")
 				// TODO: add a real token generation
-				baseGameInstances[t.GameID].Env.Bots[idx].Taken = true
-				p = Player{t.PlayerID, tokenGenerator(), &b, Context{Moving: false, Energy: 100, Heat: 0, Health: b.BaseHull}, "", t.GameID, sync.Mutex{}}
-				var g = baseGameInstances[t.GameID]
+				baseGameInstances[payload.GameID].Env.Bots[idx].Taken = true
+				p = Player{payload.PlayerID, tokenGenerator(), &b, Context{Moving: false, Energy: 100, Heat: 0, Health: b.BaseHull}, "", payload.GameID, sync.Mutex{}}
+				var g = baseGameInstances[payload.GameID]
 				p.Mutex.Lock()
 				g.Players = append(g.Players, &p)
 				// for _, qr := range AllQrCodes {
 				// 	g.QrCodes = append(g.QrCodes, &qr)
 				// }
 				g.QrCodes = AllQrCodes
-				baseGameInstances[t.GameID] = g
+				baseGameInstances[payload.GameID] = g
 				res.Header().Set("Content-Type", "application/json")
 				json.NewEncoder(res).Encode(&g)
 				p.Mutex.Unlock()
-				for _, b := range baseGameInstances[t.GameID].Env.Bots {
+				for _, b := range baseGameInstances[payload.GameID].Env.Bots {
 					if b.Taken == false {
 						fmt.Println(prefixLog, b.Name+" TAKEN - FALSE")
 						return
-						// still one slot left, we don't start the game
+						// still one slot left, we don'payload start the game
 						// return
 					}
 					fmt.Println(prefixLog, b.Name+" TAKEN - TRUE")
 				}
 				// all slot taken, we start the game
-				g = baseGameInstances[t.GameID]
+				g = baseGameInstances[payload.GameID]
 				g.StartedAt = time.Now()
 				g.Started = true
-				baseGameInstances[t.GameID] = g
+				baseGameInstances[payload.GameID] = g
 				fmt.Println(prefixLog, "All Slot filled, game can start")
 				return
 			}
 		}
-		log.Println(prefixWarn, "All bots/slots are taken")
-		http.Error(res, "All bots are taken", 400)
+		log.Println(prefixWarn, "Bot not available")
+		http.Error(res, "Bot not available", 400)
 		return
 	}
 	if !flag {
@@ -318,7 +319,7 @@ func GetPlayer(gameID string, playerID string) *Player {
 			p.Mutex.Unlock()
 		}
 	}
-	log.Println(prefixWarn, "couldn't find player")
+	log.Println(prefixWarn, "couldn'payload find player")
 	return nil
 }
 

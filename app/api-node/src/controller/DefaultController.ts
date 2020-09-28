@@ -13,7 +13,7 @@ class DefaultController
     @GET public serveRoute(@ContextResponse res)
     {
         res.render("App/index.html");
-        return Return.NoResponse;
+        res.end();
     }
 
     @GET
