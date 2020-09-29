@@ -1,6 +1,6 @@
 # BattleBots
 
-![architecture schema](docs/cover.jpg)
+![architecture schema](docs/cover.png)
 
 ### Join in real robots fight from your browser !
 
