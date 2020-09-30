@@ -4,7 +4,7 @@ all:
 
 prepare:
 	cd ../app/api-node && yarn
-	cd ../app/vuejs && yarn
+	# cd ../app/vuejs && yarn
 
 run\:battlebots:
 	cd .docker && docker-compose up --build -d && cd ../../app/api-node/ && npm run typeorm:migration:run:production && npm start
