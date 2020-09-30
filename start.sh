@@ -1,6 +1,9 @@
 #! /bin/bash
 sleep 15s
 node -v
+source ~/.nvm/nvm.sh
+nvm use 12
+node -v
 cd /home/pi/BattleBots
 git pull
 export NODE_OPTIONS=--max-old-space-size=900
