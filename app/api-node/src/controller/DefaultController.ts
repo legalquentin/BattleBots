@@ -1,6 +1,6 @@
 'use strict';
 
-import { Path, GET, ContextResponse, Return, Security } from 'typescript-rest';
+import { Path, GET, ContextResponse, Security } from 'typescript-rest';
 import * as swagger from "typescript-rest-swagger";
 
 @Path('/')
