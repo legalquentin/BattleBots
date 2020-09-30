@@ -2,6 +2,7 @@
 sleep 15s
 cd /home/pi/BattleBots
 git pull
+nvm use 12
 export NODE_OPTIONS=--max-old-space-size=900
 sudo iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-port 4443
 sudo iptables -t nat -I OUTPUT -p tcp -d 127.0.0.1 --dport 443 -j REDIRECT --to-ports 4443
