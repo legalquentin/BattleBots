@@ -1,4 +1,5 @@
 #! /bin/bash
+sleep(2)
 cd /home/pi/BattleBots
 git pull
 export NODE_OPTIONS=--max-old-space-size=900
