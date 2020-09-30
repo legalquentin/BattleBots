@@ -1,5 +1,6 @@
 #! /bin/bash
 sleep 15s
+node -v
 cd /home/pi/BattleBots
 git pull
 nvm use 12
