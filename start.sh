@@ -1,5 +1,5 @@
 #! /bin/bash
-cd /home/pi/Battlebots
+cd /home/pi/BattleBots
 git pull
 export NODE_OPTIONS=--max-old-space-size=900
 sudo iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-port 4443
