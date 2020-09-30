@@ -3,7 +3,7 @@ all:
 	$(info Avalaible commands : run:postgres, serve:api, serve:front, deploy:api deploy:front, serve\:bot-stub)
 
 prepare:
-	cd ../app/api-node && yarn
+	cd ../app/api-node && npm i
 	# cd ../app/vuejs && yarn
 
 run\:battlebots:

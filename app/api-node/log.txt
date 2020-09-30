@@ -1,3 +1,4 @@
 Error {"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":5432}
 Error {"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":5432}
 Error {"name":"error","length":100,"severity":"FATAL","code":"28P01","file":"auth.c","line":"337","routine":"auth_failed"}
+Error {"errno":"ECONNREFUSED","code":"ECONNREFUSED","syscall":"connect","address":"127.0.0.1","port":5432}

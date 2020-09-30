@@ -12,7 +12,7 @@ import * as AWS from "aws-sdk";
 import * as path from "path";
 import { uuid } from "uuidv4";
 
-AWS.config.loadFromPath('/home/pi/.awsconfig.json');
+AWS.config.loadFromPath('/Users/quentin/D.PERS/BattleBots/app/api-node/.awsconfig.json');
 @Singleton
 export class StreamsServiceImpl implements StreamsService {
 
