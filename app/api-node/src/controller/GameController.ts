@@ -3,7 +3,7 @@ import { Inject } from "typescript-ioc";
 import { Path, PreProcessor, PostProcessor, POST, PUT, PathParam, GET, DELETE, Security, ContextRequest  } from "typescript-rest";
 import { preRequest } from "../service/interceptors/preRequest/preRequest";
 import { postRequest } from "../service/interceptors/postRequest/postRequest";
-import { IGameResource } from "../resources/IGameResource";
+import { IGameResource, IJoinGameResource } from "../resources/IGameResource";
 import HttpResponseModel from "../resources/HttpResponseModel";
 import { Produces, Response, Consumes } from "typescript-rest-swagger";
 import { EGameStatus } from "../resources/EGameStatus";
@@ -158,8 +158,7 @@ export class GameController {
     @Produces("application/json; charset=UTF-8")
     @Response<HttpResponseModel<IGameResource>>(200)
     @Response<HttpResponseModel<IGameResource>>(400)
-    public async joinGame(@ContextRequest req, @PathParam("gameId") gameId: string) {
-        return (this.gameService.joinGame(parseInt(gameId), req.user.id, req.user.botId));
+    public async joinGame(@ContextRequest req, @PathParam("gameId") gameId: string, body: IJoinGameResource) {
+        return (this.gameService.joinGame(parseInt(gameId), req.user.id, body.bot_id));
     }
-
 }

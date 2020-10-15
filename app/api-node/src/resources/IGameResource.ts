@@ -16,3 +16,7 @@ export class IGameResource {
     token?: string;
     secret?: string;
 }
+
+export class IJoinGameResource {
+    bot_id: number;
+}
