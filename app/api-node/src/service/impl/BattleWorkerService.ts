@@ -40,7 +40,7 @@ export default class BattleWorkerService implements IBattleWorkerService {
     public async startGoWorker(game: IGameResource) {
         try {
             const addr = this.config.getWorkerAddress();
-            const port = "443";// this.config.getWorkerPort();
+            const port = "80";// this.config.getWorkerPort();
             const p = await new Promise(async rslv => {
                 const WORKER_PATH = `${this.config.getWorkerDir()}/main.go`; // '/home/quentin/go/src/TIC-GPE5/Worker';
                 game.token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
