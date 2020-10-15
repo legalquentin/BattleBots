@@ -69,7 +69,7 @@ export default class BattleWorkerService implements IBattleWorkerService {
                     json: true,
                     method: "POST",
                     strictSSL: false,
-                    url: `https://${addr}:${port}/api/game/create`
+                    url: `https://ebotfight.com:80/api/game/create`
                 }, (err, res, body) => {
                     console.log(err);
                     console.log(body);
@@ -113,7 +113,7 @@ export default class BattleWorkerService implements IBattleWorkerService {
                 json: true,
                 method: "POST",
                 strictSSL: false,
-                url: "https://" + worker.url + "/api/game/join",
+                url: "https://ebotfight.com:80/api/game/join",
             }, (err, res, body) => {
                 console.log("###### Game Join end #######");
                 console.log(err, body);
