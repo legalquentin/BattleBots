@@ -117,7 +117,7 @@ export default class ApiComponent extends Vue {
     }
 
     public joinGame(gameId: number): Promise<AxiosResponse> {
-        return this.axios.put(`games/join/${gameId}`);
+        return this.axios.put(`games/join/${gameId}`, {bot_id: 1});
     }
 
     public getGameResult(gameId: number): Promise<AxiosResponse> {
