@@ -1,16 +1,18 @@
-import { Container } from "typescript-ioc";
-import * as fs from "fs";
-import { GeoIpService } from "../../GeoIpService";
+// import { Container } from "typescript-ioc";
+// import * as fs from "fs";
+// import { GeoIpService } from "../../GeoIpService";
 
 export async function preRequestGeoIp(req: any){
-    const geoIpService: GeoIpService = Container.get(GeoIpService);
+    // const geoIpService: GeoIpService = Container.get(GeoIpService);
 
     try {
-        let geoip = await geoIpService.findByIp(req.socket.remoteAddress);
+        // to silence the warning
+        req = req
 
-        if (geoip == null){
-            await geoIpService.getInfo(req.socket.remoteAddress);
-        }
+        // let geoip = await geoIpService.findByIp(req.socket.remoteAddress);
+        // if (geoip == null){
+        //     await geoIpService.getInfo(req.socket.remoteAddress);
+        // }
     }
     catch (e){
         console.log(e.message);
