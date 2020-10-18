@@ -31,6 +31,11 @@ func CreateGame(res http.ResponseWriter, req *http.Request) {
 
 	id := strconv.Itoa(payload.ID)
 	log.Println(prefixLog, payload.ID)
+	if len(baseGameInstances) == 0 {
+		log.Println(prefixWarn, "Game '"+payload.Name+"' with id '"+id+"' already exist")
+		http.Error(res, "No available slot for a new game", 400)
+		return
+	}
 	if _, ok := baseGameInstances[id]; ok {
 		log.Println(prefixWarn, "Game '"+payload.Name+"' with id '"+id+"' already exist")
 		http.Error(res, "Game already exist", 400)
@@ -180,6 +185,10 @@ func Daemon() {
 				finishGameAPI(game, key)
 				delete(baseGameInstances, key)
 			} else {
+				if !game.Started && tnow.Sub(game.CreatedAt()) {
+					terminateGameAPI(baseGameInstances[key], key)
+					delete(baseGameInstances, key)
+				}
 				for _, player := range game.Players {
 					if player.BotSpecs.SocketClientCtrl != nil {
 						// k := Data{Type: TypeEnergy, Value: player.BotContext.Energy}
