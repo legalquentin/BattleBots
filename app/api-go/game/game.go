@@ -185,7 +185,7 @@ func Daemon() {
 				finishGameAPI(game, key)
 				delete(baseGameInstances, key)
 			} else {
-				if !game.Started && tnow.Sub(game.CreatedAt()) {
+				if !game.Started && tnow.Sub(game.CreatedAt).Seconds() > float64(GameTimeOut)) {
 					terminateGameAPI(baseGameInstances[key], key)
 					delete(baseGameInstances, key)
 				}

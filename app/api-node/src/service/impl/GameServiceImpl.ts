@@ -130,8 +130,6 @@ export class GameServiceImpl implements GameService {
     public async saveOrUpdate(game: IGameResource) {
         game.status = game.status ? game.status : EGameStatus.CREATED;
         try {
-            console.log("DEBUG - 1");
-            console.log(game);
             const httpCode = game.id ? 200 : 201;
             if (game.status == EGameStatus.CREATED && !game.createdAt){
                 game.createdAt = new Date().getTime();
@@ -142,19 +140,15 @@ export class GameServiceImpl implements GameService {
             else if (game.status == EGameStatus.ENDED && !game.endedAt){
                 game.endedAt = new Date().getTime();
             }
-            console.log("DEBUG - 2");
             const entity = await this.gameResourceAsm.toEntity(game);
             let playersResource = game.players;
             if (!playersResource){
                 playersResource = [];
             }
-            console.log("DEBUG - 3");
             const idList = playersResource.map(p => p.id);
             await this.serviceFactory.getBotUserRepository().deleteUsers(idList);
-            console.log("DEBUG 3'");
             const { sessions, streams, params, bots, userGames, botUsers } = await this.mapPlayerResources(playersResource);
             let saved = null;
-            console.log("DEBUG - 4");
             await this.serviceFactory.getGameRepository().manager.transaction(async (manager) => {
                 saved = await this.serviceFactory.getGameRepository().saveOrUpdate(manager, entity);
                 
@@ -185,8 +179,6 @@ export class GameServiceImpl implements GameService {
                 await this.serviceFactory.getGameRepository().AddUserGame(manager, userGames);
                 await this.serviceFactory.getGameRepository().AddSessionInGame(manager, sessions);
             });
-            console.log("DEBUG - 5");
-            console.log(saved);
             game.id = saved.id;
             const resource = await this.gameResourceAsm.toResource(saved);
             if (game.status == EGameStatus.ENDED){
@@ -194,9 +186,7 @@ export class GameServiceImpl implements GameService {
                     console.log(e);
                 });
             }
-            console.log("DEBUG - 6", game);
             if (game.status == EGameStatus.CREATED){
-                console.log("DEBUG - 7");
                 const r = await this.battleWorkerService.startGoWorker(game);
                 if (!r || !r.token || !r.secret) {
                     const response: HttpResponseModel<IGameResource> = {
