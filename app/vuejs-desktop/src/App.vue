@@ -110,6 +110,13 @@ img[alt="www.000webhost.com"] {
     transition: visibility linear 2s;
   }
 
+  .bb-button {
+    border: 2px solid rgb(21, 77, 117);
+    color: white;
+    background: linear-gradient(rgb(8, 73, 177) 0%, rgb(39, 115, 134) 43%, rgb(39, 115, 134) 49%, rgb(39, 115, 134) 55%, rgb(22, 51, 128) 100%);
+    margin-bottom: 20px;
+  }
+
   @media (max-height: 540px) {
     .logo img {
       visibility: hidden;

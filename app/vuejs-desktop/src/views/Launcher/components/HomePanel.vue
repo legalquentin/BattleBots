@@ -3,7 +3,7 @@
         <template #header>
             <SuiGridRow verticalAlign="middle" align="left">
                 <SuiGridColumn>
-                    <SuiHeader inverted size="huge">Actualitées Battlebots</SuiHeader>
+                    <SuiHeader inverted size="huge">Actualités Battlebots</SuiHeader>
                 </SuiGridColumn>
             </SuiGridRow>
         </template>

@@ -8,11 +8,10 @@
       </SuiGridRow>
     </template>
     <template #body>
-      <SuiGridRow :columns="1" verticalAlign="middle">
-        <SuiGridColumn style="margin-top: 20px" textAlign="left" :width="6">
-          <SuiContainer>
+      <SuiGridRow :columns="1">
+        <SuiGridColumn style="margin-top: 20px" textAlign="left" :width="12">
             <SuiSegment class="huge-segment" inverted raised stacked style="min-height: 200px">
-              <SuiGrid>
+              <SuiGrid style="height: 100%">
                 <SuiGridRow :columns="3" style="margin-top: 6px">
                   <SuiGridColumn :width="6">
                     <sui-statistic size="tiny" inverted>
@@ -134,7 +133,6 @@
                 </SuiGridColumn>
               </SuiGridRow>
             </SuiGrid>
-          </SuiContainer>
         </SuiGridColumn>
       </SuiGridRow>
     </template>

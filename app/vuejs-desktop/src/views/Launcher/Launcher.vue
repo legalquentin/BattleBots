@@ -50,7 +50,7 @@
         class="logo"
         target="logo"
         style="position: absolute; bottom: calc(100vh - 267px); left: -40px; width: 268px !important"
-      >Logo</SidebarItem>
+      ></SidebarItem>
       <SidebarItem v-if="$global.isLogged" target="CreateGamePanel">Créer une partie</SidebarItem>
       <SidebarItem v-else target="LoginPanel">Créer une partie</SidebarItem>
       <SidebarItem target="ListGamesPanel">Rejoindre une partie</SidebarItem>
@@ -59,7 +59,7 @@
       <SidebarItem target="HowToPlayPanel">Comment jouer ?</SidebarItem>
 
       <!-- Animated Decorations -->
-      <SidebarItem
+      <!-- <SidebarItem
         target="nothing"
         style="position: absolute; bottom: -60px; left: 145px; width: 268px !important"
       ></SidebarItem>
@@ -94,7 +94,7 @@
       <SidebarItem
         target="nothing"
         style="position: absolute; bottom: 106px; left: 120px; width: 268px !important"
-      ></SidebarItem>
+      ></SidebarItem> -->
     </Sidebar>
     <RouterView />
   </div>

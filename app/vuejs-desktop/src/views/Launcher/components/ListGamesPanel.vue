@@ -8,14 +8,16 @@
       </SuiGridRow>
     </template>
     <template #body>
-      <SuiGridRow verticalAlign="middle" align="left" id="create-game-panel-body">
+      <div id="parent">
+      <SuiGridRow align="left" id="create-game-panel-body">
         <SuiGridColumn class="huge-column">
-          <SuiSegment class="huge-segment" raised stacked="tall">
+          <SuiSegment class="huge-segment" raised stacked="tall" style="height: auto; overflow-y: hidden">
             <SuiHeader
               sub
               inverted
               style="margin-bottom: 15px"
-            >{{ openGames.length ? 'Parties Ouvertes' : 'Aucune partie' }}</SuiHeader>
+            >{{ openGames.length ? 'Parties Ouvertes' : 'Aucune partie ouverte' }}</SuiHeader>
+            <SuiButton size="medium" class="bb-button" v-if="!openGames.length">Créer une nouvelle partie</SuiButton>
             <SuiMessage
               error
               v-if="errorJoin"
@@ -51,13 +53,16 @@
                 <sui-card-content extra>
                   <sui-icon name="users" color="violet" />2 joueurs maximum
                 </sui-card-content>
+                <sui-card-content extra style="text-align: center">
+                  <SuiButton basic color="red" @click.stop="deleteGame(openGame.id)">Supprimer la partie</SuiButton>
+                </sui-card-content>
               </sui-card>
             </sui-card-group>
           </SuiSegment>
         </SuiGridColumn>
       </SuiGridRow>
 
-      <SuiGridRow verticalAlign="middle" align="left" id="list-games-panel-body-closed">
+      <SuiGridRow align="left" id="list-games-panel-body-closed">
         <SuiGridColumn class="huge-column">
           <SuiSegment class="huge-segment" raised stacked="tall">
             <SuiHeader
@@ -92,7 +97,7 @@
                       <SuiGridColumn :width="10" align="right">
                         <SuiButtonGroup size="mini">
                         <SuiButton size="mini" basic color="red">Replay</SuiButton>
-                        <SuiButton size="mini" basic color="blue" @click="infoPage(closedGames.id)" style="z-index: 1000">Infos</SuiButton>
+                        <SuiButton size="mini" basic color="blue" @click="infoPage(closedGame.id)" style="z-index: 1000">Infos</SuiButton>
                         </SuiButtonGroup>
                       </SuiGridColumn>
                       
@@ -110,6 +115,7 @@
           </SuiSegment>
         </SuiGridColumn>
       </SuiGridRow>
+      </div>
     </template>
     <template #footer>
       <SuiGridRow>
@@ -148,7 +154,6 @@ export default class ListGamesPanel extends Vue {
     super();
   }
   infoPage(gameId) {
-    alert("ok")
     this.$router.push({ name: 'StatsPanel', params: { gameId } })
   }
   created(): void {
@@ -193,23 +198,33 @@ export default class ListGamesPanel extends Vue {
     }
   }
 
+  // TODO : move to CreateGamePanel
   async joinGame(gameId: number): Promise<void> {
-    this.errorJoin = false;
+    // this.errorJoin = false;
 
-    if (!this.$store.isLogged) {
-      return this.permissionDenied();
-    }
+    // if (!this.$store.isLogged) {
+    //   return this.permissionDenied();
+    // }
 
-    try {
-      const response: AxiosResponse = await this.$api.joinGame(gameId);
-      this.$router.push({
-        name: "FightFrame",
-        params: { gameInfos: response.data.data, gameId } as any,
-      });
-    } catch (e) {
-      console.error(e);
-      this.errorJoin = true;
-    }
+    // try {
+    //   const response: AxiosResponse = await this.$api.joinGame(gameId);
+    //   this.$router.push({
+    //     name: "FightFrame",
+    //     params: { gameInfos: response.data.data, gameId } as any,
+    //   });
+    // } catch (e) {
+    //   console.error(e);
+    //   this.errorJoin = true;
+    // }
+    this.$router.push({
+      name: "CreateGamePanel",
+      params: { gameId, gameInfos: this.openGames.find((game: any) => game.id === gameId) } as any,
+    });
+  }
+
+  deleteGame(gameId: number): void {
+    this.openGames = this.openGames.filter((openGame: any) => openGame.id !== gameId);
+    this.$api.delete(gameId);
   }
 
 
@@ -228,6 +243,15 @@ export default class ListGamesPanel extends Vue {
 <style lang="less">
 #list-games-panel-body-closed {
   margin-top: 10px;
+}
+
+#parent {
+  overflow-y:scroll;
+  height: calc(100vh - 150px);
+}
+
+#parent::-webkit-scrollbar-thumb {
+  background-color: white
 }
 
 #create-game-panel-body,

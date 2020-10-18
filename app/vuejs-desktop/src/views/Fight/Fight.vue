@@ -6,7 +6,7 @@
       <sui-modal-actions style="text-align: center;">
         <div is="sui-button-group">
           <sui-button color="facebook" @click.native="$router.push({ name: 'CreateGamePanel' })" label-position="left" icon="redo">Nouvelle partie</sui-button>
-          <sui-button color="blue" @click.native="$router.push({ name: 'StatsPanel', params: { gameId } })" label-position="right" icon="chart pie">Détails</sui-button>
+          <sui-button color="blue" @click.native="$router.push({ name: 'StatPanel', params: { gameId } })" label-position="right" icon="chart pie">Détails</sui-button>
         </div>
         <sui-button color="grey" style="margin-left: 50px" @click.native="$router.push({ name: 'ListGamesPanel' })">Retourner au menu principal</sui-button>
       </sui-modal-actions>
@@ -77,9 +77,9 @@
             <SuiGrid align="left" verticalAlign="top" style="margin: 0;" v-if="!fightMenuState">
               <SuiGridRow align="right" verticalAlign="middle">
                 <SuiGridColumn>
-                  <span class="ui label" style="margin-right: 0px">
+                  <div class="ui label" style="margin-right: 0px">
                     <SuiButton size="mini" style="margin-right: 10px" disabled>ESC</SuiButton>Accéder au menu
-                  </span>
+                  </div>
                 </SuiGridColumn>
               </SuiGridRow>
             </SuiGrid>
@@ -87,7 +87,7 @@
             <SuiGrid style="position: absolute; width: 30%; bottom: 0px; right: 0px; margin: 0;">
               <SuiGridRow :columns="2" verticalAlign="middle">
                 <SuiGridColumn align="right" style="position: relative">
-                  <span class="ui label">Vie</span>
+                  <div class="ui label">Vie</div>
                 </SuiGridColumn>
                 <SuiGridColumn align="right" style="position: relative">
                   <sui-progress state="active" color="red" :percent="gameContext.life" />
@@ -96,7 +96,7 @@
 
               <SuiGridRow :columns="2" verticalAlign="middle">
                 <SuiGridColumn align="right" style="position: relative">
-                  <span class="ui label">Surchauffe</span>
+                  <div class="ui label">Surchauffe</div>
                 </SuiGridColumn>
                 <SuiGridColumn align="right" style="position: relative">
                   <sui-progress state="active" color="red" :percent="gameContext.thermal" />
@@ -105,7 +105,7 @@
 
               <SuiGridRow :columns="2" verticalAlign="middle">
                 <SuiGridColumn align="right" style="position: relative">
-                  <span class="ui label">Energie</span>
+                  <div class="ui label">Energie</div>
                 </SuiGridColumn>
                 <SuiGridColumn align="right" style="position: relative">
                   <sui-progress state="active" color="yellow" :percent="gameContext.energy" />
@@ -119,36 +119,36 @@
             >
               <!-- <SuiGridRow :columns="2" verticalAlign="middle" style="padding: 4px">
                 <SuiGridColumn :width="5" align="center" style="position: relative">
-                  <span class="ui label circular icon">
+                  <div class="ui label circular icon">
                     <SuiIcon name="time"/>
                     23h42
-                  </span>
+                  </div>
                 </SuiGridColumn>
                 <SuiGridColumn align="left" style="position: relative; margin-left: 2px">
-                  <span class="ui label blue" style="background-color: #2980b9 !important">Fire !</span>
+                  <div class="ui label blue" style="background-color: #2980b9 !important">Fire !</div>
                 </SuiGridColumn>
               </SuiGridRow>
               <SuiGridRow :columns="2" verticalAlign="middle" style="padding: 4px">
                 <SuiGridColumn :width="5" align="center" style="position: relative">
-                  <span class="ui label circular icon">
+                  <div class="ui label circular icon">
                     <SuiIcon name="time"/>
                     23h43
-                  </span>
+                  </div>
                 </SuiGridColumn>
                 <SuiGridColumn align="left" style="position: relative; margin-left: 2px">
-                  <span class="ui label" style="background-color: #e74c3c">Nothing found</span>
+                  <div class="ui label" style="background-color: #e74c3c">Nothing found</div>
                 </SuiGridColumn>
               </SuiGridRow>
 
               <SuiGridRow :columns="2" verticalAlign="middle" style="padding: 4px">
                 <SuiGridColumn :width="5" align="center" style="position: relative">
-                  <span class="ui label circular icon">
+                  <div class="ui label circular icon">
                     <SuiIcon name="time"/>
                     23h42
-                  </span>
+                  </div>
                 </SuiGridColumn>
                 <SuiGridColumn align="left" style="position: relative; margin-left: 2px">
-                  <span class="ui label">Fire !</span>
+                  <div class="ui label">Fire !</div>
                 </SuiGridColumn>
               </SuiGridRow>-->
               <SuiGridRow
@@ -159,16 +159,16 @@
                 style="padding: 4px"
               >
                 <SuiGridColumn :width="4" align="center" style="position: relative; padding-left: 0px">
-                  <span class="ui label circular icon">
+                  <div class="ui label circular icon">
                     <SuiIcon name="time" />
                     {{ notification.time.format('HH:mm:ss') }}
-                  </span>
+                  </div>
                 </SuiGridColumn>
                 <SuiGridColumn :width="11" align="left" style="position: relative; margin-left: 2px">
-                  <span
+                  <div
                     class="ui label"
                     :style="{ 'background-color': notification.color }"
-                  >{{ notification.text }}</span>
+                  >{{ notification.text }}</div>
                 </SuiGridColumn>
               </SuiGridRow>
             </SuiGrid>

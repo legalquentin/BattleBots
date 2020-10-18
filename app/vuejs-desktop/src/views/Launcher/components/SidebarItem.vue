@@ -4,10 +4,10 @@
     v-if="target === 'logo'"
     id="sidebar-item"
     class="row"
-    :class="{ extra: extra, white: rand <= 0 || rand > 5, blue: rand === 1, violet: rand === 2, pink: rand === 3, orange: rand === 4, red: rand === 5 }"
     :to="{ name: defaultTarget }"
     tag="div"
   >
+  <!-- :class="{ extra: extra, white: rand <= 0 || rand > 5, blue: rand === 1, violet: rand === 2, pink: rand === 3, orange: rand === 4, red: rand === 5 }" -->
     <SuiGridColumn>
       <SuiHeader inverted sub>
         <slot />
@@ -19,10 +19,10 @@
     v-else-if="target === 'nothing'"
     id="sidebar-item"
     class="row"
-    :class="{ extra: extra, white: rand > -1, blue: rand === 1, violet: rand === 2, pink: rand === 3, orange: rand === 4, red: rand === 5 }"
     tag="div"
     style="pointer-events: none"
   >
+  <!-- :class="{ extra: extra, white: rand > -1, blue: rand === 1, violet: rand === 2, pink: rand === 3, orange: rand === 4, red: rand === 5 }" -->
     <SuiGridColumn>
       <SuiHeader inverted sub>
         <slot />
@@ -69,12 +69,12 @@ export default class SidebarItem extends Vue {
 
   private rand = -1;
 
-  get extra(): boolean {
-    if (!this.isReadyToAnimate) {
-      return false;
-    }
-    return this.rand % 2 === 0;
-  }
+  // get extra(): boolean {
+  //   if (!this.isReadyToAnimate) {
+  //     return false;
+  //   }
+  //   return this.rand % 2 === 0;
+  // }
 
   private isReadyToAnimate = false;
   private colorTurnoverInterval!: number;
@@ -82,19 +82,19 @@ export default class SidebarItem extends Vue {
 
   mounted(): void {
       this.isCreateGame = this.target === 'LoginPanel';
-      this.colorTurnoverInterval = window.setInterval(() => this.colorTurnover(), Math.floor(Math.random() * (120 - 60) + 60) * 1000);
-      this.colorTurnoverTimeout = window.setTimeout(() => this.colorTurnover(true), Math.floor(Math.random() * (30 - 10) + 10) * 1000);
+      // this.colorTurnoverInterval = window.setInterval(() => this.colorTurnover(), Math.floor(Math.random() * (120 - 60) + 60) * 1000);
+      // this.colorTurnoverTimeout = window.setTimeout(() => this.colorTurnover(true), Math.floor(Math.random() * (30 - 10) + 10) * 1000);
   }
 
   onDestroy(): void {
-    alert("onDestroy")
-    window.clearInterval(this.colorTurnoverInterval);
-    window.clearTimeout(this.colorTurnoverTimeout);
+    // alert("onDestroy")
+    // window.clearInterval(this.colorTurnoverInterval);
+    // window.clearTimeout(this.colorTurnoverTimeout);
   }
 
   private colorTurnover(white = false): void {
-    this.rand = !white ? Math.floor(Math.random() * (12 - 0) + 0) : 0;
-    this.isReadyToAnimate = true;
+    // this.rand = !white ? Math.floor(Math.random() * (12 - 0) + 0) : 0;
+    // this.isReadyToAnimate = true;
   }
 }
 </script>
