@@ -31,8 +31,8 @@ func CreateGame(res http.ResponseWriter, req *http.Request) {
 
 	id := strconv.Itoa(payload.ID)
 	log.Println(prefixLog, payload.ID)
-	if len(baseGameInstances) == 0 {
-		log.Println(prefixWarn, "Game '"+payload.Name+"' with id '"+id+"' already exist")
+	if len(baseGameInstances) > 0 {
+		log.Println(prefixWarn, "Only one game is suported")
 		http.Error(res, "No available slot for a new game", 400)
 		return
 	}
