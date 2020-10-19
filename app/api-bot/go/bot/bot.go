@@ -33,6 +33,7 @@ func WsBotCtrl(w http.ResponseWriter, r *http.Request) {
 		mt, message, err := c.ReadMessage()
 		if err != nil {
 			log.Println(prefixWarn, "lost client connexion..")
+			stopMotor()
 			break
 		}
 		if err := json.Unmarshal(message, &msg); err != nil {
