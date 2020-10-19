@@ -29,7 +29,7 @@ func main() {
 		http.HandleFunc("/wsvideo", stub.WsStubVideoStream)
 	} else {
 		defer rpio.Close()
-		// bot.SetUpPins()
+		bot.SetUpPins()
 		http.HandleFunc("/wsctrl", bot.WsBotCtrl)
 	}
 	var addr = flag.String("addr", config.Config.Local+":"+config.Config.Port, "http service address")
