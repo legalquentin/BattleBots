@@ -158,6 +158,8 @@ func closePlayerConn(game Game) {
 		}
 		if player.BotSpecs.SocketClientCtrl != nil {
 			player.BotSpecs.SocketClientCtrl.Close()
+		}
+		if player.BotSpecs.SocketBotCtrl != nil {
 			player.BotSpecs.SocketBotCtrl.Close()
 		}
 		player.Mutex.Unlock()
