@@ -31,5 +31,5 @@ func main() {
 		bot.SetUpPins()
 		http.HandleFunc("/wsctrl", bot.WsBotCtrl)
 	}
-	log.Fatal(http.ListenAndServe(config.Config.Local+":"+config.Config.Port, nil))
+	log.Fatal(http.ListenAndServe(":"+config.Config.Port, nil))
 }
