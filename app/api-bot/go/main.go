@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"log"
 	"net/http"
 
@@ -32,6 +31,5 @@ func main() {
 		bot.SetUpPins()
 		http.HandleFunc("/wsctrl", bot.WsBotCtrl)
 	}
-	var addr = flag.String("addr", config.Config.Local+":"+config.Config.Port, "http service address")
-	log.Fatal(http.ListenAndServe(*addr, nil))
+	log.Fatal(http.ListenAndServe(config.Config.Local+":"+config.Config.Port, nil))
 }
