@@ -2,7 +2,7 @@ package config
 
 // Config variable
 var Config = Configuration{
-	Local: "127.0.0.1",
+	Local: "192.16.1.31",
 	Port:  "8888",
 	Env:   "default",
 }
