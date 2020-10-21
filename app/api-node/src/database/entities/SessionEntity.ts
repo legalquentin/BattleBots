@@ -69,4 +69,9 @@ export class SessionEntity {
         name: "bot_heat"
     })
     botHeat: number;
+
+    @Column({
+        name: "bot_health"
+    })
+    botHealth: number;
 }

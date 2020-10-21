@@ -7,6 +7,7 @@ import { ConnectedUserResource } from "./ConnectedUserResource";
 export class IContextBotResource {
     energy: number;
     heat: number;
+    health: number;
     bot?: IBotsResource;
     game?: IGameResource;
     user?: IUserResource;

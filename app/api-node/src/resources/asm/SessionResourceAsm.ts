@@ -30,6 +30,7 @@ export class SessionResourceAsm {
     toResource(session: SessionEntity){
         const resource: IContextBotResource = {
             energy: session.botEnergy,
+            health: session.botHealth,
             heat: session.botHeat
         };
 
@@ -40,6 +41,7 @@ export class SessionResourceAsm {
         const resource: IContextBotResource = {
             energy: session.botEnergy,
             heat: session.botHeat,
+            health: session.botHealth,
             bot: await this.botResourceAsm.toResource(session.bot),
             user: await this.userResourceAsm.toResource(session.player),
             stream: await this.streamResourceAsm.toResource(session.stream)
