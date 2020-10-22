@@ -19,7 +19,7 @@
               </sui-form-field>
               <sui-form-field>
                 <label>Mot de passe</label>
-                <sui-input v-model="formModel.password" size="big" placeholder="••••••••••" />
+                <sui-input type="password" v-model="formModel.password" size="big" placeholder="••••••••••" />
               </sui-form-field>
             </sui-form>
           </SuiSegment>

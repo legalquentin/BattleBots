@@ -12,12 +12,15 @@
       <SuiGridRow align="left" id="create-game-panel-body">
         <SuiGridColumn class="huge-column">
           <SuiSegment class="huge-segment" raised stacked="tall" style="height: auto; overflow-y: hidden">
+            <div class="ui dimmer" :class="{active: isLoading}">
+              <div class="ui text loader">Loading</div>
+            </div>
             <SuiHeader
               sub
               inverted
               style="margin-bottom: 15px"
             >{{ openGames.length ? 'Parties Ouvertes' : 'Aucune partie ouverte' }}</SuiHeader>
-            <SuiButton size="medium" class="bb-button" v-if="!openGames.length">Créer une nouvelle partie</SuiButton>
+            <SuiButton size="medium" class="bb-button" @click="$router.push({ name: 'CreateGamePanel' })" v-if="!openGames.length">Créer une nouvelle partie</SuiButton>
             <SuiMessage
               error
               v-if="errorJoin"
@@ -28,18 +31,6 @@
                 :key="openGame.id"
                 @click="joinGame(openGame.id)"
               >
-                <sui-dimmer-dimmable>
-                  <a
-                    class="ui massive right corner label"
-                    style="border-color: transparent; opacity: 0.7"
-                  >
-                    <i class="mouse pointer icon"></i>
-                  </a>
-
-                  <sui-dimmer blurring>
-                    <!-- <sui-button inverted>Add Friend</sui-button> -->
-                  </sui-dimmer>
-                </sui-dimmer-dimmable>
                 <sui-card-content>
                   <sui-card-header>{{ openGame.name }}</sui-card-header>
                   <sui-card-meta>{{ formatDate(openGame.createdAt) }}</sui-card-meta>
@@ -91,10 +82,10 @@
                 <sui-card-content extra>
                   <SuiGrid verticalAlign="middle" stackable>
                     <SuiGridRow :columns="2">
-                      <SuiGridColumn :width="6">
-                        <sui-icon name="lock" color="red" />Fermée
+                      <SuiGridColumn :width="2">
+                        <sui-icon name="lock" color="red" />
                       </SuiGridColumn>
-                      <SuiGridColumn :width="10" align="right">
+                      <SuiGridColumn :width="13" align="right">
                         <SuiButtonGroup size="mini">
                         <SuiButton size="mini" basic color="red">Replay</SuiButton>
                         <SuiButton size="mini" basic color="blue" @click="infoPage(closedGame.id)" style="z-index: 1000">Infos</SuiButton>
@@ -105,7 +96,7 @@
                   </SuiGrid>
                 </sui-card-content>
                 <SuiCardContent extra>
-                  <sui-icon name="flag checkered" color="violet" />Gagnant : Plume
+                  <sui-icon name="flag checkered" color="violet" />Arene : Caprica VI
                 </SuiCardContent>
                 <!-- <sui-card-content extra>
                   <sui-icon name="trash" color="red" /><a>ADMIN : supprimer la partie</a>
@@ -149,6 +140,7 @@ export default class ListGamesPanel extends Vue {
   private openGames: Game[] = [];
   private closedGames: Game[] = [];
   private reloadDataInterval = true;
+  private isLoading = true;
   
   constructor() {
     super();
@@ -177,6 +169,7 @@ export default class ListGamesPanel extends Vue {
       const response: AxiosResponse = await this.$api.getGameList();
       this.openGames = [];
       this.closedGames = [];
+      this.isLoading = false;
       response.data.data.forEach((game: Game) => {
         if (game.status === "CREATED") {
           return this.openGames.push(game);
@@ -248,6 +241,7 @@ export default class ListGamesPanel extends Vue {
 #parent {
   overflow-y:scroll;
   height: calc(100vh - 150px);
+  width: 100%;
 }
 
 #parent::-webkit-scrollbar-thumb {

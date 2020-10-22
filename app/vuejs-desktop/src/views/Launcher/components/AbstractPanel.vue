@@ -17,8 +17,8 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component({ inject: [] })
 export default class AbstractPanel extends Vue {
-  @Prop()
-  private named!: string;
+  // @Prop()
+  // private named!: string;
 }
 </script>
 

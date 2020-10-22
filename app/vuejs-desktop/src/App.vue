@@ -75,8 +75,8 @@ img[alt="www.000webhost.com"] {
 
   .card .image {
     object-fit: cover;
-    height: 90px;
-    min-width: 280px;
+    height: 150px;
+    min-width: 100%;
   }
 
   input,
@@ -121,6 +121,10 @@ img[alt="www.000webhost.com"] {
     .logo img {
       visibility: hidden;
     }
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: white;
   }
 }
 </style>

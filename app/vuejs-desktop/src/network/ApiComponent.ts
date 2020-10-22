@@ -20,6 +20,7 @@ export default class ApiComponent extends Vue {
             this.config.headers.Authorization = `Bearer ${(this.$global as Global).token}`;
         }
         this.axios = axios.create(this.config);
+        this.axios.defaults.timeout = 500000;
 
         this.axios.interceptors.response.use((response: AxiosResponse) => response, (err: AxiosError) => this.onError(err));
     }

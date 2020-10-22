@@ -400,6 +400,18 @@ export default class Fight extends Vue {
       case MessagesTypesEnum.END_OF_GAME:
         this.gameContext.endOfGame = true;
         break;
+      case MessagesTypesEnum.VICTORY:
+        this.gameContext.endOfGame = true;
+        alert("victoire")
+        break;
+      case MessagesTypesEnum.DEFEAT:
+        this.gameContext.endOfGame = true;
+        alert("défaite")
+        break;
+      case MessagesTypesEnum.EQUALITY:
+        this.gameContext.endOfGame = true;
+        alert("equality")
+        break;
     }
   }
 

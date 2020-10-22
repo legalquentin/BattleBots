@@ -17,7 +17,8 @@ const routes: RouteConfig[] = [
     { path: 'login-panel', name: 'LoginPanel', component: () => import('../views/Launcher/components/LoginPanel.vue') },
   ] },
 
-  { path: '/fight', name: 'FightFrame', component: () => import('../views/Fight/Fight.vue') }
+  { path: '/fight', name: 'FightFrame', component: () => import('../views/Fight/Fight.vue') },
+  { path: '/replay-fight', name: 'ReplayFightFrame', component: () => import('../views/Fight/ReplayFight.vue') }
 ];
 
 

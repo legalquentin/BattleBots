@@ -7,6 +7,7 @@
         </SuiGridColumn>
       </SuiGridRow>
     </template>
+
     <template #body>
       <SuiGridRow verticalAlign="middle" align="left" id="create-game-panel-body">
         <SuiGridColumn class="huge-column dimmer active">
@@ -18,22 +19,15 @@
             <SuiHeader v-if="isWaitingForPlayer" sub inverted style="margin-bottom: 15px">Choix de votre robot</SuiHeader>
             <sui-card-group v-if="isWaitingForPlayer" stackable :items-per-row="3">
               <sui-card :class="{ active: isActive[0] }" @click="setActive(0)">
-                <sui-dimmer-dimmable
-                  
-                >
                 <a class="ui massive right corner label" style="border-color: transparent; opacity: 0.7">
                   <i class="mouse pointer icon"></i>
                 </a>
-                  <sui-image
-                    src="https://i.pinimg.com/736x/aa/08/29/aa08298584a51bda1a738d64b3484788.jpg"
-                  />
-                  <sui-dimmer blurring>
-                    <!-- <sui-button inverted>Add Friend</sui-button> -->
-                  </sui-dimmer>
-                </sui-dimmer-dimmable>
+                <sui-image
+                    src="https://4.bp.blogspot.com/-1gMZZms4XcM/W8JgGB1PbyI/AAAAAAAAdiA/3fBsdu1p3gIPuqpWQitpJLiChZyMLgqhgCLcBGAs/s1600/razorback-rearshot.jpg"
+                />
                 <sui-card-content>
                   <sui-card-header>Razorback</sui-card-header>
-                  <sui-card-meta>Create in Sep 4220</sui-card-meta>
+                  <sui-card-meta>Create in Sep 4240</sui-card-meta>
                 </sui-card-content>
                 <sui-card-content extra>
                   <sui-icon name="heart" color="red" />1 de vie

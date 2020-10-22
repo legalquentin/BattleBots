@@ -9,6 +9,9 @@ export enum MessagesTypesEnum {
     THERMAL = 2,
     LIFE = 3,
     END_OF_GAME = -1,
+    VICTORY = -2,
+    DEFEAT = -3,
+    EQUALITY = -4,
 }
 
 export enum NotifTypesEnum {

@@ -10,30 +10,28 @@
     <template #body>
       <SuiGridRow verticalAlign="middle" align="left" id="list-games-panel-body-closed">
         <SuiGridColumn class="huge-column">
-          <SuiSegment class="huge-segment" raised stacked="tall">
+          <SuiSegment class="huge-segment" raised stacked="tall" style="height: calc(100vh - 150px); overflow-y: scroll">
+            <div class="ui dimmer" :class="{active: isLoading}">
+              <div class="ui text loader">Loading</div>
+            </div>
             <SuiHeader sub inverted style="margin-bottom: 15px">Cliquez sur une partie pour visionner le replay</SuiHeader>
             <sui-card-group stackable :items-per-row="3">
               <sui-card v-for="game in closedGames" :key="game.id">
-                <sui-dimmer-dimmable
-                  
-                >
-                <a class="ui massive right corner label" style="border-color: transparent; opacity: 0.7">
-                  <!-- <i class="mouse pointer icon"></i> -->
-                </a>
-                  
-                  <sui-dimmer blurring>
-                    <!-- <sui-button inverted>Add Friend</sui-button> -->
-                  </sui-dimmer>
-                </sui-dimmer-dimmable>
                 <sui-card-content>
                   <sui-card-header>{{ game.name }}</sui-card-header>
                   <sui-card-meta>{{ formatDate(game.createdAt) }}</sui-card-meta>
                 </sui-card-content>
                 <SuiCardContent extra>
-                  <SuiButtonGroup size="mini">
-                    <SuiButton size="mini" fluid basic color="red">Replay</SuiButton>
-                    <SuiButton size="mini" fluid basic color="blue" style="z-index: 1000" @click="$router.push({ name: 'StatsPanel', params: { gameId: game.id } })">Infos</SuiButton>
-                  </SuiButtonGroup>
+                  <SuiGrid verticalAlign="middle" stackable>
+                    <SuiGridRow :columns="1">
+                      <SuiGridColumn align="center">
+                        <SuiButtonGroup size="mini">
+                        <SuiButton size="mini" basic color="red" @click="getStatsForReplay(game.id)" :loading="isLoadingStatsForReplay">Replay</SuiButton>
+                        <SuiButton size="mini" basic color="blue" @click="$router.push({ name: 'StatsPanel', params: { gameId: game.id } })" style="z-index: 1000">Infos</SuiButton>
+                        </SuiButtonGroup>
+                      </SuiGridColumn>
+                    </SuiGridRow>
+                  </SuiGrid>
                 </SuiCardContent>
                 <SuiCardContent extra>
                     <sui-icon name="flag checkered" color="violet" />Gagnant : Plume
@@ -63,6 +61,7 @@ import AbstractPanel from "./AbstractPanel.vue";
 import { Global } from '@/Global';
 import { AxiosResponse } from 'axios';
 import moment from 'moment';
+import _ from 'lodash';
 
 interface Game {
   createdAt: number;
@@ -78,6 +77,7 @@ export default class ReplayPanel extends Vue {
   private openGames: Game[] = [];
   private closedGames: Game[] = [];
   private reloadDataInterval = true;
+  private isLoadingStatsForReplay = false;
 
   created(): void {
     this.$store = this.$global;
@@ -95,6 +95,16 @@ export default class ReplayPanel extends Vue {
 
   private formatDate(timestamp: number): string {
     return moment(timestamp).format("DD/MM/YYYY - HH:mm");
+  }
+
+  private getStatsForReplay(gameId: number): string {
+    this.isLoadingStatsForReplay = true;
+    this.$api.getGameResult(gameId).then((gameInfos) => {
+      const gameInfo: any = gameInfos.data.data;
+      const s3Url: string = _.first(gameInfo.players[0].botSpecs.streams).s3Url;
+      this.isLoadingStatsForReplay = false;
+      this.$router.push({ name: 'ReplayFightFrame', params: { socketUrl: s3Url } });
+    });
   }
 
   private async reloadDatas(): Promise<void> {

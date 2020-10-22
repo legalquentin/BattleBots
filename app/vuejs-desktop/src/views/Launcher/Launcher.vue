@@ -1,6 +1,6 @@
 <template>
   <div id="launcher">
-    <SuiSegment v-if="$router.currentRoute.path !== '/register-panel' && $router.currentRoute.path !== '/login-panel'" basic style="position: absolute; right: 58px; z-index: 1; top: 25px">
+    <SuiSegment v-if="$router.currentRoute.path !== '/register-panel' && $router.currentRoute.path !== '/login-panel'" basic style="position: absolute; right: 58px; z-index: 1; top: 9px">
       <SuiLabel
         v-if="!$store.isLogged"
         @click="permissionDenied()"
