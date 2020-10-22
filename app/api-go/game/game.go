@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"strings"
 	"sync"
 	"time"
 
@@ -359,4 +360,14 @@ func tokenGenerator() string {
 	b := make([]byte, 12)
 	rand.Read(b)
 	return fmt.Sprintf("%x", b)
+}
+
+func CheckAvailability(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	id := strings.TrimPrefix(req.URL.Path, "/api/game/availability/")
+	bots := make([]Bot, 2)
+	for _, b := range baseGameInstances[id].Env.Bots {
+		bots = append(bots, b)
+	}
+	json.NewEncoder(w).Encode(bots)
 }
