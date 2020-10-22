@@ -50,6 +50,11 @@ export class Session1593498810566 implements MigrationInterface {
                     name: "bot_heat",
                     type: "int",
                     isNullable: true
+                },
+                {
+                    name: "bot_health",
+                    type: "int",
+                    isNullable: true
                 }
             ]
         }));
