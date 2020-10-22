@@ -104,6 +104,7 @@ export class GameServiceImpl implements GameService {
             if (playerResource.botContext){
                 session.botEnergy = playerResource.botContext.energy;
                 session.botHeat = playerResource.botContext.heat;
+                session.botHealth = playerResource.botContext.health;
             }
             param.Key = `${uuid()}.${o.ext}`,
             param.Bucket = this.config.getBucket(),

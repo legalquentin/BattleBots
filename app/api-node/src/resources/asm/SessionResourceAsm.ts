@@ -68,6 +68,7 @@ export class SessionResourceAsm {
 
         entity.botEnergy = session.energy;
         entity.botHeat = session.heat;
+        entity.botHealth = session.health;
         if (session.user){
             const userEntity = new UserEntity();
 
