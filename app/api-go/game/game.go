@@ -366,7 +366,7 @@ func tokenGenerator() string {
 func CheckAvailability(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	vars := mux.Vars(req)
-	bots := make([]Bot, 2)
+	bots := make([]Bot, 0)
 	for _, b := range baseGameInstances[vars["id"]].Env.Bots {
 		bots = append(bots, b)
 	}
