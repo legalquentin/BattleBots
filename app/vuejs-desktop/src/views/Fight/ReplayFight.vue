@@ -52,9 +52,7 @@
                     </div> -->
                     <canvas
                         ref="videoCanvas"
-                        width="200"
-                        height="200"
-                        style="background-color: #85858573;width: 200px; max-height: 200px; display:block;z-index: -2"
+                        style="background-color: #85858573; display:block;z-index: -2"
                     >
                         <p>
                         Please use a browser that supports the Canvas Element, like
@@ -115,7 +113,7 @@ export default class Fight extends Vue {
             this.$router.back();
         }        
         console.log(this.cameraUrl)
-        new jsmpeg(this.cameraUrl, { canvas: this.videoCanvas });
+        let ref = new jsmpeg(this.cameraUrl, { canvas: this.videoCanvas, seekable: true});
         // const client: WebSocket = new WebSocket(this.cameraUrl);
         // new jsmpeg(client, { canvas: this.videoCanvas });
     }
