@@ -10,12 +10,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"strings"
 	"sync"
 	"time"
 
 	"net/http"
 	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 // CreateGame function need to be called once to setup everything
@@ -364,9 +365,9 @@ func tokenGenerator() string {
 
 func CheckAvailability(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	id := strings.TrimPrefix(req.URL.Path, "/api/game/availability/")
+	vars := mux.Vars(req)
 	bots := make([]Bot, 2)
-	for _, b := range baseGameInstances[id].Env.Bots {
+	for _, b := range baseGameInstances[vars["id"]].Env.Bots {
 		bots = append(bots, b)
 	}
 	json.NewEncoder(w).Encode(bots)

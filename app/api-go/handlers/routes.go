@@ -72,7 +72,7 @@ var Routes = []Route{
 	Route{
 		"Availability check",
 		"GET",
-		"/api/game/availability/",
+		"/api/game/availability/{id}",
 		game.CheckAvailability,
 		false,
 	},
