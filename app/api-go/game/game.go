@@ -156,11 +156,32 @@ func finishGameAPI(game Game, id string) {
 }
 
 func closePlayerConn(game Game) {
+
+	var biggest, min int8 = 0, 100
+	for _, player := range game.Players {
+		if player.BotContext.Health > biggest {
+			biggest = player.BotContext.Health
+		}
+		if player.BotContext.Health < min {
+			min = player.BotContext.Health
+		}
+	}
+
 	for _, player := range game.Players {
 		player.Mutex.Lock()
 		if player.BotSpecs.SocketBotCam != nil {
 			player.BotSpecs.SocketClientCam.Close()
-			player.BotSpecs.SocketClientCtrl.WriteJSON(Data{Type: TypeDisconnect, Value: 0})
+			var code int16 = TypeDisconnect
+			if player.BotContext.Health == min {
+				if player.BotContext.Health == biggest {
+					code = TypeDisconnectDraw
+				} else {
+					code = TypeDisconnectLost
+				}
+			} else if player.BotContext.Health == biggest {
+				code = TypeDisconnectWon
+			}
+			player.BotSpecs.SocketClientCtrl.WriteJSON(Data{Type: code, Value: 0})
 			player.BotSpecs.SocketBotCam.Close()
 		}
 		if player.BotSpecs.SocketClientCtrl != nil {

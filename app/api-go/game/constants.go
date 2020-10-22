@@ -33,6 +33,10 @@ var RunningBots = []*Bot{}
 
 // TODO: Define types
 const TypeDisconnect = -1
+const TypeDisconnectWon = -2
+const TypeDisconnectLost = -3
+const TypeDisconnectDraw = -4
+
 const TypeEnergy = 1
 const TypeOverheat = 2
 const TypeHealth = 3
