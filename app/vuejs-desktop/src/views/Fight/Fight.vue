@@ -215,8 +215,7 @@ class Notification {
 
 @Component
 export default class Fight extends Vue {
-  private lambdaKeyPress: (event: any) => void = (event: any) =>
-    this.onKeyboardKeyPress(event);
+  private lambdaKeyPress: (event: any) => void = (event: any) => this.onKeyboardKeyPress(event);
 
   @Ref("videoCanvas") private videoCanvas?: HTMLCanvasElement;
 
@@ -224,7 +223,7 @@ export default class Fight extends Vue {
   private notifications: Notification[] = [];
 
   private movingSound = new Audio('motor-sound.mp3');
-  private shootSound = new Audio('motor-sound.mp3');
+  private shootSound = new Audio('laser.mp3');
   private damageSound = new Audio('hit.mp3');
   // private ambiantSound = new Audio('motor-sound.mp3');
 
@@ -334,20 +333,26 @@ export default class Fight extends Vue {
 
   private onKeyDown(e: any): void {
     console.log("keydown", this.allowed, this.allowedKeyboardKeys[e.code], e);
-    if (e.code <= 3) {
-      this.movingSound.play();
-    }
     if (
       this.allowed.includes(e.code) &&
       this.allowedKeyboardKeys[e.code] == false
     ) {
+      if (e.code <= 3) {
+        this.movingSound.currentTime = 800
+        this.movingSound.play();
+      }
       this.allowedKeyboardKeys[e.code] = true;
       this.$ws.send(e.keyCode, true);
     }
   }
 
   private onKeyUp(e: any): void {
-    setTimeout(() => this.movingSound.pause(), 1000);
+    if (e.code <= 3) {
+      setTimeout(() => {
+        this.movingSound.pause()
+        this.movingSound.currentTime = 800
+      }, 1000);
+    }
     if (
       this.allowed.includes(e.code) &&
       this.allowedKeyboardKeys[e.code] == true
@@ -373,6 +378,8 @@ export default class Fight extends Vue {
         case NotifTypesEnum.ERROR:
           if (message.dv == "Robot Firing !") {
             this.playsound(this.shootSound, 2000)
+          } else if (message.dv.toString().endsWith("health points !")) {
+            this.playsound(this.damageSound, 2000)
           }
           this.notifications.push(
             new Notification(
