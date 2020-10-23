@@ -367,12 +367,12 @@ func CheckAvailability(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	vars := mux.Vars(req)
 	bots := make([]Bot, 0)
-	if val, ok := baseGameInstances[vars["id"]]; ok {
+	if _, ok := baseGameInstances[vars["id"]]; ok {
 		//do something here
-		bots := make([]Bot, 0)
-		for _, b := range val.Env.Bots {
+		for _, b := range baseGameInstances[vars["id"]].Env.Bots {
 			bots = append(bots, b)
 		}
+		println("game exist, returning bots")
 	}
 	json.NewEncoder(w).Encode(bots)
 	return
