@@ -18,7 +18,7 @@
             <!-- <SuiDivider v-if="!isWaitingForPlayer" /> -->
             <SuiHeader v-if="isWaitingForPlayer" sub inverted style="margin-bottom: 15px">Choix de votre robot</SuiHeader>
             <SuiCardGroup v-if="isWaitingForPlayer" stackable :items-per-row="3">
-              <SuiCard v-if="!isHidden['Razorback']" :class="{ active: isActive[0] }" @click="setActive(0)">
+              <SuiCard v-if="!isHidden['Rocinante']" :class="{ active: isActive[0] }" @click="setActive(0)">
                 <a class="ui massive right corner label" style="border-color: transparent; opacity: 0.7">
                   <i class="mouse pointer icon"></i>
                 </a>
@@ -53,7 +53,7 @@
                 </SuiCard-content>
               </SuiCard>
 
-              <SuiCard v-if="!isHidden['Rocinante']" :class="{ active: isActive[1] }" @click="setActive(1)">
+              <SuiCard v-if="!isHidden['Razorback']" :class="{ active: isActive[1] }" @click="setActive(1)">
                 <sui-dimmer-dimmable
                   
                 >

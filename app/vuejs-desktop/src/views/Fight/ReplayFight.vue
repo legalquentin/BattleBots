@@ -97,10 +97,6 @@ import jsmpeg from "jsmpeg";
 import _ from "lodash";
 
 import GameContext from "./types/GameContext";
-// import RawDataMessage, {
-// } from "./types/RawDataMessage";
-
-
 
 @Component
 export default class Fight extends Vue {
