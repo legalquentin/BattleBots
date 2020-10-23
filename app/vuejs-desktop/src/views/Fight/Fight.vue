@@ -275,6 +275,9 @@ export default class Fight extends Vue {
     //   );
     // }, 1000);
 
+    this.movingSound.loop = true;
+    this.shootSound.volume = 0.65;
+
     try {
       this.gameInfos = this.$route.params.gameInfos;
       this.gameId = this.$route.params.gameId;
@@ -333,25 +336,24 @@ export default class Fight extends Vue {
 
   private onKeyDown(e: any): void {
     console.log("keydown", this.allowed, this.allowedKeyboardKeys[e.code], e);
+    if (e.keyCode >= 37 && e.keyCode <= 40) {
+      this.movingSound.play();
+    }
     if (
       this.allowed.includes(e.code) &&
       this.allowedKeyboardKeys[e.code] == false
     ) {
-      if (e.code <= 3) {
-        this.movingSound.currentTime = 800
-        this.movingSound.play();
-      }
       this.allowedKeyboardKeys[e.code] = true;
       this.$ws.send(e.keyCode, true);
     }
   }
 
   private onKeyUp(e: any): void {
-    if (e.code <= 3) {
+    if (e.keyCode >= 37 && e.keyCode <= 40) {
       setTimeout(() => {
         this.movingSound.pause()
-        this.movingSound.currentTime = 800
-      }, 1000);
+        this.movingSound.currentTime = 0;
+      }, 100);
     }
     if (
       this.allowed.includes(e.code) &&
