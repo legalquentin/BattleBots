@@ -223,6 +223,11 @@ export default class Fight extends Vue {
   private fightMenuState = false;
   private notifications: Notification[] = [];
 
+  private movingSound = new Audio('motor-sound.mp3');
+  private shootSound = new Audio('motor-sound.mp3');
+  private damageSound = new Audio('hit.mp3');
+  // private ambiantSound = new Audio('motor-sound.mp3');
+
   created(): void {
     addEventListener("keydown", this.lambdaKeyPress);
 
@@ -327,8 +332,6 @@ export default class Fight extends Vue {
   private lambdaCtrlKeyUp: (event: any) => void = (event: any) =>
     this.onKeyUp(event);
 
-  private movingSound = new Audio('motor-sound.mp3');
-
   private onKeyDown(e: any): void {
     console.log("keydown", this.allowed, this.allowedKeyboardKeys[e.code], e);
     if (e.code <= 3) {
@@ -354,10 +357,23 @@ export default class Fight extends Vue {
     }
   }
 
+  private async playsound(src: HTMLAudioElement, time: number) {
+    return new Promise(() => {
+      src.play()
+      setTimeout(() => {
+        src.pause()
+        src.currentTime = 0;
+      }, 2000);
+    })
+  }
+
   private onGameMessage(message: RawDataMessage): void {
     if (message.dt >= 10) {
       switch (message.dt) {
         case NotifTypesEnum.ERROR:
+          if (message.dv == "Robot Firing !") {
+            this.playsound(this.shootSound, 2000)
+          }
           this.notifications.push(
             new Notification(
               message.dv as string,
