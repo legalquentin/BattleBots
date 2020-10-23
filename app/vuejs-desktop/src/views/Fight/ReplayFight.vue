@@ -1,36 +1,36 @@
 <template>
     <div id="Fight">
         <!-- <SuiModal basic v-model="gameContext.endOfGame" scrolling :closable="false">
-            <sui-modal-header style="text-align: center !important; ">Partie terminée</sui-modal-header>
-            <sui-modal-header style="text-align: center; color: lightgreen">VICTOIRE</sui-modal-header>
-            <sui-modal-actions style="text-align: center;">
-                <div is="sui-button-group">
-                    <sui-button color="facebook" @click.native="$router.push({ name: 'CreateGamePanel' })" label-position="left" icon="redo">Nouvelle partie</sui-button>
-                    <sui-button color="blue" @click.native="$router.push({ name: 'StatPanel', params: { gameId } })" label-position="right" icon="chart pie">Détails</sui-button>
+            <SuiModalHeader style="text-align: center !important; ">Partie terminée</SuiModalHeader>
+            <SuiModalHeader style="text-align: center; color: lightgreen">VICTOIRE</SuiModalHeader>
+            <SuiModalActions style="text-align: center;">
+                <div is="SuiButton-group">
+                    <SuiButton color="facebook" @click.native="$router.push({ name: 'CreateGamePanel' })" label-position="left" icon="redo">Nouvelle partie</SuiButton>
+                    <SuiButton color="blue" @click.native="$router.push({ name: 'StatPanel', params: { gameId } })" label-position="right" icon="chart pie">Détails</SuiButton>
                 </div>
-                <sui-button color="grey" style="margin-left: 50px" @click.native="$router.push({ name: 'ListGamesPanel' })">Retourner au menu principal</sui-button>
-            </sui-modal-actions>
+                <SuiButton color="grey" style="margin-left: 50px" @click.native="$router.push({ name: 'ListGamesPanel' })">Retourner au menu principal</SuiButton>
+            </SuiModalActions>
         </SuiModal> -->
     
         <!-- TOMOVE -->
-        <sui-modal size="mini" basic v-model="fightMenuState">
-            <sui-modal-content>
-                <sui-modal-description>
+        <SuiModal size="mini" basic v-model="fightMenuState">
+            <SuiModal-content>
+                <SuiModal-description>
                     <SuiGrid align="center" verticalAlign="middle">
                         <SuiGridRow>
                             <SuiGridColumn>
-                                <SuiButton size="huge" @click="fightMenuState = false" fluid>Reprendre</SuiButton>
+                                <SuiButton size="huge" @click="fightMenuState = false" fluid>Revenir</SuiButton>
                             </SuiGridColumn>
                         </SuiGridRow>
                         <SuiGridRow>
                             <SuiGridColumn>
-                                <SuiButton color="red" @click="$router.push({ name: 'ListGamesPanel' })" fluid>Quitter la partie</SuiButton>
+                                <SuiButton color="red" @click="$router.push({ name: 'ListGamesPanel' })" fluid>Quitter le replay</SuiButton>
                             </SuiGridColumn>
                         </SuiGridRow>
                     </SuiGrid>
-                </sui-modal-description>
-            </sui-modal-content>
-        </sui-modal>
+                </SuiModal-description>
+            </SuiModal-content>
+        </SuiModal>
         <!-- // TOMOVE -->
     
         <SuiGrid verticalAlign="middle" align="center" style="margin: 0; height: 100%">
@@ -52,7 +52,9 @@
                     </div> -->
                     <canvas
                         ref="videoCanvas"
-                        style="background-color: #85858573; display:block;z-index: -2"
+                        width="300"
+                        height="300"
+                        style="background-color: #85858573; display:block;z-index: -2;width: 100%; max-height: calc(100vh - 40px);"
                     >
                         <p>
                         Please use a browser that supports the Canvas Element, like
@@ -105,7 +107,18 @@ export default class Fight extends Vue {
     @Ref("videoCanvas") private videoCanvas?: HTMLCanvasElement;
     
     private cameraUrl!: string;
+    private fightMenuState = false;
     
+    created(): void {
+        addEventListener("keydown", (event: any) => {
+            switch (event.code) {
+                case "Escape":
+                    this.fightMenuState = !this.fightMenuState;
+                    break;
+            }
+        });
+    }
+
     mounted(): void {
         this.cameraUrl = this.$route.params.socketUrl;
 

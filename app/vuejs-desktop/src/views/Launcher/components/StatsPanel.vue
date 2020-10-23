@@ -1,19 +1,19 @@
 <template>
     <AbstractPanel name="StatsPanel">
         <template #header>
-          <SuiGridRow>
-            <SuiGridColumn>
-              <SuiHeader inverted size="huge">Statistiques</SuiHeader>
-            </SuiGridColumn>
-          </SuiGridRow>
+              <SuiGridRow>
+                <SuiGridColumn>
+                  <SuiHeader inverted size="huge">Statistiques</SuiHeader>
+                </SuiGridColumn>
+              </SuiGridRow>
 </template>
 
 <template #body>
-    <SuiGridRow :columns="1"  v-if="data">
+    <SuiGridRow :columns="1" v-if="data">
         <SuiGridColumn style="margin-top: 20px" textAlign="left" :width="16">
             <SuiSegment class="huge-segment" inverted raised stacked>
                 <div class="ui dimmer" :class="{active: isLoading}">
-                  <div class="ui text loader">Loading</div>
+                    <div class="ui text loader">Loading</div>
                 </div>
                 <SuiGrid style="height: 80px" verticalAlign="middle" align="center">
                     <SuiGridRow :columns="2" style="margin-top: 6px">
@@ -54,42 +54,42 @@
             </SuiGrid>
             <SuiGrid v-if="data" class="details cards" style="margin-top: 20px; height: calc(100vh - 350px); overflow-y: scroll">
                 <SuiGridRow :columns="1" verticalAlign="middle" style="margin-top: 6px">
-                    <SuiGridColumn>
-                      <div class="ui dimmer" :class="{active: isLoading}">
-                        <div class="ui text loader">Loading</div>
-                      </div>
+                    <SuiGridColumn style="min-height: 300px">
+                        <div class="ui dimmer" :class="{active: isLoading}">
+                            <div class="ui text loader">Loading</div>
+                        </div>
                         <SuiCardGroup center>
-                            <sui-card v-for="(player, index) in data.players" :key="player.id">
+                            <SuiCard v-for="(player, index) in data.players" :key="player.id" v-if="player.botSpecs">
                                 <sui-dimmer-dimmable>
                                     <sui-image v-if="player.botSpecs && player.botSpecs.name === 'Rocinante'" src="https://cdna.artstation.com/p/assets/images/images/012/579/212/4k/jason-clarke-roci-overflight-final-f000.jpg" />
                                     <sui-image v-else src="https://i.pinimg.com/736x/aa/08/29/aa08298584a51bda1a738d64b3484788.jpg" />
                                     <sui-dimmer blurring>
                                     </sui-dimmer>
                                 </sui-dimmer-dimmable>
-                                <sui-card-content v-if="player.botSpecs">
-                                    <SuiButton @click="$router.push({ name: 'ReplayPanel' })">Replay</SuiButton>
-                                </sui-card-content>
-                                <sui-card-content v-if="player.botSpecs">
-                                    <sui-card-header>{{ player.botSpecs.name }}</sui-card-header>
-                                    <sui-card-meta>Joueur : {{ player.pseudo }} </sui-card-meta>
-                                </sui-card-content>
-                                <sui-card-content extra>
+                                <SuiCard-content v-if="player.botSpecs" style="text-align: center">
+                                    <SuiButton basic color="red" @click="getStatsForReplay(index)" :loading="isLoadingStatsForReplay">Replay</SuiButton>
+                                </SuiCard-content>
+                                <SuiCard-content v-if="player.botSpecs">
+                                    <SuiCard-header>{{ player.botSpecs.name }}</SuiCard-header>
+                                    <SuiCard-meta>Joueur : {{ player.pseudo }} </SuiCard-meta>
+                                </SuiCard-content>
+                                <SuiCard-content extra>
                                     <sui-icon name="heart" color="red" />1 de vie
-                                </sui-card-content>
-                                <sui-card-content extra v-if="player.botSpecs">
+                                </SuiCard-content>
+                                <SuiCard-content extra v-if="player.botSpecs">
                                     <sui-icon name="lightning" color="yellow" />{{ player.botSpecs.energy }} d'énergie
-                                </sui-card-content>
-                                <sui-card-content extra v-if="player.botSpecs && index === 0">
+                                </SuiCard-content>
+                                <SuiCard-content extra v-if="player.botSpecs && index === 0">
                                     <span v-if="firstPlayerHealth > secondPlayerHealth"><sui-icon name="flag" color="violet" />Victoire !</span>
                                     <span v-else-if="firstPlayerHealth === secondPlayerHealth"><sui-icon name="flag" color="violet" />Egalité</span>
                                     <span v-else><sui-icon name="flag" color="violet" />Défaite ...</span>
-                                </sui-card-content>
-                                <sui-card-content extra v-if="player.botSpecs && index === 1">
+                                </SuiCard-content>
+                                <SuiCard-content extra v-if="player.botSpecs && index === 1">
                                     <span v-if="firstPlayerHealth < secondPlayerHealth"><sui-icon name="flag" color="violet" />Victoire !</span>
                                     <span v-else-if="firstPlayerHealth === secondPlayerHealth"><sui-icon name="flag" color="violet" />Egalité</span>
                                     <span v-else><sui-icon name="flag" color="violet" />Défaite ...</span>
-                                </sui-card-content>
-                                <sui-card-content extra>
+                                </SuiCard-content>
+                                <SuiCard-content extra style="padding-top: 20px; padding-bottom: 30px">
     
                                     <SuiGrid verticalAlign="middle" stackable align="left">
                                         <SuiGridRow>
@@ -104,8 +104,8 @@
                                         </SuiGridRow>
                                     </SuiGrid>
     
-                                </sui-card-content>
-                            </sui-card>
+                                </SuiCard-content>
+                            </SuiCard>
                         </SuiCardGroup>
                     </SuiGridColumn>
                 </SuiGridRow>
@@ -147,9 +147,20 @@ export default class RegisterPanel extends Vue {
 
     private firstPlayerHealth = 0;
     private secondPlayerHealth = 0;
+    private isLoadingStatsForReplay = false;
 
     created(): void {
         this.$store = this.$global;
+    }
+
+    private getStatsForReplay(botIndex: number): string {
+        this.isLoadingStatsForReplay = true;
+        this.$api.getGameResult(this.gameId).then((gameInfos) => {
+            const gameInfo: any = gameInfos.data.data;
+            const s3Url: string = _.first(gameInfo.players[botIndex].botSpecs.streams).s3Url;
+            this.isLoadingStatsForReplay = false;
+            this.$router.push({ name: 'ReplayFightFrame', params: { socketUrl: s3Url } });
+        });
     }
 
     mounted(): void {
@@ -157,18 +168,18 @@ export default class RegisterPanel extends Vue {
         if (this.gameId === undefined) {
             this.$router.push({ name: 'ListGamesPanel' });
         }
-        
+
         this.$api.getGameResult(this.gameId).then((response: AxiosResponse) => {
             // this.s3Url = response.data.data.players[0].botSpecs.streams[0].s3Url;      
             this.data = response.data.data;
             this.numberOfPlayers = this.data.players.length;
             this.isLoading = false;
             _.each(this.data.players, (player: any, index: number) => {
-              if (index === 0) {
-                this.firstPlayerHealth = player.botContext.health;
-              } else {
-                this.secondPlayerHealth = player.botContext.health;
-              }
+                if (index === 0) {
+                    this.firstPlayerHealth = player.botContext.health;
+                } else {
+                    this.secondPlayerHealth = player.botContext.health;
+                }
             });
         }).catch((err: AxiosError) => console.error(err));
     }
@@ -213,10 +224,10 @@ label {
 }
 
 .details.cards .card .image {
-  min-width: 340px !important; 
+    min-width: 340px !important;
 }
 
 .ui.statistic .micro {
-  font-size: 20px !important
+    font-size: 20px !important
 }
 </style>

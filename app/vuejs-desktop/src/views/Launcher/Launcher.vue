@@ -17,9 +17,9 @@
         inverted
       >Vous êtes connecté</SuiLabel>
     </SuiSegment>
-    <sui-modal size="mini" :closeIcon="true" basic v-model="loginRegisterMenuState">
-      <sui-modal-content>
-        <sui-modal-description style="margin-top: 50px">
+    <SuiModal size="mini" :closeIcon="true" basic v-model="loginRegisterMenuState">
+      <SuiModal-content>
+        <SuiModal-description style="margin-top: 50px">
           <SuiGrid align="center" verticalAlign="middle">
             <SuiGridRow>
               <SuiGridColumn>
@@ -41,9 +41,9 @@
               </SuiGridColumn>
             </SuiGridRow>
           </SuiGrid>
-        </sui-modal-description>
-      </sui-modal-content>
-    </sui-modal>
+        </SuiModal-description>
+      </SuiModal-content>
+    </SuiModal>
 
     <Sidebar defaultTarget="HomePanel">
       <SidebarItem

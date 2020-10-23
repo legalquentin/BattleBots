@@ -12,49 +12,53 @@
         <SuiGridColumn class="huge-column">
           <SuiSegment class="huge-segment" raised stacked="tall">
             <!-- <SuiHeader sub inverted style="margin-bottom: 15px">Ouvertes</SuiHeader> -->
-            <sui-form inverted>
-              <sui-form-field>
+            <SuiForm inverted>
+              <SuiForm-field>
                 <label>A provos de vous</label>
-                <sui-form-fields fields="three">
-                  <sui-form-field>
+                <SuiForm-fields fields="three">
+                  <SuiForm-field>
                     <SuiInput v-model="formModel.firstname" size="big" type="text" name="shipping[first-name]" placeholder="Prenom">
                     </SuiInput>
-                  </sui-form-field>
-                  <sui-form-field>
+                  </SuiForm-field>
+                  <SuiForm-field>
                     <SuiInput size="big" v-model="formModel.lastname" type="text" name="shipping[last-name]" placeholder="Nom" />
-                  </sui-form-field>
-                  <sui-form-field>
+                  </SuiForm-field>
+                  <SuiForm-field>
                     <SuiInput size="big" v-model="formModel.age" type="number" name="shipping[last-name]" placeholder="Age" />
-                  </sui-form-field>
-                </sui-form-fields>
-              </sui-form-field>
+                  </SuiForm-field>
+                </SuiForm-fields>
+              </SuiForm-field>
 
-              <sui-form-field>
+              <SuiForm-field>
                 <label>Informations de connexion</label>
-                <sui-form-fields fields="three">
-                  <sui-form-field>
+                <SuiForm-fields fields="three">
+                  <SuiForm-field>
                     <SuiInput size="big" v-model="formModel.pseudo" type="text" name="shipping[first-name]" placeholder="Nom d'utilisateur / pseudo" />
-                  </sui-form-field>
-                  <sui-form-field>
+                  </SuiForm-field>
+                  <SuiForm-field>
                     <SuiInput size="big" v-model="formModel.password" type="password" name="shipping[last-name]" placeholder="Mot de passe" />
-                  </sui-form-field>
-                  <sui-form-field>
+                  </SuiForm-field>
+                  <SuiForm-field>
                     <SuiInput size="big" v-model="formModel.passwordConf" type="password" name="shipping[last-name]" placeholder="Confirmation du mot de passe" />
-                  </sui-form-field>
-                </sui-form-fields>
-              </sui-form-field>
-              <sui-form-field>
+                  </SuiForm-field>
+                </SuiForm-fields>
+              </SuiForm-field>
+              <SuiForm-field>
                 <label>Pour vous contacter</label>
-                <sui-form-fields>
-                  <sui-form-field width="ten">
-                    <SuiInput size="big" v-model="formModel.email" type="text" name="shipping[address]" placeholder="adresse@eemail.com" />
-                  </sui-form-field>
-                  <sui-form-field width="six">
+                <SuiForm-fields>
+                  <SuiForm-field width="ten">
+                    <SuiInput size="big" v-model="formModel.email" type="text" name="shipping[address]" placeholder="adresse@email.com" />
+                  </SuiForm-field>
+                  <SuiForm-field width="six">
                     <SuiInput size="big" v-model="formModel.address" type="text" name="shipping[address-2]" placeholder="10 rue du pont Paris" />
-                  </sui-form-field>
-                </sui-form-fields>
-              </sui-form-field>
-            </sui-form>
+                  </SuiForm-field>
+                </SuiForm-fields>
+              </SuiForm-field>
+            </SuiForm>
+
+            <SuiMessage color="red" v-if="isError">
+              Une erreur s'est produite lors de l'inscription. Merci de vérifier les champs.
+            </SuiMessage>
           </SuiSegment>
         </SuiGridColumn>
       </SuiGridRow>
@@ -109,6 +113,7 @@ export default class RegisterPanel extends Vue {
     address: '',
   }
   private isCreateGame: boolean|string = false;
+  private isError = false;
 
   created(): void {
     this.$store = this.$global;
@@ -120,8 +125,12 @@ export default class RegisterPanel extends Vue {
 
   async register(): Promise<void> {
     this.isCreateGame = this.$route.params.isCreateGame;
-    await this.$api.register(_.clone(this.formModel));
-    this.$router.push({ name: 'LoginPanel', params: { isCreateGame: this.isCreateGame as string } });
+    this.$api.register(_.clone(this.formModel)).then(() => {
+      this.$router.push({ name: 'LoginPanel', params: { isCreateGame: this.isCreateGame as string } });
+    }).catch(() => {
+      this.isError = true;
+    });
+    
   }
 }
 </script>

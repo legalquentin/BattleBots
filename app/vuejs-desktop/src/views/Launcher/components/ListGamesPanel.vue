@@ -25,30 +25,30 @@
               error
               v-if="errorJoin"
             >Une erreur s'est produite. Essayez de rejoindre une autre partie ou d'en créer une nouvelle</SuiMessage>
-            <sui-card-group stackable class="centered" :items-per-row="3">
-              <sui-card
+            <SuiCardGroup stackable class="centered" :items-per-row="3">
+              <SuiCard
                 v-for="openGame in openGames"
                 :key="openGame.id"
                 @click="joinGame(openGame.id)"
               >
-                <sui-card-content>
-                  <sui-card-header>{{ openGame.name }}</sui-card-header>
-                  <sui-card-meta>{{ formatDate(openGame.createdAt) }}</sui-card-meta>
-                </sui-card-content>
-                <sui-card-content extra>
+                <SuiCard-content>
+                  <SuiCard-header>{{ openGame.name }}</SuiCard-header>
+                  <SuiCard-meta>{{ formatDate(openGame.createdAt) }}</SuiCard-meta>
+                </SuiCard-content>
+                <SuiCard-content extra>
                   <sui-icon name="unlock" color="blue" />Ouverte
-                </sui-card-content>
-                <sui-card-content extra>
+                </SuiCard-content>
+                <SuiCard-content extra>
                   <sui-icon name="user" color="violet" />2 joueurs minimum
-                </sui-card-content>
-                <sui-card-content extra>
+                </SuiCard-content>
+                <SuiCard-content extra>
                   <sui-icon name="users" color="violet" />2 joueurs maximum
-                </sui-card-content>
-                <sui-card-content extra style="text-align: center">
+                </SuiCard-content>
+                <SuiCard-content extra style="text-align: center">
                   <SuiButton basic color="red" @click.stop="deleteGame(openGame.id)">Supprimer la partie</SuiButton>
-                </sui-card-content>
-              </sui-card>
-            </sui-card-group>
+                </SuiCard-content>
+              </SuiCard>
+            </SuiCardGroup>
           </SuiSegment>
         </SuiGridColumn>
       </SuiGridRow>
@@ -61,8 +61,8 @@
               inverted
               style="margin-bottom: 15px"
             >{{ closedGames.length ? 'Parties Fermées' : 'Aucune partie terminée' }}</SuiHeader>
-            <sui-card-group stackable :items-per-row="3">
-              <sui-card v-for="closedGame in closedGames" :key="closedGame.id">
+            <SuiCardGroup stackable :items-per-row="3">
+              <SuiCard v-for="closedGame in closedGames" :key="closedGame.id">
                 <sui-dimmer-dimmable>
                   <a
                     class="ui massive right corner label"
@@ -72,14 +72,14 @@
                   </a>
 
                   <sui-dimmer blurring>
-                    <!-- <sui-button inverted>Add Friend</sui-button> -->
+                    <!-- <SuiButton inverted>Add Friend</SuiButton> -->
                   </sui-dimmer>
                 </sui-dimmer-dimmable>
-                <sui-card-content>
-                  <sui-card-header>{{ closedGame.name }}</sui-card-header>
-                  <sui-card-meta>{{ formatDate(closedGame.createdAt) }}</sui-card-meta>
-                </sui-card-content>
-                <sui-card-content extra>
+                <SuiCard-content>
+                  <SuiCard-header>{{ closedGame.name }}</SuiCard-header>
+                  <SuiCard-meta>{{ formatDate(closedGame.createdAt) }}</SuiCard-meta>
+                </SuiCard-content>
+                <SuiCard-content extra>
                   <SuiGrid verticalAlign="middle" stackable>
                     <SuiGridRow :columns="2">
                       <SuiGridColumn :width="2">
@@ -87,22 +87,21 @@
                       </SuiGridColumn>
                       <SuiGridColumn :width="13" align="right">
                         <SuiButtonGroup size="mini">
-                        <SuiButton size="mini" basic color="red">Replay</SuiButton>
                         <SuiButton size="mini" basic color="blue" @click="infoPage(closedGame.id)" style="z-index: 1000">Infos</SuiButton>
                         </SuiButtonGroup>
                       </SuiGridColumn>
                       
                     </SuiGridRow>
                   </SuiGrid>
-                </sui-card-content>
+                </SuiCard-content>
                 <SuiCardContent extra>
                   <sui-icon name="flag checkered" color="violet" />Arene : Caprica VI
                 </SuiCardContent>
-                <!-- <sui-card-content extra>
+                <!-- <SuiCard-content extra>
                   <sui-icon name="trash" color="red" /><a>ADMIN : supprimer la partie</a>
-                </sui-card-content>-->
-              </sui-card>
-            </sui-card-group>
+                </SuiCard-content>-->
+              </SuiCard>
+            </SuiCardGroup>
           </SuiSegment>
         </SuiGridColumn>
       </SuiGridRow>
