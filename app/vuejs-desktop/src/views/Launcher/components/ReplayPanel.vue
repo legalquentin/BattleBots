@@ -15,12 +15,12 @@
               <div class="ui text loader">Loading</div>
             </div>
             <SuiHeader sub inverted style="margin-bottom: 15px">Cliquez sur une partie pour visionner le replay</SuiHeader>
-            <sui-card-group stackable :items-per-row="3">
-              <sui-card v-for="game in closedGames" :key="game.id">
-                <sui-card-content>
-                  <sui-card-header>{{ game.name }}</sui-card-header>
-                  <sui-card-meta>{{ formatDate(game.createdAt) }}</sui-card-meta>
-                </sui-card-content>
+            <SuiCardGroup stackable :items-per-row="3">
+              <SuiCard v-for="game in closedGames" :key="game.id">
+                <SuiCard-content>
+                  <SuiCard-header>{{ game.name }}</SuiCard-header>
+                  <SuiCard-meta>{{ formatDate(game.createdAt) }}</SuiCard-meta>
+                </SuiCard-content>
                 <SuiCardContent extra>
                   <SuiGrid verticalAlign="middle" stackable>
                     <SuiGridRow :columns="1">
@@ -36,12 +36,12 @@
                 <SuiCardContent extra>
                     <sui-icon name="flag checkered" color="violet" />Gagnant : Plume
                 </SuiCardContent>
-                <!-- <sui-card-content extra>
+                <!-- <SuiCard-content extra>
                   <sui-icon name="trash" color="red" /><a>ADMIN : supprimer la partie</a>
-                </sui-card-content> -->
+                </SuiCard-content> -->
                 
-              </sui-card>
-            </sui-card-group>
+              </SuiCard>
+            </SuiCardGroup>
           </SuiSegment>
         </SuiGridColumn>
       </SuiGridRow>

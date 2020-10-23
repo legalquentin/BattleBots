@@ -17,25 +17,25 @@
             <SuiMessage v-if="gameNameError" error>Indiquer un nom de partie est obligatoire</SuiMessage>
             <!-- <SuiDivider v-if="!isWaitingForPlayer" /> -->
             <SuiHeader v-if="isWaitingForPlayer" sub inverted style="margin-bottom: 15px">Choix de votre robot</SuiHeader>
-            <sui-card-group v-if="isWaitingForPlayer" stackable :items-per-row="3">
-              <sui-card v-if="!isHidden['Razorback']" :class="{ active: isActive[0] }" @click="setActive(0)">
+            <SuiCardGroup v-if="isWaitingForPlayer" stackable :items-per-row="3">
+              <SuiCard v-if="!isHidden['Razorback']" :class="{ active: isActive[0] }" @click="setActive(0)">
                 <a class="ui massive right corner label" style="border-color: transparent; opacity: 0.7">
                   <i class="mouse pointer icon"></i>
                 </a>
                 <sui-image
                     src="https://4.bp.blogspot.com/-1gMZZms4XcM/W8JgGB1PbyI/AAAAAAAAdiA/3fBsdu1p3gIPuqpWQitpJLiChZyMLgqhgCLcBGAs/s1600/razorback-rearshot.jpg"
                 />
-                <sui-card-content>
-                  <sui-card-header>Razorback</sui-card-header>
-                  <sui-card-meta>Create in Sep 4240</sui-card-meta>
-                </sui-card-content>
-                <sui-card-content extra>
+                <SuiCard-content>
+                  <SuiCard-header>Razorback</SuiCard-header>
+                  <SuiCard-meta>Create in Sep 4240</SuiCard-meta>
+                </SuiCard-content>
+                <SuiCard-content extra>
                   <sui-icon name="heart" color="red" />1 de vie
-                </sui-card-content>
-                <sui-card-content extra>
+                </SuiCard-content>
+                <SuiCard-content extra>
                   <sui-icon name="lightning" color="yellow" />2 d'énergie
-                </sui-card-content>
-                <sui-card-content extra>
+                </SuiCard-content>
+                <SuiCard-content extra>
                   
                   <SuiGrid verticalAlign="middle" stackable align="left">
                     <SuiGridRow>
@@ -50,10 +50,10 @@
                     </SuiGridRow>
                   </SuiGrid>
                   
-                </sui-card-content>
-              </sui-card>
+                </SuiCard-content>
+              </SuiCard>
 
-              <sui-card v-if="!isHidden['Rocinante']" :class="{ active: isActive[1] }" @click="setActive(1)">
+              <SuiCard v-if="!isHidden['Rocinante']" :class="{ active: isActive[1] }" @click="setActive(1)">
                 <sui-dimmer-dimmable
                   
                 >
@@ -64,20 +64,20 @@
                     src="https://cdna.artstation.com/p/assets/images/images/012/579/212/4k/jason-clarke-roci-overflight-final-f000.jpg"
                   />
                   <sui-dimmer blurring>
-                    <!-- <sui-button inverted>Add Friend</sui-button> -->
+                    <!-- <SuiButton inverted>Add Friend</SuiButton> -->
                   </sui-dimmer>
                 </sui-dimmer-dimmable>
-                <sui-card-content>
-                  <sui-card-header>Rocinante</sui-card-header>
-                  <sui-card-meta>Create in Sep 4220</sui-card-meta>
-                </sui-card-content>
-                <sui-card-content extra>
+                <SuiCard-content>
+                  <SuiCard-header>Rocinante</SuiCard-header>
+                  <SuiCard-meta>Create in Sep 4220</SuiCard-meta>
+                </SuiCard-content>
+                <SuiCard-content extra>
                   <sui-icon name="heart" color="red" />1 de vie
-                </sui-card-content>
-                <sui-card-content extra>
+                </SuiCard-content>
+                <SuiCard-content extra>
                   <sui-icon name="lightning" color="yellow" />2 d'énergie
-                </sui-card-content>
-                <sui-card-content extra>
+                </SuiCard-content>
+                <SuiCard-content extra>
                   
                   <SuiGrid verticalAlign="middle" stackable align="left">
                     <SuiGridRow>
@@ -92,9 +92,9 @@
                     </SuiGridRow>
                   </SuiGrid>
                   
-                </sui-card-content>
-              </sui-card>
-            </sui-card-group>
+                </SuiCard-content>
+              </SuiCard>
+            </SuiCardGroup>
           </SuiSegment>
         </SuiGridColumn>
       </SuiGridRow>
@@ -155,8 +155,20 @@ export default class HomePanel extends Vue {
     this.$store = this.$global;
   }
 
-  public onDestroy() {
+  public beforeDestroy() {
     clearInterval(this.refreshRobotAvailability);
+  }
+
+  @Watch('$route.path', { immediate: true })
+  onPathChange() {
+    if (this.$route.path !== '/create-game-panel') {
+      this.onDestroy();
+      // destroy the vue listeners, etc
+      this.$destroy();
+
+      // remove the element from the DOM
+      this.$el.parentNode.removeChild(this.$el);
+    }
   }
   
   public mounted() {
@@ -167,9 +179,14 @@ export default class HomePanel extends Vue {
       if (!this.refreshRobotAvailability) {
         this.refreshRobotAvailability = setInterval(() => {
           this.$api.getBotAvailability(gameId).then((botInfos: any) => {
-            console.log(botInfos);
+            _.each(botInfos.data, (robot: any) => {
+              if (robot.taken) {
+                this.isHidden[robot.name] = true;
+              }
+            });
+            console.log(botInfos)
           }).catch(() => {
-            clearInterval(this.refreshRobotAvailability)
+            // clearInterval(this.refreshRobotAvailability)
           });
         }, 1000);
       }
@@ -202,8 +219,9 @@ export default class HomePanel extends Vue {
                 this.isHidden[robot.name] = true;
               }
             });
+            console.log(botInfos)
           }).catch(() => {
-            clearInterval(this.refreshRobotAvailability)
+            // clearInterval(this.refreshRobotAvailability)
           });
         }, 1000);
       }
@@ -228,7 +246,7 @@ export default class HomePanel extends Vue {
         const response: AxiosResponse = await this.$api.joinGame(this.gameInfos.id, this.activeIndex + 1);
         this.$router.push({
           name: "FightFrame",
-          params: { gameInfos: this.gameInfos, gameId: this.gameInfos.data.id } as any,
+          params: { gameInfos: this.gameInfos, gameId: this.gameInfos.id } as any,
         });
       } catch (e) {
         console.error(e);

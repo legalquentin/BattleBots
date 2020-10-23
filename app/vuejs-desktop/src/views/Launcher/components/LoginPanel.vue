@@ -12,16 +12,16 @@
         <SuiGridColumn class="huge-column">
           <SuiSegment class="huge-segment" raised stacked="tall">
             <!-- <SuiHeader sub inverted style="margin-bottom: 15px">Ouvertes</SuiHeader> -->
-            <sui-form inverted style="width: 500px; margin: 0 auto; padding-bottom: 30px">
-              <sui-form-field>
+            <SuiForm inverted style="width: 500px; margin: 0 auto; padding-bottom: 30px">
+              <SuiForm-field>
                 <label>Pseudo</label>
                 <sui-input v-model="formModel.username" size="big" placeholder="smith_j" />
-              </sui-form-field>
-              <sui-form-field>
+              </SuiForm-field>
+              <SuiForm-field>
                 <label>Mot de passe</label>
                 <sui-input type="password" v-model="formModel.password" size="big" placeholder="••••••••••" />
-              </sui-form-field>
-            </sui-form>
+              </SuiForm-field>
+            </SuiForm>
           </SuiSegment>
         </SuiGridColumn>
       </SuiGridRow>

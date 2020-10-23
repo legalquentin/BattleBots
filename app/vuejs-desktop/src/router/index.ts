@@ -15,6 +15,8 @@ const routes: RouteConfig[] = [
 
     { path: 'register-panel', name: 'RegisterPanel', component: () => import('../views/Launcher/components/RegisterPanel.vue') },
     { path: 'login-panel', name: 'LoginPanel', component: () => import('../views/Launcher/components/LoginPanel.vue') },
+
+    { path: 'how-to-play-panel', name: 'HowToPlayPanel', component: () => import('../views/Launcher/components/HowToPlayPanel.vue') },
   ] },
 
   { path: '/fight', name: 'FightFrame', component: () => import('../views/Fight/Fight.vue') },
