@@ -125,6 +125,11 @@ export default class ApiComponent extends Vue {
         return this.axios.get(`games/${gameId}`);
     }
 
+    public getBotAvailability(gameId: number): Promise<AxiosResponse> {
+        const _axios = axios.create();
+        return _axios.get(`https://ebotfight.com:80/api/game/availability/${gameId}`);
+    }
+
     private refreshToken(): AxiosPromise {
         return this.axios.post('users/login/up', { data: this.getJwt() });
     }

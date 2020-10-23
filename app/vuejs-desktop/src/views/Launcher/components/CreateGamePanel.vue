@@ -18,7 +18,7 @@
             <!-- <SuiDivider v-if="!isWaitingForPlayer" /> -->
             <SuiHeader v-if="isWaitingForPlayer" sub inverted style="margin-bottom: 15px">Choix de votre robot</SuiHeader>
             <sui-card-group v-if="isWaitingForPlayer" stackable :items-per-row="3">
-              <sui-card :class="{ active: isActive[0] }" @click="setActive(0)">
+              <sui-card v-if="!isHidden['Razorback']" :class="{ active: isActive[0] }" @click="setActive(0)">
                 <a class="ui massive right corner label" style="border-color: transparent; opacity: 0.7">
                   <i class="mouse pointer icon"></i>
                 </a>
@@ -53,7 +53,7 @@
                 </sui-card-content>
               </sui-card>
 
-              <sui-card :class="{ active: isActive[1] }" @click="setActive(1)">
+              <sui-card v-if="!isHidden['Rocinante']" :class="{ active: isActive[1] }" @click="setActive(1)">
                 <sui-dimmer-dimmable
                   
                 >
@@ -144,15 +144,35 @@ export default class HomePanel extends Vue {
   private isActive: boolean[] = [false, false, false];
   private activeIndex = -1;
 
+  private refreshRobotAvailability: any = null;
+
+  private isHidden = {
+    Rocinante: false,
+    Razorback: false,
+  }
+
   public created() {
     this.$store = this.$global;
   }
 
+  public onDestroy() {
+    clearInterval(this.refreshRobotAvailability);
+  }
+  
   public mounted() {
     const gameId: number|undefined = this.$route.params.gameId;
     if (gameId) {
       this.isWaitingForPlayer = true;
       this.isDirectlyWaitingForPlayer = true;
+      if (!this.refreshRobotAvailability) {
+        this.refreshRobotAvailability = setInterval(() => {
+          this.$api.getBotAvailability(gameId).then((botInfos: any) => {
+            console.log(botInfos);
+          }).catch(() => {
+            clearInterval(this.refreshRobotAvailability)
+          });
+        }, 1000);
+      }
     }
     if (this.$route.params.gameInfos && !this.gameInfos) {
       this.gameInfos = this.$route.params.gameInfos;
@@ -174,6 +194,19 @@ export default class HomePanel extends Vue {
     try {
       this.isCreatingGame = true;
       this.gameInfos = (await this.$api.createGame(this.gameName)).data;
+      if (!this.refreshRobotAvailability) {
+        this.refreshRobotAvailability = setInterval(() => {
+          this.$api.getBotAvailability(this.gameInfos.data.id).then((botInfos: any) => {
+            _.each(botInfos.data, (robot: any) => {
+              if (robot.taken) {
+                this.isHidden[robot.name] = true;
+              }
+            });
+          }).catch(() => {
+            clearInterval(this.refreshRobotAvailability)
+          });
+        }, 1000);
+      }
 
       this.isCreatingGame = false;
       this.isWaitingForPlayer = true;

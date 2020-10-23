@@ -2,7 +2,9 @@
   <div id="Fight">
     <SuiModal basic v-model="gameContext.endOfGame" scrolling :closable="false">
       <sui-modal-header style="text-align: center !important; ">Partie terminée</sui-modal-header>
-      <sui-modal-header style="text-align: center; color: lightgreen">VICTOIRE</sui-modal-header>
+      <sui-modal-header v-if="endMessage === 'VICTOIRE'" color="green" style="text-align: center;">{{ endMessage }}</sui-modal-header>
+      <sui-modal-header v-if="endMessage === 'DEFAITE'" color="red" style="text-align: center;">{{ endMessage }}</sui-modal-header>
+      <sui-modal-header v-if="endMessage === 'EGALITE'" style="text-align: center;">{{ endMessage }}</sui-modal-header>
       <sui-modal-actions style="text-align: center;">
         <div is="sui-button-group">
           <sui-button color="facebook" @click.native="$router.push({ name: 'CreateGamePanel' })" label-position="left" icon="redo">Nouvelle partie</sui-button>
@@ -243,6 +245,8 @@ export default class Fight extends Vue {
   private cameraUrl!: string;
   private controlUrl!: string;
 
+  private endMessage: string = '';
+
   private gameContext: GameContext = new GameContext();
 
   private allowedKeyboardKeys: { [key: string]: boolean } = {
@@ -323,8 +327,13 @@ export default class Fight extends Vue {
   private lambdaCtrlKeyUp: (event: any) => void = (event: any) =>
     this.onKeyUp(event);
 
+  private movingSound = new Audio('motor-sound.mp3');
+
   private onKeyDown(e: any): void {
     console.log("keydown", this.allowed, this.allowedKeyboardKeys[e.code], e);
+    if (e.code <= 3) {
+      this.movingSound.play();
+    }
     if (
       this.allowed.includes(e.code) &&
       this.allowedKeyboardKeys[e.code] == false
@@ -335,6 +344,7 @@ export default class Fight extends Vue {
   }
 
   private onKeyUp(e: any): void {
+    setTimeout(() => this.movingSound.pause(), 1000);
     if (
       this.allowed.includes(e.code) &&
       this.allowedKeyboardKeys[e.code] == true
@@ -402,15 +412,15 @@ export default class Fight extends Vue {
         break;
       case MessagesTypesEnum.VICTORY:
         this.gameContext.endOfGame = true;
-        alert("victoire")
+        this.endMessage = "VICTOIRE";
         break;
       case MessagesTypesEnum.DEFEAT:
         this.gameContext.endOfGame = true;
-        alert("défaite")
+        this.endMessage = "DEFAITE";
         break;
       case MessagesTypesEnum.EQUALITY:
         this.gameContext.endOfGame = true;
-        alert("equality")
+        this.endMessage = "EGALITE";
         break;
     }
   }
