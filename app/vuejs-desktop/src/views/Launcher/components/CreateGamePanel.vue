@@ -23,10 +23,10 @@
                   <i class="mouse pointer icon"></i>
                 </a>
                 <sui-image
-                    src="https://4.bp.blogspot.com/-1gMZZms4XcM/W8JgGB1PbyI/AAAAAAAAdiA/3fBsdu1p3gIPuqpWQitpJLiChZyMLgqhgCLcBGAs/s1600/razorback-rearshot.jpg"
+                    src="https://cdna.artstation.com/p/assets/images/images/012/579/212/4k/jason-clarke-roci-overflight-final-f000.jpg"
                 />
                 <SuiCard-content>
-                  <SuiCard-header>Razorback</SuiCard-header>
+                  <SuiCard-header>Rocinante</SuiCard-header>
                   <SuiCard-meta>Create in Sep 4240</SuiCard-meta>
                 </SuiCard-content>
                 <SuiCard-content extra>
@@ -61,14 +61,14 @@
                   <i class="mouse pointer icon"></i>
                 </a>
                   <sui-image
-                    src="https://cdna.artstation.com/p/assets/images/images/012/579/212/4k/jason-clarke-roci-overflight-final-f000.jpg"
+                    src="https://4.bp.blogspot.com/-1gMZZms4XcM/W8JgGB1PbyI/AAAAAAAAdiA/3fBsdu1p3gIPuqpWQitpJLiChZyMLgqhgCLcBGAs/s1600/razorback-rearshot.jpg"
                   />
                   <sui-dimmer blurring>
                     <!-- <SuiButton inverted>Add Friend</SuiButton> -->
                   </sui-dimmer>
                 </sui-dimmer-dimmable>
                 <SuiCard-content>
-                  <SuiCard-header>Rocinante</SuiCard-header>
+                  <SuiCard-header>Razorback</SuiCard-header>
                   <SuiCard-meta>Create in Sep 4220</SuiCard-meta>
                 </SuiCard-content>
                 <SuiCard-content extra>
@@ -188,7 +188,7 @@ export default class HomePanel extends Vue {
           }).catch(() => {
             // clearInterval(this.refreshRobotAvailability)
           });
-        }, 1000);
+        }, 3000);
       }
     }
     if (this.$route.params.gameInfos && !this.gameInfos) {
@@ -223,7 +223,7 @@ export default class HomePanel extends Vue {
           }).catch(() => {
             // clearInterval(this.refreshRobotAvailability)
           });
-        }, 1000);
+        }, 3000);
       }
 
       this.isCreatingGame = false;
@@ -240,13 +240,13 @@ export default class HomePanel extends Vue {
     if (!this.$store.isLogged) {
       return this.permissionDenied();
     }
-    console.log(this.gameInfos)
+    console.log("WAITING", this.isDirectlyWaitingForPlayer)
     if (this.isDirectlyWaitingForPlayer) {
       try {
         const response: AxiosResponse = await this.$api.joinGame(this.gameInfos.id, this.activeIndex + 1);
         this.$router.push({
           name: "FightFrame",
-          params: { gameInfos: this.gameInfos, gameId: this.gameInfos.id } as any,
+          params: { gameInfos: response.data.data, gameId: this.gameInfos.id } as any,
         });
       } catch (e) {
         console.error(e);
@@ -256,6 +256,7 @@ export default class HomePanel extends Vue {
     }
     try {
       const response: AxiosResponse = await this.$api.joinGame(this.gameInfos.data.id, this.activeIndex + 1);
+      console.log("DEBUG", response, this.gameInfos, this.activeIndex + 1)
       this.$router.push({
         name: "FightFrame",
         params: { gameInfos: response.data.data, gameId: this.gameInfos.data.id } as any,

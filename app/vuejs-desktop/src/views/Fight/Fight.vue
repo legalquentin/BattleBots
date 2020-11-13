@@ -279,6 +279,7 @@ export default class Fight extends Vue {
     this.shootSound.volume = 0.65;
 
     try {
+      console.log(this.$route)
       this.gameInfos = this.$route.params.gameInfos;
       this.gameId = this.$route.params.gameId;
       console.log(this.gameInfos, this.gameId);
@@ -302,6 +303,7 @@ export default class Fight extends Vue {
 
       this.$ws.getEventListener().on("message", this.lambdaOnGameMessage);
     } catch (e) {
+      console.error(e);
       this.notifications.push(
         new Notification("Une erreur s'est produite au moment du chargement de la partie", "#c0392b", this.notifications)
       );
